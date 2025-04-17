@@ -1,0 +1,64 @@
+# MUDpy Game Configuration
+# This file configures various aspects of the MUDpy game server
+
+# Game settings
+game:
+  name: "MUDpy Adventure"
+  description: "A customizable MUD game engine powered by Python"
+  welcome_message: |
+    Welcome to MUDpy Adventure!
+    Type 'help' for a list of commands.
+    
+  max_players: 100
+  idle_timeout: 3600  # seconds before idle disconnect
+  
+# Server settings
+server:
+  host: "0.0.0.0"  # Listen on all interfaces
+  port: 4000       # Default Telnet port for MUDpy
+  log_level: "info"
+  
+# World settings
+world:
+  starting_room: "town_square"
+  time_cycle: true
+  time_cycle_duration: 1800  # seconds per in-game day
+  weather_enabled: true
+  
+# Player settings
+player:
+  starting_health: 100
+  starting_mana: 50
+  starting_inventory:
+    - name: "Bread"
+      type: "food"
+      value: 5
+    - name: "Water Flask"
+      type: "drink"
+      value: 10
+    - name: "Cloth Tunic"
+      type: "armor"
+      value: 2
+      location: "chest"
+  
+  starting_equipment:
+    - name: "Wooden Stick"
+      type: "weapon"
+      damage: 3
+      location: "hand"
+  
+  leveling:
+    experience_curve: "standard"
+    max_level: 50
+    
+# Database settings
+database:
+  type: "yaml"  # Use YAML for persistent storage
+  save_interval: 300  # seconds between auto-saves
+  backup_count: 5     # Number of backup files to keep
+  
+# Directory paths (relative to MUDpy installation)
+paths:
+  data: "./data"
+  plugins: "./plugins"
+  logs: "./logs"

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 64 64"
+   height="64mm"
+   width="64mm">
+  <title
+     id="title3750">mudpy logo</title>
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>mudpy logo</dc:title>
+        <dc:date>2018-04-30</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jeremy Stanley mailto:fungi@yuggoth.org</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Copyright (c) 2004-2018 mudpy authors. Permission to use, copy, modify, and distribute this software is granted under terms provided in the LICENSE file distributed with this software.</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:description>Monogram box logo used as an identifying icon for the mudpy MUD server engine.</dc:description>
+        <cc:license
+           rdf:resource="https://mudpy.org/license/" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-70.949997,-22.580946)"
+     id="layer1">
+    <rect
+       y="27.855789"
+       x="76.224838"
+       height="53.450314"
+       width="53.450314"
+       id="rect4508"
+       style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:6.54968643;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" />
+    <text
+       id="text4512"
+       y="67.472984"
+       x="78.948631"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.86111069px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.86111069px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+         y="67.472984"
+         x="78.948631"
+         id="tspan4510">m</tspan></text>
+  </g>
+</svg>

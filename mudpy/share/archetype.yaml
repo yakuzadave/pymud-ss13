@@ -1,0 +1,14 @@
+---
+_copy: Copyright (c) 2004-2017 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: These are the base archetypes from which other elements inherit.
+
+_lock: true
+
+archetype.actor.is_actor: true
+
+archetype.avatar.default_location: area.0,0,0
+archetype.avatar.inherit:
+    - archetype.actor

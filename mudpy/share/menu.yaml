@@ -1,0 +1,132 @@
+---
+_copy: Copyright (c) 2004-2019 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: This is the standard library of menu definitions.
+
+_lock: true
+
+menu.activate_avatar.action: menu.activate_avatar_action
+menu.activate_avatar.action_a: menu.activate_avatar_action_a
+menu.activate_avatar.branch_a: main_utility
+menu.activate_avatar.choice_a: abort selection
+menu.activate_avatar.create: menu.activate_avatar_create
+menu.activate_avatar.default: "1"
+menu.activate_avatar.description: This is the list of avatars available for you
+    to awaken.
+menu.activate_avatar.prompt: Whom would you like to awaken?
+
+menu.active.prompt: ">"
+
+menu.checking_new_account_name.action_d:
+    menu.checking_new_account_name_action_d
+menu.checking_new_account_name.action_g:
+    menu.checking_new_account_name_action_g
+menu.checking_new_account_name.branch_d: disconnecting
+menu.checking_new_account_name.branch_g: entering_account_name
+menu.checking_new_account_name.branch_n: entering_new_password
+menu.checking_new_account_name.choice_d: disconnect now
+menu.checking_new_account_name.choice_g: go back
+menu.checking_new_account_name.choice_n: new account
+menu.checking_new_account_name.default: d
+menu.checking_new_account_name.description: There is no existing account for
+    "$(account)" (note that an account name is not the same as a character
+    name). Would you like to create a new account by this name, go back and
+    enter a different name or disconnect now?
+menu.checking_new_account_name.prompt: "Enter your choice:"
+
+menu.checking_password.echo: false
+menu.checking_password.error_incorrect: Incorrect password, please try again...
+menu.checking_password.prompt: "Password:"
+
+menu.choose_gender.action: menu.choose_gender_action
+menu.choose_gender.branch: choose_name
+menu.choose_gender.choice_f: female
+menu.choose_gender.choice_m: male
+menu.choose_gender.description: First, your new avatar needs a birth gender.
+    Avatars are one of male or female at birth.
+menu.choose_gender.prompt: "Pick a birth gender for your new avatar:"
+
+menu.choose_name.action: menu.choose_name_action
+menu.choose_name.branch: main_utility
+menu.choose_name.branch_g: choose_name
+menu.choose_name.choice_g: generate more names
+menu.choose_name.create_1: menu.choose_name_create_1
+menu.choose_name.create_2: menu.choose_name_create_2
+menu.choose_name.create_3: menu.choose_name_create_3
+menu.choose_name.create_4: menu.choose_name_create_4
+menu.choose_name.create_5: menu.choose_name_create_5
+menu.choose_name.create_6: menu.choose_name_create_6
+menu.choose_name.create_7: menu.choose_name_create_7
+menu.choose_name.default: g
+menu.choose_name.description: Your new avatar needs a name. This will be the
+    name with which $(tpsp) grew up, and will initially be the name by which
+    $(tpsp) is known to others. There are ways for your new avatar to make a
+    name for $(tpop)self over time, so $(tpsp) won't be stuck going by such an
+    unremarkable name forever.
+menu.choose_name.prompt: "Choose a name for $(tpop):"
+
+menu.delete_account.action_y: menu.delete_account_action_y
+menu.delete_account.branch_n: main_utility
+menu.delete_account.branch_y: disconnecting
+menu.delete_account.choice_n: no, don't delete my account
+menu.delete_account.choice_y: yes, permanently delete my account
+menu.delete_account.default: n
+menu.delete_account.description: By deleting your account, all your avatars
+    will also be permanently deleted.
+menu.delete_account.prompt: Are you certain you wish to permanently delete your
+    account?
+
+menu.delete_avatar.action: menu.delete_avatar_action
+menu.delete_avatar.action_a: menu.delete_avatar_action_a
+menu.delete_avatar.branch: main_utility
+menu.delete_avatar.branch_a: main_utility
+menu.delete_avatar.choice_a: abort selection
+menu.delete_avatar.create: menu.delete_avatar_create
+menu.delete_avatar.default: a
+menu.delete_avatar.description: This is the list of avatars available for you
+    to delete.
+menu.delete_avatar.prompt: Whom would you like to delete?
+
+menu.disconnecting.prompt: $(red)Disconnecting...$(nrm)$(eol)
+
+menu.disconnecting_duplicates.prompt: $(red)Closing your previous
+    connection...$(nrm)$(eol)
+
+menu.entering_account_name.description: $(inc:login.txt)
+menu.entering_account_name.error_bad_name: Your account name needs to contain
+    only digits (0-9) and letters (a-z).
+menu.entering_account_name.prompt: "Identify yourself:"
+
+menu.entering_new_password.echo: false
+menu.entering_new_password.error_weak: That is a weak password... Try something
+    at least 7 characters long with a combination of mixed-case letters,
+    numbers and punctuation/spaces.
+menu.entering_new_password.prompt: 'Enter a new password for "$(account)":'
+menu.entering_new_password.error_differs: The two passwords did not match. Try
+    again...
+
+menu.telopt_negotiation.prompt:
+
+menu.main_utility.action_c: menu.main_utility_action_c
+menu.main_utility.branch_a: activate_avatar
+menu.main_utility.branch_c: choose_gender
+menu.main_utility.branch_d: delete_avatar
+menu.main_utility.branch_l: disconnecting
+menu.main_utility.branch_p: delete_account
+menu.main_utility.choice_a: awaken an existing avatar
+menu.main_utility.choice_c: create a new avatar
+menu.main_utility.choice_d: delete an unwanted avatar
+menu.main_utility.choice_l: leave for now
+menu.main_utility.choice_p: permanently remove your account
+menu.main_utility.demand_a: menu.main_utility_demand_a
+menu.main_utility.demand_c: menu.main_utility_demand_c
+menu.main_utility.demand_d: menu.main_utility_demand_d
+menu.main_utility.description: $(red)$(inc:banner.txt)$(nrm)$(eol)$(eol)From
+    here you can awaken, create and delete avatars. An avatar is your persona
+    in the World. You can also leave or permanently delete your account.
+menu.main_utility.prompt: What would you like to do?
+
+menu.verifying_new_password.echo: false
+menu.verifying_new_password.prompt: "Enter the same new password again:"
