@@ -925,6 +925,46 @@ Biometric scan complete:
             
         return status_text
         
+    def get_room_name(self, room_id):
+        """
+        Get the name of a room.
+        
+        Args:
+            room_id: The ID of the room.
+            
+        Returns:
+            str: The name of the room, or None if not found.
+        """
+        if room_id in self.world['rooms']:
+            return self.world['rooms'][room_id].get('name')
+        return None
+        
+    def get_item_name(self, item_id):
+        """
+        Get the name of an item.
+        
+        Args:
+            item_id: The ID of the item.
+            
+        Returns:
+            str: The name of the item, or None if not found.
+        """
+        if item_id in self.world['items']:
+            return self.world['items'][item_id].get('name')
+        return None
+        
+    def get_player_location(self, client_id):
+        """
+        Get the location of a player.
+        
+        Args:
+            client_id: The ID of the client/player.
+            
+        Returns:
+            str: The ID of the player's location, or None if not found.
+        """
+        return self.player_locations.get(client_id)
+
     def shutdown(self):
         """
         Shut down the MUDpy interface.
