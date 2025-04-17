@@ -64,7 +64,8 @@ async def handle_client(websocket):
         mudpy_interface.connect_client(client_id)
         
         # Publish client connected event to create player in the world
-        publish("client_connected", client_id=str(client_id))
+        # Note: We keep the client_id as an integer throughout the system
+        publish("client_connected", client_id=client_id)
         
         # Send initial 'look' command through the integration to get room description
         initial_response = mud_integration.process_command(client_id, "look")
@@ -106,7 +107,8 @@ async def handle_client(websocket):
             del active_clients[client_id]
         
         # Publish client disconnected event
-        publish("client_disconnected", client_id=str(client_id))
+        # Keep client_id as an integer for consistency
+        publish("client_disconnected", client_id=client_id)
         
         # Disconnect from MUDpy
         mudpy_interface.disconnect_client(client_id)

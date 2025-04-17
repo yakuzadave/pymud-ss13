@@ -170,18 +170,21 @@ class MudpyIntegration:
         
         logger.info("Event handlers registered")
         
-    def _on_client_connected(self, client_id: str):
+    def _on_client_connected(self, client_id):
         """
         Handle client connection events.
         
         Args:
             client_id: The ID of the client.
         """
+        # Convert to string if needed for manipulation
+        client_id_str = str(client_id)
+        
         # Create a player game object for this client
         player_id = f"player_{client_id}"
         player_obj = GameObject(
             id=player_id,
-            name=f"Player {client_id[-4:]}",  # Use the last 4 digits of the client_id as the player name
+            name=f"Player {client_id_str[-4:]}",  # Use the last 4 digits of the client_id as the player name
             description="A space station crew member.",
             location="start"  # Start in the Central Hub
         )
@@ -205,7 +208,7 @@ class MudpyIntegration:
         
         logger.info(f"Created player game object for client {client_id}")
         
-    def _on_client_disconnected(self, client_id: str):
+    def _on_client_disconnected(self, client_id):
         """
         Handle client disconnection events.
         
