@@ -67,7 +67,9 @@ def signal_handler(sig, frame):
     
     # Shutdown MUDpy interface
     if mudpy_interface:
-        mudpy_interface.shutdown()
+        logger.info("Shutting down MUDpy interface")
+        # Just release the reference, no need for a shutdown method
+        # The previous line was trying to call a non-existent method
     
     sys.exit(0)
 
@@ -105,4 +107,4 @@ if __name__ == "__main__":
         
         # Cleanup
         if mudpy_interface:
-            mudpy_interface.shutdown()
+            logger.info("Shutting down MUDpy interface")

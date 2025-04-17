@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Interface module for MUDpy.
 This module provides a simplified mock interface for demo purposes.
@@ -5,13 +6,19 @@ For a full integration with the MUDpy server, additional configuration would be 
 """
 
 import logging
-import queue
-import time
 import yaml
 import os
-import sys
+import threading
+import time
+import queue
+import random
 
-logger = logging.getLogger(__name__)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('mudpy_interface')
 
 class MudpyInterface:
     """
@@ -28,185 +35,221 @@ class MudpyInterface:
             config_file (str): Path to the configuration file.
         """
         self.config_file = config_file
-        self.config = {}
         self.load_config()
         
-        # Client-related data structures
+        # Dictionary to store client sessions
         self.client_sessions = {}
-        self.response_queues = {}
-        self.player_locations = {}
-        self.player_inventories = {}
-        self.player_stats = {}
         
-        # World data
+        # Queue for responses from MUDpy
+        self.response_queues = {}
+        
+        # Sci-Fi world data
         self.world = {
             'rooms': {
                 'start': {
-                    'name': 'Medical Bay',
-                    'description': 'A sterile room with medical equipment and monitoring devices. Several empty beds line the walls, and a desk with a computer terminal sits in the corner.',
-                    'exits': {
-                        'north': 'corridor',
-                        'east': 'medbay'
-                    }
+                    'name': 'Space Station Alpha - Central Hub',
+                    'description': 'A bustling central hub of the space station. Holographic displays show ship arrivals and departures. The artificial gravity feels slightly lighter than Earth standard.',
+                    'exits': {'north': 'corridor', 'east': 'medbay', 'south': 'hangar', 'west': 'marketplace'},
+                    'items': ['station_map', 'credit_chip']
                 },
                 'corridor': {
-                    'name': 'Main Corridor',
-                    'description': 'A long corridor connecting various parts of the station. The lighting flickers occasionally, creating eerie shadows.',
-                    'exits': {
-                        'north': 'command',
-                        'east': 'research',
-                        'south': 'start',
-                        'west': 'quarters'
-                    },
+                    'name': 'Main Corridor - North Section',
+                    'description': 'A long, sterile corridor with glowing blue lighting strips. Occasional maintenance droids scuttle past, cleaning the metallic floors.',
+                    'exits': {'south': 'start', 'north': 'research', 'west': 'quarters'},
                     'items': ['keycard']
-                },
-                'command': {
-                    'name': 'Command Center',
-                    'description': 'The nerve center of the station. Multiple screens display status information and external camera feeds. The main viewscreen shows a field of stars.',
-                    'exits': {
-                        'south': 'corridor',
-                        'east': 'comms'
-                    }
-                },
-                'quarters': {
-                    'name': 'Crew Quarters',
-                    'description': 'A living area with several small rooms. Personal effects are scattered around, suggesting a hasty departure.',
-                    'exits': {
-                        'east': 'corridor',
-                        'north': 'recreation'
-                    },
-                    'items': ['medi_spray']
-                },
-                'recreation': {
-                    'name': 'Recreation Room',
-                    'description': 'A lounge area with comfortable seating and entertainment systems. A half-played game of chess sits on a table.',
-                    'exits': {
-                        'south': 'quarters'
-                    }
-                },
-                'medbay': {
-                    'name': 'Medical Storage',
-                    'description': 'A room filled with medical supplies and equipment. Cabinets line the walls, and a large refrigeration unit hums in the corner.',
-                    'exits': {
-                        'west': 'start',
-                        'north': 'quarantine'
-                    },
-                    'items': ['hazmat_suit']
-                },
-                'quarantine': {
-                    'name': 'Quarantine Zone',
-                    'description': 'A sealed area used for isolating potentially dangerous biological material. Warning signs indicate extreme caution should be exercised.',
-                    'exits': {
-                        'south': 'medbay'
-                    },
-                    'requires': {
-                        'hazmat_suit': 'WARNING: Biohazard detected. Hazmat protection required for entry.'
-                    }
                 },
                 'research': {
                     'name': 'Research Laboratory',
-                    'description': 'A high-tech laboratory with advanced scientific equipment. In the center is a containment field housing a pulsing, otherworldly artifact.',
-                    'exits': {
-                        'west': 'corridor',
-                        'north': 'detention'
-                    },
-                    'requires': {
-                        'keycard': 'The door is locked. It requires a keycard for access.'
-                    }
+                    'description': 'A high-tech laboratory filled with strange equipment. Holographic displays show DNA sequences and star charts. A containment field in the center holds a pulsing alien artifact.',
+                    'exits': {'south': 'corridor'},
+                    'items': ['datapad', 'sample_container'],
+                    'requires': {'keycard': 'This area requires authorized access. You need a keycard.'}
+                },
+                'quarters': {
+                    'name': 'Crew Quarters',
+                    'description': 'A section of small personal quarters for station staff. Your assigned room is here, with a small viewport showing the stars outside.',
+                    'exits': {'east': 'corridor'},
+                    'items': ['med_kit', 'personal_log']
+                },
+                'medbay': {
+                    'name': 'Medical Bay',
+                    'description': 'A sterile medical facility with advanced diagnostic equipment. Several medical droids stand ready to assist patients.',
+                    'exits': {'west': 'start', 'north': 'quarantine'},
+                    'items': ['medi_spray']
+                },
+                'quarantine': {
+                    'name': 'Quarantine Zone',
+                    'description': 'A sealed quarantine area. Warning lights flash red, and the air smells strongly of antiseptic. Something dangerous was contained here.',
+                    'exits': {'south': 'medbay'},
+                    'items': ['hazmat_suit'],
+                    'requires': {'hazmat_suit': 'WARNING: Hazardous environment detected. Entering without protection would be fatal.'}
+                },
+                'hangar': {
+                    'name': 'Docking Hangar',
+                    'description': 'A massive hangar where ships dock. Through the atmospheric containment field, you can see the vast expanse of space. Several vessels of different designs are currently docked.',
+                    'exits': {'north': 'start', 'east': 'security', 'west': 'maintenance'},
+                    'items': ['toolbox']
+                },
+                'security': {
+                    'name': 'Security Checkpoint',
+                    'description': 'A security checkpoint with weapon scanners and armored guards. Monitors display surveillance feeds from around the station.',
+                    'exits': {'west': 'hangar', 'south': 'detention'},
+                    'items': ['stun_baton'],
+                    'requires': {'security_clearance': 'The guard stops you: "Only security personnel beyond this point."'}
                 },
                 'detention': {
-                    'name': 'Detention Cell',
-                    'description': 'A secure room with reinforced walls. A force field contains what appears to be a non-human entity. It watches you with apparent intelligence.',
-                    'exits': {
-                        'south': 'research'
-                    }
-                },
-                'comms': {
-                    'name': 'Communications Center',
-                    'description': 'A room filled with communication equipment. Long-range transmitters, receivers, and a large subspace antenna control panel.',
-                    'exits': {
-                        'west': 'command',
-                        'south': 'maintenance'
-                    }
+                    'name': 'Detention Block',
+                    'description': 'A high-security area with reinforced cells. Most are empty, but one contains a strange alien being that watches you with multiple eyes.',
+                    'exits': {'north': 'security'},
+                    'items': ['strange_crystal']
                 },
                 'maintenance': {
-                    'name': 'Maintenance Access',
-                    'description': 'A narrow passage with exposed wiring and pipes. Essential systems for the station\'s operation are accessible from here.',
-                    'exits': {
-                        'north': 'comms',
-                        'east': 'reactor'
-                    },
-                    'items': ['radiation_badge']
+                    'name': 'Maintenance Tunnels',
+                    'description': 'Narrow maintenance tunnels with exposed piping and wiring. The air is warmer here, and you can hear the hum of the station\'s engines.',
+                    'exits': {'east': 'hangar', 'west': 'reactor'},
+                    'items': ['repair_kit']
                 },
                 'reactor': {
                     'name': 'Reactor Core',
-                    'description': 'The central power generator for the station. The reactor core pulses with energy, and warning lights indicate higher than normal radiation levels.',
-                    'exits': {
-                        'west': 'maintenance'
-                    },
-                    'requires': {
-                        'radiation_badge': 'WARNING: Dangerous radiation levels detected. Radiation protection required for entry.'
-                    }
+                    'description': 'The heart of the station - a massive fusion reactor. The intense blue glow and heat make this area uncomfortable. Warning signs are everywhere.',
+                    'exits': {'east': 'maintenance'},
+                    'items': ['radiation_badge'],
+                    'requires': {'radiation_badge': 'DANGER: Lethal radiation levels detected. Proper protection required.'}
+                },
+                'marketplace': {
+                    'name': 'Trading Marketplace',
+                    'description': 'A vibrant marketplace where merchants from across the galaxy sell exotic goods. The air is filled with unfamiliar scents and the chatter of various languages.',
+                    'exits': {'east': 'start', 'south': 'cantina'},
+                    'items': ['alien_fruit', 'star_map']
+                },
+                'cantina': {
+                    'name': 'Nova Cantina',
+                    'description': 'A dimly lit cantina where station visitors relax. Strange music plays from speakers, and various species enjoy colorful drinks. A shady-looking dealer sits in the corner.',
+                    'exits': {'north': 'marketplace'},
+                    'items': ['strange_drink']
                 }
             },
             'items': {
                 'comms_device': {
                     'name': 'Communications Device',
-                    'description': 'A personal communications device that can receive and transmit messages.',
+                    'description': 'A standard-issue communications device that allows you to contact the command center.',
                     'usable': True,
-                    'use_effect': 'You activate the communications device, but receive only static.'
-                },
-                'keycard': {
-                    'name': 'Security Keycard',
-                    'description': 'A high-clearance security keycard for accessing restricted areas.',
-                    'usable': True,
-                    'use_effect': 'You swipe the keycard through a reader.'
+                    'use_effect': 'You contact the command center. "This is Command. We read you. Continue your investigation and report when you have more information."'
                 },
                 'biometric_scanner': {
                     'name': 'Biometric Scanner',
-                    'description': 'A handheld device that can analyze biological signatures and environmental conditions.',
+                    'description': 'A handheld device that can scan for life forms and analyze environmental conditions.',
                     'usable': True,
-                    'use_effect': 'You activate the scanner and analyze your surroundings.'
+                    'use_effect': 'You activate your biometric scanner, analyzing the surrounding environment.'
+                },
+                'keycard': {
+                    'name': 'Access Keycard',
+                    'description': 'A standard station keycard with security clearance for research areas.',
+                    'usable': True,
+                    'use_effect': 'You swipe the keycard. The light turns green, indicating successful authentication.'
+                },
+                'datapad': {
+                    'name': 'Research Datapad',
+                    'description': 'A datapad containing research notes about an anomaly discovered on a nearby planet.',
+                    'usable': True,
+                    'use_effect': 'The datapad displays research notes: "The crystalline structure appears to respond to thought patterns. Caution advised - psychological side effects reported by research team."'
+                },
+                'station_map': {
+                    'name': 'Station Holographic Map',
+                    'description': 'A small device that projects a 3D map of the station when activated.',
+                    'usable': True,
+                    'use_effect': 'The device projects a holographic map of Space Station Alpha, highlighting your current position and key areas.'
+                },
+                'credit_chip': {
+                    'name': 'Credit Chip',
+                    'description': 'A digital currency chip containing 100 credits, standard currency in this sector.',
+                    'usable': True,
+                    'use_effect': 'You check your credit balance: 100 credits available.'
+                },
+                'med_kit': {
+                    'name': 'Emergency Medical Kit',
+                    'description': 'A compact kit containing medical supplies for treating minor injuries.'
                 },
                 'medi_spray': {
                     'name': 'Medi-Spray',
-                    'description': 'A medical spray that can heal minor wounds and injuries.',
-                    'usable': True,
-                    'use_effect': 'You apply the medi-spray to your injuries, feeling instant relief.'
+                    'description': 'A spray canister of advanced healing nanites that quickly treat wounds.'
                 },
                 'hazmat_suit': {
                     'name': 'Hazmat Suit',
-                    'description': 'A protective suit that shields from biological and chemical hazards.',
-                    'usable': True,
-                    'use_effect': 'You put on the hazmat suit, feeling protected from environmental hazards.'
+                    'description': 'A full-body suit that protects against radiation, toxic environments, and certain pathogens.'
+                },
+                'toolbox': {
+                    'name': 'Maintenance Toolbox',
+                    'description': 'A standard toolbox containing tools for repairing station systems.'
+                },
+                'repair_kit': {
+                    'name': 'Nano-Repair Kit',
+                    'description': 'An advanced repair system that uses nanobots to fix mechanical and electronic systems.'
+                },
+                'sample_container': {
+                    'name': 'Alien Sample Container',
+                    'description': 'A sealed container holding tissue samples from an unknown alien species.'
                 },
                 'radiation_badge': {
                     'name': 'Radiation Protection Badge',
-                    'description': 'A device that creates a protective field against radiation.',
-                    'usable': True,
-                    'use_effect': 'You activate the radiation badge, and a soft glow surrounds you.'
+                    'description': 'A badge that, when activated, generates a protective field against radiation.'
+                },
+                'stun_baton': {
+                    'name': 'Security Stun Baton',
+                    'description': 'A standard-issue security baton that can deliver an incapacitating electrical charge.'
+                },
+                'strange_crystal': {
+                    'name': 'Strange Pulsing Crystal',
+                    'description': 'A crystal that pulses with an inner light. It seems to respond to your thoughts.'
+                },
+                'personal_log': {
+                    'name': 'Personal Log',
+                    'description': 'Your personal log recording your mission objectives and observations.'
+                },
+                'star_map': {
+                    'name': 'Interstellar Navigation Chart',
+                    'description': 'A detailed chart showing nearby star systems and established jump routes.'
+                },
+                'alien_fruit': {
+                    'name': 'Glowing Alien Fruit',
+                    'description': 'A strange fruit that glows with a soft blue light. Supposedly edible for humans.'
+                },
+                'strange_drink': {
+                    'name': 'Nebula Fizz',
+                    'description': 'A popular drink that swirls with colors like a nebula. Known for its unusual psychedelic effects.'
+                },
+                'security_clearance': {
+                    'name': 'Security Clearance Badge',
+                    'description': 'A badge identifying you as station security personnel, granting access to restricted areas.'
                 }
             }
         }
         
-        # Help text shown to players
-        self.help_text = """Available commands:
-help [command] - Display help information
-look [target] - Look at your surroundings or a specific target
-go <direction> - Move in a direction (north, south, east, west)
-say <message> - Say something to others in the room
-inventory, i - List items you are carrying
-take <item> - Pick up an item
-drop <item> - Drop an item
-use <item> - Use an item
-examine <item> - Examine an item in detail
-scan - Perform environmental scan (requires scanner)
-stats - Check your vital statistics
-quit - Disconnect from the system
+        # Player state
+        self.player_locations = {}
+        self.player_inventories = {}
+        self.player_stats = {}
+        
+        # Help text
+        self.help_text = """
+Available commands:
+- look: Look around your current location
+- examine <item>: Look more closely at an item
+- go <direction>: Move in a direction (north, south, east, west)
+- say <message>: Say something to others in the same room
+- inventory (or i): Show your inventory
+- take <item>: Pick up an item
+- drop <item>: Drop an item
+- use <item>: Use an item
+- scan: Use your biometric scanner to analyze the environment
+- stats: View your current status and statistics
+- help: Display this help message
+- quit: Log out of the game
 """
         
-        logger.info("MUDpy interface initialized")
-
+        # Start the server
+        logger.info("MUDpy interface started (demo mode)")
+    
     def load_config(self):
         """
         Load configuration from YAML file.
@@ -214,22 +257,36 @@ quit - Disconnect from the system
         """
         try:
             with open(self.config_file, 'r') as f:
-                self.config = yaml.safe_load(f) or {}
-            logger.info(f"Configuration loaded from {self.config_file}")
+                self.config = yaml.safe_load(f)
+            
+            if self.config is None:
+                self.config = {}
+        
         except FileNotFoundError:
+            # Create default configuration
             self.config = {
-                'server': {
-                    'host': '0.0.0.0',
-                    'port': 8888
+                'mudpy_server': {
+                    'host': 'localhost',
+                    'port': 4000,
+                    'timeout': 5
                 },
-                'world': {
-                    'name': 'Space Station Alpha',
-                    'startup_room': 'start'
+                'websocket_server': {
+                    'host': '0.0.0.0',
+                    'port': 8000
+                },
+                'web_client': {
+                    'host': '0.0.0.0',
+                    'port': 5000
+                },
+                'storage': {
+                    'data_dir': 'data',
+                    'save_interval': 300  # 5 minutes
                 }
             }
+            
+            # Save default configuration
             self.save_config()
-            logger.info(f"Created default configuration at {self.config_file}")
-
+    
     def save_config(self):
         """
         Save current configuration to YAML file.
@@ -634,7 +691,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         item_id = None
         for i in room['items']:
             item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            if item and item_name in i or (item and item_name in item['name'].lower()):
                 item_id = i
                 break
                 
@@ -674,7 +731,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         item_id = None
         for i in inventory:
             item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            if item and item_name in i or (item and item_name in item['name'].lower()):
                 item_id = i
                 break
                 
@@ -718,7 +775,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         item_id = None
         for i in inventory:
             item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            if item and item_name in i or (item and item_name in item['name'].lower()):
                 item_id = i
                 break
                 
@@ -776,7 +833,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         if client_id in self.player_inventories:
             for i in self.player_inventories[client_id]:
                 item = self.world['items'].get(i)
-                if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+                if item and item_name in i or (item and item_name in item['name'].lower()):
                     inventory_item = item
                     break
                     
@@ -788,7 +845,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
             if room and 'items' in room:
                 for i in room['items']:
                     item = self.world['items'].get(i)
-                    if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+                    if item and item_name in i or (item and item_name in item['name'].lower()):
                         room_item = item
                         break
         
@@ -876,43 +933,64 @@ Biometric scan complete:
             str: Current player statistics.
         """
         if client_id not in self.player_stats:
-            # Initialize with default values
-            self.player_stats[client_id] = {
-                'health': 100,
-                'energy': 100,
-                'credits': 50,
-                'radiation': 0,
-                'oxygen': 100
-            }
-        
+            return "Error: Your stats are unknown."
+            
         stats = self.player_stats[client_id]
+        return f"""Status Report:
+- Health: {stats['health']}%
+- Energy: {stats['energy']}%
+- Credits: {stats['credits']}
+- Radiation: {stats['radiation']}%
+- Oxygen: {stats['oxygen']}%
+"""
+    
+    def _look(self, client_id):
+        """
+        Handle the 'look' command - enhanced version.
         
-        status_text = """Status Report:
-- Health: {health}%
-- Energy: {energy}%
-- Credits: {credits}
-- Radiation: {radiation}%
-- Oxygen: {oxygen}%
-""".format(**stats)
-        
-        # Add warnings for concerning status levels
-        if stats['health'] < 50:
-            status_text += "\nWARNING: Health critical. Seek medical attention.\n"
-        
-        if stats['radiation'] > 50:
-            status_text += "\nDANGER: High radiation levels detected! Seek radiation protection immediately.\n"
+        Args:
+            client_id: Unique identifier for the client.
             
-        if stats['oxygen'] < 80:
-            status_text += "\nWARNING: Oxygen levels depleting. Verify atmospheric containment.\n"
-            
-        return status_text
+        Returns:
+            str: Enhanced description of the current location.
+        """
+        if client_id not in self.player_locations:
+            return "Error: Your location is unknown."
         
+        room_id = self.player_locations[client_id]
+        room = self.world['rooms'].get(room_id)
+        
+        if not room:
+            return "Error: Invalid room."
+        
+        # Build basic description
+        description = f"""
+{room['name']}
+{room['description']}
+
+Exits: {', '.join(room['exits'].keys())}
+"""
+        
+        # Add items if present
+        if 'items' in room and room['items']:
+            description += "\nYou see:\n"
+            for item_id in room['items']:
+                item = self.world['items'].get(item_id)
+                if item:
+                    description += f"- {item['name']}\n"
+                else:
+                    description += f"- {item_id}\n"
+        
+        return description
+    
     def shutdown(self):
         """
         Shut down the MUDpy interface.
         """
-        logger.info("Shutting down MUDpy interface")
+        logger.info("Shutting down MUDpy interface (demo mode)...")
         
-        # Clean up any resources
-        # Save current world state if needed
-        self.save_config()
+        # Clear client sessions and queues
+        self.client_sessions.clear()
+        self.response_queues.clear()
+        
+        logger.info("MUDpy interface shut down.")
