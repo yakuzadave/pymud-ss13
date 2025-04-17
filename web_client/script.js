@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Determine the correct WebSocket URL based on the current location
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // Extract the hostname (without port) from window.location.host
-    const hostname = window.location.hostname;
-    // Connect to the WebSocket server on port 8000
-    let serverUrl = localStorage.getItem('serverUrl') || `${protocol}//${hostname}:8000`;
+    // Use the same host (including port) as the web page
+    const host = window.location.host;
+    // Connect to the WebSocket endpoint at /ws
+    let serverUrl = localStorage.getItem('serverUrl') || `${protocol}//${host}/ws`;
     
     // Set initial server URL
     serverUrlInput.value = serverUrl;
