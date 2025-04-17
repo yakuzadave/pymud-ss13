@@ -250,8 +250,15 @@ quit - Disconnect from the system
             # Create response queue for this client
             self.response_queues[client_id] = queue.Queue()
             
-            # Generate a player name
-            player_name = f"Player_{client_id % 1000}"
+            # Generate a player name - fixed string formatting
+            try:
+                # Use modulo as intended for numeric operation
+                short_id = client_id % 1000 if isinstance(client_id, int) else hash(str(client_id)) % 1000
+                player_name = f"Player_{short_id}"
+            except Exception as e:
+                # Fallback if anything goes wrong
+                player_name = f"Player_{hash(str(client_id)) % 1000}"
+                logger.warning(f"Error generating player name: {e}, using fallback")
             
             # Record client session
             self.client_sessions[client_id] = {
