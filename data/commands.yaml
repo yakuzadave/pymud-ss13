@@ -1,0 +1,105 @@
+- name: help
+  patterns:
+    - "help"
+    - "help {command}"
+  help: |
+    help            — list all available commands
+    help <command>  — get help on a specific command
+
+- name: look
+  patterns:
+    - "look"
+    - "l"
+    - "look at {target}"
+    - "examine {target}"
+    - "x {target}"
+  help: |
+    look             — describe current room
+    look at <target> — examine an object, item, or exit
+    examine <target> — same as "look at"
+    l                — shortcut for "look"
+    x <target>       — shortcut for "examine <target>"
+
+- name: move
+  patterns:
+    - "go {direction}"
+    - "{direction}"
+    - "move {direction}"
+    - "n"
+    - "s"
+    - "e"
+    - "w"
+    - "north"
+    - "south"
+    - "east"
+    - "west"
+  help: |
+    go <direction>   — move in the specified direction
+    <direction>      — shortcut for "go <direction>"
+    n, s, e, w       — shortcuts for north, south, east, west
+
+- name: inventory
+  patterns:
+    - "inventory"
+    - "i"
+    - "items"
+  help: |
+    inventory        — list items you are carrying
+    i                — shortcut for "inventory"
+
+- name: get
+  patterns:
+    - "get {item}"
+    - "take {item}"
+    - "pick up {item}"
+    - "get {item} from {container}"
+    - "take {item} from {container}"
+  help: |
+    get <item>              — pick up an item
+    take <item>             — same as "get"
+    get <item> from <cont>  — take item from container
+
+- name: drop
+  patterns:
+    - "drop {item}"
+    - "put {item} down"
+  help: |
+    drop <item>      — drop an item in the current room
+    put <item> down  — same as "drop"
+
+- name: use
+  patterns:
+    - "use {item}"
+    - "use {item} on {target}"
+    - "use {item} with {target}"
+    - "activate {item}"
+  help: |
+    use <item>              — use or activate an item
+    use <item> on <target>  — use item on another object
+    activate <item>         — same as "use"
+
+- name: say
+  patterns:
+    - "say {message}"
+    - "'{message}"
+  help: |
+    say <message>    — say something in the current room
+    '<message>       — shortcut for "say"
+
+- name: status
+  patterns:
+    - "status"
+    - "stats"
+    - "health"
+  help: |
+    status           — check your current status
+    stats            — same as "status"
+    health           — check your health stats
+
+- name: scan
+  patterns:
+    - "scan"
+    - "scan {target}"
+  help: |
+    scan             — scan the current environment
+    scan <target>    — scan a specific target
