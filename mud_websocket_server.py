@@ -13,6 +13,7 @@ import websockets
 from mudpy_interface import MudpyInterface
 import integration
 import engine
+from events import publish
 
 # Import command modules individually to ensure handlers are registered
 from commands import basic
@@ -62,6 +63,9 @@ async def handle_client(websocket):
         # Start the connection with MUDpy
         mudpy_interface.connect_client(client_id)
         
+        # Publish client connected event to create player in the world
+        publish("client_connected", client_id=str(client_id))
+        
         # Send initial 'look' command through the integration to get room description
         initial_response = mud_integration.process_command(client_id, "look")
         await websocket.send(json.dumps({
@@ -100,6 +104,9 @@ async def handle_client(websocket):
         # Clean up client connection
         if client_id in active_clients:
             del active_clients[client_id]
+        
+        # Publish client disconnected event
+        publish("client_disconnected", client_id=str(client_id))
         
         # Disconnect from MUDpy
         mudpy_interface.disconnect_client(client_id)

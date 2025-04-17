@@ -164,7 +164,67 @@ class MudpyIntegration:
         # Communication events
         subscribe("player_said", self._on_player_said)
         
+        # Connection events
+        subscribe("client_connected", self._on_client_connected)
+        subscribe("client_disconnected", self._on_client_disconnected)
+        
         logger.info("Event handlers registered")
+        
+    def _on_client_connected(self, client_id: str):
+        """
+        Handle client connection events.
+        
+        Args:
+            client_id: The ID of the client.
+        """
+        # Create a player game object for this client
+        player_id = f"player_{client_id}"
+        player_obj = GameObject(
+            id=player_id,
+            name=f"Player {client_id[-4:]}",  # Use the last 4 digits of the client_id as the player name
+            description="A space station crew member.",
+            location="start"  # Start in the Central Hub
+        )
+        
+        # Add player component
+        player_comp = PlayerComponent(
+            inventory=["comms_device", "biometric_scanner"],
+            stats={
+                "health": 100.0,
+                "energy": 100.0,
+                "oxygen": 100.0,
+                "radiation": 0.0
+            },
+            access_level=0,
+            current_location="start"
+        )
+        player_obj.add_component("player", player_comp)
+        
+        # Register the player in the world
+        self.world.register(player_obj)
+        
+        logger.info(f"Created player game object for client {client_id}")
+        
+    def _on_client_disconnected(self, client_id: str):
+        """
+        Handle client disconnection events.
+        
+        Args:
+            client_id: The ID of the client.
+        """
+        # Find and remove the player game object
+        player_id = f"player_{client_id}"
+        player_obj = self.world.get_object(player_id)
+        
+        if player_obj:
+            # TODO: In a real implementation, you might want to save player data first
+            
+            # Remove from world objects dictionary
+            if player_id in self.world.objects:
+                del self.world.objects[player_id]
+                logger.info(f"Removed player game object for client {client_id}")
+        else:
+            logger.warning(f"Player object not found for client {client_id}")
     
     def _on_player_moved(self, player_id: str, from_location: str, to_location: str):
         """
