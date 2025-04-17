@@ -404,7 +404,10 @@ Type 'help' for a list of commands.
         logger.debug(f"Looking up room with ID: {room_id}")
         
         room = self.world['rooms'].get(room_id)
-        logger.debug(f"Found room: {room['name'] if room else 'None'}")
+        if room:
+            logger.debug(f"Found room: {room['name']}")
+        else:
+            logger.debug("Room not found")
         
         if not room:
             logger.error(f"Invalid room ID: {room_id}")
@@ -644,7 +647,10 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         room['items'].remove(item_id)
         
         item = self.world['items'].get(item_id)
-        return f"You take the {item['name']}."
+        if item:
+            return f"You take the {item['name']}."
+        else:
+            return f"You take the {item_id}."
     
     def _drop(self, client_id, item_name):
         """
@@ -682,13 +688,20 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         room_id = self.player_locations[client_id]
         room = self.world['rooms'].get(room_id)
         
+        if not room:
+            # If the room doesn't exist, just remove from inventory
+            return f"You drop the {item_id}, but it falls into the void!"
+        
         if 'items' not in room:
             room['items'] = []
             
         room['items'].append(item_id)
         
         item = self.world['items'].get(item_id)
-        return f"You drop the {item['name']}."
+        if item:
+            return f"You drop the {item['name']}."
+        else:
+            return f"You drop the {item_id}."
     
     def _use(self, client_id, item_name):
         """
@@ -721,6 +734,10 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
             
         item = self.world['items'].get(item_id)
         
+        # Check if the item exists and is usable
+        if not item:
+            return f"You can't figure out how to use the {item_id}."
+            
         # Check if the item is usable
         if 'usable' not in item or not item['usable']:
             return f"You can't figure out how to use the {item['name']}."
