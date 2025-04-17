@@ -1,0 +1,10 @@
+---
+_copy: Copyright (c) 2004-2017 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: This is a set of sample objects for testing and demonstration purposes.
+
+prop.sample_prop.impression: A sample prop sits here.
+prop.sample_prop.keywords: sample prop
+prop.sample_prop.location: area.0,0,0

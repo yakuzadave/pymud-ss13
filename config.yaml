@@ -1,0 +1,16 @@
+mudpy_server:
+  host: localhost
+  port: 4000
+  timeout: 5
+
+websocket_server:
+  host: 0.0.0.0
+  port: 8000
+
+web_client:
+  host: 0.0.0.0
+  port: 5000
+
+storage:
+  data_dir: data
+  save_interval: 300

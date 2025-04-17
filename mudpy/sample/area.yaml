@@ -1,0 +1,61 @@
+---
+_copy: Copyright (c) 2004-2017 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: This is a set of sample locations for testing and demonstration
+    purposes.
+
+area.-1,0,0.description: This is the West Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.-1,0,0.gridlinks:
+    - east
+area.-1,0,0.name: West Sample Location
+area.-1,0,0.terrain: inside
+
+area.0,-1,0.description: This is the South Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.0,-1,0.gridlinks:
+    - north
+area.0,-1,0.name: South Sample Location
+area.0,-1,0.terrain: inside
+
+area.0,0,-1.description: This is the Lower Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.0,0,-1.gridlinks:
+    - up
+area.0,0,-1.name: Lower Sample Location
+area.0,0,-1.terrain: inside
+
+area.0,0,0.description: This is the Center Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.0,0,0.gridlinks:
+    - down
+    - east
+    - north
+    - south
+    - up
+    - west
+area.0,0,0.name: Center Sample Location
+area.0,0,0.terrain: inside
+
+area.0,0,1.description: This is the Upper Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.0,0,1.gridlinks:
+    - down
+area.0,0,1.name: Upper Sample Location
+area.0,0,1.terrain: inside
+
+area.0,1,0.description: This is the North Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.0,1,0.gridlinks:
+    - south
+area.0,1,0.name: North Sample Location
+area.0,1,0.terrain: inside
+
+area.1,0,0.description: This is the East Sample Location. It is merely
+    provided as an example of what an area might look like.
+area.1,0,0.gridlinks:
+    - west
+area.1,0,0.name: East Sample Location
+area.1,0,0.terrain: inside

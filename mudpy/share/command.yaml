@@ -1,0 +1,126 @@
+---
+_copy: Copyright (c) 2004-2022 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: This is the standard library of command definitions.
+
+_lock: true
+
+command.chat.description: Enter and leave chat mode.
+command.chat.help: The chat command toggles chat mode. When in chat mode, all
+    input is passed as a parameter to the say command, unless prepended by an
+    exclamation mark (!). For example, to leave chat mode,
+    use:$(eol)$(eol)   !chat
+command.chat.see_also:
+    - say
+
+command.create.administrative: true
+command.create.description: Create a new element in the universe.
+command.create.help: Ways to create an element:$(eol)$(eol)   create
+    actor.avatar_fred_1$(eol)   create other.garply foo/bar/baz
+
+command.delete.administrative: true
+command.delete.description: Delete an existing facet from an element.
+command.delete.help: You can delete any facet of an element as
+    follows:$(eol)$(eol)   delete area.boardroom terrain
+
+command.destroy.administrative: true
+command.destroy.description: Destroy an existing element in the universe.
+command.destroy.help: You can destroy any element in the universe as
+    follows:$(eol)$(eol)   destroy prop.dagger
+
+command.evaluate.debugging: true
+command.evaluate.description: Evaluate a Python expression.
+command.evaluate.help: For debugging purposes, you can use this to run certain
+    Python language expressions within the running engine's context, though for
+    safety reasons only a limited set of builtins are allowed, as well as
+    objects in the mudpy package namespace and the active universe object.
+    Expressions containing "__" or "lambda" are also prohobited for additional
+    safety. Everything following the word "evaluate" is assumed to be a Python
+    expression, and is passed to the eval() built-in, outputting a string
+    representation of whatever it returns. Any exceptions are caught in an
+    attempt to avoid accidentally crashing the engine. This command is mostly
+    useful for inspecting the contents of in-memory objects, for
+    example:$(eol)$(eol) evaluate universe.groups['actor'].keys()
+
+command.get.action: command.c_get
+command.get.description: Pick up or retrieve an item.
+command.get.help: To retrieve something from your environment into your
+    inventory, get it by whatever name is shown, or even a subset or keyword
+    which you think might relate to it.
+
+command.drop.description: Put an item onto the ground.
+command.drop.help: To drop something, reference it by whatever name is shown in
+    your inventory.
+
+command.halt.administrative: true
+command.halt.description: Shut down the world.
+command.halt.help: This will save all active accounts, disconnect all clients
+    and stop the entire program.
+
+command.help.description: List commands or get help on one.
+command.help.help: This will list all command words available to you along with
+    a brief description or, alternatively, give you detailed information on one
+    command.
+
+command.inventory.description: Look in your inventory.
+command.inventory.help: List the items you're currently carrying around.
+
+command.look.description: Look around.
+command.look.help: With the look command, you can see where you are.
+
+command.move.description: Move in a specific direction.
+command.move.help: Move to another place by supplying the name of a
+    portal/direction or a suitable abbreviation for one,
+    like:$(eol)$(eol)   move north$(eol)   move s
+
+command.preferences.description: View or change your preferences.
+command.preferences.help: If invoked with no parameters, all your current
+    preferences and their values are listed. If one parameter is supplied, the
+    value of the preference with that name is displayed. If more than one
+    parameter is supplied, the first must be the name of a preference and the
+    remainder is the value to which you wish to change it.
+    Examples:$(eol)$(eol)   preferences$(eol)   preferences
+    prompt$(eol)   preferences prompt $_(time)>
+
+command.quit.description: Leave the World.
+command.quit.help: This will deactivate your avatar and return you to the main
+    menu.
+
+command.reload.administrative: true
+command.reload.description: Reload modules and data.
+command.reload.help: This will reload all python modules and read-only data
+    files.
+
+command.say.description: State something out loud.
+command.say.help: This allows you to speak to other characters within the same
+    area. If you end your sentence with punctuation, the message displayed will
+    incorporate an appropriate action (ask, exclaim, et cetera). It will also
+    correct common typographical errors, add punctuation and capitalize your
+    sentence as needed (assuming you speak one sentence per line). For
+    example:$(eol)$(eol)   > say youre sure i went teh wrong way?$(eol)   You
+    ask, "You're sure I went the wrong way?"$(eol)$(eol)If necessary, enclose
+    literal statements in quotation marks:$(eol)$(eol)   > say "youre sure i
+    went teh wrong way?"$(eol)   You say, "youre sure i went teh wrong way?"
+command.say.see_also:
+    - chat
+
+command.set.action: command.c_set
+command.set.administrative: true
+command.set.description: Set a facet of an element.
+command.set.help: Invoke it like
+    this:$(eol)$(eol)   set actor.avatar_dominique_0 description You see
+    nothing special.
+
+command.show.administrative: true
+command.show.description: Show various data.
+command.show.help: Here are the possible incantations (<parameter> is required,
+    [option] is optional, (note) is a note):$(eol)$(eol)   show element
+    <element> (list facet definitions for an element)$(eol)   show file
+    <filename> (list elements in a file)$(eol)   show files (list all element
+    data files)$(eol)   show group <group> (list the elements in a
+    group)$(eol)   show groups (list all element group names)$(eol)   show log
+    [level [start [stop]]] (list logs above level from start to
+    stop)$(eol)   show time (return several current timer
+    values)$(eol)   show version (display running version and dependencies)

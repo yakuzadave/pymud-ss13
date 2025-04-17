@@ -1,0 +1,56 @@
+# Copyright (c) 2022 mudpy authors. Permission to use, copy,
+# modify, and distribute this software is granted under terms
+# provided in the LICENSE file distributed with this software.
+
+[build-system]
+requires = ["pbr>=5.8", "setuptools>=61"]
+build-backend = "pbr.build"
+
+[project]
+authors = [{email = "fungi@yuggoth.org"}, {name = "Jeremy Stanley"}]
+classifiers = [
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Communications",
+    "Topic :: Communications :: BBS",
+    "Topic :: Communications :: Chat",
+    "Topic :: Games/Entertainment",
+    "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Topic :: Internet",
+]
+dependencies = ["passlib>=1.7", "pyyaml"]
+description = "The mudpy MUD server engine."
+dynamic = ["version"]
+keywords = ["game", "mud", "telnet"]
+maintainers = [{email = "fungi@yuggoth.org"}, {name = "Jeremy Stanley"}]
+name = "mudpy"
+readme = {charset = "UTF-8", content-type = "text/x-rst", file = "README"}
+requires-python = ">=3.7"
+
+[project.scripts]
+mudpy = "mudpy.daemon:main"
+mudpy_selftest = "mudpy.tests.selftest:main"
+
+[project.urls]
+"Big ChangeLog" = "https://mudpy.org/clog/mudpy/"
+"Browse Source" = "https://mudpy.org/code/mudpy/"
+"Bug Reporting" = "https://mudpy.org/bugs/mudpy/"
+"Documentation" = "https://mudpy.org/docs/mudpy/"
+"Git Clone URL" = "https://mudpy.org/code/mudpy/"
+"License Texts" = "https://mudpy.org/license/"
+"Release Files" = "https://mudpy.org/dist/mudpy/"
+
+[tool.setuptools]
+# Silence a warning about namespace packages included as data because we ship
+# subdirectories inside the mudpy package tree
+packages = ["mudpy", "mudpy.tests", "mudpy.tests.fixtures"]

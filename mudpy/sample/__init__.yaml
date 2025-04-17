@@ -1,0 +1,12 @@
+---
+_copy: Copyright (c) 2004-2017 mudpy authors. Permission to use, copy,
+    modify, and distribute this software is granted under terms
+    provided in the LICENSE file distributed with this software.
+
+_desc: This is an index file for a sample collection of elements.
+
+_load:
+    - area.yaml
+    - prop.yaml
+
+_lock: true
