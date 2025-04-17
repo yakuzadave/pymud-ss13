@@ -3,7 +3,6 @@
   category: Movement
   patterns:
     - "go {direction}"
-    - "{direction}"
     - "move {direction}"
     - "n"
     - "s"

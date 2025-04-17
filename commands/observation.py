@@ -185,7 +185,7 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     # Different scan results based on scanner type
     if target:
         # Targeted scan
-        if "biometric" in scanner_type.lower():
+        if scanner_type and "biometric" in scanner_type.lower():
             # Scan for life signs
             for other_id in interface.get_clients():
                 if other_id != client_id:  # Don't include self
@@ -209,7 +209,7 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
             
             return f"No target '{target}' found for biometric scanning."
         
-        elif "radiation" in scanner_type.lower():
+        elif scanner_type and "radiation" in scanner_type.lower():
             # Scan for radiation
             room_items = interface.get_items_in_room(player_location)
             for item_id in room_items:
@@ -222,9 +222,12 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                         return f"Radiation scan of {item_name}: Safe levels (0.1 rads)"
             
             return f"No target '{target}' found for radiation scanning."
+        
+        # Default scanning behavior if scanner type doesn't match specific types
+        return f"Your {scanner_type if scanner_type else 'scanner'} can't perform detailed scans on {target}."
     else:
         # Room scan
-        if "biometric" in scanner_type.lower():
+        if scanner_type and "biometric" in scanner_type.lower():
             life_signs = 0
             scan_result = "Biometric scan of the area:\n"
             
@@ -239,21 +242,21 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
             
             # Check for any non-human life forms
             room_name = interface.get_room_name(player_location)
-            if "lab" in room_name.lower():
+            if room_name and "lab" in room_name.lower():
                 scan_result += "Warning: Non-humanoid life form signatures detected."
             
             return scan_result
         
-        elif "radiation" in scanner_type.lower():
+        elif scanner_type and "radiation" in scanner_type.lower():
             # Check room for radiation
             room_name = interface.get_room_name(player_location)
-            if "reactor" in room_name.lower():
+            if room_name and "reactor" in room_name.lower():
                 return "Radiation scan: CAUTION! Elevated radiation levels detected (15.7 rads)."
             else:
                 return "Radiation scan: Normal background radiation levels (0.1 rads)."
         
-        else:
-            return f"Scanning with {scanner_type}... No anomalies detected."
+        # Default scanning behavior
+        return f"Scanning with {scanner_type if scanner_type else 'scanner'}... No anomalies detected."
 
 def map_handler(client_id: str, **kwargs) -> str:
     """
@@ -297,10 +300,11 @@ def map_handler(client_id: str, **kwargs) -> str:
     # Generate a simple ASCII art map with the player's location
     # This is a simplified map; in a real implementation, you would generate 
     # a dynamic map based on the station layout and visited rooms
+    room_name = interface.get_room_name(player_location) or "UNKNOWN"
     
     # Example simplified map
     map_art = f"""
-    STATION MAP - YOU ARE AT: {interface.get_room_name(player_location)}
+    STATION MAP - YOU ARE AT: {room_name}
     
     +---------+----------+---------+
     |         |          |         |
