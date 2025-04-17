@@ -169,6 +169,9 @@ async def broadcast_message(message):
 async def start_websocket_server():
     """
     Start the WebSocket server.
+    
+    Note: This is now handled by the combined server in start_server.py
+    This is kept for backward compatibility.
     """
     host = '0.0.0.0'
     port = 8000
