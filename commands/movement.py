@@ -1,34 +1,39 @@
 """
-Movement commands for MUDpy SS13.
-These include moving between locations, teleporting (for admins), etc.
+Movement command handlers for MUDpy SS13.
+This module provides handlers for movement commands like go, sprint, etc.
 """
 
 import logging
-from engine import register
-from events import publish
+from typing import Optional, Dict, Any
 
+# Configure logging
 logger = logging.getLogger(__name__)
 
-@register("go")
-def cmd_go(interface, client_id, args):
+def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> str:
     """
-    Move in a specified direction.
+    Handle the move command.
     
     Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: The direction to move.
+        client_id: The ID of the client issuing the command.
+        direction: The direction to move.
         
     Returns:
-        str: Result of the movement.
+        Result of the movement attempt.
     """
-    if not args:
-        return "Go where? Specify a direction like 'go north' or 'go east'."
+    logger.debug(f"Move command called by client {client_id} with direction {direction}")
     
-    direction = args.lower()
-    valid_directions = ["north", "south", "east", "west", "up", "down", "n", "s", "e", "w", "u", "d"]
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
     
-    # Normalize shorthand directions
+    if not direction:
+        return "Move in which direction?"
+    
+    # Normalize direction
+    direction = direction.lower()
+    
+    # Check for shortcuts
     if direction == "n":
         direction = "north"
     elif direction == "s":
@@ -42,129 +47,111 @@ def cmd_go(interface, client_id, args):
     elif direction == "d":
         direction = "down"
     
-    if direction not in valid_directions:
-        return f"Invalid direction '{args}'. Try north, south, east, west, up, or down."
+    # Check if the direction is valid
+    if direction not in ["north", "south", "east", "west", "up", "down"]:
+        return f"'{direction}' is not a valid direction."
     
-    # This is a placeholder that should be enhanced to use the world and component system
-    return interface._go(client_id, direction)
-
-@register("north")
-def cmd_go_north(interface, client_id, args):
-    """
-    Shortcut to go north.
+    # Get current location
+    current_location = interface.get_player_location(client_id)
+    if not current_location:
+        return "You are nowhere. This is a strange phenomenon indeed."
     
-    Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
-        
-    Returns:
-        str: Result of the movement.
-    """
-    return cmd_go(interface, client_id, "north")
-
-@register("south")
-def cmd_go_south(interface, client_id, args):
-    """
-    Shortcut to go south.
+    # Get exits from current location
+    exits = interface.get_exits_from_room(current_location)
     
-    Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
-        
-    Returns:
-        str: Result of the movement.
-    """
-    return cmd_go(interface, client_id, "south")
-
-@register("east")
-def cmd_go_east(interface, client_id, args):
-    """
-    Shortcut to go east.
+    # Check if the direction is a valid exit
+    if direction not in exits:
+        return f"You can't go {direction} from here."
     
-    Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
-        
-    Returns:
-        str: Result of the movement.
-    """
-    return cmd_go(interface, client_id, "east")
+    # Get target location
+    target_location = exits[direction]
+    
+    # Check for locked doors or other barriers
+    door_is_locked = False  # This would be checked by calling interface.is_door_locked(current_location, direction)
+    if door_is_locked:
+        return f"The door to the {direction} is locked."
+    
+    # Consume energy
+    if hasattr(interface, 'modify_player_stat'):
+        interface.modify_player_stat(client_id, 'energy', -1)
+    
+    # Move the player
+    previous_location = current_location
+    interface.set_player_location(client_id, target_location)
+    
+    # Publish the movement event
+    from events import publish
+    publish("player_moved", 
+            player_id=client_id, 
+            from_location=previous_location, 
+            to_location=target_location)
+    
+    # Return a description of the new location
+    return interface._look(client_id)
 
-@register("west")
-def cmd_go_west(interface, client_id, args):
+def sprint_handler(client_id: str, direction: str, **kwargs) -> str:
     """
-    Shortcut to go west.
+    Handle the sprint command (move two rooms at once).
     
     Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
+        client_id: The ID of the client issuing the command.
+        direction: The direction to sprint.
         
     Returns:
-        str: Result of the movement.
+        Result of the sprint attempt.
     """
-    return cmd_go(interface, client_id, "west")
-
-@register("up")
-def cmd_go_up(interface, client_id, args):
-    """
-    Shortcut to go up.
+    logger.debug(f"Sprint command called by client {client_id} with direction {direction}")
     
-    Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
-        
-    Returns:
-        str: Result of the movement.
-    """
-    return cmd_go(interface, client_id, "up")
-
-@register("down")
-def cmd_go_down(interface, client_id, args):
-    """
-    Shortcut to go down.
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
     
-    Args:
-        interface: The MUDpy interface instance.
-        client_id: The ID of the client.
-        args: Additional arguments (unused).
+    # Check energy levels
+    stats = interface.get_player_stats(client_id)
+    if stats and stats.get('energy', 0) < 10:
+        return "You are too tired to sprint. Rest a bit first."
+    
+    # Normalize direction
+    direction = direction.lower()
+    
+    # Check for shortcuts
+    if direction == "n":
+        direction = "north"
+    elif direction == "s":
+        direction = "south"
+    elif direction == "e":
+        direction = "east"
+    elif direction == "w":
+        direction = "west"
+    elif direction == "u":
+        direction = "up"
+    elif direction == "d":
+        direction = "down"
+    
+    # Move once
+    result = move_handler(client_id, direction, **kwargs)
+    
+    # If successful, move again
+    if not result.startswith("You can't") and not result.startswith("The door"):
+        # Get current location after first move
+        current_location = interface.get_player_location(client_id)
         
-    Returns:
-        str: Result of the movement.
-    """
-    return cmd_go(interface, client_id, "down")
-
-# Single-letter shortcuts for movement
-@register("n")
-def cmd_go_n(interface, client_id, args):
-    """Shortcut to go north."""
-    return cmd_go(interface, client_id, "north")
-
-@register("s")
-def cmd_go_s(interface, client_id, args):
-    """Shortcut to go south."""
-    return cmd_go(interface, client_id, "south")
-
-@register("e")
-def cmd_go_e(interface, client_id, args):
-    """Shortcut to go east."""
-    return cmd_go(interface, client_id, "east")
-
-@register("w")
-def cmd_go_w(interface, client_id, args):
-    """Shortcut to go west."""
-    return cmd_go(interface, client_id, "west")
-
-@register("u")
-def cmd_go_u(interface, client_id, args):
-    """Shortcut to go up."""
-    return cmd_go(interface, client_id, "up")
-
-@register("d")
-def cmd_go_d(interface, client_id, args):
-    """Shortcut to go down."""
-    return cmd_go(interface, client_id, "down")
+        # Get exits from current location
+        exits = interface.get_exits_from_room(current_location)
+        
+        # Check if we can continue in the same direction
+        if direction in exits:
+            # Consume extra energy
+            if hasattr(interface, 'modify_player_stat'):
+                interface.modify_player_stat(client_id, 'energy', -5)
+            
+            # Move again
+            result = move_handler(client_id, direction, **kwargs)
+            
+            # Add sprint message
+            return f"You sprint {direction} with great speed!\n\n{result}"
+        else:
+            return f"You sprint {direction} but come to a stop.\n\n{result}"
+    
+    return result

@@ -61,10 +61,23 @@ class CommandParser:
                 name = cmd.get('name', '')
                 patterns = cmd.get('patterns', [])
                 help_text = cmd.get('help', '')
+                category = cmd.get('category', 'General')
+                required_skills = cmd.get('required_skills', [])
+                terrain_restrictions = cmd.get('terrain_restrictions', [])
+                item_requirements = cmd.get('item_requirements', [])
                 
                 handler = self.command_handlers.get(name)
                 
-                spec = CommandSpec(name, patterns, help_text, handler)
+                spec = CommandSpec(
+                    name=name, 
+                    patterns=patterns, 
+                    help_text=help_text,
+                    category=category,
+                    required_skills=required_skills,
+                    terrain_restrictions=terrain_restrictions,
+                    item_requirements=item_requirements,
+                    func=handler
+                )
                 self.command_specs.append(spec)
             
             logger.info(f"Loaded {len(self.command_specs)} command specifications")
@@ -80,6 +93,37 @@ class CommandParser:
         """
         return [spec.name for spec in self.command_specs]
     
+    def get_categories(self) -> List[str]:
+        """
+        Get a list of all command categories.
+        
+        Returns:
+            List of command categories.
+        """
+        categories = set()
+        for spec in self.command_specs:
+            categories.add(spec.category)
+        return sorted(list(categories))
+    
+    def get_commands_by_category(self) -> Dict[str, List[str]]:
+        """
+        Get commands grouped by category.
+        
+        Returns:
+            Dict mapping categories to lists of command names.
+        """
+        result = {}
+        for spec in self.command_specs:
+            if spec.category not in result:
+                result[spec.category] = []
+            result[spec.category].append(spec.name)
+        
+        # Sort commands within each category
+        for category in result:
+            result[category].sort()
+        
+        return result
+    
     def get_help(self, command_name: Optional[str] = None) -> str:
         """
         Get help text for a command or list all commands.
@@ -93,7 +137,26 @@ class CommandParser:
         if command_name:
             for spec in self.command_specs:
                 if spec.name.lower() == command_name.lower():
-                    return f"Help for '{spec.name}':\n{spec.help_text}"
+                    # Build detailed help for this command
+                    help_text = f"Help for '{spec.name}' ({spec.category}):\n"
+                    help_text += f"{spec.help_text}\n\n"
+                    
+                    # Add patterns
+                    help_text += "Patterns:\n"
+                    for pattern in spec.patterns:
+                        help_text += f"  {pattern}\n"
+                    
+                    # Add requirements if any
+                    if spec.required_skills:
+                        help_text += f"\nRequired skills: {', '.join(spec.required_skills)}"
+                    
+                    if spec.terrain_restrictions:
+                        help_text += f"\nUsable in: {', '.join(spec.terrain_restrictions)}"
+                    
+                    if spec.item_requirements:
+                        help_text += f"\nRequired items: {', '.join(spec.item_requirements)}"
+                    
+                    return help_text
             
             # Try to find close matches if exact match not found
             close_matches = difflib.get_close_matches(command_name, self.get_command_names(), n=3)
@@ -102,13 +165,16 @@ class CommandParser:
             else:
                 return f"Unknown command '{command_name}'."
         else:
-            # List all commands
-            commands = self.get_command_names()
-            commands.sort()
+            # Group commands by category
+            commands_by_category = self.get_commands_by_category()
             
-            help_text = "Available commands:\n"
-            for cmd in commands:
-                help_text += f"  {cmd}\n"
+            help_text = "Available commands by category:\n"
+            
+            # List commands by category
+            for category in sorted(commands_by_category.keys()):
+                help_text += f"\n{category}:\n"
+                for cmd in commands_by_category[category]:
+                    help_text += f"  {cmd}\n"
             
             help_text += "\nType 'help <command>' for more information on a specific command."
             return help_text

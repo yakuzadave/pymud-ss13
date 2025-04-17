@@ -9,17 +9,37 @@ from typing import Optional, Dict, Any
 
 # Import our new parser and command handlers
 from parser import CommandParser
+
+# Import basic handlers (for backward compatibility)
 from commands.basic import (
     help_handler,
-    look_handler,
     inventory_handler,
-    move_handler,
-    say_handler,
     get_handler,
     drop_handler,
     use_handler,
     status_handler,
-    scan_handler
+)
+
+# Import movement command handlers
+from commands.movement import (
+    move_handler,
+    sprint_handler,
+)
+
+# Import observation command handlers
+from commands.observation import (
+    look_handler,
+    scan_handler,
+    map_handler,
+)
+
+# Import social command handlers
+from commands.social import (
+    say_handler,
+    shout_handler,
+    whisper_handler,
+    tell_handler,
+    ooc_handler,
 )
 
 # Set up logging
@@ -71,17 +91,29 @@ class MudEngine:
     
     def _initialize_command_parser(self):
         """Initialize the command parser with handlers."""
-        # Register command handlers
+        # Register basic command handlers
         command_parser.register_handler('help', help_handler)
-        command_parser.register_handler('look', look_handler)
         command_parser.register_handler('inventory', inventory_handler)
-        command_parser.register_handler('move', move_handler)
-        command_parser.register_handler('say', say_handler)
         command_parser.register_handler('get', get_handler)
         command_parser.register_handler('drop', drop_handler)
         command_parser.register_handler('use', use_handler)
         command_parser.register_handler('status', status_handler)
+        
+        # Register movement command handlers
+        command_parser.register_handler('move', move_handler)
+        command_parser.register_handler('sprint', sprint_handler)
+        
+        # Register observation command handlers
+        command_parser.register_handler('look', look_handler)
         command_parser.register_handler('scan', scan_handler)
+        command_parser.register_handler('map', map_handler)
+        
+        # Register social command handlers
+        command_parser.register_handler('say', say_handler)
+        command_parser.register_handler('shout', shout_handler)
+        command_parser.register_handler('whisper', whisper_handler)
+        command_parser.register_handler('tell', tell_handler)
+        command_parser.register_handler('ooc', ooc_handler)
         
         # Load command specs from YAML
         if os.path.exists('data/commands.yaml'):

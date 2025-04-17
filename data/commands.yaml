@@ -1,26 +1,6 @@
-- name: help
-  patterns:
-    - "help"
-    - "help {command}"
-  help: |
-    help            — list all available commands
-    help <command>  — get help on a specific command
-
-- name: look
-  patterns:
-    - "look"
-    - "l"
-    - "look at {target}"
-    - "examine {target}"
-    - "x {target}"
-  help: |
-    look             — describe current room
-    look at <target> — examine an object, item, or exit
-    examine <target> — same as "look at"
-    l                — shortcut for "look"
-    x <target>       — shortcut for "examine <target>"
-
+# Movement Commands
 - name: move
+  category: Movement
   patterns:
     - "go {direction}"
     - "{direction}"
@@ -30,24 +10,112 @@
     - "e"
     - "w"
     - "north"
-    - "south"
+    - "south" 
     - "east"
     - "west"
   help: |
-    go <direction>   — move in the specified direction
-    <direction>      — shortcut for "go <direction>"
-    n, s, e, w       — shortcuts for north, south, east, west
+    Move in the specified direction.
+    Short directions (n, s, e, w) are supported.
 
-- name: inventory
+- name: sprint
+  category: Movement
   patterns:
-    - "inventory"
-    - "i"
-    - "items"
+    - "sprint {direction}"
   help: |
-    inventory        — list items you are carrying
-    i                — shortcut for "inventory"
+    Move two rooms in the specified direction at once.
+    Consumes more energy than regular movement.
 
+# Observation Commands
+- name: look
+  category: Observation
+  patterns:
+    - "look"
+    - "l"
+    - "look at {target}"
+    - "examine {target}"
+    - "x {target}"
+    - "inspect {target}"
+  help: |
+    Examine your surroundings or a specific object.
+    Without a target, describes the current room.
+    With a target, gives detailed information about it.
+
+- name: scan
+  category: Observation
+  patterns:
+    - "scan"
+    - "scan {target}"
+  help: |
+    Perform a detailed scan of the area or a specific target.
+    Requires a scanner device.
+    Different scanner types yield different information.
+
+- name: map
+  category: Observation
+  patterns:
+    - "map"
+  help: |
+    Display a map of the local area.
+    Shows rooms you've visited and their connections.
+
+# Communication Commands
+- name: say
+  category: Communication
+  patterns:
+    - "say {message}"
+    - "'{message}"
+  help: |
+    Say something out loud to everyone in the current room.
+
+- name: shout
+  category: Communication
+  patterns:
+    - "shout {message}"
+    - "yell {message}"
+  help: |
+    Shout a message that can be heard in adjacent rooms.
+
+- name: whisper
+  category: Communication
+  patterns:
+    - "whisper {player} {message}"
+    - "whisper to {player} {message}"
+  help: |
+    Whisper a message to a specific player in the same room.
+    Only that player will see your message.
+
+- name: tell
+  category: Communication
+  patterns:
+    - "tell {player} {message}"
+    - "msg {player} {message}"
+  help: |
+    Send a private message to any online player.
+    Works regardless of their location.
+
+- name: radio
+  category: Communication
+  patterns:
+    - "radio {channel} {message}"
+    - "broadcast {message} on {channel}"
+  help: |
+    Send a message over a radio channel.
+    Requires a communications device.
+    Available channels depend on your access level.
+  item_requirements:
+    - "comms_device"
+
+- name: ooc
+  category: Communication
+  patterns:
+    - "ooc {message}"
+  help: |
+    Send an out-of-character message to all players.
+    Use this for meta-game discussions.
+
+# Object Interaction Commands
 - name: get
+  category: Object Interaction
   patterns:
     - "get {item}"
     - "take {item}"
@@ -55,51 +123,184 @@
     - "get {item} from {container}"
     - "take {item} from {container}"
   help: |
-    get <item>              — pick up an item
-    take <item>             — same as "get"
-    get <item> from <cont>  — take item from container
+    Pick up an item from the current room or from a container.
 
 - name: drop
+  category: Object Interaction
   patterns:
     - "drop {item}"
     - "put {item} down"
   help: |
-    drop <item>      — drop an item in the current room
-    put <item> down  — same as "drop"
+    Drop an item from your inventory into the current room.
+
+- name: put
+  category: Object Interaction
+  patterns:
+    - "put {item} in {container}"
+    - "place {item} in {container}"
+    - "insert {item} into {container}"
+  help: |
+    Place an item from your inventory into a container.
+
+- name: give
+  category: Object Interaction
+  patterns:
+    - "give {item} to {player}"
+    - "hand {item} to {player}"
+  help: |
+    Give an item from your inventory to another player.
+    The player must be in the same room.
 
 - name: use
+  category: Object Interaction
   patterns:
     - "use {item}"
     - "use {item} on {target}"
     - "use {item} with {target}"
     - "activate {item}"
+    - "operate {item}"
   help: |
-    use <item>              — use or activate an item
-    use <item> on <target>  — use item on another object
-    activate <item>         — same as "use"
+    Activate or use an item, optionally on a target.
+    Different items have different effects when used.
 
-- name: say
+- name: open
+  category: Object Interaction
   patterns:
-    - "say {message}"
-    - "'{message}"
+    - "open {target}"
   help: |
-    say <message>    — say something in the current room
-    '<message>       — shortcut for "say"
+    Open a door, container, or other openable object.
+
+- name: close
+  category: Object Interaction
+  patterns:
+    - "close {target}"
+    - "shut {target}"
+  help: |
+    Close a door, container, or other closable object.
+
+# Inventory & Equipment Commands
+- name: inventory
+  category: Inventory & Equipment
+  patterns:
+    - "inventory"
+    - "i"
+    - "items"
+  help: |
+    List all items you are carrying.
+
+- name: wear
+  category: Inventory & Equipment
+  patterns:
+    - "wear {item}"
+    - "equip {item}"
+    - "put on {item}"
+  help: |
+    Wear or equip an item from your inventory.
+    Only wearable items can be equipped.
+
+- name: remove
+  category: Inventory & Equipment
+  patterns:
+    - "remove {item}"
+    - "take off {item}"
+    - "unequip {item}"
+  help: |
+    Remove a worn or equipped item.
 
 - name: status
+  category: Utility
   patterns:
     - "status"
-    - "stats"
     - "health"
+    - "stats"
   help: |
-    status           — check your current status
-    stats            — same as "status"
-    health           — check your health stats
+    Display your current status, including health, energy, and other vital statistics.
 
-- name: scan
+# Utility & Help Commands
+- name: help
+  category: Utility
   patterns:
-    - "scan"
-    - "scan {target}"
+    - "help"
+    - "help {command}"
+    - "?"
+    - "commands"
   help: |
-    scan             — scan the current environment
-    scan <target>    — scan a specific target
+    Display help information about commands.
+    Use 'help <command>' for specific command details.
+
+- name: who
+  category: Utility
+  patterns:
+    - "who"
+    - "players"
+  help: |
+    List all players currently online.
+
+- name: alias
+  category: Utility
+  patterns:
+    - "alias {shortcut} {command}"
+    - "alias {shortcut}={command}"
+  help: |
+    Create a personal shortcut for a command.
+    Example: alias l=look
+
+- name: unalias
+  category: Utility
+  patterns:
+    - "unalias {shortcut}"
+  help: |
+    Remove a previously created command shortcut.
+
+# Role-specific Commands
+- name: diagnose
+  category: Medical
+  patterns:
+    - "diagnose {player}"
+    - "examine {player}"
+    - "check {player}"
+  help: |
+    Perform a medical diagnosis on a player.
+    Shows detailed health information.
+  required_skills:
+    - "medical"
+  item_requirements:
+    - "medspray"
+
+- name: heal
+  category: Medical
+  patterns:
+    - "heal {player}"
+    - "treat {player}"
+    - "heal {player} with {item}"
+    - "apply {item} to {player}"
+  help: |
+    Provide medical treatment to a player.
+    Requires medical skill and appropriate supplies.
+  required_skills:
+    - "medical"
+
+- name: repair
+  category: Engineering
+  patterns:
+    - "repair {target}"
+    - "fix {target}"
+    - "repair {target} with {item}"
+  help: |
+    Repair a damaged object or device.
+    Requires engineering skill and appropriate tools.
+  required_skills:
+    - "engineering"
+  item_requirements:
+    - "repair_kit"
+
+- name: analyze
+  category: Science
+  patterns:
+    - "analyze {target}"
+    - "analyze sample {target}"
+  help: |
+    Perform a scientific analysis on an object or sample.
+    Requires science skill and appropriate equipment.
+  required_skills:
+    - "science"
