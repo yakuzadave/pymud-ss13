@@ -6,7 +6,7 @@ This module provides a command registry system for the MUD engine.
 import logging
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Command handler registry
@@ -75,13 +75,24 @@ class MudEngine:
         
         if handler:
             try:
-                logger.debug(f"Found handler for '{verb}', executing...")
+                logger.debug(f"Found handler for '{verb}', executing with client_id={client_id}, type={type(client_id)}")
                 # Call the handler with the interface, client_id, and arguments
                 response = handler(self.interface, client_id, args)
-                logger.debug(f"Handler response: '{response[:50]}...' (truncated)")
+                
+                # Safer response logging
+                if response:
+                    truncated = response[:50] + "..." if len(response) > 50 else response
+                    logger.debug(f"Handler response: '{truncated}'")
+                else:
+                    logger.warning(f"Handler for '{verb}' returned empty response")
+                    response = f"Command '{verb}' completed but returned no output."
+                
                 return response
+                
             except Exception as e:
+                import traceback
                 logger.error(f"Error executing command handler for '{verb}': {e}")
+                logger.error(f"Exception traceback: {traceback.format_exc()}")
                 return f"An error occurred while processing your command: {e}"
         else:
             logger.debug(f"No handler found for command '{verb}'")

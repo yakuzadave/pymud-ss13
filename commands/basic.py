@@ -32,7 +32,11 @@ def cmd_look(interface, client_id, args):
     if not args:
         logger.debug(f"Looking at current location for client {client_id}")
         response = interface._look(client_id)
-        logger.debug(f"Look response: {response[:50]}..." if response else "None")
+        # Fix string formatting issue with safer logging
+        if response:
+            logger.debug(f"Look response: {response[:50]}...")
+        else:
+            logger.debug("Look response: None")
         return response
     
     # Otherwise, try to look at a specific object

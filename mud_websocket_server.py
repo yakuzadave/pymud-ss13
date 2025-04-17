@@ -80,11 +80,18 @@ async def handle_client(websocket):
             # Send initial 'look' command through the integration to get room description
             logger.info(f"Sending initial 'look' command for client: {client_id}")
             initial_response = mud_integration.process_command(client_id, "look")
-            logger.info(f"Received initial response: {initial_response[:50]}...")
             
+            # Safer logging of responses
+            if initial_response:
+                trimmed_response = initial_response[:50] + "..." if len(initial_response) > 50 else initial_response
+                logger.info(f"Received initial response: {trimmed_response}")
+            else:
+                logger.info("Received empty initial response")
+            
+            # Send response back to client
             await websocket.send(json.dumps({
                 "type": "response",
-                "message": initial_response
+                "message": initial_response if initial_response else "Welcome! You find yourself in a mysterious location."
             }))
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
