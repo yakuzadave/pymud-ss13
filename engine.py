@@ -56,24 +56,33 @@ class MudEngine:
         Returns:
             str: The response to the command.
         """
+        logger.debug(f"Engine processing command: client={client_id}, command='{command_string}'")
+        
         # Ensure command_string is a string
         if not isinstance(command_string, str):
             command_string = str(command_string)
+            logger.debug(f"Converted command to string: '{command_string}'")
         
         # Split the command into the verb and arguments
         parts = command_string.strip().split(maxsplit=1)
         verb = parts[0].lower() if parts else ""
         args = parts[1] if len(parts) > 1 else ""
         
+        logger.debug(f"Parsed command: verb='{verb}', args='{args}'")
+        
         # Lookup the handler in the registry
         handler = COMMAND_HANDLERS.get(verb)
         
         if handler:
             try:
+                logger.debug(f"Found handler for '{verb}', executing...")
                 # Call the handler with the interface, client_id, and arguments
-                return handler(self.interface, client_id, args)
+                response = handler(self.interface, client_id, args)
+                logger.debug(f"Handler response: '{response[:50]}...' (truncated)")
+                return response
             except Exception as e:
                 logger.error(f"Error executing command handler for '{verb}': {e}")
                 return f"An error occurred while processing your command: {e}"
         else:
+            logger.debug(f"No handler found for command '{verb}'")
             return f"Unknown command '{verb}'. Type 'help' for a list of commands."

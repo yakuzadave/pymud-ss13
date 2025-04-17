@@ -22,12 +22,22 @@ def cmd_look(interface, client_id, args):
     Returns:
         str: Description of what was seen.
     """
+    logger.debug(f"Look command called by client {client_id}")
+    
+    # Get session data for debugging
+    session = interface.client_sessions.get(client_id, {})
+    logger.debug(f"Client session data: {session}")
+    
     # If no args, look at the room
     if not args:
-        return interface._look(client_id)
+        logger.debug(f"Looking at current location for client {client_id}")
+        response = interface._look(client_id)
+        logger.debug(f"Look response: {response[:50]}..." if response else "None")
+        return response
     
     # Otherwise, try to look at a specific object
     # This should be enhanced to use the world and component system
+    logger.debug(f"Looking at specific object: {args}")
     return f"You look at {args}, but don't see anything special."
 
 @register("help")
