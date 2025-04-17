@@ -1,0 +1,139 @@
+Raw WebSockets + a hand‑rolled loop tend to end in two things: dead connections nobody notices, and one slow client freezing the entire station. Instead, let’s lean on a battle‑tested ASGI framework with clear separation of concerns, built‑in lifecycle events, and pluggable backends for scaling.
+
+⸻
+
+🏗️ Architecture Using FastAPI (ASGI)
+
+pip install fastapi uvicorn pydantic[dotenv] redis asyncio
+
+1. Config with Pydantic
+
+Centralize your settings so nothing is hard‑coded:
+
+# settings.py
+from pydantic import BaseSettings
+
+class Settings(BaseSettings):
+    host: str = "0.0.0.0"
+    port: int = 8765
+    redis_url: str = "redis://localhost:6379/0"
+    world_file: str
+
+    class Config:
+        env_file = ".env"
+
+2. Connection Manager
+
+Handles per‑client queues and clean teardown:
+
+# connection.py
+import asyncio
+from fastapi import WebSocket
+
+class ConnectionManager:
+    def __init__(self):
+        self.active: dict[WebSocket, asyncio.Queue[str]] = {}
+
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        queue = asyncio.Queue()
+        self.active[ws] = queue
+        # start send task
+        asyncio.create_task(self._sender(ws, queue))
+
+    def disconnect(self, ws: WebSocket):
+        self.active.pop(ws, None)
+
+    async def _sender(self, ws: WebSocket, queue: asyncio.Queue):
+        try:
+            while True:
+                msg = await queue.get()
+                await ws.send_text(msg)
+        except:
+            pass
+
+    async def broadcast(self, msg: str):
+        for q in self.active.values():
+            q.put_nowait(msg)
+
+3. FastAPI App & WebSocket Endpoint
+
+# main.py
+import yaml, asyncio
+from fastapi import FastAPI, WebSocket, Depends
+from uvicorn import run
+from settings import Settings
+from connection import ConnectionManager
+from engine import MudEngine
+
+app = FastAPI()
+mgr = ConnectionManager()
+settings = Settings()
+world = yaml.safe_load(open(settings.world_file))
+engine = MudEngine(world)
+
+# tie engine broadcasts into WebSocket manager
+engine.on_broadcast(lambda m: asyncio.create_task(mgr.broadcast(m)))
+
+@app.on_event("startup")
+async def startup():
+    engine.load_world()
+    # if you need Redis pub/sub for multi‑instance:
+    # asyncio.create_task(redis_listener())
+
+@app.websocket("/ws")
+async def websocket_endpoint(ws: WebSocket):
+    await mgr.connect(ws)
+    player = engine.create_player()
+    await mgr.broadcast(f"* {player.name} joined.")
+    try:
+        while True:
+            data = await ws.receive_text()
+            out = await engine.process_message(player.id, data)
+            if out:
+                await mgr.active[ws].put(out)
+    except:
+        pass
+    finally:
+        engine.remove_player(player.id)
+        mgr.disconnect(ws)
+        await mgr.broadcast(f"* {player.name} left.")
+
+if __name__ == "__main__":
+    run(app, host=settings.host, port=settings.port)
+
+4. Handling Blocking Work
+	•	I/O (file dumps, YAML loads):
+
+import aiofiles
+
+async def save_world():
+    async with aiofiles.open(settings.world_file, "w") as f:
+        await f.write(yaml.safe_dump(engine.world_state))
+
+
+	•	CPU‑heavy scripts:
+
+import asyncio
+async def run_script(code, ctx):
+    return await asyncio.get_event_loop().run_in_executor(None, engine.exec_script, code, ctx)
+
+
+
+⸻
+
+🔌 Scaling & Extras
+	1.	Redis Pub/Sub via aioredis for cross‑instance broadcast.
+	2.	JWT/Auth on WebSockets for secure logins.
+	3.	BackgroundTasks or Celery/Dramatiq for scheduled autosaves or long‑running jobs.
+	4.	JSON Protocol with Pydantic models instead of raw text, so frontends can parse structured updates (e.g. { "type": "room_update", "data": {...} }).
+
+⸻
+
+🤖 Why This Is Better
+	•	No more head‑of‑line blocking: every client has its own send queue.
+	•	All async: your engine can call await broadcast() without worrying about blocking.
+	•	Config‑driven: tweak host/port/Redis without touching code.
+	•	Plug‑and‑play systems: drop in a new background task, an HTTP API for admin controls, or a metrics endpoint.
+
+By using FastAPI (or any ASGI stack like Starlette, Quart, or Daphne/Channels), you get a robust runtime for free and can focus on the gameplay instead of connection wrangling. Ready to swap out your raw websockets.serve for this ASGI setup?
