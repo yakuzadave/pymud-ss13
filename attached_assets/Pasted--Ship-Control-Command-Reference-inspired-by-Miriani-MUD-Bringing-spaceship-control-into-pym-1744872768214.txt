@@ -1,0 +1,129 @@
+# 🚀 Ship Control Command Reference (inspired by Miriani MUD)
+
+Bringing spaceship control into **pymud‑ss13**, we’ll borrow core commands and patterns from Miriani MUD’s Starship Command Reference. Players will pilot their vessels through launch, warp, scanning, and combat systems—all via intuitive text commands.
+
+> _Source: Miriani Ship Commands  [oai_citation_attribution:0‡miriani.toastsoft.net](https://miriani.toastsoft.net/help/Ship%20Commands?utm_source=chatgpt.com)_
+
+---
+
+## Core Flight Controls
+
+| Command(s)            | Syntax                                 | Description                                                                                         |
+|-----------------------|----------------------------------------|-----------------------------------------------------------------------------------------------------|
+| **LAUNCH**            | `launch`                               | Launch your starship from a planet, station, or docking bay into space.                              |
+| **LAND**              | `land`                                 | Land your starship when one unit away from a planet or station.                                     |
+| **FTL** / **JUMP**    | `ftl [sector]` / `jump [sector]`       | Engage wormhole drive. No args → show FTL map; arg → jump to that sector.                           |
+| **STARMAP** / **SM**  | `starmap` or `sm`                      | Display a map of all objects in the current sector.                                                 |
+| **MANUAL** / **MAN**  | `manual`                               | Switch to manual navigation mode (use numeric or letter keys to steer).                              |
+| **AUTOPILOT** / **AUTO** | `autopilot`                          | Engage autopilot. No args → list possible destinations; with coords → travel there.                 |
+| **MOVE** / **M**      | `move [x y]`                           | In autopilot, travel to given sector coordinates (x y).                                             |
+| **STOP**              | `stop`                                 | Halt ongoing movement or cancel autopilot.                                                          |
+| **QUIET**             | `quiet`                                | Only show movement start/stop messages.                                                             |
+| **SILENT**            | `silent`                               | Suppress all movement messages (including start/stop).                                              |
+
+---
+
+## Navigation & Warp
+
+| Command            | Syntax                                        | Description                                                                                  |
+|--------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
+| **FTL** / **JUMP** | `ftl [sector]` / `jump [sector]`              | Engage wormhole drive (see above).                                                          |
+| **SUBWARP**        | `subwarp [coordinates]`                       | Short‑range teleport; nearly instant relocation within the sector.                           |
+| **SLIP**           | `slip [direction]`                            | “Poor man’s subwarp”—fast one‑sector move in given dir.                                      |
+| **ANCHOR**         | `anchor`                                      | Anchor ship to an asteroid surface (for hauling operations).                                |
+| **HAUL**           | `haul [asteroid_id]`                          | Begin towing an asteroid to a hauling station.                                              |
+
+---
+
+## Scanning & Sensors
+
+| Command                   | Syntax                                      | Description                                                                                 |
+|---------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------|
+| **SCAN**                  | `scan [target]`                             | List scan targets in sector or detail one (no args → list targets).                         |
+| **SCAN ALL [filter]**     | `scan all [filter]`                         | Scan every object, optionally filtered by type (e.g. “scan all debris”).                    |
+| **LRSCAN**                | `lrscan`                                    | Long‑range scan—display objects at max sensor range.                                        |
+| **LOCK** / **AIM**        | `lock [coordinates]` / `aim [coordinates]`  | Weapon‑lock on given coords (for combat).                                                   |
+| **SCAN-FILTERS** / **SCAN-F** | `scan-filters [type]`                  | Apply persistent filters to SCAN results (e.g. hide stars).                                 |
+| **RESET-FILTERS**         | `reset-filters`                             | Clear all scan filters.                                                                     |
+| **CARGO**                 | `cargo`                                     | List contents of the ship’s storage hold.                                                   |
+| **CHARGE**                | `charge`                                    | Display remaining ship power levels.                                                        |
+
+---
+
+## Cargo & Salvage
+
+| Command          | Syntax                                      | Description                                                                         |
+|------------------|---------------------------------------------|-------------------------------------------------------------------------------------|
+| **SALVAGE** / **SAL** | `salvage [debris_id]`                  | Pull nearby debris into the ship’s storage.                                         |
+| **CONDENSE**     | `condense [debris|misc]`                    | Collapse multiple debris/misc items into nearest one for autopilot.                |
+| **TRANSFER**     | `transfer [amount] to [station|ship]`       | Sell debris for credits at station or transfer cargo to another docked ship.        |
+| **EXPEL**        | `expel [item]`                              | Jettison unwanted cargo into space.                                                 |
+
+---
+
+## Ship Systems & Configuration
+
+| Command           | Syntax                                     | Description                                                                            |
+|-------------------|--------------------------------------------|----------------------------------------------------------------------------------------|
+| **POWER**         | `power on` / `power off`                   | Power up or down ship systems.                                                         |
+| **SYSTEMS** / **SYS** | `systems`                              | Enter power‑management interface for fine control (engineering/control room only).     |
+| **TURRET**        | `turret [location] [on|off]`               | Manage internal stun turrets. No args → list locations; on/off to toggle.              |
+| **DOOR**          | `door [open|close] [door_id]`              | Open or close ship bulkhead doors (requires control room).                             |
+| **DOCK**          | `dock [ship_id]`                           | Request docking or attach to a docking ring.                                           |
+| **UNDOCK**        | `undock`                                   | Detach from a docking ring.                                                            |
+| **CLOAK**         | `cloak`                                    | Engage cloaking device (if installed).                                                |
+| **BEACONS**       | `beacons [sector]`                         | Calculate distance to navigational beacons.                                            |
+| **CODE**          | `code [new_code]`                          | Set or change ship’s self‑destruct/docking access code.                                |
+| **ESCAPE**        | `escape [all]`                             | Launch escape pods; `escape all` for full‑crew ejection.                               |
+| **ABORT**         | `abort`                                    | Cancel escape or self‑destruct sequence.                                               |
+| **SELF‑DESTRUCT** | `self-destruct`                            | Initiate ship self‑destruct (admin only; requires code).                               |
+| **ALERT**         | `alert [red|green|yellow|purple]`          | Set ship alert status.                                                                  |
+
+---
+
+## Communications
+
+| Command             | Syntax                                    | Description                                           |
+|---------------------|-------------------------------------------|-------------------------------------------------------|
+| **GENERAL** / **GEN** | `general [message]`                     | Broadcast to all ships in sector.                     |
+| **PA**               | `pa [message]`                          | Internal public address within ship.                  |
+| **EXT**              | `ext [message]`                         | External PA to those outside ship.                    |
+| **RADIO**            | `radio [channel] [message]`             | Encrypted channel transmission (requires radio kit).  |
+| **BROADCAST**        | `broadcast [message]`                  | Long‑range sector‑wide broadcast.                     |
+
+---
+
+### Integration Tips
+
+1. **Pattern Specs**  
+   Define each ship command in your `commands.yaml` with patterns like:
+   ```yaml
+   - name: launch
+     patterns: ["launch"]
+     help: "Launch your starship into space."
+
+	2.	Component Hooks
+Attach ship systems (FTL drive, scanners, docking clamps) as components:
+
+- id: ftl_drive
+  component: FTLDrive
+  state:
+    charge: 100
+
+
+	3.	Event Publishing
+Tie critical commands into your event bus:
+
+@register("launch")
+def launch_handler(player):
+    result = ship.prepare_launch(player.ship_id)
+    publish("ship_launch", ship_id=player.ship_id)
+    return result
+
+
+	4.	Access Control
+Restrict key commands (self-destruct, systems) to players with appropriate roles or access codes.
+
+⸻
+
+By adopting Miriani’s rich starship command set, pymud‑ss13 gains deep, immersive ship‑handling that rivals dedicated space‑combat MUDs—while still fitting into our component‑and‑event‑driven architecture.
