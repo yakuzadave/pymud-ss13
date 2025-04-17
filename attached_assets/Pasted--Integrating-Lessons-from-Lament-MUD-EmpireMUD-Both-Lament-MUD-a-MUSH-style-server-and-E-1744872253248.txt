@@ -1,0 +1,122 @@
+# Integrating Lessons from Lament MUD & EmpireMUD
+
+Both **Lament MUD** (a MUSH‐style server) and **EmpireMUD** (a skill‑and‑area heavy Diku derivative) offer rich, immersive command sets that go well beyond basic “get/drop/look.” Here are the core patterns and how we can weave them into **pymud‑ss13**.
+
+---
+
+## 1. Lament MUD: Verb‑On‑Object & Social Magic
+
+### Key Features
+- **In‑object verbs**: Every object can gain its own verb (e.g. `@verb door open: …code…`)  
+- **Soft‑typed targets**: You can `push button` even if “button” is a property on multiple objects; the system disambiguates via scope.  
+- **Social emotes**: `pose`, `ooc`, `emote`, `page` are first‑class—complete with visibility rules.  
+- **Aliases & macros**: Players script their own command shortcuts (`alias wave emote waves hello`).  
+
+### How to Adopt
+1. **Object‐Local Verb Registry**  
+   ```yaml
+   # data/objects.yaml
+   - id: maint_hatch
+     name: "Maintenance Hatch"
+     description: "A grated hatch leading down."
+     scripts:
+       command_climb:
+         code: |
+           result = f"{player.name} climbs down into the maintenance shaft."
+           world.move_player(player.id, 'maintenance_shaft') 
+           publish('player_move', player=player.id, to='maintenance_shaft')
+
+	2.	Social Commands Module
+
+- name: pose
+  patterns:
+    - "pose {action}"
+  help: |
+    pose <action> — describe what your character is doing.
+
+@register("pose")
+def pose_handler(player, action):
+    world.broadcast_room(player.location, f"* {player.name} {action}")
+
+
+	3.	Flexible Target Resolution
+	•	Use our fuzzy resolver + room scope search to pick the nearest “button” if multiple exist.
+
+⸻
+
+2. EmpireMUD: Skill & Area‑Driven Commands
+
+Key Features
+	•	Skill‑gated commands: e.g. forge, smelt, cook, only available if you’ve learned the skill.
+	•	Area commands: dig, mine, chop that depend on your current room’s terrain.
+	•	Extended syntax: forge sword from iron_ore using anvil, with multiple prepositions.
+	•	Grouped help: Commands sorted by category (Combat, Crafting, Social, Movement).
+
+How to Adopt
+	1.	Skill Checks in Handlers
+
+@register("forge")
+def forge_handler(player, item, material, tool):
+    if not player.has_skill("blacksmithing"):
+        return "You don't know how to forge yet."
+    if material != "iron_ore" or tool != "anvil":
+        return "You need iron_ore and anvil to forge."
+    # success logic…
+
+
+	2.	Area‑Conditional Commands
+
+@register("chop")
+def chop_handler(player, target):
+    room = world.get_room(player.location)
+    if room.terrain != "forest":
+        return "There is nothing to chop here."
+    # chop logic…
+
+
+	3.	Help Categories in YAML
+
+- category: Crafting
+  commands:
+    - name: forge
+      patterns: ["forge {item} from {material} using {tool}"]
+      help: "Forge an item if you have the right skill and tools."
+    - name: cook
+      patterns: ["cook {food} in {container}"]
+      help: "Cook a food item in a container."
+
+
+	4.	Dynamic Availability
+	•	At startup, only load/activate specs whose required_skill is in the player’s learned list.
+
+⸻
+
+3. Proposed Command Table for pymud‑ss13
+
+Category	Command	Patterns	Notes
+Movement	go	go {dir}, {dir}, sprint {dir}	from our ASGI plan
+Observation	scan	scan {target}, scan room	SS13 scanner, restricted by equipment
+Social	pose	pose {action}	Lament‑style emote
+	whisper	whisper {player} {message}	local private chat
+Crafting	forge	forge {item} from {material} using {tool}	EmpireMud‑style, skill‑gated
+	smelt	smelt {ore} into {ingot} in {furnace}	multi‑step prepositions
+Engineering	chop	chop {target}	only if terrain=="forest"
+	wire	wire {node}	maintain power grids
+Medical	diagnose	diagnose {player}	EmpireMud includes zone‐based heal rates
+	inject	inject {player} with {drug}	with skill or item requirement
+Admin	addverb	addverb {object} {verb} {code}	LambdaMOO dynamic scripting
+	@create	@create {type} {id} {room}	world‐builder
+
+
+
+⸻
+
+Next Actions
+	1.	Codify Lament‑style social commands (pose, emote, page, alias).
+	2.	Extend YAML schema for required_skill and terrain_restriction.
+	3.	Implement handler decorators that check player.has_skill() and room.terrain.
+	4.	Group help output by category in /help and /commands.
+	5.	Test multi‑prep patterns (forge sword from iron using anvil).
+
+With these examples drawn from Lament and EmpireMUD, you’ll have a command set that’s immersive, context‑aware, and rich in interaction—perfect for an SS13‑flavored MUD without leaning heavily on combat.
+

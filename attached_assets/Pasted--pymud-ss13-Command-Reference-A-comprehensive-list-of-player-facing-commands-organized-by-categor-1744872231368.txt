@@ -1,0 +1,148 @@
+# pymud‑ss13 Command Reference
+
+A comprehensive list of player‑facing commands, organized by category.  Each command can be invoked via one or more patterns; `{…}` indicates a variable placeholder.
+
+---
+
+## 🔀 Movement
+
+| Command(s)               | Syntax Examples                       | Description                           | Aliases      |
+|--------------------------|---------------------------------------|---------------------------------------|--------------|
+| Move                     | `go {direction}`                      | Move in a cardinal direction          | `move`, none |
+|                          | `{direction}`                         |                                       |              |
+|                          | `n`, `s`, `e`, `w`, `u`, `d`          |                                       |              |
+| Sprint                   | `sprint {direction}`                  | Move two rooms in that direction      |              |
+
+**Variables**  
+- `{direction}` ∈ north|south|east|west|up|down (or `n`/`s`/`e`/`w`/`u`/`d`)
+
+---
+
+## 👀 Observation
+
+| Command(s)           | Syntax Examples           | Description                                 |
+|----------------------|---------------------------|---------------------------------------------|
+| Look around          | `look`                    | Describe current room                       |
+| Examine object       | `look at {target}`        | Detailed description of an object or exit   |
+| Scan                 | `scan {target}`           | Run a system scan (e.g. scanner device)     |
+| Inspect              | `inspect {target}`        | Alias for `look at {target}`                |
+| Map                  | `map`                     | Show local station layout                   |
+
+**Variables**  
+- `{target}` = object ID, player name, or exit name
+
+---
+
+## 💬 Communication
+
+| Command(s)     | Syntax Examples                      | Description                                 |
+|----------------|--------------------------------------|---------------------------------------------|
+| Say            | `say {message}`                      | Speak to players in the same room           |
+| Shout          | `shout {message}`                    | Broad local broadcast (adjacent rooms)      |
+| Whisper        | `whisper {player} {message}`         | Private, room‑local whisper                 |
+| Tell (PM)      | `tell {player} {message}`            | Private message to any online player        |
+| Radio          | `radio {channel} {message}`          | Send on a secured channel (requires radio)  |
+| OOC            | `ooc {message}`                      | Out‑of‑character chat                       |
+
+---
+
+## 👐 Object Interaction
+
+| Command(s)      | Syntax Examples                       | Description                              |
+|-----------------|---------------------------------------|------------------------------------------|
+| Get / Take      | `get {item}`                          | Pick up an item                          |
+|                 | `get {item} from {container}`         | Take item from a container               |
+| Drop            | `drop {item}`                         | Drop an item into current room           |
+| Put             | `put {item} in {container}`           | Place item into a container              |
+| Give            | `give {item} to {player}`             | Transfer an item to another player       |
+| Use / Operate   | `use {device}`                        | Activate or operate a device             |
+|                 | `operate {device}`                    | Alias for `use`                          |
+| Open / Close    | `open {target}` / `close {target}`    | Open or close doors, containers, valves  |
+| Press / Pull    | `press {button}` / `pull {lever}`     | Interact with controls and switches      |
+| Toggle          | `toggle {switch}`                     | Flip a switch or circuit breaker         |
+
+---
+
+## 🎒 Inventory & Equipment
+
+| Command(s)       | Syntax Examples              | Description                             |
+|------------------|------------------------------|-----------------------------------------|
+| Inventory        | `inventory` / `inv` / `i`    | List carried items                      |
+| Wear / Equip     | `wear {item}`                | Don wearable gear (suits, helmets)      |
+| Remove / Unequip | `remove {item}`              | Take off worn equipment                 |
+| Wield / Hold     | `wield {item}` / `hold {item}` | Ready a held object for use or attack |
+| Throw            | `throw {item} at {target}`   | Hurl an object at a target              |
+| Examine on       | `on {item}`                  | Show attached components (e.g. gadgets) |
+
+---
+
+## 🛠 Role‑Specific Actions
+
+### Engineering  
+| Command        | Syntax                             | Description                                  |
+|----------------|------------------------------------|----------------------------------------------|
+| Wire           | `wire {power_node}`                | Connect or repair power wiring               |
+| Solder         | `solder {wire}`                    | Permanently join two wires                   |
+| Weld           | `weld {metal_item}`                | Repair metal structures or tools             |
+| Unscrew        | `unscrew {panel}`                  | Remove screws to open a panel                |
+
+### Atmospherics  
+| Command        | Syntax                             | Description                                  |
+|----------------|------------------------------------|----------------------------------------------|
+| Vent gas       | `vent {gas_type} into {room}`      | Release specified gas into a room            |
+| Seal valve     | `open valve {valve}` / `close valve {valve}` | Control airflow                      |
+| Scan pressure  | `check pressure`                   | Report current room pressure                 |
+
+### Medical  
+| Command        | Syntax                             | Description                                  |
+|----------------|------------------------------------|----------------------------------------------|
+| Diagnose       | `diagnose {player}`                | Check vital signs of a player                |
+| Heal           | `heal {player}`                    | Apply first aid or med‑spray                 |
+| Inject         | `inject {player} with {drug}`      | Administer chemical treatment                |
+| Analyze sample | `analyze sample {item}`            | Examine specimen under lab equipment         |
+
+### Science  
+| Command         | Syntax                            | Description                                 |
+|-----------------|-----------------------------------|---------------------------------------------|
+| Scan            | `scan {target}`                   | Run detailed device diagnostics             |
+| Calibrate       | `calibrate {device}`              | Adjust scientific instruments               |
+| Analyze         | `analyze {item}`                  | Perform chemical or physical analysis       |
+
+---
+
+## ✨ LambdaMOO‑Style & Admin
+
+| Command        | Syntax                                  | Description                            |
+|----------------|-----------------------------------------|----------------------------------------|
+| Add Verb       | `addverb {object} {verb} {code}`        | Attach a custom in‑world verb          |
+| Call Verb      | `{verb} {object}`                       | Invoke a dynamic verb                  |
+| Create Object  | `@create {type} {id} {room}`            | Spawn new object (admin only)          |
+| Destroy Object | `@destroy {id}`                         | Remove object from world (admin only)  |
+| Teleport       | `@teleport {player} {room}`             | Move player instantly                  |
+| God Mode       | `@god {on|off}`                         | Enable/disable admin powers            |
+
+---
+
+## ⚙️ Utility & Help
+
+| Command        | Syntax                     | Description                            |
+|----------------|----------------------------|----------------------------------------|
+| Help           | `help` / `?`               | List available commands                |
+| Help on cmd    | `help {command}`           | Show usage and patterns for one command|
+| Commands List  | `commands`                 | Alias for `help`                       |
+| Alias          | `alias {short} = {cmd}`    | Create a personal shortcut             |
+| Unalias        | `unalias {short}`          | Remove a personal shortcut             |
+| History        | `history`                  | Show recent inputs                     |
+| Who            | `who`                      | List connected players                 |
+| Whois          | `whois {player}`           | Get information on a player            |
+| Status         | `status`                   | Show your health, hunger, power, etc.  |
+| Stats          | `stats`                    | Detailed character stats & skills      |
+
+---
+
+> **Note:**  
+> - All commands support case‑insensitive input.  
+> - You can chain prepositional phrases (`get wrench from toolbox`) as long as your `commands.yaml` defines the corresponding pattern.  
+> - Use `help {command}` to see exact pattern syntax for each command.  
+> - For immersion, commands like `scan`, `diagnose`, and `vent` will trigger system‑level events (e.g. alarms, pressure changes) broadcast to nearby players.  
+> - Combat is handled via verbs like `attack {target} with {item}` but is intentionally de‑emphasized in favor of role‑play and system interaction.

@@ -9,7 +9,6 @@ import logging
 import difflib
 from typing import Dict, List, Optional, Any, Callable
 
-from rapidfuzz import process
 from command_spec import CommandSpec
 
 # Configure logging

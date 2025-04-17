@@ -21,7 +21,11 @@ def help_handler(client_id: str, command: Optional[str] = None, **kwargs) -> str
         Help text.
     """
     logger.debug(f"Help command called by client {client_id}, looking up '{command}'")
-    from parser import command_parser
+    
+    # Access parent module command_parser
+    import sys
+    sys.path.append('.')
+    from engine import command_parser
     
     if command:
         return command_parser.get_help(command)
@@ -41,25 +45,27 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
     logger.debug(f"Look command called by client {client_id}")
     
-    # Get session data for this client
-    from mudpy_interface import mudpy_interface
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
     
     if target:
         logger.debug(f"Looking at target: {target}")
         
         # Get player location
-        player_location = mudpy_interface.get_player_location(client_id)
+        player_location = interface.get_player_location(client_id)
         if not player_location:
             return "You are nowhere. This is a strange phenomenon indeed."
         
         # Get items in the room
-        room_items = mudpy_interface.get_items_in_room(player_location)
+        room_items = interface.get_items_in_room(player_location)
         
         # Get exits from the room
-        exits = mudpy_interface.get_exits_from_room(player_location)
+        exits = interface.get_exits_from_room(player_location)
         
         # Get player inventory
-        inventory = mudpy_interface.get_player_inventory(client_id)
+        inventory = interface.get_player_inventory(client_id)
         
         # Try to find the target in:
         # 1. Room items
@@ -68,22 +74,22 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
         
         # Check room items
         for item_id in room_items:
-            item_name = mudpy_interface.get_item_name(item_id)
+            item_name = interface.get_item_name(item_id)
             if item_name and item_name.lower() == target.lower():
-                item_desc = mudpy_interface.get_item_description(item_id)
+                item_desc = interface.get_item_description(item_id)
                 return f"{item_name}: {item_desc}"
         
         # Check exits
         for exit_dir, exit_target in exits.items():
             if exit_dir.lower() == target.lower():
-                exit_name = mudpy_interface.get_room_name(exit_target)
+                exit_name = interface.get_room_name(exit_target)
                 return f"You see a path leading {exit_dir} to {exit_name}."
         
         # Check inventory
         for item_id in inventory:
-            item_name = mudpy_interface.get_item_name(item_id)
+            item_name = interface.get_item_name(item_id)
             if item_name and item_name.lower() == target.lower():
-                item_desc = mudpy_interface.get_item_description(item_id)
+                item_desc = interface.get_item_description(item_id)
                 return f"{item_name} (in your inventory): {item_desc}"
         
         # Target not found
@@ -91,7 +97,7 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     else:
         # Look at current location
         logger.debug(f"Looking at current location for client {client_id}")
-        return mudpy_interface._look(client_id)
+        return interface._look(client_id)
 
 def inventory_handler(client_id: str, **kwargs) -> str:
     """
@@ -105,9 +111,13 @@ def inventory_handler(client_id: str, **kwargs) -> str:
     """
     logger.debug(f"Inventory command called by client {client_id}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get inventory for this client
-    from mudpy_interface import mudpy_interface
-    inventory = mudpy_interface.get_player_inventory(client_id)
+    inventory = interface.get_player_inventory(client_id)
     
     if not inventory:
         return "Your inventory is empty."
@@ -115,7 +125,7 @@ def inventory_handler(client_id: str, **kwargs) -> str:
     # Build inventory description
     inventory_desc = "You are carrying:\n"
     for item_id in inventory:
-        item_name = mudpy_interface.get_item_name(item_id)
+        item_name = interface.get_item_name(item_id)
         inventory_desc += f"- {item_name}\n"
     
     return inventory_desc
@@ -132,6 +142,11 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
         Result of the movement attempt.
     """
     logger.debug(f"Move command called by client {client_id} with direction {direction}")
+    
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
     
     if not direction:
         return "Move in which direction?"
@@ -150,8 +165,7 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
         direction = "west"
     
     # Try to move the player
-    from mudpy_interface import mudpy_interface
-    return mudpy_interface._move(client_id, direction)
+    return interface._move(client_id, direction)
 
 def say_handler(client_id: str, message: str, **kwargs) -> str:
     """
@@ -166,9 +180,13 @@ def say_handler(client_id: str, message: str, **kwargs) -> str:
     """
     logger.debug(f"Say command called by client {client_id} with message: {message}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get player location
-    from mudpy_interface import mudpy_interface
-    player_location = mudpy_interface.get_player_location(client_id)
+    player_location = interface.get_player_location(client_id)
     
     if not player_location:
         return "You are nowhere. Your words echo into the void."
@@ -193,9 +211,13 @@ def get_handler(client_id: str, item: str, container: Optional[str] = None, **kw
     """
     logger.debug(f"Get command called by client {client_id} for item {item}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get player location
-    from mudpy_interface import mudpy_interface
-    player_location = mudpy_interface.get_player_location(client_id)
+    player_location = interface.get_player_location(client_id)
     
     if not player_location:
         return "You are nowhere. There is nothing to take."
@@ -205,14 +227,14 @@ def get_handler(client_id: str, item: str, container: Optional[str] = None, **kw
         return f"Taking items from containers is not implemented yet."
     else:
         # Try to get the item from the room
-        items_in_room = mudpy_interface.get_items_in_room(player_location)
+        items_in_room = interface.get_items_in_room(player_location)
         
         # Find item with matching name
         for item_id in items_in_room:
-            item_name = mudpy_interface.get_item_name(item_id)
+            item_name = interface.get_item_name(item_id)
             if item_name and item_name.lower() == item.lower():
                 # Found the item, try to take it
-                result = mudpy_interface._take(client_id, item_id)
+                result = interface._take(client_id, item_id)
                 return result
         
         # Item not found
@@ -231,22 +253,26 @@ def drop_handler(client_id: str, item: str, **kwargs) -> str:
     """
     logger.debug(f"Drop command called by client {client_id} for item {item}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get player location
-    from mudpy_interface import mudpy_interface
-    player_location = mudpy_interface.get_player_location(client_id)
+    player_location = interface.get_player_location(client_id)
     
     if not player_location:
         return "You are nowhere. There is nowhere to drop anything."
     
     # Get player inventory
-    inventory = mudpy_interface.get_player_inventory(client_id)
+    inventory = interface.get_player_inventory(client_id)
     
     # Find item with matching name
     for item_id in inventory:
-        item_name = mudpy_interface.get_item_name(item_id)
+        item_name = interface.get_item_name(item_id)
         if item_name and item_name.lower() == item.lower():
             # Found the item, try to drop it
-            result = mudpy_interface._drop(client_id, item_id)
+            result = interface._drop(client_id, item_id)
             return result
     
     # Item not found
@@ -266,16 +292,20 @@ def use_handler(client_id: str, item: str, target: Optional[str] = None, **kwarg
     """
     logger.debug(f"Use command called by client {client_id} for item {item}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get player inventory
-    from mudpy_interface import mudpy_interface
-    inventory = mudpy_interface.get_player_inventory(client_id)
+    inventory = interface.get_player_inventory(client_id)
     
     # Find item with matching name
     for item_id in inventory:
-        item_name = mudpy_interface.get_item_name(item_id)
+        item_name = interface.get_item_name(item_id)
         if item_name and item_name.lower() == item.lower():
             # Found the item, try to use it
-            result = mudpy_interface._use(client_id, item_id, target)
+            result = interface._use(client_id, item_id, target)
             return result
     
     # Item not found
@@ -293,9 +323,13 @@ def status_handler(client_id: str, **kwargs) -> str:
     """
     logger.debug(f"Status command called by client {client_id}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Get player stats
-    from mudpy_interface import mudpy_interface
-    stats = mudpy_interface.get_player_stats(client_id)
+    stats = interface.get_player_stats(client_id)
     
     if not stats:
         return "Unable to retrieve status information."
@@ -320,13 +354,17 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
     logger.debug(f"Scan command called by client {client_id}")
     
+    # Get the interface from kwargs
+    interface = kwargs.get('interface')
+    if not interface:
+        return "Error: Interface not available"
+    
     # Check if player has a scanner
-    from mudpy_interface import mudpy_interface
-    inventory = mudpy_interface.get_player_inventory(client_id)
+    inventory = interface.get_player_inventory(client_id)
     
     has_scanner = False
     for item_id in inventory:
-        item_name = mudpy_interface.get_item_name(item_id)
+        item_name = interface.get_item_name(item_id)
         if item_name and "scanner" in item_name.lower():
             has_scanner = True
             break
