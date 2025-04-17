@@ -1,0 +1,94 @@
+Excellent! Let’s set up a custom starter template for Mudpy that includes:
+	•	Persistent storage using YAML files.
+	•	An optional web-based frontend for Telnet-less testing.
+
+⸻
+
+🛠️ Setting Up Mudpy with Persistent Storage
+
+Mudpy inherently uses YAML files for configuration and data storage. To set up a basic environment:
+	1.	Clone the Mudpy Repository:
+
+git clone https://mudpy.org/code/mudpy
+cd mudpy
+
+
+	2.	Create a Virtual Environment:
+
+python3 -m venv mudpy_venv
+source mudpy_venv/bin/activate
+
+
+	3.	Install Mudpy:
+
+pip install .
+
+
+	4.	Start the Mudpy Server:
+
+mudpy
+
+
+
+By default, Mudpy listens on the loopback address. You can configure this in the network settings.
+
+⸻
+
+🌐 Adding a Web-Based Frontend
+
+To enable a web-based interface for Mudpy, you can integrate a WebSocket server that communicates with the Mudpy backend. Here’s a high-level overview:
+	1.	Set Up a WebSocket Server:
+Use a Python library like websockets to create a server that interfaces with Mudpy.
+
+import asyncio
+import websockets
+
+async def handler(websocket, path):
+    async for message in websocket:
+        # Process the message and interact with Mudpy
+        response = process_message(message)
+        await websocket.send(response)
+
+start_server = websockets.serve(handler, "localhost", 8765)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
+
+
+	2.	Create a Web Client:
+Develop a simple HTML/JavaScript frontend that connects to the WebSocket server.
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mudpy Web Client</title>
+</head>
+<body>
+    <textarea id="output" rows="20" cols="80" readonly></textarea><br>
+    <input type="text" id="input" size="80">
+    <script>
+        const ws = new WebSocket("ws://localhost:8765/");
+        const output = document.getElementById("output");
+        const input = document.getElementById("input");
+
+        ws.onmessage = (event) => {
+            output.value += event.data + "\n";
+        };
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                ws.send(input.value);
+                input.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+This setup allows users to interact with Mudpy through a web browser, eliminating the need for a Telnet client.
+
+⸻
+
+If you’d like, I can provide a more detailed implementation, including the integration between the WebSocket server and Mudpy’s backend. Let me know if you’d like to proceed with that!
