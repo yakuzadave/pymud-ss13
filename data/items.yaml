@@ -1,0 +1,232 @@
+# Space Station Alpha - Item Definitions
+# This file describes all items that can be found in the station
+
+- id: keycard_captain
+  name: Captain's Keycard
+  description: >
+    A high-security access card with the station captain's credentials.
+    Grants access to all areas of the station.
+  location: bridge
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swipe the captain's keycard.
+      item_type: keycard
+      item_properties:
+        access_level: 100
+        issued_to: "Station Captain"
+        serial: "CAPT-001"
+
+- id: keycard_security
+  name: Security Keycard
+  description: >
+    A security-level access card. Grants access to security areas
+    and moderate-security zones.
+  location: bridge
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swipe the security keycard.
+      item_type: keycard
+      item_properties:
+        access_level: 50
+        issued_to: "Security Personnel"
+        serial: "SEC-042"
+
+- id: keycard_science
+  name: Science Keycard
+  description: >
+    An access card for science personnel. Grants access to research
+    facilities and laboratories.
+  location: science_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swipe the science keycard.
+      item_type: keycard
+      item_properties:
+        access_level: 40
+        issued_to: "Research Staff"
+        serial: "SCI-137"
+
+- id: keycard_engineering
+  name: Engineering Keycard
+  description: >
+    An access card for engineering personnel. Grants access to
+    critical infrastructure areas.
+  location: engineering
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swipe the engineering keycard.
+      item_type: keycard
+      item_properties:
+        access_level: 70
+        issued_to: "Engineering Staff"
+        serial: "ENG-291"
+
+- id: biometric_scanner
+  name: Biometric Scanner
+  description: >
+    A handheld device that can scan for life signs and analyze
+    biological samples.
+  location: medbay
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You activate the biometric scanner. It detects your vital signs:
+        Heart rate: 72 BPM, Body temperature: 36.7°C.
+        No anomalies detected.
+      item_type: tool
+      item_properties:
+        durability: 85
+        power_level: 92
+
+- id: radiation_detector
+  name: Radiation Detector
+  description: >
+    A device that measures ambient radiation levels. Essential for
+    safety in certain areas of the station.
+  location: engineering
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You activate the radiation detector. Current ambient radiation
+        level: 0.12 mSv/h. Safe for prolonged exposure.
+      item_type: tool
+      item_properties:
+        durability: 90
+        power_level: 88
+
+- id: hazmat_suit
+  name: Hazmat Suit
+  description: >
+    A protective suit designed to shield the wearer from radiation,
+    biological contaminants, and extreme conditions.
+  location: reactor_access
+  components:
+    item:
+      weight: 3.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the hazmat suit. You feel protected against environmental hazards.
+      item_type: apparel
+      item_properties:
+        durability: 95
+        radiation_protection: true
+        thermal_protection: true
+        biohazard_protection: true
+
+- id: medspray
+  name: Med-Spray
+  description: >
+    A canister of medical nanites that quickly treat minor injuries
+    and stabilize more serious conditions.
+  location: medbay
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You apply the Med-Spray to yourself. The cooling sensation is
+        immediate as the nanites begin their work.
+      item_type: medical
+      item_properties:
+        doses_remaining: 3
+        healing_power: 25
+        expiration_date: "2186-07-15"
+
+- id: emergency_beacon
+  name: Emergency Beacon
+  description: >
+    A compact device that sends a distress signal when activated.
+    Standard issue for all station personnel during EVAs.
+  location: airlock_north
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You activate the emergency beacon. It begins pulsing with
+        a red light and emitting a regular ping sound.
+      item_type: tool
+      item_properties:
+        durability: 100
+        power_level: 100
+        signal_range: "50km"
+
+- id: portable_terminal
+  name: Portable Terminal
+  description: >
+    A rugged tablet-like device with access to the station's information
+    systems and basic control interfaces.
+  location: communications
+  components:
+    item:
+      weight: 0.7
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You power on the portable terminal. It displays the station status
+        overview and awaits your input.
+      item_type: tool
+      item_properties:
+        durability: 75
+        power_level: 65
+        os_version: "StationOS 4.2.1"
+
+- id: repair_kit
+  name: Emergency Repair Kit
+  description: >
+    A compact toolkit containing essential items for emergency repairs
+    to station systems and equipment.
+  location: corridor_east
+  components:
+    item:
+      weight: 1.5
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You open the repair kit and examine its contents. It contains
+        various tools and materials for quick repairs.
+      item_type: tool
+      item_properties:
+        durability: 80
+        contains: "Basic tools, sealant, spare parts"
+        complete: true
+
+- id: oxygen_tank
+  name: Portable Oxygen Tank
+  description: >
+    A compact tank of compressed oxygen with a breathing mask.
+    Essential for emergencies or EVA operations.
+  location: airlock_cargo
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You attach the oxygen mask and open the valve. Fresh oxygen
+        flows into the mask, ensuring you can breathe safely.
+      item_type: survival
+      item_properties:
+        durability: 90
+        oxygen_remaining: 95
+        duration_minutes: 30

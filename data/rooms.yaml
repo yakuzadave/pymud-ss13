@@ -1,0 +1,305 @@
+# Space Station Alpha - Room Definitions
+# This file describes all rooms (locations) in the station
+
+- id: bridge
+  name: Command Bridge
+  description: >
+    The central command center of Space Station Alpha. Holographic displays show the status
+    of various station systems. The captain's chair dominates the center of the room.
+  components:
+    room:
+      exits:
+        north: corridor_north
+        east: communications
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: communications
+  name: Communications Center
+  description: >
+    Banks of equipment line the walls, handling the station's internal and external
+    communications. A large radio dish is visible through the reinforced viewport.
+  components:
+    room:
+      exits:
+        west: bridge
+        south: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: corridor_north
+  name: North Corridor
+  description: >
+    A long, sterile corridor with brushed metal walls. Emergency lighting strips
+    pulse faintly along the floor, leading to various parts of the station.
+  components:
+    room:
+      exits:
+        north: airlock_north
+        south: bridge
+        east: science_lab
+        west: medbay
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: airlock_north
+  name: North Airlock
+  description: >
+    A reinforced airlock chamber connecting the station to the exterior. Warning
+    lights flash periodically, and safety protocols are prominently displayed.
+  components:
+    room:
+      exits:
+        south: corridor_north
+      atmosphere:
+        oxygen: 19.0
+        nitrogen: 75.0
+        co2: 0.1
+        pressure: 95.0
+      hazards: []
+      is_airlock: true
+    door:
+      is_open: false
+      is_locked: true
+      destination: exterior_north
+      requires_power: true
+      access_level: 50
+
+- id: exterior_north
+  name: Exterior Hull - North Section
+  description: >
+    The cold vacuum of space surrounds you. The station's hull stretches below,
+    its metal skin reflecting distant starlight. Safety tethers are required here.
+  components:
+    room:
+      exits:
+        south: airlock_north
+      atmosphere:
+        oxygen: 0.0
+        nitrogen: 0.0
+        co2: 0.0
+        pressure: 0.0
+      hazards: ["vacuum", "radiation", "extreme_cold"]
+      is_airlock: false
+
+- id: science_lab
+  name: Science Laboratory
+  description: >
+    The station's research facility, filled with complex equipment and specimens
+    in various stages of analysis. Holographic models float above workstations.
+  components:
+    room:
+      exits:
+        west: corridor_north
+        south: research_storage
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: research_storage
+  name: Research Storage
+  description: >
+    A climate-controlled room for storing sensitive research materials and specimens.
+    Most containers are locked and require security clearance to access.
+  components:
+    room:
+      exits:
+        north: science_lab
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: medbay
+  name: Medical Bay
+  description: >
+    The station's medical facility, equipped with advanced diagnostic and treatment
+    technology. Automated medical beds line one wall, ready for patients.
+  components:
+    room:
+      exits:
+        east: corridor_north
+        west: surgery
+      atmosphere:
+        oxygen: 22.0  # Slightly enriched oxygen
+        nitrogen: 77.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: surgery
+  name: Surgical Suite
+  description: >
+    A sterile environment for conducting medical procedures. Robotic surgical
+    assistants stand ready next to the operating table.
+  components:
+    room:
+      exits:
+        east: medbay
+      atmosphere:
+        oxygen: 23.0  # Enriched oxygen for medical purposes
+        nitrogen: 76.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: corridor_east
+  name: East Corridor
+  description: >
+    A utility corridor connecting various functional areas of the station.
+    Maintenance hatches line the walls, providing access to system conduits.
+  components:
+    room:
+      exits:
+        north: communications
+        south: cargo_bay
+        east: engineering
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: engineering
+  name: Engineering Control
+  description: >
+    The heart of the station's power and life support systems. Displays monitor
+    power production, atmosphere quality, and structural integrity.
+  components:
+    room:
+      exits:
+        west: corridor_east
+        south: reactor_access
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 102.0
+      hazards: []
+      is_airlock: false
+
+- id: reactor_access
+  name: Reactor Access
+  description: >
+    A high-security area providing access to the station's fusion reactor.
+    Radiation warnings and safety procedures are prominently displayed.
+  components:
+    room:
+      exits:
+        north: engineering
+        south: reactor_core
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 103.0
+      hazards: ["low_radiation"]
+      is_airlock: false
+    door:
+      is_open: false
+      is_locked: true
+      destination: reactor_core
+      requires_power: true
+      access_level: 70
+
+- id: reactor_core
+  name: Fusion Reactor Core
+  description: >
+    The central reactor chamber houses the station's fusion core, contained within
+    powerful magnetic fields. The air thrums with energy, and the heat is palpable.
+  components:
+    room:
+      exits:
+        north: reactor_access
+      atmosphere:
+        oxygen: 19.0
+        nitrogen: 79.0
+        co2: 0.1
+        pressure: 105.0
+        temperature: 40.0  # Celsius
+      hazards: ["radiation", "extreme_heat"]
+      is_airlock: false
+
+- id: cargo_bay
+  name: Cargo Bay
+  description: >
+    A spacious area for receiving and storing supplies. Automated loader robots
+    move between storage racks, organizing inventory and preparing shipments.
+  components:
+    room:
+      exits:
+        north: corridor_east
+        east: airlock_cargo
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: airlock_cargo
+  name: Cargo Airlock
+  description: >
+    A large airlock designed for moving cargo between the station and visiting
+    supply ships. Heavy-duty loading equipment stands ready for use.
+  components:
+    room:
+      exits:
+        west: cargo_bay
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 77.0
+        co2: 0.05
+        pressure: 98.0
+      hazards: []
+      is_airlock: true
+    door:
+      is_open: false
+      is_locked: true
+      destination: docking_bay
+      requires_power: true
+      access_level: 30
+
+- id: docking_bay
+  name: Exterior Docking Bay
+  description: >
+    An external platform for docking supply ships and smaller craft. The vast
+    emptiness of space stretches out in all directions beyond the platform edge.
+  components:
+    room:
+      exits:
+        west: airlock_cargo
+      atmosphere:
+        oxygen: 0.0
+        nitrogen: 0.0
+        co2: 0.0
+        pressure: 0.0
+      hazards: ["vacuum", "radiation", "extreme_cold"]
+      is_airlock: false

@@ -45,17 +45,21 @@ class MudEngine:
         self.interface = interface
         logger.info("MUD Engine initialized")
         
-    def process_command(self, client_id, command_string):
+    def process_command(self, client_id: str, command_string: str) -> str:
         """
         Process a command from a client and return the response.
         
         Args:
-            client_id: Unique identifier for the client.
-            command_string: The full command to process.
+            client_id (str): Unique identifier for the client.
+            command_string (str): The full command to process.
             
         Returns:
             str: The response to the command.
         """
+        # Ensure command_string is a string
+        if not isinstance(command_string, str):
+            command_string = str(command_string)
+        
         # Split the command into the verb and arguments
         parts = command_string.strip().split(maxsplit=1)
         verb = parts[0].lower() if parts else ""

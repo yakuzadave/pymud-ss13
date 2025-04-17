@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-WebSocket server for MUDpy.
-This module provides a WebSocket interface to MUDpy, allowing browser-based clients
+WebSocket server for MUDpy SS13.
+This module provides a WebSocket interface to MUDpy SS13, allowing browser-based clients
 to connect to the MUD game without requiring a Telnet client.
 """
 
@@ -11,6 +11,16 @@ import logging
 import os
 import websockets
 from mudpy_interface import MudpyInterface
+import integration
+import engine
+
+# Import command modules individually to ensure handlers are registered
+from commands import basic
+from commands import movement
+from commands import inventory
+from commands import system
+from commands import interaction
+from commands import debug  # This should be disabled in production
 
 # Configure logging
 logging.basicConfig(
@@ -24,6 +34,9 @@ active_clients = {}
 
 # Create an instance of the MudpyInterface
 mudpy_interface = MudpyInterface()
+
+# Create the integration with the new engine architecture
+mud_integration = integration.create_integration(mudpy_interface)
 
 async def handle_client(websocket):
     """
@@ -43,11 +56,18 @@ async def handle_client(websocket):
         # Send welcome message
         await websocket.send(json.dumps({
             "type": "system",
-            "message": "Welcome to MUDpy WebSocket Interface!"
+            "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!"
         }))
         
         # Start the connection with MUDpy
         mudpy_interface.connect_client(client_id)
+        
+        # Send initial 'look' command through the integration to get room description
+        initial_response = mud_integration.process_command(client_id, "look")
+        await websocket.send(json.dumps({
+            "type": "response",
+            "message": initial_response
+        }))
         
         # Handle client messages
         async for message in websocket:
@@ -57,8 +77,8 @@ async def handle_client(websocket):
                 
                 logger.debug(f"Received command from client {client_id}: {command}")
                 
-                # Forward the command to MUDpy
-                response = mudpy_interface.process_command(client_id, command)
+                # Forward the command to MUDpy through the integration
+                response = mud_integration.process_command(client_id, command)
                 
                 # Send the response back to the client
                 await websocket.send(json.dumps({
