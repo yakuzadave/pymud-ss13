@@ -48,10 +48,13 @@ async def handle_client(websocket):
     """
     # Generate a unique client ID
     client_id = id(websocket)
-    logger.info(f"New client connected: {client_id}")
+    logger.info(f"New client connected: {client_id}, type: {type(client_id)}")
     
     # Register client
     active_clients[client_id] = websocket
+    
+    # Log active clients for debugging
+    logger.debug(f"Active clients: {list(active_clients.keys())}")
     
     try:
         # Send welcome message
@@ -61,18 +64,34 @@ async def handle_client(websocket):
         }))
         
         # Start the connection with MUDpy
+        logger.info(f"Connecting client to MUDpy interface: {client_id}")
         mudpy_interface.connect_client(client_id)
+        
+        # Debug client session state
+        logger.debug(f"After connect_client, player_locations: {mudpy_interface.player_locations}")
+        logger.debug(f"After connect_client, client_sessions: {mudpy_interface.client_sessions}")
         
         # Publish client connected event to create player in the world
         # Note: We keep the client_id as an integer throughout the system
+        logger.info(f"Publishing client_connected event for: {client_id}")
         publish("client_connected", client_id=client_id)
         
-        # Send initial 'look' command through the integration to get room description
-        initial_response = mud_integration.process_command(client_id, "look")
-        await websocket.send(json.dumps({
-            "type": "response",
-            "message": initial_response
-        }))
+        try:
+            # Send initial 'look' command through the integration to get room description
+            logger.info(f"Sending initial 'look' command for client: {client_id}")
+            initial_response = mud_integration.process_command(client_id, "look")
+            logger.info(f"Received initial response: {initial_response[:50]}...")
+            
+            await websocket.send(json.dumps({
+                "type": "response",
+                "message": initial_response
+            }))
+        except Exception as e:
+            logger.error(f"Error processing initial look command: {e}")
+            await websocket.send(json.dumps({
+                "type": "error",
+                "message": "Error initializing game state. Please refresh and try again."
+            }))
         
         # Handle client messages
         async for message in websocket:

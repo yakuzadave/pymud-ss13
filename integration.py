@@ -179,9 +179,10 @@ class MudpyIntegration:
         """
         # Convert to string if needed for manipulation
         client_id_str = str(client_id)
+        logger.debug(f"Client connected event handler, client_id: {client_id} (type: {type(client_id)})")
         
-        # Create a player game object for this client
-        player_id = f"player_{client_id}"
+        # Create a player game object for this client - use string ID for consistency
+        player_id = f"player_{client_id_str}"
         player_obj = GameObject(
             id=player_id,
             name=f"Player {client_id_str[-4:]}",  # Use the last 4 digits of the client_id as the player name
@@ -205,6 +206,15 @@ class MudpyIntegration:
         
         # Register the player in the world
         self.world.register(player_obj)
+        
+        # Ensure client is registered in interface
+        if client_id not in self.interface.player_locations:
+            logger.debug(f"Adding client {client_id} to player_locations in interface")
+            self.interface.player_locations[client_id] = 'start'
+            
+        if client_id not in self.interface.client_sessions:
+            logger.debug(f"Client {client_id} not found in client_sessions, reconnecting")
+            self.interface.connect_client(client_id)
         
         logger.info(f"Created player game object for client {client_id}")
         

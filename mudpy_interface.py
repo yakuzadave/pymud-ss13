@@ -394,15 +394,21 @@ Type 'help' for a list of commands.
         logger.debug(f"Client sessions: {self.client_sessions}")
         
         if client_id not in self.player_locations:
-            logger.error(f"Client {client_id} not found in player_locations dictionary")
+            logger.error(f"Client {client_id} (type: {type(client_id)}) not found in player_locations: {self.player_locations.keys()}")
             
             # Try to recover by setting player to the start location
             if client_id in self.client_sessions:
                 logger.debug(f"Setting player {client_id} to start location as a recovery action")
                 self.player_locations[client_id] = 'start'
             else:
-                logger.error(f"Client {client_id} not found in client_sessions either")
-                return "Error: Your location is unknown. Please refresh the page and try again."
+                # If client not in sessions either, try to create a new session as emergency recovery
+                logger.error(f"Client {client_id} not found in client_sessions either, attempting emergency recovery")
+                self.connect_client(client_id)
+                if client_id in self.player_locations:
+                    logger.info(f"Emergency recovery successful for client {client_id}")
+                else:
+                    logger.error(f"Emergency recovery failed for client {client_id}")
+                    return "Error: Your location is unknown. Please refresh the page and try again."
         
         room_id = self.player_locations[client_id]
         logger.debug(f"Looking up room with ID: {room_id}")
