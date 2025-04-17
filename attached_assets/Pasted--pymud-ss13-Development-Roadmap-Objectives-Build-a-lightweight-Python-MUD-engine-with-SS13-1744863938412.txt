@@ -1,0 +1,91 @@
+# pymud‑ss13 Development Roadmap
+
+## 🎯 Objectives
+- Build a lightweight Python MUD engine with SS13‑inspired mechanics  
+- Support dynamic in‑game scripting (LambdaMOO‑style verbs)  
+- Implement a component‑based object model  
+- Provide an event‑driven “systems” architecture (atmospherics, power, jobs, AI)  
+- Expose a WebSocket‑based web client with grid/map UI  
+
+---
+
+## 🛠 Phases & Tasks
+
+### Phase 1 – Foundation Refactoring
+- [ ] **Command Registry**  
+  - Refactor `mudpy_interface.py` → `engine.py`  
+  - Replace `if/elif` chains with `@register(cmd)` handlers  
+- [ ] **World Layer**  
+  - Extract YAML loader & object store into `world.py`  
+  - Centralize save/load logic in `persistence.py`  
+- [ ] **Event Bus**  
+  - Create `events.py` with `subscribe(event, fn)` & `publish(event, **ctx)`  
+  - Wire core Mudpy loops into the bus  
+
+### Phase 2 – Component System
+- [ ] **GameObject Class**  
+  - Add `components: dict[str, Component]` field  
+  - Helper methods: `add_component()`, `get_component()`  
+- [ ] **Core Components**  
+  - Door (open/close/lock)  
+  - AccessControl (keycards, access levels)  
+  - Container (inventory, nested contents)  
+- [ ] **YAML → Components**  
+  - Load `data/objects.yaml` specs → instantiate components  
+
+### Phase 3 – Event‑Driven Systems
+- [ ] **Atmospherics** (`systems/atmos.py`)  
+  - Zones, gas mixtures, vents, leak detection  
+  - Publish/subscribe hooks for pressure changes  
+- [ ] **Power Grid** (`systems/power.py`)  
+  - Breakers, grid nodes, power on/off events  
+  - Auto‑lock doors on power loss  
+- [ ] **Jobs & AI** (`systems/jobs.py`, `systems/ai.py`)  
+  - Crew roles, loadouts, basic NPC behavior loops  
+
+### Phase 4 – Dynamic In‑Game Scripting
+- [ ] **Sandbox Engine**  
+  - Integrate RestrictedPython (or Lua via `lupa`)  
+  - `script_manager.py` for compile/exec of user code  
+- [ ] **In‑World Verb API**  
+  - `@register("addverb")` command  
+  - Allow players/admins to attach `command_<verb>` scripts to objects  
+- [ ] **Persistence of Scripts**  
+  - Extend save/load to include attached code snippets  
+
+### Phase 5 – Persistence Enhancements
+- [ ] **State Serialization**  
+  - Dump all `GameObject` fields + component state to YAML/JSON  
+- [ ] **Snapshotting**  
+  - Periodic autosave (e.g. every 5 min)  
+  - Graceful shutdown save hook  
+
+### Phase 6 – Web Client & UI
+- [ ] **Command I/O Panel**  
+  - Hook up via WebSocket to `run.py` server  
+- [ ] **Grid‑Map Renderer**  
+  - CSS Grid or `<canvas>` for station layout  
+  - Clickable cells show room/object info  
+- [ ] **Status Overlays**  
+  - Airlock locks, atmospheric alerts, power status badges  
+
+### Phase 7 – Testing & Documentation
+- [ ] **Unit Tests**  
+  - Engine, world, events, components, scripting  
+- [ ] **CI/CD Pipeline**  
+  - GitHub Actions: lint, test, build  
+- [ ] **Docs & Examples**  
+  - README with quickstart  
+  - `docs/` folder: architecture, YAML spec examples  
+
+---
+
+## 🚀 Future Extensions
+- **Plugin Architecture** (hot‑loadable bundles)  
+- **Medical & Research Systems** (SS13 modules)  
+- **Desktop/Mobile Client** (Electron or React Native)  
+- **Multi‑Server Clustering** for large worlds  
+
+---
+
+> _Keep this roadmap in `docs/roadmap.md` in your repo. Update statuses as you knock off each task and extend with new ideas!_  

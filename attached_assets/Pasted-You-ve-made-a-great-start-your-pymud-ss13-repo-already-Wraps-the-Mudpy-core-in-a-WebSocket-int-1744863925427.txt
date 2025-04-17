@@ -1,0 +1,173 @@
+You’ve made a great start—your “pymud‑ss13” repo already:
+	•	Wraps the Mudpy core in a WebSocket interface (mudpy_interface.py) so browser clients can connect  ￼ ￼
+	•	Loads rooms/items via YAML and persists state automatically
+	•	Implements SS13‑style hazards (radiation, quarantine), scanners, keycards, med‑sprays, etc.
+
+⸻
+
+1. Pull Command Logic into a Registry
+
+Right now you’ve got a long if/elif chain in process_command(). Let’s turn every verb into a first‐class, pluggable handler:
+
+# engine.py
+
+COMMAND_HANDLERS = {}
+
+def register(cmd_name):
+    def deco(fn):
+        COMMAND_HANDLERS[cmd_name] = fn
+        return fn
+    return deco
+
+# In your init:
+from engine import COMMAND_HANDLERS
+# instead of if/elif, just:
+handler = COMMAND_HANDLERS.get(cmd, None)
+if handler:
+    return handler(self, client_id, *args)
+else:
+    return f"Unknown command '{cmd}'"
+
+# Example:
+@register("look")
+def cmd_look(self, client_id, *args):
+    return self._look(client_id)
+
+This makes it trivial to add, remove, or even rebind commands at runtime.
+
+⸻
+
+2. Introduce a Component‑Based GameObject Model
+
+Instead of hard‑coding “room,” “item,” “hazmat_suit” logic, give every in‑world entity a list of components:
+
+# object.py
+
+from dataclasses import dataclass, field
+
+@dataclass
+class GameObject:
+    id: str
+    name: str
+    description: str
+    components: dict = field(default_factory=dict)
+
+    def add_component(self, comp_name, comp):
+        self.components[comp_name] = comp
+        comp.owner = self
+
+    def get_component(self, comp_name):
+        return self.components.get(comp_name)
+
+Then define reusable components:
+
+# components/door.py
+
+class DoorComponent:
+    def __init__(self, locked=False):
+        self.locked = locked
+
+    def open(self, player):
+        if self.locked:
+            return "The door is locked."
+        self.owner.location.move(player)  # pseudo‑API
+        return "You open the door."
+
+YAML for an SS13 airlock might look like:
+
+# data/objects.yaml
+- id: airlock_north
+  name: "North Airlock"
+  description: "A heavy blast door with a keypad."
+  components:
+    door:
+      locked: true
+    access_control:
+      level_required: 2
+
+At load time, you’d instantiate:
+
+from components.door import DoorComponent
+from components.access import AccessComponent
+
+for spec in yaml.load_all(open("objects.yaml")):
+    obj = GameObject(**spec)
+    if "door" in spec["components"]:
+        obj.add_component("door", DoorComponent(**spec["components"]["door"]))
+    # …
+    WORLD.register(obj)
+
+
+
+⸻
+
+3. Build an Event Bus
+
+SS13 is nothing without cascading events—power failures kill doors, atmos vents trigger alarms, etc. A simple pub/sub:
+
+# events.py
+
+SUBSCRIBERS = {}
+
+def subscribe(event_name, fn):
+    SUBSCRIBERS.setdefault(event_name, []).append(fn)
+
+def publish(event_name, **kwargs):
+    for fn in SUBSCRIBERS.get(event_name, []):
+        fn(**kwargs)
+
+# Usage in DoorComponent:
+def on_power_loss(grid):
+    door = self.owner
+    door.locked = True
+
+subscribe("power_loss", on_power_loss)
+
+Your systems (atmos.py, ai.py, jobs.py) can all hook into this same bus.
+
+⸻
+
+4. Dynamic In‑Game Scripting (LambdaMOO‑Style)
+
+Allow players (or admins) to upload tiny Python snippets for custom verbs. Using a safe sandbox like RestrictedPython:
+
+# script_manager.py
+
+from RestrictedPython import compile_restricted
+
+def add_verb(obj: GameObject, verb: str, code: str):
+    byte_code = compile_restricted(code, filename="<in‑world>", mode="exec")
+    def verb_fn(player, *args):
+        loc = {"self": obj, "player": player, "args": args}
+        exec(byte_code, {"__builtins__": {}}, loc)
+        return loc.get("result", "")
+    obj.add_component(f"verb_{verb}", verb_fn)
+
+Then wire your command registry to look at obj.get_component(f"verb_{cmd}").
+
+⸻
+
+5. Next Steps & Priorities
+	1.	Refactor your mudpy_interface.py into:
+	•	engine.py (command loop + registry)
+	•	world.py (load/save YAML, manage GameObjects)
+	•	events.py (pub/sub)
+	2.	Implement core SS13 systems under mudpy/systems/:
+	•	atmos.py (pressure, gas mixes, vents)
+	•	power.py (grids, breakers, failures)
+	•	jobs.py (crew roles, loadouts)
+	3.	Integrate RestrictedPython (or Lua via lupa) for safe in‑game scripting.
+	4.	Extend your web client: add a simple grid map renderer with CSS Grid or Canvas, overlay component statuses (airlock locked/unlocked).
+
+⸻
+
+Summary Table
+
+Layer	Status now	Next Action
+Command Dispatch	if/elif in mudpy_interface.py	Registry + @register decorators
+Object Model	Plain YAML + dicts in interface	GameObject + component system
+Event System	Ad‑hoc in code	Central publish()/subscribe() bus
+Dynamic Scripting	None	Add RestrictedPython or Lua sandbox for addverb
+Web Client	Text input/output over WS	Grid‑based station map, clickable objects, component view
+
+With those building blocks in place, you’ll have a true SS13‑style station: modular, event‑driven, and hackable both by you and by your players. Ready for me to scaffold out engine.py, world.py and a sample SS13 component? Let me know which piece you’d like to tackle first!
