@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let webSocket = null;
     let commandHistory = [];
     let historyIndex = -1;
-    let darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+    // Set dark mode to true by default
+    let darkModeEnabled = localStorage.getItem('darkMode') !== 'false';
     
     // Determine the correct WebSocket URL based on the current location
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

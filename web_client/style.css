@@ -31,11 +31,11 @@
 
 body {
     font-family: 'Courier New', monospace;
-    background-color: var(--bg-color);
+    background-color: #05101d; /* Explicitly setting a dark background */
     margin: 0;
     padding: 0;
     transition: background-color 0.3s ease;
-    color: var(--terminal-text);
+    color: #d6e9ff;
 }
 
 .container {
@@ -267,6 +267,69 @@ footer {
     border-left: 2px solid var(--accent-color);
     padding-left: 8px;
     margin: 4px 0;
+}
+
+/* Bootstrap overrides for dark theme */
+.modal-content {
+    background-color: var(--history-bg);
+    border: 1px solid var(--accent-color);
+    box-shadow: var(--neon-glow);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--accent-color);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--accent-color);
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    box-shadow: 0 0 0 0.25rem rgba(76, 200, 255, 0.25);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-info {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-info:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-secondary {
+    color: #a0a0a0;
+    border-color: #505050;
+}
+
+.btn-outline-dark {
+    color: #d6e9ff;
+    border-color: #505050;
+}
+
+.btn-primary {
+    background-color: var(--button-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-secondary {
+    background-color: #333;
+    border-color: #555;
 }
 
 /* Responsive design */
