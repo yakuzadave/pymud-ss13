@@ -393,13 +393,46 @@ Type 'help' for a list of commands.
         logger.debug(f"Player locations: {self.player_locations}")
         logger.debug(f"Client sessions: {self.client_sessions}")
         
-        if client_id not in self.player_locations:
-            logger.error(f"Client {client_id} (type: {type(client_id)}) not found in player_locations: {self.player_locations.keys()}")
+        # Convert client_id to appropriate type for comparison
+        # This is to handle the type mismatch between client_id in different parts of the system
+        client_id_int = client_id
+        client_id_str = client_id
+        
+        if isinstance(client_id, str):
+            try:
+                client_id_int = int(client_id)
+            except ValueError:
+                logger.debug(f"Could not convert client_id {client_id} to int")
+        elif isinstance(client_id, int):
+            client_id_str = str(client_id)
+        
+        logger.debug(f"Looking up client with ID: '{client_id}' (str: '{client_id_str}', int: '{client_id_int}')")
+        logger.debug(f"Player locations keys: {list(self.player_locations.keys())}")
+        
+        # Try all variants of the client ID
+        if client_id in self.player_locations:
+            logger.debug(f"Found client_id {client_id} in player_locations")
+        elif client_id_str in self.player_locations:
+            logger.debug(f"Found client_id_str {client_id_str} in player_locations")
+            client_id = client_id_str  # Use the string version that was found
+        elif client_id_int in self.player_locations:
+            logger.debug(f"Found client_id_int {client_id_int} in player_locations")
+            client_id = client_id_int  # Use the int version that was found
+        else:
+            logger.error(f"Client {client_id} not found in player_locations: {self.player_locations.keys()}")
             
-            # Try to recover by setting player to the start location
+            # Try to recover by setting player to the start location - try both versions
             if client_id in self.client_sessions:
                 logger.debug(f"Setting player {client_id} to start location as a recovery action")
                 self.player_locations[client_id] = 'start'
+            elif client_id_str in self.client_sessions:
+                logger.debug(f"Setting player {client_id_str} to start location as a recovery action (using string version)")
+                self.player_locations[client_id_str] = 'start'
+                client_id = client_id_str  # Use the string version that was found
+            elif client_id_int in self.client_sessions:
+                logger.debug(f"Setting player {client_id_int} to start location as a recovery action (using int version)")
+                self.player_locations[client_id_int] = 'start'
+                client_id = client_id_int  # Use the int version that was found
             else:
                 # If client not in sessions either, try to create a new session as emergency recovery
                 logger.error(f"Client {client_id} not found in client_sessions either, attempting emergency recovery")
@@ -407,8 +440,14 @@ Type 'help' for a list of commands.
                 if client_id in self.player_locations:
                     logger.info(f"Emergency recovery successful for client {client_id}")
                 else:
-                    logger.error(f"Emergency recovery failed for client {client_id}")
-                    return "Error: Your location is unknown. Please refresh the page and try again."
+                    # Try one more time with a fresh session
+                    logger.error(f"Emergency recovery failed for client {client_id}, creating default room")
+                    self.player_locations[client_id] = 'start'
+                    
+                    # If we still fail after all these attempts, report an error
+                    if client_id not in self.player_locations:
+                        logger.error(f"All recovery attempts failed for client {client_id}")
+                        return "Error: Your location is unknown. Please refresh the page and try again."
         
         room_id = self.player_locations[client_id]
         logger.debug(f"Looking up room with ID: {room_id}")
@@ -559,7 +598,27 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         if not message:
             return "Say what?"
         
-        character_name = self.client_sessions[client_id]['character']
+        # Handle different client_id formats
+        client_id_str = str(client_id) if not isinstance(client_id, str) else client_id
+        client_id_int = client_id
+        if isinstance(client_id, str):
+            try:
+                client_id_int = int(client_id)
+            except ValueError:
+                logger.debug(f"Could not convert client_id {client_id} to int in _say")
+        
+        # Try to find the client in client_sessions
+        if client_id in self.client_sessions:
+            session = self.client_sessions[client_id]
+        elif client_id_str in self.client_sessions:
+            session = self.client_sessions[client_id_str]
+        elif client_id_int in self.client_sessions:
+            session = self.client_sessions[client_id_int]
+        else:
+            logger.error(f"Client {client_id} not found in client_sessions in _say method")
+            return f"You say: {message}"  # Fallback response
+            
+        character_name = session.get('character', f"Player_{client_id}")
         
         # In a real implementation, this would broadcast to all players in the same room
         return f"You say: {message}"

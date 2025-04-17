@@ -119,11 +119,12 @@ def cmd_say(interface, client_id, args):
     
     # Get the client's session data
     session = interface.client_sessions.get(client_id, {})
-    player_name = session.get("player_name", "Unknown")
+    player_name = session.get("character", f"Player_{client_id}")  # Use 'character' which is set in connect_client
     location = session.get("location", "nowhere")
     
-    # Create the message
+    # Create the message and log for debugging
     message = f"{player_name} says: {args}"
+    logger.debug(f"Say command: player={player_name}, location={location}, message={args}")
     
     # Publish an event for this message
     publish("player_said", client_id=client_id, location=location, message=args)
