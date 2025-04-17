@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let commandHistory = [];
     let historyIndex = -1;
     let darkModeEnabled = localStorage.getItem('darkMode') === 'true';
-    let serverUrl = localStorage.getItem('serverUrl') || 'ws://localhost:8000';
+    
+    // Determine the correct WebSocket URL based on the current location
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    let serverUrl = localStorage.getItem('serverUrl') || `${protocol}//${window.location.hostname}:8000`;
     
     // Set initial server URL
     serverUrlInput.value = serverUrl;

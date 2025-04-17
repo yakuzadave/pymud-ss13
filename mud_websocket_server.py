@@ -25,7 +25,7 @@ active_clients = {}
 # Create an instance of the MudpyInterface
 mudpy_interface = MudpyInterface()
 
-async def handle_client(websocket, path):
+async def handle_client(websocket):
     """
     Handle WebSocket connections from clients.
     Each client connection is given a unique ID and stored in the active_clients dictionary.
@@ -108,8 +108,11 @@ async def start_websocket_server():
     
     logger.info(f"Starting WebSocket server on {host}:{port}")
     
-    async with websockets.serve(handle_client, host, port):
-        await asyncio.Future()  # Run forever
+    # Create a WebSocket server
+    server = await websockets.serve(handle_client, host, port)
+    
+    # Run forever
+    await asyncio.Future()
 
 if __name__ == "__main__":
     try:
