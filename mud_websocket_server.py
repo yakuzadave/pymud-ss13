@@ -96,25 +96,37 @@ async def handle_client(websocket):
         # Handle client messages
         async for message in websocket:
             try:
-                data = json.loads(message)
-                command = data.get('command', '')
-                
-                logger.debug(f"Received command from client {client_id}: {command}")
+                # Try to parse JSON, but also handle plain text
+                try:
+                    data = json.loads(message)
+                    command = data.get('command', '')
+                except json.JSONDecodeError:
+                    # If not valid JSON, treat the entire message as a command
+                    command = message
+                    logger.debug(f"Received plain text command from client {client_id}: {command}")
                 
                 # Forward the command to MUDpy through the integration
-                response = mud_integration.process_command(client_id, command)
+                if command:
+                    logger.debug(f"Processing command from client {client_id}: {command}")
+                    response = mud_integration.process_command(client_id, command)
+                    
+                    # Send the response back to the client
+                    await websocket.send(json.dumps({
+                        "type": "response",
+                        "message": response
+                    }))
+                else:
+                    logger.warning(f"Empty command received from client {client_id}")
+                    await websocket.send(json.dumps({
+                        "type": "error",
+                        "message": "Please enter a command."
+                    }))
                 
-                # Send the response back to the client
-                await websocket.send(json.dumps({
-                    "type": "response",
-                    "message": response
-                }))
-                
-            except json.JSONDecodeError:
-                logger.warning(f"Invalid JSON received from client {client_id}")
+            except Exception as e:
+                logger.error(f"Error processing message from client {client_id}: {str(e)}")
                 await websocket.send(json.dumps({
                     "type": "error",
-                    "message": "Invalid command format. Please send valid JSON."
+                    "message": "Error processing your command. Please try again."
                 }))
     
     except websockets.exceptions.ConnectionClosed:
