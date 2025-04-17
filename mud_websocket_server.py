@@ -9,7 +9,8 @@ import asyncio
 import json
 import logging
 import os
-import websockets
+import time
+from aiohttp import web, WSMsgType
 from mudpy_interface import MudpyInterface
 import integration
 import engine
@@ -58,7 +59,7 @@ async def handle_client(websocket):
     
     try:
         # Send welcome message
-        await websocket.send(json.dumps({
+        await websocket.send_str(json.dumps({
             "type": "system",
             "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!"
         }))
@@ -89,55 +90,62 @@ async def handle_client(websocket):
                 logger.info("Received empty initial response")
             
             # Send response back to client
-            await websocket.send(json.dumps({
+            await websocket.send_str(json.dumps({
                 "type": "response",
                 "message": initial_response if initial_response else "Welcome! You find yourself in a mysterious location."
             }))
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
-            await websocket.send(json.dumps({
+            await websocket.send_str(json.dumps({
                 "type": "error",
                 "message": "Error initializing game state. Please refresh and try again."
             }))
         
         # Handle client messages
-        async for message in websocket:
-            try:
-                # Try to parse JSON, but also handle plain text
+        async for msg in websocket:
+            if msg.type == WSMsgType.TEXT:
                 try:
-                    data = json.loads(message)
-                    command = data.get('command', '')
-                except json.JSONDecodeError:
-                    # If not valid JSON, treat the entire message as a command
-                    command = message
-                    logger.debug(f"Received plain text command from client {client_id}: {command}")
-                
-                # Forward the command to MUDpy through the integration
-                if command:
-                    logger.debug(f"Processing command from client {client_id}: {command}")
-                    response = mud_integration.process_command(client_id, command)
+                    message = msg.data
+                    # Try to parse JSON, but also handle plain text
+                    try:
+                        data = json.loads(message)
+                        command = data.get('command', '')
+                    except json.JSONDecodeError:
+                        # If not valid JSON, treat the entire message as a command
+                        command = message
+                        logger.debug(f"Received plain text command from client {client_id}: {command}")
                     
-                    # Send the response back to the client
-                    await websocket.send(json.dumps({
-                        "type": "response",
-                        "message": response
-                    }))
-                else:
-                    logger.warning(f"Empty command received from client {client_id}")
-                    await websocket.send(json.dumps({
+                    # Forward the command to MUDpy through the integration
+                    if command:
+                        logger.debug(f"Processing command from client {client_id}: {command}")
+                        response = mud_integration.process_command(client_id, command)
+                        
+                        # Send the response back to the client
+                        await websocket.send_str(json.dumps({
+                            "type": "response",
+                            "message": response
+                        }))
+                    else:
+                        logger.warning(f"Empty command received from client {client_id}")
+                        await websocket.send_str(json.dumps({
+                            "type": "error",
+                            "message": "Please enter a command."
+                        }))
+                    
+                except Exception as e:
+                    logger.error(f"Error processing message from client {client_id}: {str(e)}")
+                    await websocket.send_str(json.dumps({
                         "type": "error",
-                        "message": "Please enter a command."
+                        "message": "Error processing your command. Please try again."
                     }))
-                
-            except Exception as e:
-                logger.error(f"Error processing message from client {client_id}: {str(e)}")
-                await websocket.send(json.dumps({
-                    "type": "error",
-                    "message": "Error processing your command. Please try again."
-                }))
+            elif msg.type == WSMsgType.ERROR:
+                logger.error(f"WebSocket connection closed with exception: {websocket.exception()}")
+            elif msg.type == WSMsgType.CLOSE:
+                logger.info(f"WebSocket connection closed by client")
+                break
     
-    except websockets.exceptions.ConnectionClosed:
-        logger.info(f"Client disconnected: {client_id}")
+    except Exception as e:
+        logger.error(f"Connection error: {e}")
     
     finally:
         # Clean up client connection
@@ -146,10 +154,13 @@ async def handle_client(websocket):
         
         # Publish client disconnected event
         # Keep client_id as an integer for consistency
+        logger.info(f"Client disconnected: {client_id}")
         publish("client_disconnected", client_id=client_id)
         
         # Disconnect from MUDpy
         mudpy_interface.disconnect_client(client_id)
+        
+        return websocket
 
 async def broadcast_message(message):
     """
@@ -160,32 +171,13 @@ async def broadcast_message(message):
     """
     if active_clients:
         await asyncio.gather(
-            *[client.send(json.dumps({
+            *[client.send_str(json.dumps({
                 "type": "broadcast",
                 "message": message
             })) for client in active_clients.values()]
         )
 
-async def start_websocket_server():
-    """
-    Start the WebSocket server.
-    
-    Note: This is now handled by the combined server in start_server.py
-    This is kept for backward compatibility.
-    """
-    host = '0.0.0.0'
-    port = 8000
-    
-    logger.info(f"Starting WebSocket server on {host}:{port}")
-    
-    # Create a WebSocket server
-    server = await websockets.serve(handle_client, host, port)
-    
-    # Run forever
-    await asyncio.Future()
+# The WebSocket server is now handled in start_server.py using aiohttp
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(start_websocket_server())
-    except KeyboardInterrupt:
-        logger.info("WebSocket server stopped by user")
+    logger.warning("This module should be imported by start_server.py, not run directly.")
