@@ -1,0 +1,123 @@
+# pymud‑ss13 Updated Project Plan
+
+## 🎯 Objectives
+- **Modern ASGI backend**: FastAPI + Uvicorn, Pydantic settings, clean lifecycle hooks  
+- **Pattern‑based DSL command parser** with YAML specs, user aliases, synonyms & fuzzy matching (via RapidFuzz)  
+- **Component‑based object model** for rooms, items, machines, players  
+- **Event‑driven “systems”** architecture (atmospherics, power grid, jobs, AI)  
+- **Dynamic in‑world scripting** sandbox (RestrictedPython or Lua) for LambdaMOO‑style verbs  
+- **Persistent state** (YAML/JSON + script attachments) with autosave/snapshots  
+- **WebSocket‑powered web client**: command I/O, grid/map renderer, status overlays  
+- **Developer DX**: interactive dev shell, hot‑reload plugins, Pydantic‑validated JSON protocol  
+- **Quality & CI/CD**: unit tests, type checks, GitHub Actions, containerized deploy  
+
+---
+
+## 🛠 Phases & Tasks
+
+### Phase 1 – ASGI Foundation
+- [ ] **Settings & DI**  
+  - Define `Settings` via Pydantic `BaseSettings` (`.env` support)  
+  - Inject `MudEngine`, `World`, `ConnectionManager` via FastAPI dependencies  
+- [ ] **Connection Manager**  
+  - Implement per‑WebSocket `asyncio.Queue` send loops  
+  - Handle `connect` / `disconnect` / `broadcast` cleanly  
+- [ ] **WebSocket Endpoint**  
+  - Mount `/ws` in FastAPI  
+  - Login handshake → `engine.add_player()` → session mapping  
+  - Loop: `await ws.receive_text()` → `await engine.process_message()` → enqueue response  
+
+### Phase 2 – DSL‑Style Command Parser
+- [ ] **YAML Command Specs** (`commands.yaml`)  
+  - Define `name`, `patterns` (`"get {item}"`, `"get {item} from {container}"`), `help` text  
+- [ ] **Compile to Regex**  
+  - At startup, build `CommandSpec` objects with `re.compile()` patterns  
+- [ ] **Synonyms & Aliases**  
+  - Load global synonyms (`{"n":"move north",…}`) + per‑player aliases from profile  
+- [ ] **Fuzzy Matching**  
+  - Integrate RapidFuzz for entity resolution (`rapidfuzz.process.extractOne`)  
+- [ ] **Dispatch Loop**  
+  - On input: expand alias → match specs → fuzzy‑resolve captures → call handler → fallback suggestions  
+
+### Phase 3 – Component System
+- [ ] **`GameObject` dataclass**  
+  - Fields: `id`, `name`, `description`, `components: dict[str, Component]`  
+  - Methods: `add_component()`, `get_component()`, event hook dispatch  
+- [ ] **Core Components** (`components/`)  
+  - Door (open/close/lock), AccessControl, Container, Inventory, Machine, Hazard  
+- [ ] **YAML → Components**  
+  - Extend loader in `world.py` to instantiate component classes with state  
+
+### Phase 4 – Event‑Driven Systems
+- [ ] **`events.py`**  
+  - `subscribe(event_name, fn)`, `publish(event_name, **ctx)`  
+- [ ] **Systems Skeletons** (`systems/`)  
+  - **atmos.py**: zones, gas mixes, vents → `publish("pressure_change")`  
+  - **power.py**: grids, breakers → auto‑lock doors on power loss  
+  - **jobs.py**: crew roles, loadouts, shift assignments  
+  - **ai.py**: NPC behavior loops, task scheduling  
+
+### Phase 5 – Dynamic In‑World Scripting
+- [ ] **Sandbox Integration**  
+  - Pick RestrictedPython (or Lua via `lupa`) for safe exec  
+  - `script_manager.py`: `compile_restricted()`, `exec()` in limited globals  
+- [ ] **In‑Game Verb API**  
+  - `@register("addverb")` command to attach `command_<verb>` functions to objects  
+  - Persist code snippets in world state  
+- [ ] **Script Persistence**  
+  - Extend `persistence.py` to dump & reload attached code per object  
+
+### Phase 6 – SS13‑Style Systems
+- [ ] **Atmospherics**: gas mixes, pressure propagation, leak/hazard detection  
+- [ ] **Power Grid**: grid nodes, power flow, manual overrides, cascading failures  
+- [ ] **Jobs & AI**: role‑based equipment, NPC patrols, task queues  
+- [ ] **Hazards & Events**: radiation leaks, quarantine protocols, fire propagation  
+
+### Phase 7 – Persistence Enhancements
+- [ ] **State Serialization**  
+  - Serialize `GameObject` fields + component state + scripts as YAML/JSON  
+- [ ] **Autosave & Snapshots**  
+  - Background task to save every X minutes via `aiofiles` or `asyncio.to_thread()`  
+- [ ] **Graceful Shutdown**  
+  - FastAPI `shutdown` hook to flush state  
+
+### Phase 8 – Web Client & UI
+- [ ] **Command I/O Panel**  
+  - WebSocket connection, `<textarea>` or React component for chat log  
+  - Pydantic‑validated JSON messages for rich updates  
+- [ ] **Grid‑Map Renderer**  
+  - CSS Grid or Canvas overlay to draw station layout from room graph  
+  - Clickable cells to inspect room details  
+- [ ] **Status Overlays**  
+  - Door lock icons, atmos warning badges, power status indicators  
+- [ ] **Autocomplete & Help**  
+  - HTTP endpoints `/autocomplete`, `/help/{cmd}` for client suggestions  
+
+### Phase 9 – Developer Tooling & DX
+- [ ] **Interactive Dev Shell**  
+  - `make shell` → IPython with `engine`, `world`, `GameObject` instances  
+- [ ] **Hot‑Reload Watcher**  
+  - Watch `plugins/` & `data/` via `watchgod`; reload only changed modules  
+- [ ] **Code Generators**  
+  - `mud-cli generate component Door --fields locked:bool`  
+
+### Phase 10 – Testing & CI/CD
+- [ ] **Unit Tests**  
+  - `engine.process_message()`, `CommandSpec.match()`, component behavior, event bus, scripting  
+- [ ] **Type Checking**  
+  - Mypy on `*.py`  
+- [ ] **GitHub Actions**  
+  - Lint (flake8/black), test suite, build Docker image, security scan  
+- [ ] **Containerization**  
+  - Dockerfile multi‑stage build, publish image to registry  
+
+---
+
+## 🚀 Milestones
+- **M1**: ASGI server + DSL parser + basic world load/save  
+- **M2**: Component instantiation + event bus + core SS13 door & access  
+- **M3**: Scripting sandbox + in‑world verb support + script persistence  
+- **M4**: Atmos & power systems + web client grid renderer  
+- **M5**: Full CI/CD pipeline + dev shell + docs + sample scenario  
+
+> _Save this as `docs/roadmap.md` in your repo. Check off tasks as you progress and tweak the plan as your vision evolves!_  

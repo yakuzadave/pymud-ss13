@@ -1,0 +1,364 @@
+# Implementation Steps & Next Actions
+
+This document walks through concrete implementation steps—complete with code examples—and outlines the immediate next actions to get our pymud‑ss13 engine off the ground.
+
+---
+
+## 1. ASGI Foundation
+
+### 1.1 Install Core Dependencies
+```bash
+pip install fastapi uvicorn pydantic python-dotenv rapidfuzz aiofiles restrictedpython
+
+1.2 Define Settings (settings.py)
+
+from pydantic import BaseSettings
+
+class Settings(BaseSettings):
+    HOST: str = "0.0.0.0"
+    PORT: int = 8765
+    WORLD_FILE: str = "data/world.yaml"
+    AUTOSAVE_INTERVAL: int = 300  # seconds
+
+    class Config:
+        env_file = ".env"
+
+1.3 Connection Manager (connection.py)
+
+import asyncio
+from fastapi import WebSocket
+
+class ConnectionManager:
+    def __init__(self):
+        self.active: dict[WebSocket, asyncio.Queue[str]] = {}
+
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        queue = asyncio.Queue()
+        self.active[ws] = queue
+        asyncio.create_task(self._sender(ws, queue))
+
+    async def _sender(self, ws: WebSocket, queue: asyncio.Queue):
+        try:
+            while True:
+                msg = await queue.get()
+                await ws.send_text(msg)
+        except:
+            pass
+
+    def disconnect(self, ws: WebSocket):
+        self.active.pop(ws, None)
+
+    async def broadcast(self, msg: str):
+        for q in self.active.values():
+            q.put_nowait(msg)
+
+1.4 WebSocket Endpoint & Server (main.py)
+
+import yaml, asyncio
+from fastapi import FastAPI, WebSocket, Depends
+from uvicorn import run
+from settings import Settings
+from connection import ConnectionManager
+from engine import MudEngine
+
+app = FastAPI()
+mgr = ConnectionManager()
+cfg = Settings()
+world_data = yaml.safe_load(open(cfg.WORLD_FILE))
+engine = MudEngine(world_data)
+
+# Hook engine broadcasts into WS manager
+engine.on_broadcast(lambda m: asyncio.create_task(mgr.broadcast(m)))
+
+@app.websocket("/ws")
+async def ws_endpoint(ws: WebSocket):
+    await mgr.connect(ws)
+    player_id = engine.add_player()
+    await mgr.broadcast(f"* {engine.get_player_name(player_id)} has joined.")
+    try:
+        while True:
+            text = await ws.receive_text()
+            out = await engine.process_message(player_id, text)
+            if out:
+                await mgr.active[ws].put(out)
+    except:
+        pass
+    finally:
+        name = engine.get_player_name(player_id)
+        engine.remove_player(player_id)
+        mgr.disconnect(ws)
+        await mgr.broadcast(f"* {name} has left.")
+
+if __name__ == "__main__":
+    run(app, host=cfg.HOST, port=cfg.PORT)
+
+
+
+⸻
+
+2. DSL‑Style Command Parser
+
+2.1 Define commands.yaml
+
+- name: look
+  patterns:
+    - "look"
+    - "look at {target}"
+  help: |
+    look             — describe current room
+    look at <target> — examine an object or exit
+
+- name: get
+  patterns:
+    - "get {item}"
+    - "get {item} from {container}"
+  help: |
+    get <item>             — pick up an item
+    get <item> from <ctr>  — take item out of container
+
+2.2 Compile Specs (command_spec.py)
+
+import re
+
+class CommandSpec:
+    def __init__(self, name, patterns, func):
+        self.name = name
+        self.func = func
+        self.regexes = []
+        for pat in patterns:
+            rx = re.escape(pat)
+            rx = re.sub(r"\\\{(\w+)\\\}", r"(?P<\1>\\S+)", rx)
+            self.regexes.append(re.compile("^" + rx + "$", re.IGNORECASE))
+
+    def match(self, line: str):
+        for rx in self.regexes:
+            m = rx.match(line)
+            if m:
+                return m.groupdict()
+        return None
+
+2.3 Load & Dispatch (parser.py)
+
+import yaml
+from rapidfuzz import process
+from command_spec import CommandSpec
+from commands import look_handler, get_handler, move_handler
+
+INTENTS = {
+    "look": look_handler,
+    "get":  get_handler,
+    "move": move_handler,
+}
+
+def load_specs(path="commands.yaml"):
+    specs = []
+    for doc in yaml.safe_load(open(path)):
+        specs.append(CommandSpec(doc["name"], doc["patterns"], INTENTS[doc["name"]]))
+    return specs
+
+SPECS = load_specs()
+
+def dispatch(player, line, world_objs, container_objs):
+    line = line.strip().lower()
+    for spec in SPECS:
+        ctx = spec.match(line)
+        if ctx is not None:
+            # fuzzy‑resolve captured names
+            if "item" in ctx:
+                ctx["item"] = process.extractOne(ctx["item"], world_objs)[0]
+            if "container" in ctx:
+                ctx["container"] = process.extractOne(ctx["container"], container_objs)[0]
+            return spec.func(player, **ctx)
+    # fallback suggestions
+    from difflib import get_close_matches
+    name = line.split()[0]
+    sugg = get_close_matches(name, [s.name for s in SPECS])
+    return f"Unknown command. Did you mean: {', '.join(sugg)}?"
+
+
+
+⸻
+
+3. Component‑Based Object Model
+
+3.1 GameObject & Base Component (object.py)
+
+from dataclasses import dataclass, field
+
+@dataclass
+class GameObject:
+    id: str
+    name: str
+    description: str
+    components: dict[str, "Component"] = field(default_factory=dict)
+
+    def add_component(self, key: str, comp: "Component"):
+        self.components[key] = comp
+        comp.owner = self
+
+    def get_component(self, key: str):
+        return self.components.get(key)
+
+3.2 Example Component (components/door.py)
+
+class DoorComponent:
+    def __init__(self, locked=False):
+        self.locked = locked
+        self.owner = None
+
+    def open(self, player):
+        if self.locked:
+            return "The door is locked."
+        # move player into connected room...
+        return "You open the door and step through."
+
+3.3 YAML Spec for Objects (data/objects.yaml)
+
+- id: airlock_north
+  name: "North Airlock"
+  description: "A heavy blast door with keypad."
+  components:
+    door:
+      locked: true
+    access:
+      level_required: 2
+
+
+
+⸻
+
+4. Event‑Driven Systems
+
+4.1 events.py
+
+SUBSCRIBERS: dict[str, list[callable]] = {}
+
+def subscribe(event: str, fn: callable):
+    SUBSCRIBERS.setdefault(event, []).append(fn)
+
+def publish(event: str, **ctx):
+    for fn in SUBSCRIBERS.get(event, []):
+        fn(**ctx)
+
+4.2 Hooking a System (systems/power.py)
+
+from events import subscribe
+
+class PowerGrid:
+    def __init__(self):
+        self.grids = {}
+
+    def fail_grid(self, grid_id):
+        # ...
+        publish("power_loss", grid=grid_id)
+
+# Example subscriber
+from components.door import DoorComponent
+
+def on_power_loss(grid):
+    for door in DoorComponent.instances_for_grid(grid):
+        door.locked = True
+
+subscribe("power_loss", on_power_loss)
+
+
+
+⸻
+
+5. Dynamic In‑World Scripting
+
+5.1 script_manager.py
+
+from RestrictedPython import compile_restricted
+
+class ScriptManager:
+    def __init__(self):
+        self.scripts: dict[str, str] = {}
+
+    def add_script(self, obj_id: str, verb: str, code: str):
+        byte_code = compile_restricted(code, "<in-world>", "exec")
+        self.scripts[f"{obj_id}:{verb}"] = byte_code
+
+    def run_script(self, obj, verb, player, **ctx):
+        key = f"{obj.id}:{verb}"
+        bc = self.scripts.get(key)
+        if not bc:
+            return None
+        globs, locs = {}, {"self": obj, "player": player, **ctx}
+        exec(bc, globs, locs)
+        return locs.get("result", "")
+
+
+
+⸻
+
+6. Persistence & Autosave
+
+6.1 Asynchronous Save (persistence.py)
+
+import aiofiles, yaml, asyncio
+
+async def autosave(world_state, path, interval):
+    while True:
+        async with aiofiles.open(path, "w") as f:
+            await f.write(yaml.safe_dump(world_state()))
+        await asyncio.sleep(interval)
+
+6.2 Hook into Startup (main.py)
+
+@app.on_event("startup")
+async def on_startup():
+    asyncio.create_task(autosave(engine.world_state, cfg.WORLD_FILE, cfg.AUTOSAVE_INTERVAL))
+
+
+
+⸻
+
+7. Web Client & UI Examples
+
+7.1 Basic HTML Client (client/webclient.html)
+
+<!DOCTYPE html>
+<html>
+<body>
+  <textarea id="log" rows="20" cols="80" readonly></textarea><br>
+  <input id="in" size="80" autofocus>
+  <script>
+    const ws = new WebSocket("ws://" + location.host + "/ws");
+    const log = document.getElementById("log");
+    const inp = document.getElementById("in");
+    ws.onmessage = e => log.value += e.data + "\n";
+    inp.onkeydown = e => {
+      if (e.key === "Enter") {
+        ws.send(inp.value);
+        inp.value = "";
+      }
+    };
+  </script>
+</body>
+</html>
+
+7.2 Autocomplete Endpoint (main.py)
+
+@app.get("/autocomplete")
+def autocomplete(q: str):
+    return [spec.name for spec in SPECS if spec.name.startswith(q.lower())]
+
+
+
+⸻
+
+Next Steps
+	•	✅ Wire up ASGI server & confirm WebSocket connections
+	•	✅ Implement DSL parser & verify pattern dispatch with sample commands
+	•	🟩 Build GameObject loader and core components (Door, Container)
+	•	🟨 Scaffold event bus and hook one system (power or atmos)
+	•	🟧 Integrate scripting sandbox and test addverb flow
+	•	🟦 Setup autosave task and ensure state persists across restarts
+	•	🟪 Flesh out web client UI: grid/map renderer and status overlays
+	•	⚪ Write unit tests for parser, components, events, and scripting
+	•	⚪ Configure GitHub Actions: lint, test, build Docker image
+
+Keep this as docs/IMPLEMENTATION.md and tick off each “🟩/🟨/🟧/🟦/🟪” as you complete it, promoting to ✅ when done. Feel free to adjust and expand examples as needed!
+
