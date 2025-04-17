@@ -25,8 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Determine the correct WebSocket URL based on the current location
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // Connect to the WebSocket on the same port as the HTTP server, but at the /ws path
-    let serverUrl = localStorage.getItem('serverUrl') || `${protocol}//${window.location.host}/ws`;
+    // Extract the hostname (without port) from window.location.host
+    const hostname = window.location.hostname;
+    // Connect to the WebSocket server on port 8000
+    let serverUrl = localStorage.getItem('serverUrl') || `${protocol}//${hostname}:8000`;
     
     // Set initial server URL
     serverUrlInput.value = serverUrl;
@@ -68,15 +70,25 @@ document.addEventListener('DOMContentLoaded', function() {
             webSocket.onmessage = function(event) {
                 try {
                     const data = JSON.parse(event.data);
+                    console.log('Received message:', data);
                     
                     if (data.type === 'error') {
                         appendToTerminal(data.message, 'error-message');
                     } else if (data.type === 'system') {
                         appendToTerminal(data.message, 'system-message');
-                    } else {
+                    } else if (data.type === 'response') {
                         appendToTerminal(data.message);
+                    } else if (data.type === 'broadcast') {
+                        appendToTerminal(data.message, 'broadcast-message');
+                    } else if (data.type === 'location') {
+                        appendToTerminal(data.message, 'location-message');
+                    } else if (data.type === 'chat') {
+                        appendToTerminal(data.message, 'chat-message');
+                    } else {
+                        appendToTerminal(data.message || 'Unknown message type: ' + data.type);
                     }
                 } catch (e) {
+                    console.error('Error parsing message:', e, event.data);
                     // If not JSON, just display the raw message
                     appendToTerminal(event.data);
                 }

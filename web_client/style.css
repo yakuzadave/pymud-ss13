@@ -269,6 +269,31 @@ footer {
     margin: 4px 0;
 }
 
+.broadcast-message {
+    color: #f0ad4e;
+    font-style: italic;
+    border-left: 2px solid #f0ad4e;
+    padding-left: 8px;
+    margin: 4px 0;
+}
+
+.location-message {
+    color: #5bc0de;
+    font-style: italic;
+    border-left: 2px solid #5bc0de;
+    padding-left: 8px;
+    margin: 4px 0;
+}
+
+.chat-message {
+    color: #fff;
+    background-color: rgba(92, 184, 92, 0.1);
+    border-left: 2px solid #5cb85c;
+    padding: 4px 8px;
+    margin: 4px 0;
+    border-radius: 0 4px 4px 0;
+}
+
 /* Bootstrap overrides for dark theme */
 .modal-content {
     background-color: var(--history-bg);
