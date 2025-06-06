@@ -15,8 +15,7 @@ from events import subscribe, publish
 import yaml
 import os
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Set up module logger
 logger = logging.getLogger(__name__)
 
 class MudpyIntegration:

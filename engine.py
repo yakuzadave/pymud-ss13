@@ -42,8 +42,7 @@ from commands.social import (
     ooc_handler,
 )
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
+# Set up module logger
 logger = logging.getLogger(__name__)
 
 # Create the command parser

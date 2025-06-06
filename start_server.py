@@ -31,7 +31,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-logger = logging.getLogger('start_server')
+logger = logging.getLogger(__name__)
 
 # Global MudpyInterface instance for proper cleanup
 mudpy_interface = None

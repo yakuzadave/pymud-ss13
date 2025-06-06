@@ -16,16 +16,8 @@ from settings import settings
 from server import app as api_app
 from connection import ConnectionManager
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG if settings.debug else logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(f'{settings.log_dir}/combined_server.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger('combined_server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 # Signal handler for graceful shutdown
 def signal_handler(sig, frame):

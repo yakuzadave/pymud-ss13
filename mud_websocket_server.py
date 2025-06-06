@@ -24,12 +24,8 @@ from commands import system
 from commands import interaction
 from commands import debug  # This should be disabled in production
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger('mud_websocket_server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 # Dictionary to store active client connections
 active_clients = {}

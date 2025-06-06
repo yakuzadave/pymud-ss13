@@ -9,8 +9,7 @@ import inspect
 import logging
 from typing import Callable, Dict, List, Any, Union, Coroutine
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Set up module logger
 logger = logging.getLogger(__name__)
 
 # Type for event handlers (can be sync or async)

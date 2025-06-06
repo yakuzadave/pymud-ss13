@@ -13,19 +13,8 @@ import sys
 from aiohttp import web
 from mud_server import create_mud_server
 
-# Configure logging
-if not os.path.exists('logs'):
-    os.makedirs('logs')
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/server.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger('run_server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 # Create routes for the HTTP server
 routes = web.RouteTableDef()

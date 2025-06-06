@@ -24,16 +24,8 @@ import integration
 import engine
 from events import publish, subscribe
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG if settings.debug else logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(f'{settings.log_dir}/server.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger('server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
