@@ -33,3 +33,7 @@ python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
