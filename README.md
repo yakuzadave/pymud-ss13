@@ -1,16 +1,14 @@
 # MUDpy with WebSocket Interface
 
-This project extends the MUDpy game engine with a WebSocket interface, allowing players to connect through a web browser instead of requiring a Telnet client.
+This project extends the MUDpy game engine with a WebSocket interface. Players can connect via a modern web browser instead of a Telnet client.
 
 ## Features
 
-- **MUDpy Integration**: Seamlessly interfaces with the MUDpy game engine.
-- **Persistent Storage**: Uses YAML files for configuration and data storage.
-- **Web-Based Frontend**: Allows players to connect through a browser.
-- **Real-Time Communication**: Uses WebSockets for bi-directional communication.
-- **Command History**: Keeps track of command history for easy reuse.
-- **Dark Mode**: Supports both light and dark themes.
-- **Mobile Responsive**: Works on desktop and mobile devices.
+- **MUDpy Integration**: Interfaces with the MUDpy game engine.
+- **Persistent Storage**: Uses YAML for configuration and data files.
+- **Web-Based Frontend**: Connect through a browser using WebSockets.
+- **Command History and Dark Mode** support.
+- **Responsive Design** for desktop and mobile.
 
 ## Requirements
 
@@ -21,8 +19,17 @@ This project extends the MUDpy game engine with a WebSocket interface, allowing 
 
 ## Setup
 
-1. Run the setup script to clone MUDpy and set up the environment:
+Run the setup script to clone MUDpy and install dependencies:
 
 ```bash
 chmod +x setup.sh
 ./setup.sh
+```
+
+Then start the combined HTTP/WebSocket server:
+
+```bash
+python run_server.py
+```
+
+The web client will be available on `http://localhost:5000`.
