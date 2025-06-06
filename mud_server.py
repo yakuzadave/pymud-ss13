@@ -18,19 +18,8 @@ import integration
 import engine
 from events import publish, subscribe
 
-# Configure logging
-if not os.path.exists('logs'):
-    os.makedirs('logs')
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/server.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger('mud_server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 class MudServer:
     """

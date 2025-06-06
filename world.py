@@ -9,8 +9,7 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 import os
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Set up module logger
 logger = logging.getLogger(__name__)
 
 @dataclass
