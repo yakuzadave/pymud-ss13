@@ -33,3 +33,17 @@ python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+## Command Line Interface
+
+For quick local testing you can also use a simple CLI.
+
+```bash
+python cli.py
+```
+
+This launches a text prompt using the same engine as the server. Type commands
+like `look`, `go north`, or `inventory`. Use `quit` to exit.
+
+Additional project notes are available in `docs/development_plan.md` and
+external references are listed in `docs/resources.md`.
