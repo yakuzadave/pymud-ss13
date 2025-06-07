@@ -10,6 +10,7 @@ from world import get_world, GameObject
 from components.room import RoomComponent
 from components.door import DoorComponent
 from components.item import ItemComponent
+from components.npc import NPCComponent
 from components.player import PlayerComponent
 from events import subscribe, publish
 import yaml
@@ -62,6 +63,8 @@ class MudpyIntegration:
             self._load_items()
 
         # Note: In a real implementation, you'd also load players, NPCs, etc.
+        if os.path.exists("data/npcs.yaml"):
+            self._load_npcs()
 
         logger.info("World initialization complete")
 
@@ -147,6 +150,36 @@ class MudpyIntegration:
 
         except Exception as e:
             logger.error(f"Error loading items: {e}")
+
+    def _load_npcs(self):
+        """
+        Load NPCs from the YAML file.
+        """
+        try:
+            with open("data/npcs.yaml", "r") as f:
+                npcs_data = yaml.safe_load(f)
+
+            for npc_data in npcs_data:
+                npc_obj = GameObject(
+                    id=npc_data["id"],
+                    name=npc_data["name"],
+                    description=npc_data.get("description", ""),
+                    location=npc_data.get("location")
+                )
+
+                if "components" in npc_data and "npc" in npc_data["components"]:
+                    npc_comp = NPCComponent(
+                        role=npc_data["components"]["npc"].get("role", "crew"),
+                        dialogue=npc_data["components"]["npc"].get("dialogue", [])
+                    )
+                    npc_obj.add_component("npc", npc_comp)
+
+                self.world.register(npc_obj)
+
+            logger.info(f"Loaded {len(npcs_data)} NPCs from data/npcs.yaml")
+
+        except Exception as e:
+            logger.error(f"Error loading NPCs: {e}")
 
     def _setup_event_handlers(self):
         """

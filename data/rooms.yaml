@@ -1,6 +1,24 @@
 # Space Station Alpha - Room Definitions
 # This file describes all rooms (locations) in the station
 
+- id: start
+  name: Central Hub
+  description: >
+    The main arrival and transit hall of the station, bustling with activity.
+  components:
+    room:
+      exits:
+        north: corridor_north
+        east: corridor_east
+        west: bridge
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
 - id: bridge
   name: Command Bridge
   description: >
@@ -11,6 +29,7 @@
       exits:
         north: corridor_north
         east: communications
+        south: start
       atmosphere:
         oxygen: 21.0
         nitrogen: 78.0

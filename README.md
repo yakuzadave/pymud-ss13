@@ -7,6 +7,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **MUDpy Integration**: Interfaces with the MUDpy game engine.
 - **Persistent Storage**: Uses YAML for configuration and data files.
 - **Web-Based Frontend**: Connect through a browser using WebSockets.
+- **NPC Data**: Non-player characters defined in `data/npcs.yaml`.
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
 
