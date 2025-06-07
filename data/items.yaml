@@ -262,3 +262,35 @@
       item_properties:
         durability: 90
         radiation_protection: true
+
+- id: space_suit
+  name: Space Suit
+  description: >
+    A bulky suit designed for EVA operations. It protects against the vacuum of space.
+  location: airlock_north
+  components:
+    item:
+      weight: 5.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You zip yourself into the space suit, feeling safe from the void.
+      item_type: apparel
+      item_properties:
+        durability: 95
+        vacuum_protection: true
+
+- id: tool_belt
+  name: Engineer's Tool Belt
+  description: >
+    A belt containing common engineering tools and a few spare parts.
+  location: engineering
+  components:
+    item:
+      weight: 1.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You secure the tool belt around your waist.
+      item_type: utility
+      item_properties:
+        durability: 70
+        slot_count: 6
