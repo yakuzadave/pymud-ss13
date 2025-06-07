@@ -9,7 +9,7 @@ import os
 class Settings(BaseSettings):
     """
     Settings for the MUDpy server.
-    
+
     These settings can be overridden by environment variables or a .env file.
     """
     host: str = "0.0.0.0"
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     log_dir: str = "logs"
     # Debug mode
     debug: bool = True
-    
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8"
