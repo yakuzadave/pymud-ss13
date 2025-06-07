@@ -362,25 +362,25 @@ footer {
     .container {
         padding: 10px;
     }
-    
+
     header {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .connection-status {
         margin-top: 10px;
     }
-    
+
     .terminal {
         height: 300px;
     }
-    
+
     footer {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .buttons {
         width: 100%;
         justify-content: space-between;

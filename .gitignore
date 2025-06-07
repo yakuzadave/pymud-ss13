@@ -54,3 +54,4 @@ htmlcov/
 
 # Windows
 Thumbs.db
+*.bak

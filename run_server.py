@@ -28,7 +28,7 @@ async def index(request):
 async def static_files(request):
     """Serve static files."""
     path = request.match_info['path']
-    
+
     if os.path.isfile(f'web_client/{path}'):
         return web.FileResponse(f'web_client/{path}')
     else:
@@ -48,34 +48,34 @@ async def main():
     # Register signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    
+
     # Check if web_client directory exists, create it if it doesn't
     if not os.path.exists('web_client'):
         logger.warning("web_client directory not found, creating it...")
         os.makedirs('web_client')
-    
+
     # Create the MUD server
     mud_server = create_mud_server()
-    
+
     # Create the app
     app = web.Application()
     app.add_routes(routes)
-    
+
     # Create a task for running the MUD server
     mud_server_task = asyncio.create_task(mud_server.run())
-    
+
     # Start the HTTP server
     host = '0.0.0.0'
     port = 5000
-    
+
     logger.info(f"Starting combined HTTP/WebSocket server on {host}:{port}")
-    
+
     # Run the server
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, host, port)
     await site.start()
-    
+
     # Keep the server running
     try:
         await asyncio.gather(
