@@ -230,3 +230,35 @@
         durability: 90
         oxygen_remaining: 95
         duration_minutes: 30
+
+- id: comms_device
+  name: Communications Device
+  description: >
+    A handheld communicator used to send and receive messages over station channels.
+  location: start
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You activate the communicator and hear a soft beep.
+      item_type: tool
+      item_properties:
+        durability: 80
+        power_level: 100
+
+- id: rad_suit
+  name: Radiation Suit
+  description: >
+    A protective suit designed to shield the wearer from harmful radiation.
+  location: reactor_access
+  components:
+    item:
+      weight: 4.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You carefully put on the radiation suit.
+      item_type: apparel
+      item_properties:
+        durability: 90
+        radiation_protection: true
