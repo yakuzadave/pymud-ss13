@@ -6,6 +6,7 @@
   weight: 1
   params:
     message: "A brief meteor shower rattles the station's hull."
+  description: A barrage of tiny meteors pelts the station hull.
 
 - id: power_surge
   name: Power Surge
@@ -18,3 +19,9 @@
   weight: 1
   params:
     room_id: "engineering"
+
+- id: solar_flare
+  description: A sudden solar flare disrupts communications and power systems.
+
+- id: power_outage
+  description: Critical generators shut down, plunging sections into darkness.
