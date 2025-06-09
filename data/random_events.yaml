@@ -1,0 +1,21 @@
+# Random Event Definitions
+# Example events for the RandomEventSystem
+
+- id: power_outage
+  weight: 10
+  min_players: 1
+  actions:
+    - "POWER_SYSTEM.cause_power_failure"
+
+- id: atmos_leak
+  weight: 8
+  min_players: 1
+  actions:
+    - "ATMOS_SYSTEM.create_leak"
+
+- id: meteor_shower
+  weight: 5
+  min_players: 2
+  actions:
+    - "ATMOS_SYSTEM.breach_hull"
+    - "POWER_SYSTEM.damage_solar_panels"
