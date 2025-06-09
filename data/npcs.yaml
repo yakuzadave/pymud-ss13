@@ -36,3 +36,27 @@
       dialogue:
         - "These samples are fascinating."
         - "Please don't touch the equipment."
+
+- id: npc_security
+  name: Officer Patel
+  description: >
+    A vigilant security officer watching for any sign of trouble.
+  location: corridor_north
+  components:
+    npc:
+      role: Security
+      dialogue:
+        - "Stay safe and follow station regulations."
+        - "Report any suspicious activity immediately."
+
+- id: npc_engineer
+  name: Chief Engineer Torres
+  description: >
+    An experienced engineer always ready to fix a failing subsystem.
+  location: engineering
+  components:
+    npc:
+      role: Engineer
+      dialogue:
+        - "Keep the power grid stable and we'll all be fine."
+        - "Let me know if you see any loose wiring."

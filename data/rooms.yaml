@@ -322,3 +322,36 @@
         pressure: 0.0
       hazards: ["vacuum", "radiation", "extreme_cold"]
       is_airlock: false
+
+- id: observatory
+  name: Stellar Observatory
+  description: >
+    A quiet dome with a large viewport and telescopes for studying distant stars.
+  components:
+    room:
+      exits:
+        west: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: maintenance_tunnel
+  name: Maintenance Tunnel
+  description: >
+    A narrow passage filled with pipes and cables running along the walls.
+  components:
+    room:
+      exits:
+        south: corridor_north
+        east: engineering
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 100.0
+      hazards: ["low_light"]
+      is_airlock: false
