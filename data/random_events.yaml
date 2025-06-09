@@ -1,0 +1,6 @@
+- id: solar_flare
+  description: A sudden solar flare disrupts communications and power systems.
+- id: meteor_shower
+  description: A barrage of tiny meteors pelts the station hull.
+- id: power_outage
+  description: Critical generators shut down, plunging sections into darkness.
