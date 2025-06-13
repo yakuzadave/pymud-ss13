@@ -56,6 +56,10 @@ corresponding logic.
 
 Administrators can fire an event with `event trigger <event_id>`.
 
+## Persistence
+
+Game objects are stored as YAML. Player files are written to `data/players` when clients disconnect and the server writes periodic autosave snapshots of the entire world to `data/world`. See [docs/persistence.md](docs/persistence.md) for format details.
+
 ## License
 
 This project is released under the [MIT License](LICENSE).

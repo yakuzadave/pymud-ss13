@@ -150,9 +150,13 @@ class MudpyIntegration:
         player_obj = self.world.get_object(player_id)
 
         if player_obj:
-            # TODO: In a real implementation, you might want to save player data first
+            save_path = os.path.join(self.world.data_dir, "players", f"{player_id}.yaml")
+            try:
+                from persistence import save_game_object
+                save_game_object(player_obj, save_path)
+            except Exception as e:
+                logger.error(f"Failed to save player {player_id}: {e}")
 
-            # Remove from world objects dictionary
             if player_id in self.world.objects:
                 del self.world.objects[player_id]
                 logger.info(f"Removed player game object for client {client_id}")

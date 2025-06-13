@@ -12,6 +12,8 @@ import signal
 import sys
 from aiohttp import web
 from mud_server import create_mud_server
+from world import get_world
+from persistence import autosave_loop
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -63,6 +65,7 @@ async def main():
 
     # Create a task for running the MUD server
     mud_server_task = asyncio.create_task(mud_server.run())
+    autosave_task = asyncio.create_task(autosave_loop(get_world(), interval=60))
 
     # Start the HTTP server
     host = '0.0.0.0'
@@ -80,6 +83,7 @@ async def main():
     try:
         await asyncio.gather(
             mud_server_task,
+            autosave_task,
             asyncio.Future()  # Run forever
         )
     except asyncio.CancelledError:
