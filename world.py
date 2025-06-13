@@ -106,6 +106,24 @@ class World:
 
         logger.info(f"World initialized with data directory: {data_dir}")
 
+    def load_rooms(self, filename: str = "rooms.yaml") -> int:
+        """Load room definitions into the world."""
+        from persistence import load_rooms
+        filepath = os.path.join(self.data_dir, filename)
+        return load_rooms(filepath, self)
+
+    def load_items(self, filename: str = "items.yaml") -> int:
+        """Load item definitions into the world."""
+        from persistence import load_items
+        filepath = os.path.join(self.data_dir, filename)
+        return load_items(filepath, self)
+
+    def load_npcs(self, filename: str = "npcs.yaml") -> int:
+        """Load NPC definitions into the world."""
+        from persistence import load_npcs
+        filepath = os.path.join(self.data_dir, filename)
+        return load_npcs(filepath, self)
+
     def register(self, obj: GameObject) -> None:
         """
         Register a game object in the world.

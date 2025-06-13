@@ -5,10 +5,12 @@ This module provides handlers for movement commands like go, sprint, etc.
 
 import logging
 from typing import Optional, Dict, Any
+from engine import register
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
+@register("move")
 def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> str:
     """
     Handle the move command.
@@ -89,6 +91,7 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
     # Return a description of the new location
     return interface._look(client_id)
 
+@register("sprint")
 def sprint_handler(client_id: str, direction: str, **kwargs) -> str:
     """
     Handle the sprint command (move two rooms at once).

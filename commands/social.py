@@ -5,10 +5,12 @@ This module provides handlers for communication commands like say, shout, whispe
 
 import logging
 from typing import Optional, Dict, Any
+from engine import register
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
+@register("say")
 def say_handler(client_id: str, message: str, **kwargs) -> str:
     """
     Handle the say command.
@@ -46,6 +48,7 @@ def say_handler(client_id: str, message: str, **kwargs) -> str:
 
     return f"You say: {message}"
 
+@register("shout")
 def shout_handler(client_id: str, message: str, **kwargs) -> str:
     """
     Handle the shout command.
@@ -90,6 +93,7 @@ def shout_handler(client_id: str, message: str, **kwargs) -> str:
 
     return f"You shout: {message.upper()}!"
 
+@register("whisper")
 def whisper_handler(client_id: str, player: str, message: str, **kwargs) -> str:
     """
     Handle the whisper command.
@@ -146,6 +150,7 @@ def whisper_handler(client_id: str, player: str, message: str, **kwargs) -> str:
 
     return f"You whisper to {player}: {message}"
 
+@register("tell")
 def tell_handler(client_id: str, player: str, message: str, **kwargs) -> str:
     """
     Handle the tell command (private message).
@@ -204,6 +209,7 @@ def tell_handler(client_id: str, player: str, message: str, **kwargs) -> str:
 
     return f"You tell {player}: {message}"
 
+@register("ooc")
 def ooc_handler(client_id: str, message: str, **kwargs) -> str:
     """
     Handle the out-of-character (OOC) command.
