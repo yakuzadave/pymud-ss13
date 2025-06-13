@@ -1,9 +1,7 @@
-
 """Random events system for MUDpy SS13."""
 
 import asyncio
 import logging
-import os
 import random
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -13,6 +11,7 @@ import yaml
 from events import publish
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class RandomEvent:
@@ -28,10 +27,16 @@ class RandomEvent:
 class RandomEventSystem:
     """System that periodically fires random events."""
 
-    def __init__(self, events_file: str = "data/random_events.yaml", interval: float = 60.0) -> None:
+    def __init__(
+        self,
+        events_file: str = "data/random_events.yaml",
+        interval: float = 60.0,
+    ) -> None:
         self.events_file = events_file
         self.interval = interval
         self.events: List[RandomEvent] = []
+        self.weights: List[int] = []
+        self.events_by_id: Dict[str, RandomEvent] = {}
         self.enabled = False
         self.task: Optional[asyncio.Task] = None
 
@@ -56,10 +61,14 @@ class RandomEventSystem:
                 )
                 for evt in data
             ]
+            self.weights = [evt.weight for evt in self.events]
+            self.events_by_id = {evt.id: evt for evt in self.events if evt.id}
             logger.info(f"Loaded {len(self.events)} random events")
         except Exception as e:
             logger.error(f"Failed to load random events: {e}")
             self.events = []
+            self.weights = []
+            self.events_by_id = {}
 
     def start(self) -> None:
         """Start the random event loop."""
@@ -94,10 +103,27 @@ class RandomEventSystem:
         if not self.events:
             return
 
+        if not self.weights:
+            self.weights = [evt.weight for evt in self.events]
+
         event = random.choices(self.events, weights=self.weights, k=1)[0]
         logger.debug(f"Triggering random event {event.id}")
         publish(event.id, **event.params)
         publish("random_event", event_id=event.id, event=event)
+
+    def list_events(self) -> List[str]:
+        """Return available event IDs."""
+        return [evt.id for evt in self.events]
+
+    def trigger_event(self, event_id: str, **kwargs: Any) -> bool:
+        """Manually trigger a specific event."""
+        event = self.events_by_id.get(event_id)
+        if not event:
+            return False
+        params = {**event.params, **kwargs}
+        publish(event.id, **params)
+        publish("random_event", event_id=event.id, event=event)
+        return True
 
 
 RANDOM_EVENT_SYSTEM = RandomEventSystem()

@@ -9,6 +9,7 @@ from events import publish
 
 logger = logging.getLogger(__name__)
 
+
 @register("quit")
 def cmd_quit(interface, client_id, args):
     """
@@ -33,6 +34,7 @@ def cmd_quit(interface, client_id, args):
     interface.disconnect_client(client_id)
 
     return "You have disconnected from Space Station Alpha. Safe travels."
+
 
 @register("save")
 def cmd_save(interface, client_id, args):
@@ -60,6 +62,7 @@ def cmd_save(interface, client_id, args):
     publish("game_saved", client_id=client_id, player_name=player_name)
 
     return "Game state saved."
+
 
 @register("shutdown")
 def cmd_shutdown(interface, client_id, args):
@@ -90,15 +93,21 @@ def cmd_shutdown(interface, client_id, args):
 
     return "Server shutdown initiated."
 
+
 @register("event")
 def cmd_event(interface, client_id, args):
     """List or trigger random events."""
     session = interface.client_sessions.get(client_id, {})
     is_admin = session.get("is_admin", False)
 
+    from systems.random_events import get_random_event_system
+
+    system = get_random_event_system()
+    if not system.events:
+        system.load_events()
+
     if not args or args.strip().lower() in {"list", "ls"}:
-        from random_events import list_events
-        events = list_events()
+        events = system.list_events()
         if not events:
             return "No random events are defined."
         return "Available events: " + ", ".join(events)
@@ -111,11 +120,14 @@ def cmd_event(interface, client_id, args):
         if len(parts) < 2:
             return "Usage: event trigger <event_id>"
         event_id = parts[1]
-        from random_events import trigger_event
-        if trigger_event(event_id, client_id=client_id):
+        if system.trigger_event(event_id, client_id=client_id):
             # Notify subscribers that a manual event has fired.
             # Useful for logging or debugging purposes.
-            publish("manual_event_triggered", event_id=event_id, client_id=client_id)
+            publish(
+                "manual_event_triggered",
+                event_id=event_id,
+                client_id=client_id,
+            )
             return f"Event {event_id} triggered."
         else:
             return f"Unknown event: {event_id}"

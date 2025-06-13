@@ -23,13 +23,12 @@ def test_load_random_events():
 def test_random_event_system_update_publishes_event(monkeypatch):
     system = RandomEventSystem("data/random_events.yaml")
     system.load_events()
-    # compute weights attribute expected by update()
-    system.weights = [evt.weight for evt in system.events]
 
     mock_publish = mock.Mock()
     monkeypatch.setattr("events.publish", mock_publish)
     monkeypatch.setattr(random_events, "publish", mock_publish)
     import systems.random_events as sr
+
     monkeypatch.setattr(sr, "publish", mock_publish)
     monkeypatch.setattr("random.choices", lambda seq, weights=None, k=1: [seq[0]])
 
@@ -55,3 +54,44 @@ def test_trigger_event_returns_bool(monkeypatch):
     assert random_events.trigger_event("does_not_exist") is False
     # two events should have been published for the valid call
     assert mock_publish.call_count == 2
+
+
+def test_random_event_system_run(monkeypatch):
+    system = RandomEventSystem("data/random_events.yaml", interval=0)
+    system.load_events()
+
+    mock_publish = mock.Mock()
+    monkeypatch.setattr("events.publish", mock_publish)
+    import systems.random_events as sr
+
+    monkeypatch.setattr(sr, "publish", mock_publish)
+    monkeypatch.setattr("random.choices", lambda seq, weights=None, k=1: [seq[0]])
+
+    async def run():
+        system.start()
+        await asyncio.sleep(0.01)
+        system.stop()
+
+    asyncio.run(run())
+    assert mock_publish.call_count > 0
+
+
+def test_event_command(monkeypatch):
+    from commands.system import cmd_event
+    from types import SimpleNamespace
+
+    system = RandomEventSystem("data/random_events.yaml")
+    system.load_events()
+    monkeypatch.setattr("systems.random_events.get_random_event_system", lambda: system)
+    mock_publish = mock.Mock()
+    monkeypatch.setattr("events.publish", mock_publish)
+    import systems.random_events as sr
+
+    monkeypatch.setattr(sr, "publish", mock_publish)
+
+    interface = SimpleNamespace(client_sessions={"1": {"is_admin": True}})
+    list_out = cmd_event(interface, "1", "list")
+    assert "meteor_shower" in list_out
+    out = cmd_event(interface, "1", "trigger meteor_shower")
+    assert "triggered" in out
+    assert mock_publish.call_count >= 2

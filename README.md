@@ -56,9 +56,11 @@ Random station events are defined in `data/random_events.yaml`.  Each entry in
 that file specifies an event name, its weight, and optional conditions for it to
 occur.  The server loads these definitions at startup and the event manager
 periodically picks one based on their weights, automatically running the
-corresponding logic.
+corresponding logic. The interval between checks is configured on the
+`RandomEventSystem` and defaults to 60 seconds.
 
-Administrators can fire an event with `event trigger <event_id>`.
+Administrators can view available events with `event list` and manually trigger
+them using `event trigger <event_id>`.
 
 ## Persistence
 
