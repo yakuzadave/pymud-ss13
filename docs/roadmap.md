@@ -21,7 +21,7 @@ This roadmap outlines major phases and tasks required to build the core structur
 - [ ] **Random Event Manager** that periodically triggers station events.
 - [ ] **Event Definitions** stored in `data/random_events.yaml` with weights and conditions.
 - [ ] **Context‑Aware Triggers** reacting to power, atmosphere, or crew status.
-- [ ] **Admin Controls** for manually firing or suppressing random events.
+- [x] **Admin Controls** for manually firing or suppressing random events.
 
 ### Phase 4 – Dynamic In‑Game Scripting
 - [ ] **Sandbox Engine** using RestrictedPython or Lua.

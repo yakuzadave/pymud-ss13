@@ -1,3 +1,4 @@
+
 # Random events definition for MUDpy SS13
 # Each event has an id, name, optional weight and parameters passed to handlers
 
