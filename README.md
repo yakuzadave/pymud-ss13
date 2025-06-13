@@ -36,6 +36,16 @@ python run_server.py
 
 The web client will be available on `http://localhost:5000`.
 
+
+## Running Tests
+
+Install pytest and run tests using:
+
+```bash
+pytest
+```
+
+
 ## Random Events
 
 Random station events are defined in `data/random_events.yaml`.  Each entry in
