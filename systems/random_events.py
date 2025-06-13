@@ -95,6 +95,7 @@ class RandomEventSystem:
         event = random.choices(self.events, weights=[e.weight for e in self.events], k=1)[0]
         logger.debug(f"Triggering random event {event.id}")
         publish(event.id, **event.params)
+        publish("random_event", event_id=event.id, event=event)
 
 
 RANDOM_EVENT_SYSTEM = RandomEventSystem()
