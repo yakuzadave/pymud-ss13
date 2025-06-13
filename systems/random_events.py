@@ -35,13 +35,13 @@ class RandomEventSystem:
 
     def load_events(self) -> None:
         """Load random events from a YAML file."""
-        if not os.path.exists(self.events_file):
+        if not Path(self.events_file).exists():
             logger.warning(f"Random events file {self.events_file} not found")
             self.events = []
             return
 
         try:
-            with open(self.events_file, "r") as f:
+            with Path(self.events_file).open("r") as f:
                 data = yaml.safe_load(f) or []
 
             self.events = [
