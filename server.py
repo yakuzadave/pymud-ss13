@@ -23,17 +23,10 @@ from mudpy_interface import MudpyInterface
 import integration
 import engine
 from events import publish, subscribe
+from systems import get_random_event_system
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG if settings.debug else logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(f'{settings.log_dir}/server.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger('server')
+# Module logger
+logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -51,6 +44,9 @@ mudpy_interface = MudpyInterface(settings.config_file)
 # Create integration with engine
 mud_integration = None
 
+# Random event system
+random_event_system = get_random_event_system()
+
 # Client location tracking
 client_locations: Dict[str, str] = {}
 
@@ -67,7 +63,7 @@ else:
 async def on_player_moved(player_id: str, from_location: str, to_location: str) -> None:
     """
     Handle player movement events.
-    
+
     Args:
         player_id: The ID of the player who moved.
         from_location: The previous location ID.
@@ -75,14 +71,14 @@ async def on_player_moved(player_id: str, from_location: str, to_location: str) 
     """
     # Update client location tracking
     client_locations[player_id] = to_location
-    
+
     # Get player name
     player_name = f"Crew Member {player_id[-4:]}"
-    
+
     # Get location names
     from_name = mudpy_interface.get_room_name(from_location) or from_location
     to_name = mudpy_interface.get_room_name(to_location) or to_location
-    
+
     # Broadcast to players in the previous location
     await connection_manager.broadcast_to_room(
         {
@@ -93,7 +89,7 @@ async def on_player_moved(player_id: str, from_location: str, to_location: str) 
         client_locations,
         exclude_client=player_id
     )
-    
+
     # Broadcast to players in the new location
     await connection_manager.broadcast_to_room(
         {
@@ -108,7 +104,7 @@ async def on_player_moved(player_id: str, from_location: str, to_location: str) 
 async def on_item_taken(item_id: str, player_id: str) -> None:
     """
     Handle item taken events.
-    
+
     Args:
         item_id: The ID of the item taken.
         player_id: The ID of the player who took the item.
@@ -117,13 +113,13 @@ async def on_item_taken(item_id: str, player_id: str) -> None:
     player_location = client_locations.get(player_id)
     if not player_location:
         return
-    
+
     # Get player name
     player_name = f"Crew Member {player_id[-4:]}"
-    
+
     # Get item name
     item_name = mudpy_interface.get_item_name(item_id) or item_id
-    
+
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
         {
@@ -138,7 +134,7 @@ async def on_item_taken(item_id: str, player_id: str) -> None:
 async def on_item_dropped(item_id: str, player_id: str) -> None:
     """
     Handle item dropped events.
-    
+
     Args:
         item_id: The ID of the item dropped.
         player_id: The ID of the player who dropped the item.
@@ -147,13 +143,13 @@ async def on_item_dropped(item_id: str, player_id: str) -> None:
     player_location = client_locations.get(player_id)
     if not player_location:
         return
-    
+
     # Get player name
     player_name = f"Crew Member {player_id[-4:]}"
-    
+
     # Get item name
     item_name = mudpy_interface.get_item_name(item_id) or item_id
-    
+
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
         {
@@ -168,7 +164,7 @@ async def on_item_dropped(item_id: str, player_id: str) -> None:
 async def on_item_used(item_id: str, player_id: str, item_type: str) -> None:
     """
     Handle item used events.
-    
+
     Args:
         item_id: The ID of the item used.
         player_id: The ID of the player who used the item.
@@ -178,13 +174,13 @@ async def on_item_used(item_id: str, player_id: str, item_type: str) -> None:
     player_location = client_locations.get(player_id)
     if not player_location:
         return
-    
+
     # Get player name
     player_name = f"Crew Member {player_id[-4:]}"
-    
+
     # Get item name
     item_name = mudpy_interface.get_item_name(item_id) or item_id
-    
+
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
         {
@@ -199,7 +195,7 @@ async def on_item_used(item_id: str, player_id: str, item_type: str) -> None:
 async def on_player_said(client_id: str, location: str, message: str) -> None:
     """
     Handle player chat messages.
-    
+
     Args:
         client_id: The ID of the player who said something.
         location: The location ID where the message was said.
@@ -207,7 +203,7 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
     """
     # Get player name
     player_name = f"Crew Member {client_id[-4:]}"
-    
+
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
         {
@@ -224,26 +220,33 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
 async def startup_event():
     """Handle application startup."""
     global mud_integration
-    
+    global random_event_system
+
     logger.info("Starting MUDpy SS13 server")
-    
+
     # Create integration with engine
     mud_integration = integration.create_integration(mudpy_interface)
-    
+
     # Register event handlers
     subscribe("player_moved", on_player_moved)
     subscribe("item_taken", on_item_taken)
     subscribe("item_dropped", on_item_dropped)
     subscribe("item_used", on_item_used)
     subscribe("player_said", on_player_said)
-    
+
     logger.info("Event handlers registered")
+
+    # Start random events
+    random_event_system.start()
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Handle application shutdown."""
     logger.info("Shutting down MUDpy SS13 server")
-    
+
+    # Stop random events
+    random_event_system.stop()
+
     # Shut down MUDpy interface
     if mudpy_interface:
         try:
@@ -280,13 +283,13 @@ async def get_static(path: str):
 async def websocket_endpoint(websocket: WebSocket):
     """
     Handle WebSocket connections.
-    
+
     This endpoint accepts WebSocket connections from clients, processes
     messages, and sends responses.
     """
     # Accept the connection and get client ID
     client_id = await connection_manager.connect(websocket)
-    
+
     try:
         # Send welcome message
         await connection_manager.send_personal_message(
@@ -296,26 +299,26 @@ async def websocket_endpoint(websocket: WebSocket):
             },
             websocket
         )
-        
+
         # Connect client to MUDpy interface
         logger.info(f"Connecting client to MUDpy interface: {client_id}")
         mudpy_interface.connect_client(client_id)
-        
+
         # Publish client connected event
         logger.info(f"Publishing client_connected event for: {client_id}")
         publish("client_connected", client_id=client_id)
-        
+
         # Send initial 'look' command
         try:
             # Send initial 'look' command to get room description
             logger.info(f"Sending initial 'look' command for client: {client_id}")
             initial_response = mud_integration.process_command(client_id, "look")
-            
+
             # Get player location
             player_location = mudpy_interface.get_player_location(client_id)
             if player_location:
                 client_locations[client_id] = player_location
-            
+
             # Send response back to client
             await connection_manager.send_personal_message(
                 {
@@ -333,7 +336,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 },
                 websocket
             )
-        
+
         # Announce new player to other clients
         await connection_manager.broadcast(
             {
@@ -342,12 +345,12 @@ async def websocket_endpoint(websocket: WebSocket):
             },
             exclude=websocket
         )
-        
+
         # Wait for messages from the client
         while True:
             # Receive message
             message = await websocket.receive_text()
-            
+
             try:
                 # Parse message
                 try:
@@ -356,17 +359,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 except json.JSONDecodeError:
                     # If not JSON, treat as plain command
                     command = message.strip()
-                
+
                 # Process command
                 if command:
                     logger.debug(f"Processing command from client {client_id}: {command}")
                     response = mud_integration.process_command(client_id, command)
-                    
+
                     # Update player location
                     player_location = mudpy_interface.get_player_location(client_id)
                     if player_location:
                         client_locations[client_id] = player_location
-                    
+
                     # Send response back to client
                     await connection_manager.send_personal_message(
                         {
@@ -393,7 +396,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     },
                     websocket
                 )
-    
+
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected: {client_id}")
     except Exception as e:
@@ -401,19 +404,19 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         # Disconnect from connection manager
         connection_manager.disconnect(websocket)
-        
+
         # Clean up client location tracking
         if client_id in client_locations:
             del client_locations[client_id]
-        
+
         # Publish client disconnected event
         logger.info(f"Publishing client_disconnected event for: {client_id}")
         publish("client_disconnected", client_id=client_id)
-        
+
         # Disconnect from MUDpy interface
         logger.info(f"Disconnecting client from MUDpy interface: {client_id}")
         mudpy_interface.disconnect_client(client_id)
-        
+
         # Announce departure to other clients
         await connection_manager.broadcast(
             {

@@ -1,0 +1,62 @@
+# Space Station Alpha - NPC Definitions
+# This file describes non-player characters that inhabit the station
+
+- id: npc_captain
+  name: Captain Ramirez
+  description: >
+    The commanding officer of the station, exuding authority and calm.
+  location: bridge
+  components:
+    npc:
+      role: Captain
+      dialogue:
+        - "Welcome aboard, crewman."
+        - "Keep the station running smoothly."
+
+- id: npc_janitor
+  name: Janitor Bob
+  description: >
+    A weary janitor pushing a cart filled with cleaning supplies.
+  location: corridor_east
+  components:
+    npc:
+      role: Janitor
+      dialogue:
+        - "Another mess to clean up..."
+        - "Have you seen my mop?"
+
+- id: npc_scientist
+  name: Dr. Lin
+  description: >
+    A focused scientist reviewing data on a handheld tablet.
+  location: science_lab
+  components:
+    npc:
+      role: Scientist
+      dialogue:
+        - "These samples are fascinating."
+        - "Please don't touch the equipment."
+
+- id: npc_security
+  name: Officer Patel
+  description: >
+    A vigilant security officer watching for any sign of trouble.
+  location: corridor_north
+  components:
+    npc:
+      role: Security
+      dialogue:
+        - "Stay safe and follow station regulations."
+        - "Report any suspicious activity immediately."
+
+- id: npc_engineer
+  name: Chief Engineer Torres
+  description: >
+    An experienced engineer always ready to fix a failing subsystem.
+  location: engineering
+  components:
+    npc:
+      role: Engineer
+      dialogue:
+        - "Keep the power grid stable and we'll all be fine."
+        - "Let me know if you see any loose wiring."

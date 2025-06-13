@@ -15,4 +15,5 @@ This document collects notes about the current codebase and outlines initial ste
 2. **Extend Game Mechanics** – continue fleshing out command handlers and world logic.
 3. **Reference Existing MUD Engines** – examine open source MUD frameworks for ideas (see `resources.md`).
 4. **Iterative Development** – start small with room navigation and inventory, then expand to complex systems inspired by Space Station 13.
+5. **Study tgstation-server** – review its update workflow and management features; see `tgstation-server-notes.md`.
 

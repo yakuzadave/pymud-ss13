@@ -1,6 +1,24 @@
 # Space Station Alpha - Room Definitions
 # This file describes all rooms (locations) in the station
 
+- id: start
+  name: Central Hub
+  description: >
+    The main arrival and transit hall of the station, bustling with activity.
+  components:
+    room:
+      exits:
+        north: corridor_north
+        east: corridor_east
+        west: bridge
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
 - id: bridge
   name: Command Bridge
   description: >
@@ -11,6 +29,7 @@
       exits:
         north: corridor_north
         east: communications
+        south: start
       atmosphere:
         oxygen: 21.0
         nitrogen: 78.0
@@ -302,4 +321,37 @@
         co2: 0.0
         pressure: 0.0
       hazards: ["vacuum", "radiation", "extreme_cold"]
+      is_airlock: false
+
+- id: observatory
+  name: Stellar Observatory
+  description: >
+    A quiet dome with a large viewport and telescopes for studying distant stars.
+  components:
+    room:
+      exits:
+        west: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: maintenance_tunnel
+  name: Maintenance Tunnel
+  description: >
+    A narrow passage filled with pipes and cables running along the walls.
+  components:
+    room:
+      exits:
+        south: corridor_north
+        east: engineering
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 100.0
+      hazards: ["low_light"]
       is_airlock: false

@@ -13,79 +13,106 @@ logger = logging.getLogger(__name__)
 def cmd_quit(interface, client_id, args):
     """
     Quit the game and disconnect.
-    
+
     Args:
         interface: The MUDpy interface instance.
         client_id: The ID of the client.
         args: Additional arguments (unused).
-        
+
     Returns:
         str: Quit message.
     """
     # Get the client's session data
     session = interface.client_sessions.get(client_id, {})
     player_name = session.get("player_name", "Unknown")
-    
+
     # Publish an event for this quit
     publish("player_quit", client_id=client_id, player_name=player_name)
-    
+
     # Clean up the client session
     interface.disconnect_client(client_id)
-    
+
     return "You have disconnected from Space Station Alpha. Safe travels."
 
 @register("save")
 def cmd_save(interface, client_id, args):
     """
     Save the current game state.
-    
+
     Args:
         interface: The MUDpy interface instance.
         client_id: The ID of the client.
         args: Additional arguments (unused).
-        
+
     Returns:
         str: Save confirmation message.
     """
     # This is a placeholder that should be enhanced to use the world system
-    
+
     # Get the client's session data
     session = interface.client_sessions.get(client_id, {})
     player_name = session.get("player_name", "Unknown")
-    
+
     # Save the configuration (this should be expanded to use the world system)
     interface.save_config()
-    
+
     # Publish an event for this save
     publish("game_saved", client_id=client_id, player_name=player_name)
-    
+
     return "Game state saved."
 
 @register("shutdown")
 def cmd_shutdown(interface, client_id, args):
     """
     Shut down the server (admin only).
-    
+
     Args:
         interface: The MUDpy interface instance.
         client_id: The ID of the client.
         args: Additional arguments (unused).
-        
+
     Returns:
         str: Shutdown confirmation or denial message.
     """
     # Get the client's session data
     session = interface.client_sessions.get(client_id, {})
     is_admin = session.get("is_admin", False)
-    
+
     if not is_admin:
         return "You do not have permission to shut down the server."
-    
+
     # This is a placeholder - in a real implementation, you would:
     # 1. Broadcast a shutdown message to all clients
     # 2. Save the game state
     # 3. Gracefully shut down the server
-    
+
     publish("server_shutdown", client_id=client_id, reason="admin command")
-    
+
     return "Server shutdown initiated."
+
+@register("event")
+def cmd_event(interface, client_id, args):
+    """List or trigger random events."""
+    session = interface.client_sessions.get(client_id, {})
+    is_admin = session.get("is_admin", False)
+
+    if not args or args.strip().lower() in {"list", "ls"}:
+        from random_events import list_events
+        events = list_events()
+        if not events:
+            return "No random events are defined."
+        return "Available events: " + ", ".join(events)
+
+    parts = args.split(maxsplit=1)
+    cmd = parts[0].lower()
+    if cmd in {"trigger", "run", "fire"}:
+        if not is_admin:
+            return "You do not have permission to trigger events."
+        if len(parts) < 2:
+            return "Usage: event trigger <event_id>"
+        event_id = parts[1]
+        from random_events import trigger_event
+        if trigger_event(event_id, client_id=client_id):
+            # Notify subscribers that a manual event has fired.
+            # Useful for logging or debugging purposes.
+
