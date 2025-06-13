@@ -1,32 +1,28 @@
 
-# Random Event Definitions
-# Example events for the RandomEventSystem
-
-- id: power_outage
-  description: Critical generators shut down, plunging sections into darkness.
-  weight: 10
-  min_players: 1
-  actions:
-    - "POWER_SYSTEM.cause_power_failure"
-
-- id: atmos_leak
-  description: A dangerous atmosphere leak threatens the station.
-  weight: 8
-  min_players: 1
-  actions:
-    - "ATMOS_SYSTEM.create_leak"
+# Random events definition for MUDpy SS13
+# Each event has an id, name, optional weight and parameters passed to handlers
 
 - id: meteor_shower
+  name: Meteor Shower
+  weight: 1
+  params:
+    message: "A brief meteor shower rattles the station's hull."
   description: A barrage of tiny meteors pelts the station hull.
-  weight: 5
-  min_players: 2
-  actions:
-    - "ATMOS_SYSTEM.breach_hull"
-    - "POWER_SYSTEM.damage_solar_panels"
+
+- id: power_surge
+  name: Power Surge
+  weight: 2
+  params:
+    grid_id: "main"
+
+- id: gas_leak
+  name: Gas Leak Detected
+  weight: 1
+  params:
+    room_id: "engineering"
 
 - id: solar_flare
   description: A sudden solar flare disrupts communications and power systems.
-  weight: 7
-  min_players: 2
-  actions:
-    - "POWER_SYSTEM.overload_grid"
+
+- id: power_outage
+  description: Critical generators shut down, plunging sections into darkness.

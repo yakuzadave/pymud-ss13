@@ -40,6 +40,7 @@ def trigger_event(event_id: str, **kwargs) -> bool:
         return False
 
 
+
     # Merge event data with any additional parameters.
     # Warn if there are key conflicts that will be overwritten by kwargs.
     conflicting_keys = set(event.keys()) & set(kwargs.keys())
