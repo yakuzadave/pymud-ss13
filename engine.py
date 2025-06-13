@@ -35,7 +35,19 @@ def register(cmd_name):
     return decorator
 
 # Import command modules so decorators run and populate COMMAND_HANDLERS
-from commands import basic, movement, observation, social, system, inventory, debug, interaction
+from commands import (
+    basic,
+    movement,
+    observation,
+    social,
+    system,
+    inventory,
+    debug,
+    interaction,
+    engineer,
+    doctor,
+    security,
+)
 
 class MudEngine:
     """

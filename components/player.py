@@ -18,7 +18,9 @@ class PlayerComponent:
                  inventory: Optional[List[str]] = None,
                  stats: Optional[Dict[str, float]] = None,
                  access_level: int = 0,
-                 current_location: Optional[str] = None):
+                 current_location: Optional[str] = None,
+                 role: str = "crew",
+                 abilities: Optional[List[str]] = None):
         """
         Initialize the player component.
 
@@ -39,6 +41,8 @@ class PlayerComponent:
         self.access_level = access_level
         self.current_location = current_location
         self.max_inventory_size = 10
+        self.role = role
+        self.abilities = abilities or self._default_role_abilities(role)
 
     def add_to_inventory(self, item_id: str) -> bool:
         """
@@ -203,6 +207,17 @@ class PlayerComponent:
         # In a real game, you'd check item properties of keycards in inventory
         return self.access_level
 
+    def _default_role_abilities(self, role: str) -> List[str]:
+        mapping = {
+            "engineer": ["repair_power", "fix_leak"],
+            "doctor": ["heal"],
+            "security": ["restrain"],
+        }
+        return mapping.get(role.lower(), [])
+
+    def has_ability(self, ability: str) -> bool:
+        return ability in self.abilities
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert this component to a dictionary for serialization.
@@ -215,5 +230,7 @@ class PlayerComponent:
             "stats": self.stats,
             "access_level": self.access_level,
             "current_location": self.current_location,
-            "max_inventory_size": self.max_inventory_size
+            "max_inventory_size": self.max_inventory_size,
+            "role": self.role,
+            "abilities": self.abilities
         }
