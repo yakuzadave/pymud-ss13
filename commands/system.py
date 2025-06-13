@@ -115,4 +115,9 @@ def cmd_event(interface, client_id, args):
         if trigger_event(event_id, client_id=client_id):
             # Notify subscribers that a manual event has fired.
             # Useful for logging or debugging purposes.
-
+            publish("manual_event_triggered", event_id=event_id, client_id=client_id)
+            return f"Event {event_id} triggered."
+        else:
+            return f"Unknown event: {event_id}"
+    else:
+        return f"Unknown event command '{cmd}'."
