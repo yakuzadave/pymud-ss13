@@ -14,7 +14,9 @@ from aiohttp import web, WSMsgType
 from mudpy_interface import MudpyInterface
 import integration
 import engine
-from events import publish
+from events import publish, subscribe
+from collections import deque
+from systems.power import get_power_system
 
 # Import command modules individually to ensure handlers are registered
 from commands import basic
@@ -35,6 +37,125 @@ mudpy_interface = MudpyInterface()
 
 # Create the integration with the new engine architecture
 mud_integration = integration.create_integration(mudpy_interface)
+
+# ---------------------------------------------------------------------------
+# Map generation and broadcast helpers
+# ---------------------------------------------------------------------------
+
+def generate_room_map(start_id: str = "start"):
+    """Generate a simple coordinate map of rooms based on exits."""
+    world = mud_integration.world
+    if start_id not in world.rooms:
+        if world.rooms:
+            start_id = next(iter(world.rooms))
+        else:
+            return {}
+
+    offsets = {
+        "north": (0, -1),
+        "south": (0, 1),
+        "east": (1, 0),
+        "west": (-1, 0),
+    }
+
+    positions = {}
+    queue = deque([(start_id, (0, 0))])
+    visited = set()
+
+    while queue:
+        room_id, pos = queue.popleft()
+        if room_id in visited:
+            continue
+        visited.add(room_id)
+        positions[room_id] = pos
+        room_obj = world.get_object(room_id)
+        if not room_obj:
+            continue
+        room_comp = room_obj.get_component("room")
+        if not room_comp:
+            continue
+        for direction, dest in room_comp.exits.items():
+            if dest not in visited and direction in offsets:
+                off = offsets[direction]
+                queue.append((dest, (pos[0] + off[0], pos[1] + off[1])))
+
+    return positions
+
+
+def build_map_payload():
+    """Build the payload for /map requests."""
+    positions = generate_room_map()
+    world = mud_integration.world
+    rooms = []
+    door_states = {}
+    hazards = {}
+    power = {}
+
+    for room_id, (x, y) in positions.items():
+        room_obj = world.get_object(room_id)
+        if not room_obj:
+            continue
+        rooms.append({"id": room_id, "name": room_obj.name, "x": x, "y": y})
+        door_comp = room_obj.get_component("door")
+        if door_comp:
+            door_states[room_id] = door_comp.is_locked
+        room_comp = room_obj.get_component("room")
+        if room_comp:
+            hazards[room_id] = list(room_comp.hazards)
+
+    # Power states
+    ps = get_power_system()
+    for grid in ps.grids.values():
+        for r in grid.rooms:
+            power[r] = grid.is_powered
+
+    return {
+        "type": "map",
+        "rooms": rooms,
+        "doors": door_states,
+        "hazards": hazards,
+        "power": power,
+    }
+
+
+async def broadcast_to_clients(payload: dict) -> None:
+    if active_clients:
+        await asyncio.gather(
+            *[client.send_str(json.dumps(payload)) for client in active_clients.values()]
+        )
+
+
+def _register_event_handlers():
+    """Subscribe to game events and forward them to clients."""
+
+    def door_lock_handler(door_id: str, **_):
+        asyncio.create_task(
+            broadcast_to_clients({"type": "door_status", "door_id": door_id, "locked": True})
+        )
+
+    def door_unlock_handler(door_id: str, **_):
+        asyncio.create_task(
+            broadcast_to_clients({"type": "door_status", "door_id": door_id, "locked": False})
+        )
+
+    def atmos_update(room_id: str, atmosphere: dict, hazards: list, **_):
+        asyncio.create_task(
+            broadcast_to_clients({"type": "atmos_warning", "room_id": room_id, "hazards": hazards})
+        )
+
+    def power_update(grid_id: str, is_powered: bool, **kwargs):
+        asyncio.create_task(
+            broadcast_to_clients({"type": "power_status", "grid_id": grid_id, "is_powered": is_powered})
+        )
+
+    subscribe("door_locked", door_lock_handler)
+    subscribe("door_emergency_lockdown", door_lock_handler)
+    subscribe("door_unlocked", door_unlock_handler)
+    subscribe("atmos_updated", atmos_update)
+    subscribe("power_status_update", power_update)
+
+
+_register_event_handlers()
 
 async def handle_client(websocket):
     """
@@ -105,6 +226,9 @@ async def handle_client(websocket):
                     # Try to parse JSON, but also handle plain text
                     try:
                         data = json.loads(message)
+                        if data.get('type') == 'map_request':
+                            await websocket.send_str(json.dumps(build_map_payload()))
+                            continue
                         command = data.get('command', '')
                     except json.JSONDecodeError:
                         # If not valid JSON, treat the entire message as a command
@@ -113,14 +237,17 @@ async def handle_client(websocket):
 
                     # Forward the command to MUDpy through the integration
                     if command:
-                        logger.debug(f"Processing command from client {client_id}: {command}")
-                        response = mud_integration.process_command(client_id, command)
+                        if command.strip() == "/map":
+                            await websocket.send_str(json.dumps(build_map_payload()))
+                        else:
+                            logger.debug(f"Processing command from client {client_id}: {command}")
+                            response = mud_integration.process_command(client_id, command)
 
-                        # Send the response back to the client
-                        await websocket.send_str(json.dumps({
-                            "type": "response",
-                            "message": response
-                        }))
+                            # Send the response back to the client
+                            await websocket.send_str(json.dumps({
+                                "type": "response",
+                                "message": response
+                            }))
                     else:
                         logger.warning(f"Empty command received from client {client_id}")
                         await websocket.send_str(json.dumps({

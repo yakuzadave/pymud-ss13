@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleHelpButton = document.getElementById('toggle-help');
     const helpPanel = document.getElementById('help-panel');
     const clearTerminalButton = document.getElementById('clear-terminal');
+    const showMapButton = document.getElementById('show-map');
+    const mapContainer = document.getElementById('map-container');
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
     const serverUrlInput = document.getElementById('server-url');
     const saveSettingsButton = document.getElementById('save-settings');
@@ -20,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let webSocket = null;
     let commandHistory = [];
     let historyIndex = -1;
+    let roomPositions = {};
+    let doorStates = {};
+    let hazardStates = {};
+    let powerStates = {};
     // Set dark mode to true by default
     let darkModeEnabled = localStorage.getItem('darkMode') !== 'false';
 
@@ -84,6 +90,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         appendToTerminal(data.message, 'location-message');
                     } else if (data.type === 'chat') {
                         appendToTerminal(data.message, 'chat-message');
+                    } else if (data.type === 'map') {
+                        roomPositions = {};
+                        doorStates = data.doors || {};
+                        hazardStates = data.hazards || {};
+                        powerStates = data.power || {};
+                        data.rooms.forEach(r => {
+                            roomPositions[r.id] = { x: r.x, y: r.y, name: r.name };
+                        });
+                        renderMap();
+                    } else if (data.type === 'door_status') {
+                        doorStates[data.door_id] = data.locked;
+                        renderMap();
+                    } else if (data.type === 'atmos_warning') {
+                        hazardStates[data.room_id] = data.hazards || [];
+                        renderMap();
+                    } else if (data.type === 'power_status') {
+                        powerStates[data.grid_id] = data.is_powered;
+                        renderMap();
                     } else {
                         appendToTerminal(data.message || 'Unknown message type: ' + data.type);
                     }
@@ -171,6 +195,61 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Render map in the map container
+    function renderMap() {
+        if (!mapContainer) return;
+
+        if (Object.keys(roomPositions).length === 0) {
+            mapContainer.style.display = 'none';
+            return;
+        }
+
+        mapContainer.style.display = 'block';
+
+        // Determine grid bounds
+        let xs = Object.values(roomPositions).map(p => p.x);
+        let ys = Object.values(roomPositions).map(p => p.y);
+        let minX = Math.min(...xs), maxX = Math.max(...xs);
+        let minY = Math.min(...ys), maxY = Math.max(...ys);
+
+        const rows = maxY - minY + 1;
+        const cols = maxX - minX + 1;
+
+        mapContainer.innerHTML = '';
+        const grid = document.createElement('div');
+        grid.className = 'map-grid';
+        grid.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
+
+        for (let y = minY; y <= maxY; y++) {
+            for (let x = minX; x <= maxX; x++) {
+                const cell = document.createElement('div');
+                cell.className = 'map-cell';
+                const key = Object.keys(roomPositions).find(k => roomPositions[k].x === x && roomPositions[k].y === y);
+                if (key) {
+                    cell.textContent = roomPositions[key].name[0];
+                    cell.title = roomPositions[key].name;
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    let icons = '';
+                    if (doorStates[key]) icons += '<i data-feather="lock"></i>';
+                    if (hazardStates[key] && hazardStates[key].length > 0) icons += '<i data-feather="alert-triangle"></i>';
+                    if (powerStates[key] === false) icons += '<i data-feather="zap-off"></i>';
+                    overlay.innerHTML = icons;
+                    cell.appendChild(overlay);
+                }
+                grid.appendChild(cell);
+            }
+        }
+        mapContainer.appendChild(grid);
+        feather.replace();
+    }
+
+    function requestMap() {
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+            webSocket.send(JSON.stringify({ type: 'map_request' }));
+        }
+    }
+
     // Event Listeners
     sendButton.addEventListener('click', sendCommand);
 
@@ -205,6 +284,10 @@ document.addEventListener('DOMContentLoaded', function() {
     clearTerminalButton.addEventListener('click', function() {
         terminal.innerHTML = '';
         appendToTerminal('Terminal cleared.', 'system-message');
+    });
+
+    showMapButton.addEventListener('click', function() {
+        requestMap();
     });
 
     toggleDarkModeButton.addEventListener('click', function() {

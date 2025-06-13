@@ -11,6 +11,8 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
 - **Admin Event Control**: List and trigger random events using the `event` command.
+- **Grid Map & Status Overlays**: View a simple station layout with door lock,
+  atmosphere, and power indicators via WebSocket updates.
 
 ## Requirements
 
@@ -39,6 +41,13 @@ python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+### Grid Map and Overlays
+
+Click the **Map** button in the web client to request the current station layout
+from the server. Rooms are shown in a simple grid with icons indicating locked
+doors, atmospheric hazards, and power loss. These overlays update in real time
+based on WebSocket events.
 
 
 ## Running Tests
