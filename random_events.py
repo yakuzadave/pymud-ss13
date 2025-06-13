@@ -55,9 +55,6 @@ def trigger_event(event_id: str, **kwargs) -> bool:
 
     publish(event_id, **merged_event)
     publish("random_event", event_id=event_id, event=merged_event)
-    #publish(event_id, **event, **kwargs)
-    #publish('random_event', event_id=event_id, event=event, **kwargs)
-
     return True
 
 
