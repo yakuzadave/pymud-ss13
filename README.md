@@ -21,14 +21,18 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 
 ## Setup
 
-Run the setup script to clone MUDpy and install dependencies:
+Create a virtual environment and install the required packages:
 
 ```bash
-chmod +x setup.sh
-./setup.sh
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Then start the combined HTTP/WebSocket server:
+The repository also ships a helper script `setup.sh` which clones the `mudpy`
+project and installs extra dependencies for the optional self‑test suite.
+
+Start the combined HTTP/WebSocket server:
 
 ```bash
 python run_server.py
@@ -59,6 +63,29 @@ Administrators can fire an event with `event trigger <event_id>`.
 ## Persistence
 
 Game objects are stored as YAML. Player files are written to `data/players` when clients disconnect and the server writes periodic autosave snapshots of the entire world to `data/world`. See [docs/persistence.md](docs/persistence.md) for format details.
+
+## YAML Data Format
+
+Rooms, items and NPCs are defined using YAML. A minimal room entry looks like:
+
+```yaml
+- id: start
+  name: Central Hub
+  description: The main arrival point of the station.
+  components:
+    room:
+      exits:
+        north: corridor_north
+```
+
+This structure maps directly into the component system discussed in
+[docs/component_system.md](docs/component_system.md).
+
+## Usage Guide
+
+Once the server is running, connect to `http://localhost:5000` in your browser.
+Type commands into the prompt to interact with the world. Useful commands include
+`look`, `move <direction>`, `inventory` and `say <message>`.
 
 ## License
 
