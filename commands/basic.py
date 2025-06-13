@@ -5,10 +5,12 @@ This module provides handlers for basic MUD commands like look, help, etc.
 
 import logging
 from typing import Optional, Dict, Any
+from engine import register
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
+@register("help")
 def help_handler(client_id: str, command: Optional[str] = None, **kwargs) -> str:
     """
     Handle the help command.
@@ -99,6 +101,7 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
         logger.debug(f"Looking at current location for client {client_id}")
         return interface._look(client_id)
 
+@register("inventory")
 def inventory_handler(client_id: str, **kwargs) -> str:
     """
     Handle the inventory command.
@@ -197,6 +200,7 @@ def say_handler(client_id: str, message: str, **kwargs) -> str:
 
     return f"You say: {message}"
 
+@register("get")
 def get_handler(client_id: str, item: str, container: Optional[str] = None, **kwargs) -> str:
     """
     Handle the get command.
@@ -240,6 +244,7 @@ def get_handler(client_id: str, item: str, container: Optional[str] = None, **kw
         # Item not found
         return f"You don't see '{item}' here."
 
+@register("drop")
 def drop_handler(client_id: str, item: str, **kwargs) -> str:
     """
     Handle the drop command.
@@ -278,6 +283,7 @@ def drop_handler(client_id: str, item: str, **kwargs) -> str:
     # Item not found
     return f"You don't have '{item}' in your inventory."
 
+@register("use")
 def use_handler(client_id: str, item: str, target: Optional[str] = None, **kwargs) -> str:
     """
     Handle the use command.
@@ -311,6 +317,7 @@ def use_handler(client_id: str, item: str, target: Optional[str] = None, **kwarg
     # Item not found
     return f"You don't have '{item}' in your inventory."
 
+@register("status")
 def status_handler(client_id: str, **kwargs) -> str:
     """
     Handle the status command.

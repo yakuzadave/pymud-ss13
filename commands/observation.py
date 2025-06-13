@@ -5,10 +5,12 @@ This module provides handlers for observation commands like look, scan, etc.
 
 import logging
 from typing import Optional, Dict, Any
+from engine import register
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
+@register("look")
 def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
     Handle the look command.
@@ -144,6 +146,7 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
 
         return result
 
+@register("scan")
 def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
     Handle the scan command.
@@ -258,6 +261,7 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
         # Default scanning behavior
         return f"Scanning with {scanner_type if scanner_type else 'scanner'}... No anomalies detected."
 
+@register("map")
 def map_handler(client_id: str, **kwargs) -> str:
     """
     Handle the map command.
