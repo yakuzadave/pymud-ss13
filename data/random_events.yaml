@@ -27,3 +27,20 @@
 
 - id: power_outage
   description: Critical generators shut down, plunging sections into darkness.
+
+- id: radiation_storm
+  name: Radiation Storm
+  weight: 1
+  params:
+    duration: 30
+    severity: high
+  description: Ionizing radiation sweeps through the station.
+
+- id: cargo_lottery
+  name: Cargo Lottery
+  weight: 3
+  params:
+    crate_contents:
+      - space donuts
+      - mysterious seeds
+  description: A random crate appears in cargo packed with goodies.
