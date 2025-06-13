@@ -357,6 +357,33 @@ footer {
     border-color: #555;
 }
 
+/* Map styles */
+.map-container {
+    margin-top: 10px;
+    display: none;
+}
+
+.map-grid {
+    display: grid;
+    gap: 2px;
+}
+
+.map-cell {
+    width: 40px;
+    height: 40px;
+    background-color: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {
