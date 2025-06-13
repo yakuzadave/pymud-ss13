@@ -294,3 +294,6 @@
       item_properties:
         durability: 70
         slot_count: 6
+    container:
+      capacity: 6
+      items: []
