@@ -39,6 +39,7 @@ def trigger_event(event_id: str, **kwargs) -> bool:
     if not event:
         return False
 
+
     # Merge event data with any additional parameters.
     # Warn if there are key conflicts that will be overwritten by kwargs.
     conflicting_keys = set(event.keys()) & set(kwargs.keys())
@@ -53,6 +54,9 @@ def trigger_event(event_id: str, **kwargs) -> bool:
 
     publish(event_id, **merged_event)
     publish("random_event", event_id=event_id, event=merged_event)
+    #publish(event_id, **event, **kwargs)
+    #publish('random_event', event_id=event_id, event=event, **kwargs)
+
     return True
 
 
