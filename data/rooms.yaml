@@ -264,6 +264,8 @@
         temperature: 40.0  # Celsius
       hazards: ["radiation", "extreme_heat"]
       is_airlock: false
+    access:
+      required_level: 80
 
 - id: cargo_bay
   name: Cargo Bay

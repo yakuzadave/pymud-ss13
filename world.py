@@ -5,6 +5,7 @@ This module provides the world state and game object management.
 
 import logging
 import yaml
+import inspect
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 import os
@@ -196,12 +197,21 @@ class World:
                         location=obj_data.get('location')
                     )
 
-                    # Add components (to be implemented later)
-                    # This is a placeholder for the component system
                     if 'components' in obj_data:
+                        from components import COMPONENT_REGISTRY
                         for comp_name, comp_data in obj_data['components'].items():
-                            # In a real implementation, we'd instantiate the appropriate component
-                            obj.components[comp_name] = comp_data
+                            comp_class = COMPONENT_REGISTRY.get(comp_name)
+                            if comp_class and isinstance(comp_data, dict):
+                                params = inspect.signature(comp_class.__init__).parameters
+                                kwargs = {k: v for k, v in comp_data.items() if k in params and k != 'self'}
+                                try:
+                                    comp_instance = comp_class(**kwargs)
+                                except Exception as e:
+                                    logger.warning(f"Failed to instantiate component {comp_name} for {obj.id}: {e}")
+                                    continue
+                                obj.add_component(comp_name, comp_instance)
+                            else:
+                                obj.components[comp_name] = comp_data
 
                     self.register(obj)
                     count += 1

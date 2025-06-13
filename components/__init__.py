@@ -7,6 +7,8 @@ from .door import DoorComponent
 from .item import ItemComponent
 from .player import PlayerComponent
 from .npc import NPCComponent
+from .container import ContainerComponent
+from .access import AccessControlComponent
 
 __all__ = [
     "RoomComponent",
@@ -14,4 +16,17 @@ __all__ = [
     "ItemComponent",
     "PlayerComponent",
     "NPCComponent",
+    "ContainerComponent",
+    "AccessControlComponent",
 ]
+
+# Mapping of component names in YAML to classes
+COMPONENT_REGISTRY = {
+    "room": RoomComponent,
+    "door": DoorComponent,
+    "item": ItemComponent,
+    "player": PlayerComponent,
+    "npc": NPCComponent,
+    "container": ContainerComponent,
+    "access": AccessControlComponent,
+}
