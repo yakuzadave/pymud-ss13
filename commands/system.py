@@ -89,3 +89,32 @@ def cmd_shutdown(interface, client_id, args):
     publish("server_shutdown", client_id=client_id, reason="admin command")
 
     return "Server shutdown initiated."
+
+@register("event")
+def cmd_event(interface, client_id, args):
+    """List or trigger random events."""
+    session = interface.client_sessions.get(client_id, {})
+    is_admin = session.get("is_admin", False)
+
+    if not args or args.strip().lower() in {"list", "ls"}:
+        from random_events import list_events
+        events = list_events()
+        if not events:
+            return "No random events are defined."
+        return "Available events: " + ", ".join(events)
+
+    parts = args.split(maxsplit=1)
+    cmd = parts[0].lower()
+    if cmd in {"trigger", "run", "fire"}:
+        if not is_admin:
+            return "You do not have permission to trigger events."
+        if len(parts) < 2:
+            return "Usage: event trigger <event_id>"
+        event_id = parts[1]
+        from random_events import trigger_event
+        if trigger_event(event_id, client_id=client_id):
+            publish("event_triggered", client_id=client_id, event_id=event_id)
+            return f"Event '{event_id}' triggered."
+        return f"Event '{event_id}' not found."
+
+    return "Usage: event list | event trigger <event_id>"

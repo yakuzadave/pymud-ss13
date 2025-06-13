@@ -10,6 +10,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **NPC Data**: Non-player characters defined in `data/npcs.yaml`.
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
+- **Admin Event Control**: List and trigger random events using the `event` command.
 
 ## Requirements
 
@@ -34,6 +35,18 @@ python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+## Random Events
+
+Random station events are defined in `data/random_events.yaml`.  Each entry in
+that file specifies an event name, its weight, and optional conditions for it to
+occur.  The server loads these definitions at startup and the event manager
+periodically picks one based on their weights, automatically running the
+corresponding logic.
+
+Administrators can also fire a specific event on demand using the
+`trigger_event` command.  This makes it easy to test scenarios or script special
+incidents during play.
 
 ## License
 
