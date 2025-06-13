@@ -1,6 +1,32 @@
-- id: solar_flare
-  description: A sudden solar flare disrupts communications and power systems.
-- id: meteor_shower
-  description: A barrage of tiny meteors pelts the station hull.
+
+# Random Event Definitions
+# Example events for the RandomEventSystem
+
 - id: power_outage
   description: Critical generators shut down, plunging sections into darkness.
+  weight: 10
+  min_players: 1
+  actions:
+    - "POWER_SYSTEM.cause_power_failure"
+
+- id: atmos_leak
+  description: A dangerous atmosphere leak threatens the station.
+  weight: 8
+  min_players: 1
+  actions:
+    - "ATMOS_SYSTEM.create_leak"
+
+- id: meteor_shower
+  description: A barrage of tiny meteors pelts the station hull.
+  weight: 5
+  min_players: 2
+  actions:
+    - "ATMOS_SYSTEM.breach_hull"
+    - "POWER_SYSTEM.damage_solar_panels"
+
+- id: solar_flare
+  description: A sudden solar flare disrupts communications and power systems.
+  weight: 7
+  min_players: 2
+  actions:
+    - "POWER_SYSTEM.overload_grid"
