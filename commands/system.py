@@ -113,6 +113,8 @@ def cmd_event(interface, client_id, args):
         event_id = parts[1]
         from random_events import trigger_event
         if trigger_event(event_id, client_id=client_id):
+            # Notify subscribers that a manual event has fired.
+            # Useful for logging or debugging purposes.
             publish("event_triggered", client_id=client_id, event_id=event_id)
             return f"Event '{event_id}' triggered."
         return f"Event '{event_id}' not found."
