@@ -9,6 +9,8 @@
   components:
     npc:
       role: Captain
+      hooks:
+        power_loss: notify
       dialogue:
         - "Welcome aboard, crewman."
         - "Keep the station running smoothly."
@@ -21,6 +23,8 @@
   components:
     npc:
       role: Janitor
+      hooks:
+        gas_leak: flee
       dialogue:
         - "Another mess to clean up..."
         - "Have you seen my mop?"
@@ -33,6 +37,8 @@
   components:
     npc:
       role: Scientist
+      hooks:
+        gas_leak: analyze
       dialogue:
         - "These samples are fascinating."
         - "Please don't touch the equipment."
@@ -45,6 +51,8 @@
   components:
     npc:
       role: Security
+      hooks:
+        power_loss: patrol
       dialogue:
         - "Stay safe and follow station regulations."
         - "Report any suspicious activity immediately."
@@ -57,6 +65,9 @@
   components:
     npc:
       role: Engineer
+      hooks:
+        power_loss: repair
+        gas_leak: fix
       dialogue:
         - "Keep the power grid stable and we'll all be fine."
         - "Let me know if you see any loose wiring."
