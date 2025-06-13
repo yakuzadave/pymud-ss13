@@ -54,9 +54,7 @@ occur.  The server loads these definitions at startup and the event manager
 periodically picks one based on their weights, automatically running the
 corresponding logic.
 
-Administrators can also fire a specific event on demand using the
-`trigger_event` command.  This makes it easy to test scenarios or script special
-incidents during play.
+Administrators can fire an event with `event trigger <event_id>`.
 
 ## License
 
