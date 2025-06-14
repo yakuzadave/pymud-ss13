@@ -11,13 +11,20 @@ from .power import PowerSystem, get_power_system
 from .jobs import JobSystem, get_job_system
 from .random_events import RandomEventSystem, get_random_event_system
 from .antagonists import AntagonistSystem, get_antagonist_system
+from .advanced_antagonists import (
+    AdvancedAntagonistSystem,
+    get_advanced_antagonist_system,
+)
 from .chemistry import ChemistrySystem, get_chemistry_system
 from .disease import DiseaseSystem, get_disease_system
 from .communications import CommunicationsSystem, get_comms_system
 from .research import ResearchSystem, get_research_system
 from .security import SecuritySystem, get_security_system
+from .combat import CombatSystem, get_combat_system
 from .communications import CommunicationsSystem, get_comms_system
-
+from .cargo import CargoSystem, get_cargo_system
+from .physics import PhysicsSystem, get_physics_system
+from .maintenance import MaintenanceSystem, get_maintenance_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -30,6 +37,8 @@ __all__ = [
     "get_random_event_system",
     "AntagonistSystem",
     "get_antagonist_system",
+    "AdvancedAntagonistSystem",
+    "get_advanced_antagonist_system",
     "ChemistrySystem",
     "get_chemistry_system",
     "DiseaseSystem",
@@ -38,11 +47,18 @@ __all__ = [
     "get_research_system",
     "SecuritySystem",
     "get_security_system",
+    "CombatSystem",
+    "get_combat_system",
     "CommunicationsSystem",
     "get_comms_system",
+    "CargoSystem",
+    "get_cargo_system",
+    "PhysicsSystem",
+    "get_physics_system",
+    "MaintenanceSystem",
+    "get_maintenance_system",
     "GasMixture",
     "AtmosGrid",
     "PipeNetwork",
     "FireSystem",
 ]
-
