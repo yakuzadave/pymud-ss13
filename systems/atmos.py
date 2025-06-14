@@ -197,6 +197,7 @@ class AtmosphericSystem:
             if "low_oxygen" not in room_comp.hazards:
                 room_comp.hazards.append("low_oxygen")
                 logger.debug(f"Low oxygen hazard added to room {room_comp.owner.id}")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="low_oxygen")
         elif "low_oxygen" in room_comp.hazards:
             room_comp.hazards.remove("low_oxygen")
 
@@ -205,6 +206,7 @@ class AtmosphericSystem:
             if "high_co2" not in room_comp.hazards:
                 room_comp.hazards.append("high_co2")
                 logger.debug(f"High CO2 hazard added to room {room_comp.owner.id}")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="high_co2")
         elif "high_co2" in room_comp.hazards:
             room_comp.hazards.remove("high_co2")
 
@@ -213,6 +215,7 @@ class AtmosphericSystem:
             if "low_pressure" not in room_comp.hazards:
                 room_comp.hazards.append("low_pressure")
                 logger.debug(f"Low pressure hazard added to room {room_comp.owner.id}")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="low_pressure")
         elif "low_pressure" in room_comp.hazards:
             room_comp.hazards.remove("low_pressure")
 
@@ -221,8 +224,24 @@ class AtmosphericSystem:
             if "high_pressure" not in room_comp.hazards:
                 room_comp.hazards.append("high_pressure")
                 logger.debug(f"High pressure hazard added to room {room_comp.owner.id}")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="high_pressure")
         elif "high_pressure" in room_comp.hazards:
             room_comp.hazards.remove("high_pressure")
+
+        if atmos.get("smoke", 0.0) > 5.0:
+            if "smoke" not in room_comp.hazards:
+                room_comp.hazards.append("smoke")
+                logger.debug(f"Smoke hazard added to room {room_comp.owner.id}")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="smoke")
+        elif "smoke" in room_comp.hazards:
+            room_comp.hazards.remove("smoke")
+
+        if atmos.get("temperature", 20.0) > 60.0:
+            if "extreme_heat" not in room_comp.hazards:
+                room_comp.hazards.append("extreme_heat")
+                publish("hazard_warning", room_id=room_comp.owner.id, hazard="extreme_heat")
+        elif "extreme_heat" in room_comp.hazards:
+            room_comp.hazards.remove("extreme_heat")
 
     def create_leak(self, room_id: str, rate: float = 1.0, duration: Optional[float] = None) -> None:
         """

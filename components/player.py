@@ -351,17 +351,28 @@ class PlayerComponent:
 
         return messages
 
-    def has_radiation_protection(self) -> bool:
-        """
-        Check if the player has radiation protection.
-        This would check for hazmat suits or similar items in inventory.
+    def _equipment_has_property(self, prop: str) -> bool:
+        from world import get_world
 
-        Returns:
-            bool: True if protected, False otherwise.
-        """
-        # This is a placeholder implementation
-        # In a real game, you'd check for specific items or equipment
-        return "hazmat_suit" in self.inventory or "rad_suit" in self.inventory
+        w = get_world()
+        item_ids = list(self.equipment.values()) + self.inventory
+        for item_id in item_ids:
+            obj = w.get_object(item_id)
+            if not obj:
+                continue
+            comp = obj.get_component("item")
+            if comp and comp.item_properties.get(prop):
+                return True
+        return False
+
+    def has_radiation_protection(self) -> bool:
+        return self._equipment_has_property("radiation_protection")
+
+    def has_vacuum_protection(self) -> bool:
+        return self._equipment_has_property("vacuum_protection")
+
+    def has_thermal_protection(self) -> bool:
+        return self._equipment_has_property("thermal_protection")
 
     def get_access_card_level(self) -> int:
         """
@@ -401,7 +412,7 @@ class PlayerComponent:
             "max_inventory_size": self.max_inventory_size,
             "role": self.role,
             "abilities": self.abilities,
-            "equipment": self.equipment
+            "equipment": self.equipment,
             "body_parts": self.body_parts,
             "diseases": self.diseases,
             "alive": self.alive,
