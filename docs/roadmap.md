@@ -19,6 +19,7 @@ This roadmap outlines major phases and tasks required to build the core structur
 - [ ] **Power Grid** with breakers and power events that auto‑lock doors.
 - [ ] **Jobs & AI** providing crew roles and simple NPC behavior.
 - [ ] **Random Event Manager** that periodically triggers station events.
+- [ ] **Communications Network** with radios, intercoms and PDAs.
 - [ ] **Event Definitions** stored in `data/random_events.yaml` with weights and conditions.
 - [ ] **Context‑Aware Triggers** reacting to power, atmosphere, or crew status.
 - [ ] **Admin Controls** for manually firing or suppressing random events.
