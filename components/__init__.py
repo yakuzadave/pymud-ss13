@@ -8,6 +8,7 @@ from .item import ItemComponent
 from .player import PlayerComponent
 from .npc import NPCComponent
 from .container import ContainerComponent
+from systems.chemical_reactions import ChemicalContainerComponent
 from .access import AccessControlComponent
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "PlayerComponent",
     "NPCComponent",
     "ContainerComponent",
+    "ChemicalContainerComponent",
     "AccessControlComponent",
 ]
 
@@ -28,5 +30,6 @@ COMPONENT_REGISTRY = {
     "player": PlayerComponent,
     "npc": NPCComponent,
     "container": ContainerComponent,
+    "chemical_container": ChemicalContainerComponent,
     "access": AccessControlComponent,
 }
