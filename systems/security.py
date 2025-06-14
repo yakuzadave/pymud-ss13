@@ -36,7 +36,6 @@ class Prisoner:
 
 
 
-
 @dataclass
 class Camera:
     """Representation of a security camera."""
@@ -67,6 +66,7 @@ class SecuritySystem:
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
+
         # monitoring
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
@@ -94,16 +94,9 @@ class SecuritySystem:
         logger.info("Security system initialized")
 
         # Sensor and camera tracking
-        self.cameras: Dict[str, Camera] = {}
-        self.sensors: Dict[str, MotionSensor] = {}
-        self.access_log: List[Dict[str, Any]] = []
-        self.alerts: List[Dict[str, Any]] = []
 
-        self.enabled = False
-        subscribe("object_moved", self.on_object_moved)
-        subscribe("door_opened", self.on_access_event)
-        subscribe("door_closed", self.on_access_event)
-        logger.info("Security system initialized")
+
+
 
 
 
@@ -177,6 +170,9 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
+
+    # -- Camera and sensor management -----------------------------------------
+
 _SECURITY_SYSTEM = SecuritySystem()
 
 
@@ -206,6 +202,7 @@ class SecurityMonitoringSystem:
 
 
     # ------------------------------------------------------------------
+
     def register_camera(self, camera_id: str, location: str) -> None:
         """Register a security camera."""
         self.cameras[camera_id] = Camera(camera_id, location)
@@ -275,7 +272,9 @@ class SecurityMonitoringSystem:
 
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
-    return _SECURITY_SYSTEM
+    return SECURITY_SYSTEM
+
+
 
 
 

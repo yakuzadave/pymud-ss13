@@ -147,6 +147,19 @@ class ItemComponent:
                     else:
                         return "No issues detected."
 
+        # Food items restore player nutrition
+        elif self.item_type == "food":
+            from world import get_world
+
+            world_instance = get_world()
+            player = world_instance.get_object(player_id)
+            if player:
+                comp = player.get_component("player")
+                if comp:
+                    nutrition = self.item_properties.get("nutrition", 0)
+                    comp.consume_food(float(nutrition))
+            return f"You eat the {self.owner.name}."
+
         # Otherwise use the default behavior
         publish(
             "item_used",
@@ -184,6 +197,9 @@ class ItemComponent:
             description += f"It's a medical item. It might have healing properties."
         elif self.item_type == "diagnostic":
             description += "A medical scanner capable of detailed health analysis."
+        elif self.item_type == "food":
+            nutrition = self.item_properties.get("nutrition", 0)
+            description += f"It looks edible and provides {nutrition} nutrition."
 
         # Add additional property information
         if "durability" in self.item_properties:
