@@ -9,18 +9,21 @@ from events import publish
 
 logger = logging.getLogger(__name__)
 
+
 class ItemComponent:
     """
     Component that represents an item in the game world.
     """
 
-    def __init__(self,
-                 weight: float = 1.0,
-                 is_takeable: bool = True,
-                 is_usable: bool = False,
-                 use_effect: Optional[str] = None,
-                 item_type: str = "miscellaneous",
-                 item_properties: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        weight: float = 1.0,
+        is_takeable: bool = True,
+        is_usable: bool = False,
+        use_effect: Optional[str] = None,
+        item_type: str = "miscellaneous",
+        item_properties: Optional[Dict[str, Any]] = None,
+    ):
         """
         Initialize the item component.
 
@@ -100,8 +103,36 @@ class ItemComponent:
         if self.custom_use_handler:
             return self.custom_use_handler(player_id)
 
+        # Medical items automatically heal based on properties
+        if self.item_type == "medical":
+            from world import get_world
+
+            world_instance = get_world()
+            player = world_instance.get_object(player_id)
+            if player:
+                comp = player.get_component("player")
+                if comp:
+                    heal_type = self.item_properties.get("heal_type")
+                    heal_amount = self.item_properties.get("heal_amount", 0)
+                    body_part = self.item_properties.get("body_part", "torso")
+                    if heal_type:
+                        comp.heal_damage(body_part, heal_type, heal_amount)
+                    disease = self.item_properties.get("cures")
+                    if disease:
+                        comp.cure_disease(disease)
+            doses = self.item_properties.get("doses_remaining")
+            if doses is not None:
+                if doses <= 0:
+                    return f"The {self.owner.name} is empty."
+                self.item_properties["doses_remaining"] = doses - 1
+
         # Otherwise use the default behavior
-        publish("item_used", item_id=self.owner.id, player_id=player_id, item_type=self.item_type)
+        publish(
+            "item_used",
+            item_id=self.owner.id,
+            player_id=player_id,
+            item_type=self.item_type,
+        )
 
         if self.use_effect:
             return self.use_effect
@@ -150,6 +181,6 @@ class ItemComponent:
             "is_usable": self.is_usable,
             "use_effect": self.use_effect,
             "item_type": self.item_type,
-            "item_properties": self.item_properties
+            "item_properties": self.item_properties,
             # Note: custom_use_handler is not serialized as it's a function
         }
