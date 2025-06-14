@@ -19,6 +19,7 @@ from systems import (
     get_power_system,
     get_atmos_system,
     get_random_event_system,
+    get_security_system,
 )
 
 # Import command modules to ensure handlers are registered
@@ -100,6 +101,18 @@ async def _random_event_loop():
         res.stop()
         raise
 
+async def _security_loop():
+    """Run the security system update loop."""
+    sec = get_security_system()
+    sec.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            sec.update()
+    except asyncio.CancelledError:
+        sec.stop()
+        raise
+
 async def _power_task() -> None:
     """Start and monitor the power system."""
     system = get_power_system()
@@ -126,6 +139,17 @@ async def _random_event_task() -> None:
     system.start()
     try:
         await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+async def _security_task() -> None:
+    """Start and monitor the security system."""
+    system = get_security_system()
+    system.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            system.update()
     finally:
         system.stop()
 
@@ -208,12 +232,14 @@ async def main():
     power_task = asyncio.create_task(_power_loop())
     atmos_task = asyncio.create_task(_atmos_loop())
     random_event_task = asyncio.create_task(_random_event_loop())
+    security_task = asyncio.create_task(_security_loop())
 
     power_task = asyncio.create_task(_power_task())
     atmos_task = asyncio.create_task(_atmos_task())
     random_event_task = asyncio.create_task(_random_event_task())
+    security_task = asyncio.create_task(_security_task())
 
-    TASKS.extend([power_task, atmos_task, random_event_task])
+    TASKS.extend([power_task, atmos_task, random_event_task, security_task])
 
     # Start the server
     host = '0.0.0.0'
@@ -233,6 +259,7 @@ async def main():
             power_task,
             atmos_task,
             random_event_task,
+            security_task,
             asyncio.Future(),
         )
     except asyncio.CancelledError:
