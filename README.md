@@ -77,6 +77,14 @@ incidents will occur periodically without needing any admin commands.
 Administrators can view available events with `event list` and manually trigger
 them using `event trigger <event_id>`.
 
+## Antagonists
+
+The `AntagonistSystem` tracks traitors or other hostile roles. Admins can assign
+traitors using the `antag assign <player_id>` command and review all active
+antagonists with `antag list`. Objectives can be marked complete with
+`antag complete <player_id> <objective>`, allowing simple win/loss checks at
+round end.
+
 ## Persistence
 
 Game objects are stored as YAML. Player files are written to `data/players` when clients disconnect and the server writes periodic autosave snapshots of the entire world to `data/world`. See [docs/persistence.md](docs/persistence.md) for format details.

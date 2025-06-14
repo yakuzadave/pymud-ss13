@@ -36,6 +36,13 @@
     severity: high
   description: Ionizing radiation sweeps through the station.
 
+- id: equipment_failure
+  name: Equipment Failure
+  weight: 2
+  params:
+    room_id: "engineering"
+  description: Critical machinery sparks and grinds to a halt.
+
 - id: cargo_lottery
   name: Cargo Lottery
   weight: 3
