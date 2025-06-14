@@ -395,3 +395,63 @@
         heal_type: brute
         heal_amount: 30
 
+
+- id: handcuffs
+  name: Handcuffs
+  description: >
+    A pair of sturdy metal handcuffs used to restrain prisoners.
+  location: security_office
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: false
+      item_type: security
+      item_properties:
+        durability: 100
+
+- id: stunbaton
+  name: Stun Baton
+  description: >
+    A rechargeable baton capable of stunning unruly suspects.
+  location: armory
+  components:
+    item:
+      weight: 1.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You swing the stun baton with a crackle of electricity.
+      item_type: security
+      item_properties:
+        power_level: 100
+        durability: 80
+
+- id: security_camera
+  name: Security Camera
+  description: >
+    A small camera for monitoring activity around the station.
+  location: security_office
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: false
+      item_type: security
+      item_properties:
+        installation_required: true
+
+- id: forensics_kit
+  name: Forensics Kit
+  description: >
+    Tools and reagents used to collect fingerprints and DNA samples.
+  location: security_office
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You dust for prints and collect trace evidence.
+      item_type: security
+      item_properties:
+        charges: 10
+
