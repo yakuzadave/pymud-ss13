@@ -20,6 +20,7 @@ from systems import (
     get_random_event_system,
 )
 
+
 from systems import (
     get_power_system,
     get_atmos_system,
@@ -54,6 +55,42 @@ async def static_files(request):
         return web.Response(status=404, text="File not found")
 
 
+
+async def _power_loop():
+    """Run the power system update loop."""
+    ps = get_power_system()
+    ps.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            ps.update()
+    except asyncio.CancelledError:
+        ps.stop()
+        raise
+
+
+async def _atmos_loop():
+    """Run the atmosphere system update loop."""
+    atmos = get_atmos_system()
+    atmos.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            atmos.update()
+    except asyncio.CancelledError:
+        atmos.stop()
+        raise
+
+
+async def _random_event_loop():
+    """Wrapper for the random event system."""
+    res = get_random_event_system()
+    res.start()
+    try:
+        await asyncio.Event().wait()
+    except asyncio.CancelledError:
+        res.stop()
+        raise
 async def _power_task() -> None:
     """Start and monitor the power system."""
     system = get_power_system()
@@ -115,9 +152,12 @@ async def main():
     # Create a task for running the MUD server
     mud_server_task = asyncio.create_task(mud_server.run())
     autosave_task = asyncio.create_task(autosave_loop(get_world(), interval=60))
-    power_task = asyncio.create_task(_power_task())
-    atmos_task = asyncio.create_task(_atmos_task())
-    random_event_task = asyncio.create_task(_random_event_task())
+
+    power_task = asyncio.create_task(_power_loop())
+    atmos_task = asyncio.create_task(_atmos_loop())
+    random_event_task = asyncio.create_task(_random_event_loop())
+
+
 
     TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task])
 
