@@ -67,7 +67,7 @@ class SecuritySystem:
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
 
-        # monitoring
+        # monitoring infrastructure
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
         self.access_log: List[Dict[str, Any]] = []
@@ -77,23 +77,6 @@ class SecuritySystem:
         subscribe("door_opened", self.on_access_event)
         subscribe("door_closed", self.on_access_event)
         logger.info("Security system initialized")
-
-
-        # Surveillance
-        # Monitoring infrastructure
-
-        self.cameras: Dict[str, Camera] = {}
-        self.sensors: Dict[str, MotionSensor] = {}
-        self.access_log: List[Dict[str, Any]] = []
-        self.alerts: List[Dict[str, Any]] = []
-
-        self.enabled = False
-        subscribe("object_moved", self.on_object_moved)
-        subscribe("door_opened", self.on_access_event)
-        subscribe("door_closed", self.on_access_event)
-        logger.info("Security system initialized")
-
-        # Sensor and camera tracking
 
 
 
@@ -170,39 +153,7 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
-
-    # -- Camera and sensor management -----------------------------------------
-
-_SECURITY_SYSTEM = SecuritySystem()
-
-
-
-
-class Camera:
-    """Representation of a security camera."""
-
-
-
-    # Monitoring ------------------------------------------------------
-
-class SecurityMonitoringSystem:
-    """Central security monitoring system."""
-
-    def __init__(self) -> None:
-        self.cameras: Dict[str, Camera] = {}
-        self.sensors: Dict[str, MotionSensor] = {}
-        self.access_log: List[Dict[str, Any]] = []
-        self.alerts: List[Dict[str, Any]] = []
-
-        self.enabled = False
-        subscribe("object_moved", self.on_object_moved)
-        subscribe("door_opened", self.on_access_event)
-        subscribe("door_closed", self.on_access_event)
-        logger.info("Security system initialized")
-
-
     # ------------------------------------------------------------------
-
     def register_camera(self, camera_id: str, location: str) -> None:
         """Register a security camera."""
         self.cameras[camera_id] = Camera(camera_id, location)
@@ -266,9 +217,10 @@ class SecurityMonitoringSystem:
         return list(self.access_log)
 
 
+# -- Camera and sensor management -----------------------------------------
 
-
-
+# Global security system instance
+SECURITY_SYSTEM = SecuritySystem()
 
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
