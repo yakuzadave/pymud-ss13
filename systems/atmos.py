@@ -270,7 +270,7 @@ class AtmosphericSystem:
 
         return fixed
 
-    def on_power_loss(self, affected_rooms: Optional[List[str]] = None) -> None:
+    def on_power_loss(self, affected_rooms: Optional[List[str]] = None, **_: Any) -> None:
         """
         Handle power loss event by disabling vents in affected rooms.
 
@@ -290,7 +290,7 @@ class AtmosphericSystem:
                     self.vents[room_id]["is_active"] = False
             logger.info(f"Vents disabled in {len(affected_rooms)} rooms due to power loss")
 
-    def on_power_restored(self, affected_rooms: Optional[List[str]] = None) -> None:
+    def on_power_restored(self, affected_rooms: Optional[List[str]] = None, **_: Any) -> None:
         """
         Handle power restored event by re-enabling vents in affected rooms.
 

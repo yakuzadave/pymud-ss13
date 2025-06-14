@@ -11,18 +11,23 @@ from events import publish
 
 logger = logging.getLogger(__name__)
 
+
 class PlayerComponent:
     """
     Component that represents a player character.
     """
 
-    def __init__(self,
-                 inventory: Optional[List[str]] = None,
-                 stats: Optional[Dict[str, float]] = None,
-                 access_level: int = 0,
-                 current_location: Optional[str] = None,
-                 role: str = "crew",
-                 abilities: Optional[List[str]] = None):
+    def __init__(
+        self,
+        inventory: Optional[List[str]] = None,
+        stats: Optional[Dict[str, float]] = None,
+        access_level: int = 0,
+        current_location: Optional[str] = None,
+        role: str = "crew",
+        abilities: Optional[List[str]] = None,
+        body_parts: Optional[Dict[str, Dict[str, float]]] = None,
+        diseases: Optional[List[str]] = None,
+    ):
         """
         Initialize the player component.
 
@@ -39,7 +44,7 @@ class PlayerComponent:
             "health": 100.0,
             "energy": 100.0,
             "oxygen": 100.0,
-            "radiation": 0.0
+            "radiation": 0.0,
         }
         self.access_level = access_level
         self.current_location = current_location
@@ -50,6 +55,18 @@ class PlayerComponent:
         self.equipment: Dict[str, str] = {}
         self.move_speed = 1.0
         self.last_move_time = 0.0
+
+        default_parts = {
+            "head": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+            "torso": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+            "left_arm": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+            "right_arm": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+            "left_leg": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+            "right_leg": {"brute": 0.0, "burn": 0.0, "toxin": 0.0, "oxygen": 0.0},
+        }
+        self.body_parts = body_parts or default_parts
+        self.diseases = diseases or []
+        self.alive = True
 
     def add_to_inventory(self, item_id: str) -> bool:
         """
@@ -66,7 +83,9 @@ class PlayerComponent:
                 return False
             self.inventory.append(item_id)
         logger.debug(f"Added item {item_id} to {self.owner.id}'s inventory")
-        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="add")
+        publish(
+            "inventory_changed", player_id=self.owner.id, item_id=item_id, action="add"
+        )
 
         return True
 
@@ -80,6 +99,7 @@ class PlayerComponent:
         Returns:
             bool: True if the item was removed, False if not found.
         """
+
         with self._lock:
             if item_id in self.inventory:
                 self.inventory.remove(item_id)
@@ -88,6 +108,8 @@ class PlayerComponent:
         logger.debug(f"Removed item {item_id} from {self.owner.id}'s inventory")
         publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="remove")
         return True
+
+
 
     def has_item(self, item_id: str) -> bool:
         """
@@ -144,8 +166,15 @@ class PlayerComponent:
         self.last_move_time = time.time()
         old_location = self.current_location
         self.current_location = location_id
-        logger.debug(f"Moved player {self.owner.id} from {old_location} to {location_id}")
-        publish("player_moved", player_id=self.owner.id, from_location=old_location, to_location=location_id)
+        logger.debug(
+            f"Moved player {self.owner.id} from {old_location} to {location_id}"
+        )
+        publish(
+            "player_moved",
+            player_id=self.owner.id,
+            from_location=old_location,
+            to_location=location_id,
+        )
 
     def update_stat(self, stat_name: str, value: float) -> None:
         """
@@ -165,10 +194,108 @@ class PlayerComponent:
             else:
                 self.stats[stat_name] = max(0, min(100, self.stats[stat_name]))
 
+            logger.debug(
+                f"Updated {self.owner.id}'s {stat_name} from {old_value} to {self.stats[stat_name]}"
+            )
+            publish(
+                "stat_changed",
+                player_id=self.owner.id,
+                stat=stat_name,
+                old_value=old_value,
+                new_value=self.stats[stat_name],
+            )
+
+    def apply_damage(self, body_part: str, damage_type: str, amount: float) -> None:
+        """Apply damage to a body part."""
+        part = self.body_parts.get(body_part)
+        if not part or damage_type not in part:
+            return
+        old = part[damage_type]
+        part[damage_type] = max(0.0, min(100.0, part[damage_type] + amount))
+        if damage_type == "oxygen":
+            self.update_stat("oxygen", -amount)
+        else:
+            self.update_stat("health", -amount)
+        publish(
+            "damage_applied",
+            player_id=self.owner.id,
+            part=body_part,
+            damage_type=damage_type,
+            old_value=old,
+            new_value=part[damage_type],
+        )
+        if self.stats.get("health", 0) <= 0 and self.alive:
+            self.alive = False
+            publish("player_dead", player_id=self.owner.id)
+
+    def heal_damage(self, body_part: str, damage_type: str, amount: float) -> None:
+        """Heal damage on a body part."""
+        part = self.body_parts.get(body_part)
+        if not part or damage_type not in part:
+            return
+        old = part[damage_type]
+        part[damage_type] = max(0.0, part[damage_type] - amount)
+        if damage_type == "oxygen":
+            self.update_stat("oxygen", amount)
+        else:
+            self.update_stat("health", amount)
+        publish(
+            "damage_healed",
+            player_id=self.owner.id,
+            part=body_part,
+            damage_type=damage_type,
+            old_value=old,
+            new_value=part[damage_type],
+        )
+        if self.stats.get("health", 0) > 0 and not self.alive:
+            self.alive = True
+            publish("player_revived", player_id=self.owner.id)
+
+    def contract_disease(self, disease: str) -> None:
+        if disease not in self.diseases:
+            self.diseases.append(disease)
+            publish("disease_contracted", player_id=self.owner.id, disease=disease)
+
+    def cure_disease(self, disease: str) -> None:
+        if disease in self.diseases:
+            self.diseases.remove(disease)
+            publish("disease_cured", player_id=self.owner.id, disease=disease)
+
+    def apply_environmental_effects(
+        self, room_atmosphere: Dict[str, float], hazards: List[str]
+    ) -> List[str]:
             logger.debug(f"Updated {self.owner.id}'s {stat_name} from {old_value} to {self.stats[stat_name]}")
             publish("stat_changed", player_id=self.owner.id, stat=stat_name, old_value=old_value, new_value=self.stats[stat_name])
 
+    def breathe(self, room_comp: "RoomComponent", amount: float = 0.1) -> None:
+        """Simulate the player breathing in a room.
+
+        Oxygen is removed from the room atmosphere and converted to CO2.
+        The player's oxygen stat is adjusted based on the remaining oxygen
+        percentage in the room.
+
+        Args:
+            room_comp: The room component representing the current location.
+            amount: Amount of oxygen consumed each tick.
+        """
+        atmos = getattr(room_comp, "atmosphere", None)
+        if atmos is None and hasattr(room_comp, "gas"):
+            atmos = room_comp.gas.composition
+        if atmos is None:
+            return
+        available = atmos.get("oxygen", 0.0)
+        consumed = min(amount, available)
+        atmos["oxygen"] = max(0.0, available - consumed)
+        atmos["co2"] = atmos.get("co2", 0.0) + consumed
+
+        if atmos.get("oxygen", 21.0) < 10.0:
+            self.update_stat("oxygen", -1.0)
+        else:
+            if self.stats.get("oxygen", 0) < 100.0:
+                self.update_stat("oxygen", 0.5)
+
     def apply_environmental_effects(self, room_atmosphere: Dict[str, float], hazards: List[str]) -> List[str]:
+
         """
         Apply environmental effects to the player based on room conditions.
 
@@ -185,7 +312,9 @@ class PlayerComponent:
         if room_atmosphere.get("oxygen", 21.0) < 10.0:
             self.update_stat("oxygen", -2.0)
             if self.stats["oxygen"] < 50:
-                messages.append("You're having trouble breathing in the low-oxygen environment.")
+                messages.append(
+                    "You're having trouble breathing in the low-oxygen environment."
+                )
 
         # Check radiation
         if "radiation" in hazards:
@@ -210,6 +339,10 @@ class PlayerComponent:
         if "extreme_heat" in hazards:
             self.update_stat("health", -1.5)
             messages.append("The extreme heat is damaging.")
+
+        if "electrical" in hazards:
+            self.update_stat("health", -5.0)
+            messages.append("Sparks arc across your body, shocking you.")
 
         # Apply any other hazard effects
         if "toxic_gas" in hazards:
@@ -269,4 +402,7 @@ class PlayerComponent:
             "role": self.role,
             "abilities": self.abilities,
             "equipment": self.equipment
+            "body_parts": self.body_parts,
+            "diseases": self.diseases,
+            "alive": self.alive,
         }

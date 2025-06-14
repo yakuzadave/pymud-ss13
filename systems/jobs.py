@@ -198,6 +198,9 @@ class JobSystem:
             max_access = max(job.access_levels)
             player_comp.access_level = max_access
 
+        # Update the player's role field
+        player_comp.role = job.job_id
+
         # Move to spawn location if specified
         if job.spawn_location:
             player_comp.move_to(job.spawn_location)
@@ -414,6 +417,40 @@ def create_standard_jobs() -> Dict[str, Job]:
     assistant.add_starting_item("assistant_uniform")
     assistant.set_spawn_location("arrival")
     jobs[assistant.job_id] = assistant
+
+    # Traitor - antagonist role
+    traitor = Job(
+        "traitor",
+        "Traitor",
+        "Undermine the station and complete covert objectives.",
+    )
+    traitor.add_access_level(20)
+    traitor.add_starting_item("traitor_kit")
+    traitor.set_spawn_location("arrival")
+    traitor.add_ability("sabotage")
+    jobs[traitor.job_id] = traitor
+
+    # Station AI
+    ai = Job(
+        "ai",
+        "Station AI",
+        "Oversee station operations and assist the crew.",
+    )
+    ai.add_access_level(100)
+    ai.set_spawn_location("core")
+    ai.add_ability("monitor")
+    jobs[ai.job_id] = ai
+
+    # Cyborg
+    cyborg = Job(
+        "cyborg",
+        "Cyborg",
+        "Robotic assistant with specialized modules.",
+    )
+    cyborg.add_access_level(60)
+    cyborg.set_spawn_location("robotics")
+    cyborg.add_ability("interface")
+    jobs[cyborg.job_id] = cyborg
 
     return jobs
 
