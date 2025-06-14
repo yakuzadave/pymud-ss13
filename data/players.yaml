@@ -1,0 +1,16 @@
+- id: player_engineer
+  name: Test Engineer
+  role: Engineer
+  hooks:
+    power_loss: repair
+    gas_leak: fix
+- id: player_doctor
+  name: Test Doctor
+  role: Doctor
+  hooks:
+    gas_leak: treat
+- id: player_security
+  name: Test Security
+  role: Security
+  hooks:
+    power_loss: patrol

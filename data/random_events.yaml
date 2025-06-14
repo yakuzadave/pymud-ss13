@@ -1,0 +1,46 @@
+
+
+# Random events definition for MUDpy SS13
+# Each event has an id, name, optional weight and parameters passed to handlers
+
+- id: meteor_shower
+  name: Meteor Shower
+  weight: 1
+  params:
+    message: "A brief meteor shower rattles the station's hull."
+  description: A barrage of tiny meteors pelts the station hull.
+
+- id: power_surge
+  name: Power Surge
+  weight: 2
+  params:
+    grid_id: "main"
+
+- id: gas_leak
+  name: Gas Leak Detected
+  weight: 1
+  params:
+    room_id: "engineering"
+
+- id: solar_flare
+  description: A sudden solar flare disrupts communications and power systems.
+
+- id: power_outage
+  description: Critical generators shut down, plunging sections into darkness.
+
+- id: radiation_storm
+  name: Radiation Storm
+  weight: 1
+  params:
+    duration: 30
+    severity: high
+  description: Ionizing radiation sweeps through the station.
+
+- id: cargo_lottery
+  name: Cargo Lottery
+  weight: 3
+  params:
+    crate_contents:
+      - space donuts
+      - mysterious seeds
+  description: A random crate appears in cargo packed with goodies.

@@ -8,32 +8,104 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Persistent Storage**: Uses YAML for configuration and data files.
 - **Web-Based Frontend**: Connect through a browser using WebSockets.
 - **NPC Data**: Non-player characters defined in `data/npcs.yaml`.
+- **User-defined Aliases**: Create shortcuts with `alias` and remove them with `unalias`. Aliases persist between sessions.
+- **See Who's Online**: View active players at any time with the `who` command.
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
+- **Admin Event Control**: List and trigger random events using the `event` command.
+- **Grid Map & Status Overlays**: View a simple station layout with door lock,
+  atmosphere, and power indicators via WebSocket updates.
+- **Automatic Subsystems**: Power, atmosphere and random events tick in the background when the server runs.
 
 ## Requirements
 
-- Python 3.6+
+- Python 3.11+
 - Git
 - WebSockets library for Python
 - MUDpy
 
 ## Setup
 
-Run the setup script to clone MUDpy and install dependencies:
+Create a virtual environment and install the required packages:
 
 ```bash
-chmod +x setup.sh
-./setup.sh
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Then start the combined HTTP/WebSocket server:
+The repository also ships a helper script `setup.sh` which clones the `mudpy`
+project and installs extra dependencies for the optional self‑test suite.
+
+Start the combined HTTP/WebSocket server:
 
 ```bash
 python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+### Grid Map and Overlays
+
+Click the **Map** button in the web client to request the current station layout
+from the server. Rooms are shown in a simple grid with icons indicating locked
+doors, atmospheric hazards, and power loss. These overlays update in real time
+based on WebSocket events.
+
+
+## Running Tests
+
+Install pytest and run tests using:
+
+```bash
+pytest
+```
+
+
+## Random Events
+
+Random station events are defined in `data/random_events.yaml`.  Each entry in
+that file specifies an event name, its weight, and optional conditions for it to
+occur.  The server loads these definitions at startup and the event manager
+periodically picks one based on their weights, automatically running the
+corresponding logic. The interval between checks is configured on the
+`RandomEventSystem` and defaults to 60 seconds.
+
+Once the server is running, events are scheduled automatically so random
+incidents will occur periodically without needing any admin commands.
+
+Administrators can view available events with `event list` and manually trigger
+them using `event trigger <event_id>`.
+
+## Persistence
+
+Game objects are stored as YAML. Player files are written to `data/players` when clients disconnect and the server writes periodic autosave snapshots of the entire world to `data/world`. See [docs/persistence.md](docs/persistence.md) for format details.
+
+## YAML Data Format
+
+Rooms, items and NPCs are defined using YAML. A minimal room entry looks like:
+
+```yaml
+- id: start
+  name: Central Hub
+  description: The main arrival point of the station.
+  components:
+    room:
+      exits:
+        north: corridor_north
+```
+
+This structure maps directly into the component system discussed in
+[docs/component_system.md](docs/component_system.md).
+
+## Usage Guide
+
+Once the server is running, connect to `http://localhost:5000` in your browser.
+Type commands into the prompt to interact with the world. Useful commands include
+`look`, `move <direction>`, `inventory` and `say <message>`.
+You can create shortcuts for long commands with `alias <shortcut> <command>` and remove them with
+`unalias <shortcut>`. Aliases are saved per player and persist between sessions.
+The `who` command lists all players currently online.
 
 ## License
 

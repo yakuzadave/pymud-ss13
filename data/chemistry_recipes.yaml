@@ -1,0 +1,4 @@
+- output: chemical_ab
+  inputs:
+    - chemical_a
+    - chemical_b

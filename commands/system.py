@@ -9,6 +9,7 @@ from events import publish
 
 logger = logging.getLogger(__name__)
 
+
 @register("quit")
 def cmd_quit(interface, client_id, args):
     """
@@ -33,6 +34,7 @@ def cmd_quit(interface, client_id, args):
     interface.disconnect_client(client_id)
 
     return "You have disconnected from Space Station Alpha. Safe travels."
+
 
 @register("save")
 def cmd_save(interface, client_id, args):
@@ -60,6 +62,7 @@ def cmd_save(interface, client_id, args):
     publish("game_saved", client_id=client_id, player_name=player_name)
 
     return "Game state saved."
+
 
 @register("shutdown")
 def cmd_shutdown(interface, client_id, args):
@@ -89,3 +92,61 @@ def cmd_shutdown(interface, client_id, args):
     publish("server_shutdown", client_id=client_id, reason="admin command")
 
     return "Server shutdown initiated."
+
+
+@register("event")
+def cmd_event(interface, client_id, args):
+    """List or trigger random events."""
+    session = interface.client_sessions.get(client_id, {})
+    is_admin = session.get("is_admin", False)
+
+    from systems.random_events import get_random_event_system
+
+    system = get_random_event_system()
+    if not system.events:
+        system.load_events()
+
+    if not args or args.strip().lower() in {"list", "ls"}:
+        events = system.list_events()
+        if not events:
+            return "No random events are defined."
+        return "Available events: " + ", ".join(events)
+
+    parts = args.split(maxsplit=1)
+    cmd = parts[0].lower()
+    if cmd in {"trigger", "run", "fire"}:
+        if not is_admin:
+            return "You do not have permission to trigger events."
+        if len(parts) < 2:
+            return "Usage: event trigger <event_id>"
+        event_id = parts[1]
+        if system.trigger_event(event_id, client_id=client_id):
+            # Notify subscribers that a manual event has fired.
+            # Useful for logging or debugging purposes.
+            publish(
+                "manual_event_triggered",
+                event_id=event_id,
+                client_id=client_id,
+            )
+            return f"Event {event_id} triggered."
+        else:
+            return f"Unknown event: {event_id}"
+    else:
+        return f"Unknown event command '{cmd}'."
+
+
+@register("who")
+def cmd_who(interface, client_id, **_):
+    """List currently connected players."""
+    players = []
+    for cid, session in interface.client_sessions.items():
+        name = session.get("character") or f"Player_{cid}"
+        players.append(name)
+
+    if not players:
+        return "No players are online."
+
+    players.sort()
+    return "Online players:\n" + "\n".join(players)
+
+

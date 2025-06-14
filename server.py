@@ -23,6 +23,7 @@ from mudpy_interface import MudpyInterface
 import integration
 import engine
 from events import publish, subscribe
+from systems import get_random_event_system
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -42,6 +43,9 @@ mudpy_interface = MudpyInterface(settings.config_file)
 
 # Create integration with engine
 mud_integration = None
+
+# Random event system
+random_event_system = get_random_event_system()
 
 # Client location tracking
 client_locations: Dict[str, str] = {}
@@ -216,6 +220,7 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
 async def startup_event():
     """Handle application startup."""
     global mud_integration
+    global random_event_system
 
     logger.info("Starting MUDpy SS13 server")
 
@@ -231,10 +236,16 @@ async def startup_event():
 
     logger.info("Event handlers registered")
 
+    # Start random events
+    random_event_system.start()
+
 @app.on_event("shutdown")
 async def shutdown_event():
     """Handle application shutdown."""
     logger.info("Shutting down MUDpy SS13 server")
+
+    # Stop random events
+    random_event_system.stop()
 
     # Shut down MUDpy interface
     if mudpy_interface:

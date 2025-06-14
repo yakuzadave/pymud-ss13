@@ -47,139 +47,45 @@ class MudpyIntegration:
         """
         Initialize the world with game data from YAML files.
         """
+        data_dir = self.world.data_dir
+
         # Create the data directory if it doesn't exist
-        os.makedirs("data", exist_ok=True)
+        os.makedirs(data_dir, exist_ok=True)
 
         # Create player-specific and world-specific folders
-        os.makedirs("data/players", exist_ok=True)
-        os.makedirs("data/world", exist_ok=True)
+        os.makedirs(os.path.join(data_dir, "players"), exist_ok=True)
+        os.makedirs(os.path.join(data_dir, "world"), exist_ok=True)
 
         # Load rooms
-        if os.path.exists("data/rooms.yaml"):
-            self._load_rooms()
+        if os.path.exists(os.path.join(data_dir, "rooms.yaml")):
+            self.world.load_rooms("rooms.yaml")
 
         # Load items
-        if os.path.exists("data/items.yaml"):
-            self._load_items()
+        if os.path.exists(os.path.join(data_dir, "items.yaml")):
+            self.world.load_items("items.yaml")
 
         # Note: In a real implementation, you'd also load players, NPCs, etc.
-        if os.path.exists("data/npcs.yaml"):
-            self._load_npcs()
+        if os.path.exists(os.path.join(data_dir, "npcs.yaml")):
+            self.world.load_npcs("npcs.yaml")
+
+
+        # Load any player files if present
+        if os.path.exists(os.path.join(data_dir, "players.yaml")):
+            self.world.load_from_file("players.yaml")
+
+        players_dir = os.path.join(data_dir, "players")
+        if os.path.isdir(players_dir):
+            for fname in os.listdir(players_dir):
+                if fname.endswith(".yaml"):
+                    self.world.load_from_file(os.path.join("players", fname))
+
+        # Load saved player objects
+        from persistence import load_players
+        load_players(os.path.join(self.world.data_dir, "players"), self.world)
+
 
         logger.info("World initialization complete")
 
-    def _load_rooms(self):
-        """
-        Load rooms from the YAML file.
-        """
-        try:
-            with open("data/rooms.yaml", "r") as f:
-                rooms_data = yaml.safe_load(f)
-
-            for room_data in rooms_data:
-                # Create a GameObject for the room
-                room_obj = GameObject(
-                    id=room_data["id"],
-                    name=room_data["name"],
-                    description=room_data["description"]
-                )
-
-                # Add components
-                if "components" in room_data:
-                    if "room" in room_data["components"]:
-                        room_comp = RoomComponent(
-                            exits=room_data["components"]["room"].get("exits", {}),
-                            atmosphere=room_data["components"]["room"].get("atmosphere", {}),
-                            hazards=room_data["components"]["room"].get("hazards", []),
-                            is_airlock=room_data["components"]["room"].get("is_airlock", False)
-                        )
-                        room_obj.add_component("room", room_comp)
-
-                    if "door" in room_data["components"]:
-                        door_comp = DoorComponent(
-                            is_open=room_data["components"]["door"].get("is_open", False),
-                            is_locked=room_data["components"]["door"].get("is_locked", False),
-                            destination=room_data["components"]["door"].get("destination"),
-                            requires_power=room_data["components"]["door"].get("requires_power", True),
-                            access_level=room_data["components"]["door"].get("access_level", 0)
-                        )
-                        room_obj.add_component("door", door_comp)
-
-                # Register the room in the world
-                self.world.register(room_obj)
-
-            logger.info(f"Loaded {len(rooms_data)} rooms from data/rooms.yaml")
-
-        except Exception as e:
-            logger.error(f"Error loading rooms: {e}")
-
-    def _load_items(self):
-        """
-        Load items from the YAML file.
-        """
-        try:
-            with open("data/items.yaml", "r") as f:
-                items_data = yaml.safe_load(f)
-
-            for item_data in items_data:
-                # Create a GameObject for the item
-                item_obj = GameObject(
-                    id=item_data["id"],
-                    name=item_data["name"],
-                    description=item_data["description"],
-                    location=item_data.get("location")
-                )
-
-                # Add components
-                if "components" in item_data:
-                    if "item" in item_data["components"]:
-                        item_comp = ItemComponent(
-                            weight=item_data["components"]["item"].get("weight", 1.0),
-                            is_takeable=item_data["components"]["item"].get("is_takeable", True),
-                            is_usable=item_data["components"]["item"].get("is_usable", False),
-                            use_effect=item_data["components"]["item"].get("use_effect"),
-                            item_type=item_data["components"]["item"].get("item_type", "miscellaneous"),
-                            item_properties=item_data["components"]["item"].get("item_properties", {})
-                        )
-                        item_obj.add_component("item", item_comp)
-
-                # Register the item in the world
-                self.world.register(item_obj)
-
-            logger.info(f"Loaded {len(items_data)} items from data/items.yaml")
-
-        except Exception as e:
-            logger.error(f"Error loading items: {e}")
-
-    def _load_npcs(self):
-        """
-        Load NPCs from the YAML file.
-        """
-        try:
-            with open("data/npcs.yaml", "r") as f:
-                npcs_data = yaml.safe_load(f)
-
-            for npc_data in npcs_data:
-                npc_obj = GameObject(
-                    id=npc_data["id"],
-                    name=npc_data["name"],
-                    description=npc_data.get("description", ""),
-                    location=npc_data.get("location")
-                )
-
-                if "components" in npc_data and "npc" in npc_data["components"]:
-                    npc_comp = NPCComponent(
-                        role=npc_data["components"]["npc"].get("role", "crew"),
-                        dialogue=npc_data["components"]["npc"].get("dialogue", [])
-                    )
-                    npc_obj.add_component("npc", npc_comp)
-
-                self.world.register(npc_obj)
-
-            logger.info(f"Loaded {len(npcs_data)} NPCs from data/npcs.yaml")
-
-        except Exception as e:
-            logger.error(f"Error loading NPCs: {e}")
 
     def _setup_event_handlers(self):
         """
@@ -262,9 +168,13 @@ class MudpyIntegration:
         player_obj = self.world.get_object(player_id)
 
         if player_obj:
-            # TODO: In a real implementation, you might want to save player data first
+            save_path = os.path.join(self.world.data_dir, "players", f"{player_id}.yaml")
+            try:
+                from persistence import save_game_object
+                save_game_object(player_obj, save_path)
+            except Exception as e:
+                logger.error(f"Failed to save player {player_id}: {e}")
 
-            # Remove from world objects dictionary
             if player_id in self.world.objects:
                 del self.world.objects[player_id]
                 logger.info(f"Removed player game object for client {client_id}")
