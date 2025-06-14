@@ -10,6 +10,8 @@ import time
 import yaml
 import os
 import sys
+from typing import Dict
+from persistence import load_aliases, save_aliases
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +22,7 @@ class MudpyInterface:
     This class simulates communication with a MUD server for demonstration purposes.
     """
 
-    def __init__(self, config_file='config.yaml'):
+    def __init__(self, config_file: str = 'config.yaml', alias_dir: str = 'data/aliases'):
         """
         Initialize the MUDpy interface.
 
@@ -30,6 +32,9 @@ class MudpyInterface:
         self.config_file = config_file
         self.config = {}
         self.load_config()
+
+        self.alias_dir = alias_dir
+        self.aliases: Dict[str, Dict[str, str]] = {}
 
         # Client-related data structures
         self.client_sessions = {}
@@ -207,6 +212,15 @@ quit - Disconnect from the system
 
         logger.info("MUDpy interface initialized")
 
+    def load_aliases_for(self, client_id: str) -> None:
+        """Load saved aliases for a client into ``self.aliases``."""
+        self.aliases[client_id] = load_aliases(os.path.join(self.alias_dir, f"{client_id}.yaml"))
+
+    def save_aliases_for(self, client_id: str) -> None:
+        """Persist aliases for ``client_id`` to disk."""
+        if client_id in self.aliases:
+            save_aliases(self.aliases[client_id], os.path.join(self.alias_dir, f"{client_id}.yaml"))
+
     def load_config(self):
         """
         Load configuration from YAML file.
@@ -286,6 +300,9 @@ quit - Disconnect from the system
             }
             logger.debug(f"Initialized stats for player {client_id}: {self.player_stats[client_id]}")
 
+            # Load any saved command aliases
+            self.load_aliases_for(client_id)
+
             # Log all client information for debugging
             logger.debug(f"Client {client_id} fully initialized: location={self.player_locations.get(client_id)}, "
                          f"session={self.client_sessions.get(client_id)}")
@@ -316,9 +333,15 @@ Type 'help' for a list of commands.
         if client_id in self.client_sessions:
             logger.info(f"Cleaning up session for client {client_id}")
 
+            # Persist aliases for this client
+            self.save_aliases_for(client_id)
+
             # Remove client session and response queue
             del self.client_sessions[client_id]
             del self.response_queues[client_id]
+
+            if client_id in self.aliases:
+                del self.aliases[client_id]
 
             # Remove player location
             if client_id in self.player_locations:

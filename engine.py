@@ -43,6 +43,7 @@ from commands import (
     system,
     inventory,
     debug,
+    aliases,
     interaction,
     engineer,
     doctor,

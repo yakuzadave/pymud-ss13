@@ -169,3 +169,30 @@ async def autosave_loop(world: World, interval: int = 60, *, iterations: int | N
         filename = os.path.join(world.data_dir, "world", f"{prefix}_{timestamp}.yaml")
         save_world(world, filename)
         count += 1
+
+
+def load_aliases(path: str) -> Dict[str, str]:
+    """Load a dictionary of command aliases from ``path``."""
+    try:
+        with open(path, "r") as f:
+            data = yaml.safe_load(f) or {}
+        if not isinstance(data, dict):
+            logger.error(f"Expected dict in {path}, got {type(data)}")
+            return {}
+        return {str(k): str(v) for k, v in data.items()}
+    except FileNotFoundError:
+        logger.debug(f"Alias file not found: {path}")
+        return {}
+    except Exception as e:
+        logger.error(f"Error reading aliases from {path}: {e}")
+        return {}
+
+
+def save_aliases(aliases: Dict[str, str], path: str) -> None:
+    """Write the ``aliases`` mapping to ``path`` as YAML."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    try:
+        with open(path, "w") as f:
+            yaml.safe_dump(dict(sorted(aliases.items())), f, default_flow_style=False)
+    except Exception as e:
+        logger.error(f"Failed to save aliases to {path}: {e}")

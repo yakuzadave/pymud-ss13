@@ -196,6 +196,18 @@ class CommandParser:
         # Clean up the input text
         text = text.strip()
 
+        # Expand player-defined aliases
+        interface = context.get("interface")
+        client_id = context.get("client_id")
+        if interface and client_id:
+            aliases = getattr(interface, "aliases", {}).get(client_id, {})
+            if aliases:
+                first, *rest = text.split(maxsplit=1)
+                if first in aliases:
+                    expanded = aliases[first]
+                    text = expanded + (" " + rest[0] if rest else "")
+                    logger.debug(f"Expanded alias '{first}' -> '{text}'")
+
         # Check for help command first
         if text.lower() == 'help':
             return self.get_help()
