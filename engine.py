@@ -5,7 +5,6 @@ This module provides a command processing system for the MUD engine.
 
 import logging
 import os
-from typing import Optional, Dict, Any
 
 from parser import CommandParser
 
@@ -18,6 +17,7 @@ command_parser = CommandParser()
 # Legacy command handler registry (for backward compatibility)
 COMMAND_HANDLERS = {}
 
+
 def register(cmd_name):
     """
     Decorator to register command handlers.
@@ -28,14 +28,17 @@ def register(cmd_name):
     Returns:
         function: Decorator function that registers the handler.
     """
+
     def decorator(fn):
         COMMAND_HANDLERS[cmd_name] = fn
         logger.info(f"Registered command handler for '{cmd_name}'")
         return fn
+
     return decorator
 
+
 # Import command modules so decorators run and populate COMMAND_HANDLERS
-from commands import (
+from commands import (  # noqa: F401,E402
     basic,
     movement,
     observation,
@@ -48,13 +51,16 @@ from commands import (
     engineer,
     doctor,
     security,
+    chemist,
 )
+
 
 class MudEngine:
     """
     Core engine class for the MUD.
 
-    This class handles command processing and dispatches to the appropriate handler.
+    This class handles command processing and dispatches to the appropriate
+    handler.
     """
 
     def __init__(self, interface=None):
@@ -77,7 +83,7 @@ class MudEngine:
             command_parser.register_handler(name, handler)
 
         # Load command specs from YAML
-        if os.path.exists('data/commands.yaml'):
+        if os.path.exists("data/commands.yaml"):
             command_parser.load_commands()
         else:
             logger.warning("Command specs file not found: data/commands.yaml")
@@ -93,7 +99,10 @@ class MudEngine:
         Returns:
             str: The response to the command.
         """
-        logger.debug(f"Engine processing command: client={client_id}, command='{command_string}'")
+        logger.debug(
+            f"Engine processing command: client={client_id}, "
+            f"command='{command_string}'"
+        )
 
         # Ensure command_string is a string
         if not isinstance(command_string, str):
@@ -103,8 +112,8 @@ class MudEngine:
         try:
             # Process the command using the DSL parser
             context = {
-                'client_id': client_id,
-                'interface': self.interface,
+                "client_id": client_id,
+                "interface": self.interface,
             }
 
             response = command_parser.dispatch(command_string, context)
@@ -115,12 +124,13 @@ class MudEngine:
                 logger.debug(f"Command response: '{truncated}'")
             else:
                 logger.warning(f"Command '{command_string}' returned empty response")
-                response = f"Command completed but returned no output."
+                response = "Command completed but returned no output."
 
             return response
 
         except Exception as e:
             import traceback
+
             logger.error(f"Error processing command '{command_string}': {e}")
             logger.error(f"Exception traceback: {traceback.format_exc()}")
             return f"An error occurred while processing your command: {e}"

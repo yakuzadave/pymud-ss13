@@ -303,3 +303,11 @@
     Requires science skill and appropriate equipment.
   required_skills:
     - "science"
+
+- name: mix
+  category: Science
+  patterns:
+    - "mix {chem1} {chem2}"
+  help: |
+    Combine two chemicals in your inventory.
+    Only chemists are trained to perform these reactions safely.
