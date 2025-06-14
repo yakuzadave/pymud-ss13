@@ -212,6 +212,7 @@ class PlayerComponent:
             "engineer": ["repair_power", "fix_leak"],
             "doctor": ["heal"],
             "security": ["restrain"],
+            "chemist": ["mix"],
         }
         return mapping.get(role.lower(), [])
 

@@ -297,3 +297,51 @@
     container:
       capacity: 6
       items: []
+
+- id: beaker
+  name: Laboratory Beaker
+  description: >
+    A glass container used for mixing chemical reagents.
+  location: science_lab
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: tool
+
+- id: chemical_a
+  name: Chemical A
+  description: >
+    A basic reagent used in many simple reactions.
+  location: science_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: chemical
+
+- id: chemical_b
+  name: Chemical B
+  description: >
+    A common reagent that reacts readily with Chemical A.
+  location: science_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: chemical
+
+- id: chemical_ab
+  name: Chemical AB
+  description: >
+    A compound created by mixing Chemical A with Chemical B.
+  location: science_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: chemical

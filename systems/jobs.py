@@ -5,11 +5,11 @@ Handles crew roles, permissions, and duties.
 
 import logging
 from typing import Dict, List, Any, Optional
-import random
 from events import subscribe, publish
 import world
 
 logger = logging.getLogger(__name__)
+
 
 class Job:
     """
@@ -44,7 +44,9 @@ class Job:
             self.access_levels.append(level)
             self.access_levels.sort()
 
-    def add_starting_item(self, item_id: str, properties: Optional[Dict[str, Any]] = None) -> None:
+    def add_starting_item(
+        self, item_id: str, properties: Optional[Dict[str, Any]] = None
+    ) -> None:
         """
         Add a starting item for this job.
 
@@ -52,10 +54,7 @@ class Job:
             item_id (str): The ID of the item template.
             properties (Dict[str, Any], optional): Additional properties for this item.
         """
-        self.starting_items.append({
-            "item_id": item_id,
-            "properties": properties or {}
-        })
+        self.starting_items.append({"item_id": item_id, "properties": properties or {}})
 
     def set_spawn_location(self, location_id: str) -> None:
         """
@@ -90,8 +89,9 @@ class Job:
             "access_levels": self.access_levels,
             "starting_items": self.starting_items,
             "spawn_location": self.spawn_location,
-            "abilities": self.abilities
+            "abilities": self.abilities,
         }
+
 
 class JobSystem:
     """
@@ -188,7 +188,7 @@ class JobSystem:
             logger.error(f"Player object {player_obj_id} not found")
             return None
 
-        player_comp = player_obj.get_component('player')
+        player_comp = player_obj.get_component("player")
         if not player_comp:
             logger.error(f"Player component not found on object {player_obj_id}")
             return None
@@ -206,7 +206,9 @@ class JobSystem:
         for item_spec in job.starting_items:
             # In a real implementation, you'd create a new item from the template
             # For now, just log that it would be added
-            logger.info(f"Would add {item_spec['item_id']} to player {player_id}'s inventory")
+            logger.info(
+                f"Would add {item_spec['item_id']} to player {player_id}'s inventory"
+            )
 
         message = f"You have been assigned the role of {job.title}. {job.description}"
         return message
@@ -273,6 +275,7 @@ class JobSystem:
             del self.assigned_jobs[player_id]
             logger.info(f"Player {player_id} quit, removed job assignment {job_id}")
 
+
 # Create standard SS13 jobs
 def create_standard_jobs() -> Dict[str, Job]:
     """
@@ -284,17 +287,33 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs = {}
 
     # Captain
-    captain = Job("captain", "Captain", "You are in command of the station and its crew.")
+    captain = Job(
+        "captain", "Captain", "You are in command of the station and its crew."
+    )
     captain.add_access_level(100)  # All access
     captain.add_starting_item("captain_id_card", {"access_level": 100})
-    captain.add_starting_item("captain_headset", {"channels": ["command", "security", "engineering", "medical", "science", "supply"]})
+    captain.add_starting_item(
+        "captain_headset",
+        {
+            "channels": [
+                "command",
+                "security",
+                "engineering",
+                "medical",
+                "science",
+                "supply",
+            ]
+        },
+    )
     captain.add_starting_item("captain_uniform")
     captain.add_starting_item("captain_laser")
     captain.set_spawn_location("bridge")
     jobs[captain.job_id] = captain
 
     # Security Officer
-    security = Job("security", "Security Officer", "Maintain order and protect the crew.")
+    security = Job(
+        "security", "Security Officer", "Maintain order and protect the crew."
+    )
     security.add_access_level(30)  # Security access
     security.add_starting_item("security_id_card", {"access_level": 30})
     security.add_starting_item("security_headset", {"channels": ["security"]})
@@ -304,7 +323,11 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[security.job_id] = security
 
     # Engineer
-    engineer = Job("engineer", "Station Engineer", "Keep the station's power and life support systems running.")
+    engineer = Job(
+        "engineer",
+        "Station Engineer",
+        "Keep the station's power and life support systems running.",
+    )
     engineer.add_access_level(40)  # Engineering access
     engineer.add_starting_item("engineering_id_card", {"access_level": 40})
     engineer.add_starting_item("engineering_headset", {"channels": ["engineering"]})
@@ -324,7 +347,9 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[doctor.job_id] = doctor
 
     # Scientist
-    scientist = Job("scientist", "Scientist", "Research new technologies and study anomalies.")
+    scientist = Job(
+        "scientist", "Scientist", "Research new technologies and study anomalies."
+    )
     scientist.add_access_level(60)  # Science access
     scientist.add_starting_item("science_id_card", {"access_level": 60})
     scientist.add_starting_item("science_headset", {"channels": ["science"]})
@@ -333,8 +358,24 @@ def create_standard_jobs() -> Dict[str, Job]:
     scientist.set_spawn_location("research")
     jobs[scientist.job_id] = scientist
 
+    # Chemist
+    chemist = Job(
+        "chemist",
+        "Chemist",
+        "Create new compounds and manage reagents for the station.",
+    )
+    chemist.add_access_level(60)  # Science access
+    chemist.add_starting_item("science_id_card", {"access_level": 60})
+    chemist.add_starting_item("beaker")
+    chemist.add_starting_item("chemical_a")
+    chemist.add_starting_item("chemical_b")
+    chemist.set_spawn_location("science_lab")
+    jobs[chemist.job_id] = chemist
+
     # Cargo Technician
-    cargo = Job("cargo", "Cargo Technician", "Order and deliver supplies to the station.")
+    cargo = Job(
+        "cargo", "Cargo Technician", "Order and deliver supplies to the station."
+    )
     cargo.add_access_level(70)  # Cargo access
     cargo.add_starting_item("cargo_id_card", {"access_level": 70})
     cargo.add_starting_item("cargo_headset", {"channels": ["supply"]})
@@ -364,7 +405,9 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[chef.job_id] = chef
 
     # Assistant
-    assistant = Job("assistant", "Assistant", "Learn the ropes and help out where needed.")
+    assistant = Job(
+        "assistant", "Assistant", "Learn the ropes and help out where needed."
+    )
     assistant.add_access_level(10)  # Basic access
     assistant.add_starting_item("assistant_id_card", {"access_level": 10})
     assistant.add_starting_item("assistant_headset", {"channels": ["common"]})
@@ -374,12 +417,14 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     return jobs
 
+
 # Create a global job system instance
 JOB_SYSTEM = JobSystem()
 
 # Add standard jobs to the system
 for job_id, job in create_standard_jobs().items():
     JOB_SYSTEM.register_job(job)
+
 
 def get_job_system() -> JobSystem:
     """

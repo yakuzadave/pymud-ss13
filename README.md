@@ -15,6 +15,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Admin Event Control**: List and trigger random events using the `event` command.
 - **Grid Map & Status Overlays**: View a simple station layout with door lock,
   atmosphere, and power indicators via WebSocket updates.
+- **Automatic Subsystems**: Power, atmosphere and random events tick in the background when the server runs.
 
 ## Requirements
 
@@ -69,6 +70,9 @@ occur.  The server loads these definitions at startup and the event manager
 periodically picks one based on their weights, automatically running the
 corresponding logic. The interval between checks is configured on the
 `RandomEventSystem` and defaults to 60 seconds.
+
+Once the server is running, events are scheduled automatically so random
+incidents will occur periodically without needing any admin commands.
 
 Administrators can view available events with `event list` and manually trigger
 them using `event trigger <event_id>`.
