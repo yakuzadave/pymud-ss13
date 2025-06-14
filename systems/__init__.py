@@ -13,7 +13,9 @@ from .random_events import RandomEventSystem, get_random_event_system
 from .antagonists import AntagonistSystem, get_antagonist_system
 from .chemistry import ChemistrySystem, get_chemistry_system
 from .disease import DiseaseSystem, get_disease_system
+from .security import SecuritySystem, get_security_system
 from .communications import CommunicationsSystem, get_comms_system
+
 
 __all__ = [
     "AtmosphericSystem",
@@ -30,6 +32,8 @@ __all__ = [
     "get_chemistry_system",
     "DiseaseSystem",
     "get_disease_system",
+    "SecuritySystem",
+    "get_security_system",
     "CommunicationsSystem",
     "get_comms_system",
     "GasMixture",
