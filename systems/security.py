@@ -187,7 +187,6 @@ class SecuritySystem:
     def get_access_log(self) -> List[Dict[str, Any]]:
         return list(self.access_log)
 
-
 _SECURITY_SYSTEM = SecuritySystem()
 
 
