@@ -136,19 +136,17 @@ def cmd_event(interface, client_id, args):
 
 
 @register("who")
-def cmd_who(interface, client_id, args=None):
-    """Return a list of currently connected players."""
-    sessions = getattr(interface, "client_sessions", {})
-    if not sessions:
-        return "No players are currently online."
+def cmd_who(interface, client_id, **_):
+    """List currently connected players."""
+    players = []
+    for cid, session in interface.client_sessions.items():
+        name = session.get("character") or f"Player_{cid}"
+        players.append(name)
 
-    names = []
-    for session in sessions.values():
-        name = session.get("character") or session.get("player_name")
-        if name:
-            names.append(name)
+    if not players:
+        return "No players are online."
 
-    if not names:
-        return "No players are currently online."
+    players.sort()
+    return "Online players:\n" + "\n".join(players)
 
-    return "Players online: " + ", ".join(sorted(names))
+
