@@ -13,6 +13,7 @@ from .random_events import RandomEventSystem, get_random_event_system
 from .antagonists import AntagonistSystem, get_antagonist_system
 from .chemistry import ChemistrySystem, get_chemistry_system
 from .disease import DiseaseSystem, get_disease_system
+from .communications import CommunicationsSystem, get_comms_system
 from .research import ResearchSystem, get_research_system
 from .security import SecuritySystem, get_security_system
 from .communications import CommunicationsSystem, get_comms_system

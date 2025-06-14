@@ -27,6 +27,7 @@ class PlayerComponent:
         abilities: Optional[List[str]] = None,
         body_parts: Optional[Dict[str, Dict[str, float]]] = None,
         diseases: Optional[List[str]] = None,
+        skills: Optional[Dict[str, int]] = None,
     ):
         """
         Initialize the player component.
@@ -66,6 +67,7 @@ class PlayerComponent:
         }
         self.body_parts = body_parts or default_parts
         self.diseases = diseases or []
+        self.skills: Dict[str, int] = skills or {}
         self.alive = True
 
     def add_to_inventory(self, item_id: str) -> bool:
@@ -415,5 +417,6 @@ class PlayerComponent:
             "equipment": self.equipment,
             "body_parts": self.body_parts,
             "diseases": self.diseases,
+            "skills": self.skills,
             "alive": self.alive,
         }
