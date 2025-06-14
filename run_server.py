@@ -97,45 +97,6 @@ async def _security_loop():
     except asyncio.CancelledError:
         sec.stop()
         raise
-async def _power_task() -> None:
-    """Start and monitor the power system."""
-    system = get_power_system()
-    system.start()
-    try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
-
-
-async def _atmos_task() -> None:
-    """Start and monitor the atmosphere system."""
-    system = get_atmos_system()
-    system.start()
-    try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
-
-
-async def _random_event_task() -> None:
-    """Start and monitor the random event system."""
-    system = get_random_event_system()
-    system.start()
-    try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
-
-async def _security_task() -> None:
-    """Start and monitor the security system."""
-    system = get_security_system()
-    system.start()
-    try:
-        while True:
-            await asyncio.sleep(1)
-            system.update()
-    finally:
-        system.stop()
 
 def signal_handler(sig, frame):
     """
