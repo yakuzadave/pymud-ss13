@@ -401,7 +401,7 @@ class PlayerComponent:
             "max_inventory_size": self.max_inventory_size,
             "role": self.role,
             "abilities": self.abilities,
-            "equipment": self.equipment
+            "equipment": self.equipment,
             "body_parts": self.body_parts,
             "diseases": self.diseases,
             "alive": self.alive,
