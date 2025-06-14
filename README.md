@@ -18,6 +18,9 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Automatic Subsystems**: Power, atmosphere and random events tick in the background when the server runs.
 - **Away Missions**: Basic shuttle travel and off-station exploration with environmental hazards.
 
+- **Physics System**: Materials react to pressure and temperature with damage cascading to nearby structures.
+
+
 ## Requirements
 
 - Python 3.11+
@@ -60,6 +63,14 @@ Install pytest and run tests using:
 
 ```bash
 pytest
+```
+
+Automated gameplay scenarios are located in `tests/test_ai_gameplay.py` and
+use simple AI players to run through common interactions. Performance
+benchmarks can be executed with:
+
+```bash
+pytest tests/test_performance.py --benchmark-only
 ```
 
 
