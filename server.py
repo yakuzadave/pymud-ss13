@@ -18,6 +18,7 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 from settings import settings
+from performance import PerformanceMonitor
 from connection import ConnectionManager
 from mudpy_interface import MudpyInterface
 import integration
@@ -27,6 +28,9 @@ from systems import get_random_event_system
 
 # Module logger
 logger = logging.getLogger(__name__)
+
+# Performance monitoring
+perf_monitor = PerformanceMonitor()
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -428,6 +432,7 @@ async def websocket_endpoint(websocket: WebSocket):
 # Main entry point
 def run_server():
     """Run the server."""
+    perf_monitor.start()
     uvicorn.run(
         "server:app",
         host=settings.host,
