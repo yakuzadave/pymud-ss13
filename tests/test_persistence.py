@@ -44,3 +44,21 @@ def test_autosave_contains_all_objects(tmp_path):
     finally:
         world.WORLD = old_world
 
+
+def test_init_world_loads_saved_players(tmp_path):
+    old_world = world.WORLD
+    world.WORLD = World(data_dir=str(tmp_path))
+    try:
+        from components.player import PlayerComponent
+        from persistence import save_game_object
+
+        player = GameObject(id="player_42", name="Loaded", description="")
+        player.add_component("player", PlayerComponent())
+        save_game_object(player, tmp_path / "players" / "player_42.yaml")
+
+        world.WORLD = World(data_dir=str(tmp_path))
+        integ = integration.MudpyIntegration(MudpyInterface())
+        assert integ.world.get_object("player_42") is not None
+    finally:
+        world.WORLD = old_world
+

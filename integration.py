@@ -66,6 +66,10 @@ class MudpyIntegration:
         if os.path.exists("data/npcs.yaml"):
             self.world.load_npcs("npcs.yaml")
 
+        # Load saved player objects
+        from persistence import load_players
+        load_players(os.path.join(self.world.data_dir, "players"), self.world)
+
         logger.info("World initialization complete")
 
 
