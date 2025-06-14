@@ -10,6 +10,7 @@ from .npc import NPCComponent
 from .container import ContainerComponent
 from systems.chemical_reactions import ChemicalContainerComponent
 from .access import AccessControlComponent
+from .structure import StructureComponent
 
 __all__ = [
     "RoomComponent",
@@ -20,6 +21,7 @@ __all__ = [
     "ContainerComponent",
     "ChemicalContainerComponent",
     "AccessControlComponent",
+    "StructureComponent",
 ]
 
 # Mapping of component names in YAML to classes
@@ -32,4 +34,5 @@ COMPONENT_REGISTRY = {
     "container": ContainerComponent,
     "chemical_container": ChemicalContainerComponent,
     "access": AccessControlComponent,
+    "structure": StructureComponent,
 }
