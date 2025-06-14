@@ -85,6 +85,7 @@
     room:
       exits:
         south: corridor_north
+        west: maintenance_north
       atmosphere:
         oxygen: 19.0
         nitrogen: 75.0
@@ -160,7 +161,7 @@
     room:
       exits:
         east: corridor_north
-        west: surgery
+        south: maintenance_west
       atmosphere:
         oxygen: 22.0  # Slightly enriched oxygen
         nitrogen: 77.0
@@ -277,6 +278,7 @@
       exits:
         north: corridor_east
         east: airlock_cargo
+        west: maintenance_west
       atmosphere:
         oxygen: 21.0
         nitrogen: 78.0
@@ -350,6 +352,8 @@
       exits:
         south: corridor_north
         east: engineering
+        west: maintenance_west
+        north: maintenance_north
       atmosphere:
         oxygen: 20.0
         nitrogen: 79.0
@@ -357,6 +361,43 @@
         pressure: 100.0
       hazards: ["low_light"]
       is_airlock: false
+
+- id: maintenance_north
+  name: Maintenance Tunnel - North
+  description: >
+    A dim passage running behind the security office toward the outer hull.
+  components:
+    room:
+      exits:
+        south: maintenance_tunnel
+        east: security
+        north: airlock_north
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 100.0
+      hazards: ["low_light"]
+      is_airlock: false
+
+- id: maintenance_west
+  name: Maintenance Tunnel - West
+  description: >
+    A cramped tunnel connecting medbay with the cargo bay.
+  components:
+    room:
+      exits:
+        east: cargo_bay
+        north: medbay
+        west: maintenance_tunnel
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 100.0
+      hazards: ["low_light"]
+      is_airlock: false
+
 - id: security
   name: Security Office
   description: >
@@ -365,6 +406,7 @@
     room:
       exits:
         east: corridor_north
+        west: maintenance_north
       atmosphere:
         oxygen: 21.0
         nitrogen: 78.0
