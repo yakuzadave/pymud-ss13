@@ -41,6 +41,7 @@ class MudpyInterface:
         self.response_queues = {}
         self.player_locations = {}
         self.player_inventories = {}
+        self.player_equipment = {}
         self.player_stats = {}
 
         # World data
@@ -289,6 +290,8 @@ quit - Disconnect from the system
             # Initialize player inventory
             self.player_inventories[client_id] = ['comms_device', 'biometric_scanner']
             logger.debug(f"Initialized inventory for player {client_id}: {self.player_inventories[client_id]}")
+
+            self.player_equipment[client_id] = {}
 
             # Initialize player stats
             self.player_stats[client_id] = {
@@ -620,7 +623,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         inventory = self.player_inventories[client_id]
 
-        if not inventory:
+        if not inventory and not self.player_equipment.get(client_id):
             return "Your inventory is empty."
 
         inventory_text = "Inventory:\n"
@@ -630,6 +633,16 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
                 inventory_text += f"- {item['name']}: {item['description']}\n"
             else:
                 inventory_text += f"- {item_id} (Unknown item)\n"
+
+        equipped = self.player_equipment.get(client_id, {})
+        if equipped:
+            inventory_text += "\nEquipped:\n"
+            for slot, iid in equipped.items():
+                item = self.world['items'].get(iid)
+                if item:
+                    inventory_text += f"[{slot}] {item['name']}\n"
+                else:
+                    inventory_text += f"[{slot}] {iid}\n"
 
         return inventory_text
 
@@ -987,6 +1000,10 @@ Biometric scan complete:
             str: The ID of the player's location, or None if not found.
         """
         return self.player_locations.get(client_id)
+
+    def set_player_location(self, client_id, location):
+        """Update a player's location."""
+        self.player_locations[client_id] = location
 
     def shutdown(self):
         """

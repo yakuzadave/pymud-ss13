@@ -5,6 +5,8 @@ Represents a player character with inventory, stats, and abilities.
 
 from typing import Dict, List, Any, Optional
 import logging
+import threading
+import time
 from events import publish
 
 logger = logging.getLogger(__name__)
@@ -32,6 +34,7 @@ class PlayerComponent:
         """
         self.owner = None
         self.inventory = inventory or []
+        self._lock = threading.Lock()
         self.stats = stats or {
             "health": 100.0,
             "energy": 100.0,
@@ -43,6 +46,10 @@ class PlayerComponent:
         self.max_inventory_size = 10
         self.role = role
         self.abilities = abilities or self._default_role_abilities(role)
+        self.equipment_slots = ["head", "body", "hands"]
+        self.equipment: Dict[str, str] = {}
+        self.move_speed = 1.0
+        self.last_move_time = 0.0
 
     def add_to_inventory(self, item_id: str) -> bool:
         """
@@ -54,10 +61,10 @@ class PlayerComponent:
         Returns:
             bool: True if the item was added, False if inventory is full.
         """
-        if len(self.inventory) >= self.max_inventory_size:
-            return False
-
-        self.inventory.append(item_id)
+        with self._lock:
+            if len(self.inventory) >= self.max_inventory_size:
+                return False
+            self.inventory.append(item_id)
         logger.debug(f"Added item {item_id} to {self.owner.id}'s inventory")
         publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="add")
 
@@ -73,12 +80,14 @@ class PlayerComponent:
         Returns:
             bool: True if the item was removed, False if not found.
         """
-        if item_id in self.inventory:
-            self.inventory.remove(item_id)
-            logger.debug(f"Removed item {item_id} from {self.owner.id}'s inventory")
-            publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="remove")
-            return True
-        return False
+        with self._lock:
+            if item_id in self.inventory:
+                self.inventory.remove(item_id)
+            else:
+                return False
+        logger.debug(f"Removed item {item_id} from {self.owner.id}'s inventory")
+        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="remove")
+        return True
 
     def has_item(self, item_id: str) -> bool:
         """
@@ -101,6 +110,28 @@ class PlayerComponent:
         """
         return self.inventory.copy()
 
+    def equip_item(self, item_id: str, slot: str) -> bool:
+        """Equip an item from inventory into a slot."""
+        if slot not in self.equipment_slots:
+            return False
+        with self._lock:
+            if item_id not in self.inventory or slot in self.equipment:
+                return False
+            self.inventory.remove(item_id)
+            self.equipment[slot] = item_id
+        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="equip")
+        return True
+
+    def unequip_item(self, slot: str) -> Optional[str]:
+        """Unequip an item from a slot back to inventory."""
+        if slot not in self.equipment:
+            return None
+        with self._lock:
+            item_id = self.equipment.pop(slot)
+            self.inventory.append(item_id)
+        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="unequip")
+        return item_id
+
     def move_to(self, location_id: str) -> None:
         """
         Move the player to a new location.
@@ -108,6 +139,9 @@ class PlayerComponent:
         Args:
             location_id (str): The ID of the new location.
         """
+        if time.time() - self.last_move_time < self.move_speed:
+            return
+        self.last_move_time = time.time()
         old_location = self.current_location
         self.current_location = location_id
         logger.debug(f"Moved player {self.owner.id} from {old_location} to {location_id}")
@@ -233,5 +267,6 @@ class PlayerComponent:
             "current_location": self.current_location,
             "max_inventory_size": self.max_inventory_size,
             "role": self.role,
-            "abilities": self.abilities
+            "abilities": self.abilities,
+            "equipment": self.equipment
         }

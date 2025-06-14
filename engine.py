@@ -5,6 +5,7 @@ This module provides a command processing system for the MUD engine.
 
 import logging
 import os
+from action_queue import ActionQueue
 
 from parser import CommandParser
 
@@ -13,6 +14,10 @@ logger = logging.getLogger(__name__)
 
 # Create the command parser
 command_parser = CommandParser()
+
+# Action queue to prevent spamming commands
+action_queue = ActionQueue()
+RATE_LIMITED = {"move", "get", "take", "drop", "use", "put", "wear", "remove", "sprint"}
 
 # Legacy command handler registry (for backward compatibility)
 COMMAND_HANDLERS = {}
@@ -104,6 +109,11 @@ class MudEngine:
             f"command='{command_string}'"
         )
 
+        cmd_name = command_string.split()[0] if command_string else ""
+        if cmd_name in RATE_LIMITED and not action_queue.can_act(client_id):
+            logger.debug("Action blocked by queue")
+            return "You need to slow down and wait a moment."
+
         # Ensure command_string is a string
         if not isinstance(command_string, str):
             command_string = str(command_string)
@@ -117,6 +127,8 @@ class MudEngine:
             }
 
             response = command_parser.dispatch(command_string, context)
+            if cmd_name in RATE_LIMITED:
+                action_queue.record_action(client_id)
 
             # Safer response logging
             if response:

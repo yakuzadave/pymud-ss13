@@ -152,3 +152,54 @@ def cmd_examine(interface, client_id, item: str, **_):
 @register("x")
 def cmd_x(interface, client_id, item: str, **kwargs):
     return cmd_examine(interface, client_id, item, **kwargs)
+
+
+@register("wear")
+def cmd_equip(interface, client_id, item: str, slot: Optional[str] = None, **_):
+    world = get_world()
+    player = world.get_object(f"player_{client_id}")
+    if not player:
+        return "Player not found."
+    pc = player.get_component("player")
+
+    inv_objs = [world.get_object(i) for i in pc.inventory if world.get_object(i)]
+    itm_obj = _find_object_by_name(item, inv_objs)
+    if not itm_obj:
+        return f"You aren't carrying {item}."
+
+    item_comp = itm_obj.get_component("item")
+    slot_name = slot or (item_comp.item_properties.get("slot") if item_comp else None)
+    if not slot_name:
+        return "Where would you wear that?"
+
+    if pc.equip_item(itm_obj.id, slot_name):
+        interface.player_inventories[client_id].remove(itm_obj.id)
+        interface.player_equipment.setdefault(client_id, {})[slot_name] = itm_obj.id
+        return f"You equip the {itm_obj.name}."
+    return "You can't equip that now."
+
+
+@register("remove")
+def cmd_remove(interface, client_id, item: str, **_):
+    world = get_world()
+    player = world.get_object(f"player_{client_id}")
+    if not player:
+        return "Player not found."
+    pc = player.get_component("player")
+
+    equipped = interface.player_equipment.get(client_id, {})
+    target_slot = None
+    for slt, iid in equipped.items():
+        obj = world.get_object(iid)
+        if iid == item or (obj and item.lower() in obj.name.lower()):
+            target_slot = slt
+            item_id = iid
+            break
+    if not target_slot:
+        return f"You aren't wearing {item}."
+
+    pc.unequip_item(target_slot)
+    interface.player_inventories[client_id].append(item_id)
+    del interface.player_equipment[client_id][target_slot]
+    itm_obj = world.get_object(item_id)
+    return f"You remove the {itm_obj.name if itm_obj else item_id}."
