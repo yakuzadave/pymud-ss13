@@ -26,6 +26,7 @@ from .cargo import CargoSystem, get_cargo_system
 from .physics import PhysicsSystem, get_physics_system
 from .maintenance import MaintenanceSystem, get_maintenance_system
 from .genetics import GeneticsSystem, get_genetics_system
+from .robotics import RoboticsSystem, get_robotics_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -60,6 +61,8 @@ __all__ = [
     "get_maintenance_system",
     "GeneticsSystem",
     "get_genetics_system",
+    "RoboticsSystem",
+    "get_robotics_system",
     "GasMixture",
     "AtmosGrid",
     "PipeNetwork",

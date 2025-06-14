@@ -19,6 +19,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Cargo System**: Order supplies through vendors and track department inventory.
 - **Away Missions**: Basic shuttle travel and off-station exploration with environmental hazards.
 - **Physics System**: Materials react to pressure and temperature with damage cascading to nearby structures.
+- **Robotics System**: Build cyborg units from parts and manage their modules.
 
 ## Requirements
 
