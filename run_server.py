@@ -14,9 +14,17 @@ from aiohttp import web
 from mud_server import create_mud_server
 from world import get_world
 from persistence import autosave_loop
+from systems import (
+    get_power_system,
+    get_atmos_system,
+    get_random_event_system,
+)
 
 # Module logger
 logger = logging.getLogger(__name__)
+
+# Track background tasks so they can be cancelled on shutdown
+TASKS: list[asyncio.Task] = []
 
 # Create routes for the HTTP server
 routes = web.RouteTableDef()
@@ -36,11 +44,50 @@ async def static_files(request):
     else:
         return web.Response(status=404, text="File not found")
 
+
+async def _power_loop():
+    """Run the power system update loop."""
+    ps = get_power_system()
+    ps.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            ps.update()
+    except asyncio.CancelledError:
+        ps.stop()
+        raise
+
+
+async def _atmos_loop():
+    """Run the atmosphere system update loop."""
+    atmos = get_atmos_system()
+    atmos.start()
+    try:
+        while True:
+            await asyncio.sleep(1)
+            atmos.update()
+    except asyncio.CancelledError:
+        atmos.stop()
+        raise
+
+
+async def _random_event_loop():
+    """Wrapper for the random event system."""
+    res = get_random_event_system()
+    res.start()
+    try:
+        await asyncio.Event().wait()
+    except asyncio.CancelledError:
+        res.stop()
+        raise
+
 def signal_handler(sig, frame):
     """
     Handle SIGINT and SIGTERM signals for clean shutdown.
     """
     logger.info("Received shutdown signal, cleaning up...")
+    for task in TASKS:
+        task.cancel()
     sys.exit(0)
 
 async def main():
@@ -66,6 +113,11 @@ async def main():
     # Create a task for running the MUD server
     mud_server_task = asyncio.create_task(mud_server.run())
     autosave_task = asyncio.create_task(autosave_loop(get_world(), interval=60))
+    power_task = asyncio.create_task(_power_loop())
+    atmos_task = asyncio.create_task(_atmos_loop())
+    random_event_task = asyncio.create_task(_random_event_loop())
+
+    TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task])
 
     # Start the HTTP server
     host = '0.0.0.0'
@@ -84,6 +136,9 @@ async def main():
         await asyncio.gather(
             mud_server_task,
             autosave_task,
+            power_task,
+            atmos_task,
+            random_event_task,
             asyncio.Future()  # Run forever
         )
     except asyncio.CancelledError:
