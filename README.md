@@ -99,6 +99,9 @@ This structure maps directly into the component system discussed in
 Once the server is running, connect to `http://localhost:5000` in your browser.
 Type commands into the prompt to interact with the world. Useful commands include
 `look`, `move <direction>`, `inventory` and `say <message>`.
+You can create shortcuts for long commands with `alias <shortcut> <command>` and remove them with
+`unalias <shortcut>`. Aliases are saved per player and persist between sessions.
+The `who` command lists all players currently online.
 
 ## License
 
