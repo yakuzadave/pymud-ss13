@@ -9,6 +9,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Web-Based Frontend**: Connect through a browser using WebSockets.
 - **NPC Data**: Non-player characters defined in `data/npcs.yaml`.
 - **User-defined Aliases**: Create shortcuts with `alias` and remove them with `unalias`. Aliases persist between sessions.
+- **See Who's Online**: View active players at any time with the `who` command.
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
 - **Admin Event Control**: List and trigger random events using the `event` command.
@@ -98,6 +99,9 @@ This structure maps directly into the component system discussed in
 Once the server is running, connect to `http://localhost:5000` in your browser.
 Type commands into the prompt to interact with the world. Useful commands include
 `look`, `move <direction>`, `inventory` and `say <message>`.
+You can create shortcuts for long commands with `alias <shortcut> <command>` and remove them with
+`unalias <shortcut>`. Aliases are saved per player and persist between sessions.
+The `who` command lists all players currently online.
 
 ## License
 
