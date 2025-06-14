@@ -11,6 +11,7 @@ from .jobs import JobSystem, get_job_system
 from .random_events import RandomEventSystem, get_random_event_system
 from .antagonists import AntagonistSystem, get_antagonist_system
 from .chemistry import ChemistrySystem, get_chemistry_system
+from .disease import DiseaseSystem, get_disease_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -25,6 +26,8 @@ __all__ = [
     "get_antagonist_system",
     "ChemistrySystem",
     "get_chemistry_system",
+    "DiseaseSystem",
+    "get_disease_system",
     "GasMixture",
     "AtmosGrid",
     "PipeNetwork",

@@ -346,3 +346,52 @@
       is_usable: false
       item_type: chemical
 
+- id: bandage
+  name: Sterile Bandage
+  description: >
+    A roll of sterile bandages for treating brute injuries.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You carefully wrap the bandage around the wound.
+      item_type: medical
+      item_properties:
+        heal_type: brute
+        heal_amount: 10
+
+- id: medicine
+  name: Detox Medicine
+  description: >
+    A strong medicine used to counteract toxins.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swallow the bitter-tasting medicine.
+      item_type: medical
+      item_properties:
+        heal_type: toxin
+        heal_amount: 15
+        cures: flu
+
+- id: surgery_kit
+  name: Portable Surgery Kit
+  description: >
+    Tools for performing quick field surgery.
+  location: medbay
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You use the surgical tools with practiced precision.
+      item_type: medical
+      item_properties:
+        heal_type: brute
+        heal_amount: 30
+
