@@ -1,6 +1,7 @@
 
 """Security monitoring and crime management system."""
 
+
 import logging
 import time
 from dataclasses import dataclass, field
@@ -145,12 +146,19 @@ class SecuritySystem:
         publish("evidence_collected", crime_id=crime_id, description=evidence_desc)
         return True
 
-    def arrest(self, player_id: str, duration: float, cell_id: Optional[str] = None) -> Prisoner:
+    # ------------------------------------------------------------------
+    def arrest(
+        self, player_id: str, duration: float, cell_id: Optional[str] = None
+    ) -> Prisoner:
         """Arrest a player and add them to the prisoner database."""
         release_time = time.time() + duration
-        prisoner = Prisoner(player_id=player_id, cell_id=cell_id, release_time=release_time)
+        prisoner = Prisoner(
+            player_id=player_id, cell_id=cell_id, release_time=release_time
+        )
         self.prisoners[player_id] = prisoner
-        publish("player_arrested", player_id=player_id, cell_id=cell_id, duration=duration)
+        publish(
+            "player_arrested", player_id=player_id, cell_id=cell_id, duration=duration
+        )
         logger.info(f"Player {player_id} arrested for {duration} seconds")
         return prisoner
 
@@ -170,6 +178,8 @@ class SecuritySystem:
             self.release(pid)
 
 _SECURITY_SYSTEM = SecuritySystem()
+
+
 
 
 class Camera:
@@ -260,11 +270,12 @@ class SecurityMonitoringSystem:
 
 
 
-_SECURITY_SYSTEM = SecuritySystem()
+
 
 
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
-    return SECURITY_SYSTEM
+    return _SECURITY_SYSTEM
+
 
 

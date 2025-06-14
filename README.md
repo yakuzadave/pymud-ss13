@@ -16,10 +16,9 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Grid Map & Status Overlays**: View a simple station layout with door lock,
   atmosphere, and power indicators via WebSocket updates.
 - **Automatic Subsystems**: Power, atmosphere and random events tick in the background when the server runs.
+- **Cargo System**: Order supplies through vendors and track department inventory.
 - **Away Missions**: Basic shuttle travel and off-station exploration with environmental hazards.
-
 - **Physics System**: Materials react to pressure and temperature with damage cascading to nearby structures.
-
 
 ## Requirements
 
