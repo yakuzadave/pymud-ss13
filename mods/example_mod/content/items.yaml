@@ -1,0 +1,6 @@
+- id: mod_test_item
+  name: Test Item
+  description: Item added by Example Mod
+  components:
+    item:
+      weight: 1
