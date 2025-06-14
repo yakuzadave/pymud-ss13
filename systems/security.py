@@ -169,10 +169,31 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
+_SECURITY_SYSTEM = SecuritySystem()
+
+
+class Camera:
+    """Representation of a security camera."""
 
 
 
     # Monitoring ------------------------------------------------------
+
+class SecurityMonitoringSystem:
+    """Central security monitoring system."""
+
+    def __init__(self) -> None:
+        self.cameras: Dict[str, Camera] = {}
+        self.sensors: Dict[str, MotionSensor] = {}
+        self.access_log: List[Dict[str, Any]] = []
+        self.alerts: List[Dict[str, Any]] = []
+
+        self.enabled = False
+        subscribe("object_moved", self.on_object_moved)
+        subscribe("door_opened", self.on_access_event)
+        subscribe("door_closed", self.on_access_event)
+        logger.info("Security system initialized")
+
 
     # ------------------------------------------------------------------
     def register_camera(self, camera_id: str, location: str) -> None:
@@ -236,6 +257,7 @@ class SecuritySystem:
     def get_access_log(self) -> List[Dict[str, Any]]:
         """Return door access log."""
         return list(self.access_log)
+
 
 
 _SECURITY_SYSTEM = SecuritySystem()
