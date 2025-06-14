@@ -8,6 +8,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Persistent Storage**: Uses YAML for configuration and data files.
 - **Web-Based Frontend**: Connect through a browser using WebSockets.
 - **NPC Data**: Non-player characters defined in `data/npcs.yaml`.
+- **User-defined Aliases**: Create shortcuts with `alias` and remove them with `unalias`. Aliases persist between sessions.
 - **Command History and Dark Mode** support.
 - **Responsive Design** for desktop and mobile.
 - **Admin Event Control**: List and trigger random events using the `event` command.
