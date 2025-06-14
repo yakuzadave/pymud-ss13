@@ -15,6 +15,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Admin Event Control**: List and trigger random events using the `event` command.
 - **Grid Map & Status Overlays**: View a simple station layout with door lock,
   atmosphere, and power indicators via WebSocket updates.
+- **Automatic Subsystems**: Power, atmosphere and random events tick in the background when the server runs.
 
 ## Requirements
 

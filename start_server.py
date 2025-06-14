@@ -15,6 +15,11 @@ from mud_websocket_server import handle_client, active_clients
 from mudpy_interface import MudpyInterface
 import integration
 import engine
+from systems import (
+    get_power_system,
+    get_atmos_system,
+    get_random_event_system,
+)
 
 # Import command modules to ensure handlers are registered
 from commands import basic, movement, inventory, system, interaction
@@ -32,6 +37,9 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Track background tasks to cancel on shutdown
+TASKS: list[asyncio.Task] = []
 
 # Global MudpyInterface instance for proper cleanup
 mudpy_interface = None
@@ -54,11 +62,44 @@ async def static_files(request):
     else:
         return web.Response(status=404, text="File not found")
 
+
+async def _power_task() -> None:
+    """Start and monitor the power system."""
+    system = get_power_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _atmos_task() -> None:
+    """Start and monitor the atmosphere system."""
+    system = get_atmos_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _random_event_task() -> None:
+    """Start and monitor the random event system."""
+    system = get_random_event_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
 def signal_handler(sig, frame):
     """
     Handle SIGINT and SIGTERM signals for clean shutdown.
     """
     logger.info("Received shutdown signal, cleaning up...")
+
+    for task in TASKS:
+        task.cancel()
 
     # Shutdown MUDpy interface
     if mudpy_interface:
@@ -75,6 +116,8 @@ async def on_shutdown(app):
     """Handle graceful shutdown."""
     for ws in active_clients.values():
         await ws.close(code=1001, reason="Server shutdown")
+    for task in TASKS:
+        task.cancel()
 
 async def websocket_handler(request):
     """Handle WebSocket connections."""
@@ -122,6 +165,12 @@ async def main():
     # Add shutdown handler
     app.on_shutdown.append(on_shutdown)
 
+    # Background subsystem tasks
+    power_task = asyncio.create_task(_power_task())
+    atmos_task = asyncio.create_task(_atmos_task())
+    random_event_task = asyncio.create_task(_random_event_task())
+    TASKS.extend([power_task, atmos_task, random_event_task])
+
     # Start the server
     host = '0.0.0.0'
     port = 5000
@@ -135,7 +184,15 @@ async def main():
     await site.start()
 
     # Keep the server running
-    await asyncio.Future()
+    try:
+        await asyncio.gather(
+            power_task,
+            atmos_task,
+            random_event_task,
+            asyncio.Future(),
+        )
+    except asyncio.CancelledError:
+        logger.info("Server tasks cancelled")
 
 if __name__ == "__main__":
     try:
