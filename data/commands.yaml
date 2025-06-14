@@ -311,3 +311,16 @@
   help: |
     Combine two chemicals in your inventory.
     Only chemists are trained to perform these reactions safely.
+- name: research
+  category: Science
+  patterns:
+    - "research {technology}"
+  help: |
+    Conduct research on a technology using accumulated points.
+
+- name: prototype
+  category: Engineering
+  patterns:
+    - "prototype {item} {materials}"
+  help: |
+    Construct a prototype item if technology and materials are available.
