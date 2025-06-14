@@ -349,3 +349,16 @@
   help: >
     Add an evidence note to an existing case.
 
+- name: research
+  category: Science
+  patterns:
+    - "research {technology}"
+  help: |
+    Conduct research on a technology using accumulated points.
+
+- name: prototype
+  category: Engineering
+  patterns:
+    - "prototype {item} {materials}"
+  help: |
+    Construct a prototype item if technology and materials are available.

@@ -115,6 +115,19 @@ You can create shortcuts for long commands with `alias <shortcut> <command>` and
 `unalias <shortcut>`. Aliases are saved per player and persist between sessions.
 The `who` command lists all players currently online.
 
+## Modding
+
+Mods live in the `mods/` directory. Each mod must contain a `mod.yaml` file describing the mod and may include `content` and `scripts` folders. Mods are automatically loaded when the world is initialized. You can also load them manually using `ModManager`:
+
+```python
+from mod_manager import ModManager
+manager = ModManager()
+manager.discover()
+manager.load_all()
+```
+
+The included `example_mod` demonstrates adding a new item.
+
 ## License
 
 This project is released under the [MIT License](LICENSE).
