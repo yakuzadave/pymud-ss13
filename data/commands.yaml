@@ -311,6 +311,44 @@
   help: |
     Combine two chemicals in your inventory.
     Only chemists are trained to perform these reactions safely.
+
+- name: restrain
+  category: Security
+  patterns:
+    - "restrain {target}"
+  help: >
+    Attempt to restrain a suspect using restraints.
+
+- name: report
+  category: Security
+  patterns:
+    - "report {description}"
+    - "report {description} suspect {suspect}"
+  help: >
+    File a crime report describing an incident.
+
+- name: arrest
+  category: Security
+  patterns:
+    - "arrest {target}"
+    - "arrest {target} for {duration}"
+  help: >
+    Arrest a player and send them to the brig for a time.
+
+- name: release
+  category: Security
+  patterns:
+    - "release {target}"
+  help: >
+    Release a prisoner from the brig.
+
+- name: evidence
+  category: Security
+  patterns:
+    - "evidence {crime_id} {note}"
+  help: >
+    Add an evidence note to an existing case.
+
 - name: research
   category: Science
   patterns:
