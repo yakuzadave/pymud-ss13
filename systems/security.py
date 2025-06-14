@@ -54,14 +54,22 @@ class MotionSensor:
 
 
 class SecuritySystem:
+    """Central security monitoring and crime management system."""
+
+    def __init__(self) -> None:
+        # Crime/prisoner tracking
+
     """Central system for crime tracking and security monitoring."""
 
     def __init__(self) -> None:
         # Crime/prison management
+
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
 
+        # Surveillance
+=======
         # Monitoring infrastructure
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
@@ -77,6 +85,7 @@ class SecuritySystem:
     # ------------------------------------------------------------------
     # Crime database
     # ------------------------------------------------------------------
+    # Crime tracking
     def report_crime(
         self,
         reporter_id: str,
@@ -138,6 +147,8 @@ class SecuritySystem:
             self.release(pid)
 
     # ------------------------------------------------------------------
+    # Surveillance
+
     # Monitoring infrastructure
     # ------------------------------------------------------------------
     def register_camera(self, camera_id: str, location: str) -> None:
