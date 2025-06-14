@@ -46,6 +46,7 @@ This document outlines a structured approach for implementing text-based version
    - Create events such as power outages or hull breaches that players must respond to via commands.
 3. **Expand Social Mechanics**
    - Build chat modes (local, global, radio) to mimic SS13 communication channels.
+   - Implement a communication network with intercoms and PDAs for private messages.
    - Include systems for player conflict and cooperation, such as arresting or healing other characters.
 4. **Emergency Scenarios**
    - Script random events that challenge players, from simple fires to complex traitor objectives.
