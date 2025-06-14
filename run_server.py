@@ -18,16 +18,10 @@ from systems import (
     get_power_system,
     get_atmos_system,
     get_random_event_system,
+    get_security_system,
 )
 
 
-from systems import (
-    get_power_system,
-    get_atmos_system,
-    get_random_event_system,
-)
-
-from systems import get_random_event_system
 
 
 # Module logger
@@ -91,34 +85,18 @@ async def _random_event_loop():
     except asyncio.CancelledError:
         res.stop()
         raise
-async def _power_task() -> None:
-    """Start and monitor the power system."""
-    system = get_power_system()
-    system.start()
+
+async def _security_loop():
+    """Run the security system update loop."""
+    sec = get_security_system()
+    sec.start()
     try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
-
-
-async def _atmos_task() -> None:
-    """Start and monitor the atmosphere system."""
-    system = get_atmos_system()
-    system.start()
-    try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
-
-
-async def _random_event_task() -> None:
-    """Start and monitor the random event system."""
-    system = get_random_event_system()
-    system.start()
-    try:
-        await asyncio.Event().wait()
-    finally:
-        system.stop()
+        while True:
+            await asyncio.sleep(1)
+            sec.update()
+    except asyncio.CancelledError:
+        sec.stop()
+        raise
 
 def signal_handler(sig, frame):
     """
@@ -156,10 +134,11 @@ async def main():
     power_task = asyncio.create_task(_power_loop())
     atmos_task = asyncio.create_task(_atmos_loop())
     random_event_task = asyncio.create_task(_random_event_loop())
+    security_task = asyncio.create_task(_security_loop())
 
 
 
-    TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task])
+    TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task, security_task])
 
     # Start the HTTP server
     host = '0.0.0.0'
@@ -182,6 +161,7 @@ async def main():
             power_task,
             atmos_task,
             random_event_task,
+            security_task,
             asyncio.Future()  # Run forever
         )
     except asyncio.CancelledError:
