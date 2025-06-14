@@ -57,9 +57,17 @@ class MudpyIntegration:
         os.makedirs(os.path.join(data_dir, "players"), exist_ok=True)
         os.makedirs(os.path.join(data_dir, "world"), exist_ok=True)
 
-        # Load rooms
-        if os.path.exists(os.path.join(data_dir, "rooms.yaml")):
-            self.world.load_rooms("rooms.yaml")
+        # Load rooms - allow alternative layouts via STATION_LAYOUT env var
+        rooms_file = os.environ.get("STATION_LAYOUT", "rooms.yaml")
+        rooms_path = os.path.join(data_dir, rooms_file)
+        if os.path.exists(rooms_path):
+            self.world.load_rooms(rooms_file)
+        else:
+            if rooms_file != "rooms.yaml":
+                logger.warning(f"Rooms file {rooms_file} not found; falling back to rooms.yaml")
+            default_path = os.path.join(data_dir, "rooms.yaml")
+            if os.path.exists(default_path):
+                self.world.load_rooms("rooms.yaml")
 
         # Load items
         if os.path.exists(os.path.join(data_dir, "items.yaml")):

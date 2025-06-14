@@ -55,6 +55,16 @@ from the server. Rooms are shown in a simple grid with icons indicating locked
 doors, atmospheric hazards, and power loss. These overlays update in real time
 based on WebSocket events.
 
+To load a different station layout, set the `STATION_LAYOUT` environment
+variable to an alternate rooms YAML file before starting the server:
+
+```bash
+STATION_LAYOUT=rooms_beta.yaml python run_server.py
+```
+
+The default file `rooms.yaml` holds the Alpha layout while `rooms_beta.yaml`
+provides a smaller example map.
+
 
 ## Running Tests
 
