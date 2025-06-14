@@ -64,7 +64,8 @@ STATION_LAYOUT=rooms_beta.yaml python run_server.py
 ```
 
 The default file `rooms.yaml` holds the Alpha layout while `rooms_beta.yaml`
-provides a smaller example map.
+provides a smaller example map. The Alpha map now includes a small network
+of maintenance tunnels linking engineering, medbay, cargo and security.
 
 
 ## Running Tests
