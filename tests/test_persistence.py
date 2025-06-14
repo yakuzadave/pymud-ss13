@@ -1,5 +1,4 @@
 import asyncio
-import asyncio
 import sys
 import os
 import yaml
