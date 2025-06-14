@@ -20,6 +20,7 @@ from systems import (
     get_random_event_system,
     get_security_system,
 )
+from system_loops import run_update_loop, run_forever_loop
 
 
 
@@ -50,53 +51,6 @@ async def static_files(request):
 
 
 
-async def _power_loop():
-    """Run the power system update loop."""
-    ps = get_power_system()
-    ps.start()
-    try:
-        while True:
-            await asyncio.sleep(1)
-            ps.update()
-    except asyncio.CancelledError:
-        ps.stop()
-        raise
-
-
-async def _atmos_loop():
-    """Run the atmosphere system update loop."""
-    atmos = get_atmos_system()
-    atmos.start()
-    try:
-        while True:
-            await asyncio.sleep(1)
-            atmos.update()
-    except asyncio.CancelledError:
-        atmos.stop()
-        raise
-
-
-async def _random_event_loop():
-    """Wrapper for the random event system."""
-    res = get_random_event_system()
-    res.start()
-    try:
-        await asyncio.Event().wait()
-    except asyncio.CancelledError:
-        res.stop()
-        raise
-
-async def _security_loop():
-    """Run the security system update loop."""
-    sec = get_security_system()
-    sec.start()
-    try:
-        while True:
-            await asyncio.sleep(1)
-            sec.update()
-    except asyncio.CancelledError:
-        sec.stop()
-        raise
 
 def signal_handler(sig, frame):
     """
@@ -131,10 +85,10 @@ async def main():
     mud_server_task = asyncio.create_task(mud_server.run())
     autosave_task = asyncio.create_task(autosave_loop(get_world(), interval=60))
 
-    power_task = asyncio.create_task(_power_loop())
-    atmos_task = asyncio.create_task(_atmos_loop())
-    random_event_task = asyncio.create_task(_random_event_loop())
-    security_task = asyncio.create_task(_security_loop())
+    power_task = asyncio.create_task(run_update_loop(get_power_system))
+    atmos_task = asyncio.create_task(run_update_loop(get_atmos_system))
+    random_event_task = asyncio.create_task(run_forever_loop(get_random_event_system))
+    security_task = asyncio.create_task(run_update_loop(get_security_system))
 
 
 
@@ -151,7 +105,6 @@ async def main():
     await runner.setup()
     site = web.TCPSite(runner, host, port)
     await site.start()
-    get_random_event_system().start()
 
     # Keep the server running
     try:
