@@ -14,6 +14,11 @@ from aiohttp import web
 from mud_server import create_mud_server
 from world import get_world
 from persistence import autosave_loop
+from systems import (
+    get_power_system,
+    get_atmos_system,
+    get_random_event_system,
+)
 
 from systems import (
     get_power_system,
