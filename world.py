@@ -40,6 +40,11 @@ class GameObject:
         self.components[comp_name] = comp
         if hasattr(comp, 'owner'):
             comp.owner = self
+        if hasattr(comp, 'on_added'):
+            try:
+                comp.on_added()
+            except Exception as e:
+                logger.warning(f"on_added for {comp_name} on {self.id} failed: {e}")
         logger.debug(f"Added {comp_name} component to {self.id}")
 
     def move_to(self, new_location: str) -> None:

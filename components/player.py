@@ -307,6 +307,10 @@ class PlayerComponent:
             self.update_stat("health", -1.5)
             messages.append("The extreme heat is damaging.")
 
+        if "electrical" in hazards:
+            self.update_stat("health", -5.0)
+            messages.append("Sparks arc across your body, shocking you.")
+
         # Apply any other hazard effects
         if "toxic_gas" in hazards:
             self.update_stat("health", -2.0)

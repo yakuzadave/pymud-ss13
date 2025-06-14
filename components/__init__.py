@@ -10,7 +10,10 @@ from .npc import NPCComponent
 from .container import ContainerComponent
 from systems.chemical_reactions import ChemicalContainerComponent
 from .access import AccessControlComponent
+
+from .power_consumer import PowerConsumerComponent
 from .structure import StructureComponent
+
 
 __all__ = [
     "RoomComponent",
@@ -21,6 +24,7 @@ __all__ = [
     "ContainerComponent",
     "ChemicalContainerComponent",
     "AccessControlComponent",
+    "PowerConsumerComponent",
     "StructureComponent",
 ]
 
@@ -34,5 +38,6 @@ COMPONENT_REGISTRY = {
     "container": ContainerComponent,
     "chemical_container": ChemicalContainerComponent,
     "access": AccessControlComponent,
+    "power_consumer": PowerConsumerComponent,
     "structure": StructureComponent,
 }

@@ -129,6 +129,8 @@ class PowerSystem:
         self.generators: Dict[str, Dict[str, Any]] = {}
         self.solar_panels: Dict[str, Dict[str, Any]] = {}
         self.batteries: Dict[str, Dict[str, Any]] = {}
+        self.smes_units: Dict[str, Dict[str, Any]] = {}
+        self.consumers: Dict[str, Dict[str, Any]] = {}
 
         # Register event handlers
         subscribe("generator_toggle", self.on_generator_toggle)
@@ -206,6 +208,37 @@ class PowerSystem:
         }
         logger.debug(f"Registered solar panel {panel_id} for grid {grid_id}")
 
+    def register_smes(self, smes_id: str, grid_id: str, capacity: float = 100.0, charge: float = 0.0,
+                      input_rate: float = 20.0, output_rate: float = 20.0) -> None:
+        """Register an SMES unit for energy storage."""
+        self.smes_units[smes_id] = {
+            "grid_id": grid_id,
+            "capacity": capacity,
+            "charge": charge,
+            "input_rate": input_rate,
+            "output_rate": output_rate,
+        }
+        logger.debug(f"Registered SMES {smes_id} for grid {grid_id}")
+
+    def register_consumer(self, consumer_id: str, grid_id: str, load: float, active: bool = True) -> None:
+        """Register a power consumer device."""
+        self.consumers[consumer_id] = {
+            "grid_id": grid_id,
+            "load": load,
+            "active": active,
+        }
+
+    def update_consumer_status(self, consumer_id: str, active: bool) -> None:
+        if consumer_id in self.consumers:
+            self.consumers[consumer_id]["active"] = active
+
+    def update_consumer_load(self, consumer_id: str, load: float) -> None:
+        if consumer_id in self.consumers:
+            self.consumers[consumer_id]["load"] = load
+
+    def remove_consumer(self, consumer_id: str) -> None:
+        self.consumers.pop(consumer_id, None)
+
     def start(self) -> None:
         """
         Start the power system.
@@ -238,18 +271,15 @@ class PowerSystem:
 
         # Update each grid
         for grid_id, grid in self.grids.items():
+            load = self.get_grid_load(grid_id)
 
-            # Calculate total power available from generators
             total_power = 0.0
 
-            # Check generators
             for gen_id, gen_data in self.generators.items():
                 if gen_data["grid_id"] == grid_id and gen_data["is_active"]:
-                    # Generators consume fuel
                     if gen_data["fuel_level"] > 0:
                         gen_data["fuel_level"] -= random.uniform(0.5, 1.5)
                         gen_data["fuel_level"] = max(0, gen_data["fuel_level"])
-
                         if gen_data["fuel_level"] <= 0:
                             gen_data["is_active"] = False
                             logger.info(f"Generator {gen_id} ran out of fuel")
@@ -257,15 +287,25 @@ class PowerSystem:
                         else:
                             total_power += gen_data["capacity"]
 
-            # Check solar panels
             for panel_id, panel_data in self.solar_panels.items():
                 if panel_data["grid_id"] == grid_id and panel_data["is_active"]:
                     total_power += panel_data["efficiency"] * 0.5
 
-            # Set grid capacity based on available power
-            grid.capacity = total_power
+            # SMES discharge if needed
+            for smes_id, smes in self.smes_units.items():
+                if smes["grid_id"] == grid_id:
+                    if total_power < load and smes["charge"] > 0:
+                        needed = min(load - total_power, smes["output_rate"], smes["charge"])
+                        smes["charge"] -= needed
+                        total_power += needed
+                    elif total_power > load and smes["charge"] < smes["capacity"]:
+                        surplus = min(total_power - load, smes["input_rate"], smes["capacity"] - smes["charge"])
+                        smes["charge"] += surplus
+                        total_power -= surplus
 
-            # Update grid status based on power availability and load
+            grid.capacity = total_power
+            grid.update_load(load)
+
             if total_power <= 0:
                 # No power available, check for batteries
                 battery_power = self._activate_backup_batteries(grid_id)
@@ -277,16 +317,15 @@ class PowerSystem:
                 elif grid.is_powered:
                     grid.power_off()
             elif grid.is_overloaded():
-                # Grid is overloaded, trigger a power failure
                 grid.power_off()
-                logger.warning(f"Power grid {grid_id} overloaded (load: {grid.current_load}%, capacity: {grid.capacity}%)")
+                logger.warning(
+                    f"Power grid {grid_id} overloaded (load: {grid.current_load}%, capacity: {grid.capacity}%)"
+                )
                 publish("grid_overload", grid_id=grid_id, load=grid.current_load, capacity=grid.capacity)
+                self.cause_electrical_hazard(grid_id)
             elif not grid.is_powered:
                 # Power is available and grid is not overloaded, restore power
                 grid.power_on()
-
-            # Generate some random fluctuations in power load
-            grid.update_load(grid.current_load + random.uniform(-5, 5))
 
             publish("power_status_update", grid_id=grid_id, is_powered=grid.is_powered,
                    load=grid.current_load, capacity=grid.capacity)
@@ -335,6 +374,7 @@ class PowerSystem:
         if grid_id in self.grids:
             grid = self.grids[grid_id]
             grid.power_off()
+            self.cause_electrical_hazard(grid_id)
 
             # Deactivate power sources
             for gen_id, gen_data in self.generators.items():
@@ -427,6 +467,18 @@ class PowerSystem:
                 if grid.is_powered:
                     grid.power_off()
                 logger.info(f"Grid breaker opened for {grid_id}, power cut")
+
+    def get_grid_load(self, grid_id: str) -> float:
+        return sum(
+            data["load"]
+            for data in self.consumers.values()
+            if data["grid_id"] == grid_id and data["active"]
+        )
+
+    def cause_electrical_hazard(self, grid_id: str) -> None:
+        if grid_id in self.grids:
+            rooms = list(self.grids[grid_id].rooms)
+            publish("electrical_hazard", grid_id=grid_id, affected_rooms=rooms)
 
 # Create a global power system instance
 POWER_SYSTEM = PowerSystem()
