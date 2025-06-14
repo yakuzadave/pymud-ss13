@@ -14,6 +14,7 @@ from aiohttp import web
 from mud_server import create_mud_server
 from world import get_world
 from persistence import autosave_loop
+from systems import get_random_event_system
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -78,6 +79,7 @@ async def main():
     await runner.setup()
     site = web.TCPSite(runner, host, port)
     await site.start()
+    get_random_event_system().start()
 
     # Keep the server running
     try:
@@ -89,6 +91,7 @@ async def main():
     except asyncio.CancelledError:
         logger.info("Server tasks cancelled")
     finally:
+        get_random_event_system().stop()
         await runner.cleanup()
 
 if __name__ == "__main__":
