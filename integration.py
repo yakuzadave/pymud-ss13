@@ -47,24 +47,36 @@ class MudpyIntegration:
         """
         Initialize the world with game data from YAML files.
         """
+        data_dir = self.world.data_dir
+
         # Create the data directory if it doesn't exist
-        os.makedirs("data", exist_ok=True)
+        os.makedirs(data_dir, exist_ok=True)
 
         # Create player-specific and world-specific folders
-        os.makedirs("data/players", exist_ok=True)
-        os.makedirs("data/world", exist_ok=True)
+        os.makedirs(os.path.join(data_dir, "players"), exist_ok=True)
+        os.makedirs(os.path.join(data_dir, "world"), exist_ok=True)
 
         # Load rooms
-        if os.path.exists("data/rooms.yaml"):
+        if os.path.exists(os.path.join(data_dir, "rooms.yaml")):
             self.world.load_rooms("rooms.yaml")
 
         # Load items
-        if os.path.exists("data/items.yaml"):
+        if os.path.exists(os.path.join(data_dir, "items.yaml")):
             self.world.load_items("items.yaml")
 
         # Note: In a real implementation, you'd also load players, NPCs, etc.
-        if os.path.exists("data/npcs.yaml"):
+        if os.path.exists(os.path.join(data_dir, "npcs.yaml")):
             self.world.load_npcs("npcs.yaml")
+
+        # Load any player files if present
+        if os.path.exists(os.path.join(data_dir, "players.yaml")):
+            self.world.load_from_file("players.yaml")
+
+        players_dir = os.path.join(data_dir, "players")
+        if os.path.isdir(players_dir):
+            for fname in os.listdir(players_dir):
+                if fname.endswith(".yaml"):
+                    self.world.load_from_file(os.path.join("players", fname))
 
         logger.info("World initialization complete")
 
