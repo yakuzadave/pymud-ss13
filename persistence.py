@@ -10,6 +10,7 @@ from components.door import DoorComponent
 from components.item import ItemComponent
 from components.npc import NPCComponent
 from world import GameObject, World
+import inspect
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +122,62 @@ def load_npcs(path: str, world) -> int:
         except Exception as e:
             logger.error(f"Error loading NPC data {npc_data}: {e}")
     logger.info(f"Loaded {count} NPCs from {path}")
+    return count
+
+
+def load_players(directory: str, world: World) -> int:
+    """Load player objects from individual YAML files in ``directory``."""
+    if not os.path.isdir(directory):
+        logger.debug(f"Player directory not found: {directory}")
+        return 0
+
+    count = 0
+    for filename in sorted(os.listdir(directory)):
+        if not filename.endswith(".yaml"):
+            continue
+        path = os.path.join(directory, filename)
+        try:
+            with open(path, "r") as f:
+                data = yaml.safe_load(f)
+            if not isinstance(data, dict):
+                logger.error(f"Expected dict in {path}, got {type(data)}")
+                continue
+
+            obj = GameObject(
+                id=data.get("id"),
+                name=data.get("name", ""),
+                description=data.get("description", ""),
+                location=data.get("location"),
+            )
+
+            if "components" in data:
+                from components import COMPONENT_REGISTRY
+                for comp_name, comp_data in data["components"].items():
+                    comp_class = COMPONENT_REGISTRY.get(comp_name)
+                    if comp_class and isinstance(comp_data, dict):
+                        params = inspect.signature(comp_class.__init__).parameters
+                        kwargs = {
+                            k: v for k, v in comp_data.items() if k in params and k != "self"
+                        }
+                        try:
+                            comp_instance = comp_class(**kwargs)
+                        except Exception as e:
+                            logger.warning(
+                                f"Failed to instantiate component {comp_name} for {obj.id}: {e}"
+                            )
+                            continue
+                        obj.add_component(comp_name, comp_instance)
+                    else:
+                        obj.components[comp_name] = comp_data
+
+            world.register(obj)
+            count += 1
+        except FileNotFoundError:
+            logger.debug(f"Player file not found: {path}")
+        except Exception as e:
+            logger.error(f"Error loading player file {path}: {e}")
+
+    logger.info(f"Loaded {count} players from {directory}")
     return count
 
 
