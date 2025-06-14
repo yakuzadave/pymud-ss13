@@ -1,3 +1,6 @@
+
+"""Security and crime management system."""
+
 import logging
 import time
 from dataclasses import dataclass, field
@@ -52,12 +55,23 @@ class MotionSensor:
 
 
 class SecuritySystem:
-    """Tracks crimes, prisoners and security alerts."""
+    """Central security monitoring and crime management system."""
 
     def __init__(self) -> None:
+        # Crime/prisoner tracking
+
+    """Central system for crime tracking and security monitoring."""
+
+    def __init__(self) -> None:
+        # Crime/prison management
+
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
+
+
+        # Surveillance
+        # Monitoring infrastructure
 
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
@@ -70,7 +84,12 @@ class SecuritySystem:
         subscribe("door_closed", self.on_access_event)
         logger.info("Security system initialized")
 
+
+
     # ------------------------------------------------------------------
+    # Crime database
+    # ------------------------------------------------------------------
+    # Crime tracking
     def report_crime(
         self,
         reporter_id: str,
@@ -99,7 +118,6 @@ class SecuritySystem:
         logger.info(f"Crime reported {cid} by {reporter_id}")
         return record
 
-    # ------------------------------------------------------------------
     def add_evidence(self, crime_id: int, evidence_desc: str) -> bool:
         record = self.crimes.get(crime_id)
         if not record:
@@ -108,7 +126,6 @@ class SecuritySystem:
         publish("evidence_collected", crime_id=crime_id, description=evidence_desc)
         return True
 
-    # ------------------------------------------------------------------
     def arrest(self, player_id: str, duration: float, cell_id: Optional[str] = None) -> Prisoner:
         """Arrest a player and add them to the prisoner database."""
         release_time = time.time() + duration
@@ -118,7 +135,6 @@ class SecuritySystem:
         logger.info(f"Player {player_id} arrested for {duration} seconds")
         return prisoner
 
-    # ------------------------------------------------------------------
     def release(self, player_id: str) -> bool:
         prisoner = self.prisoners.pop(player_id, None)
         if not prisoner:
@@ -127,7 +143,6 @@ class SecuritySystem:
         logger.info(f"Player {player_id} released from prison")
         return True
 
-    # ------------------------------------------------------------------
     def check_sentence_expirations(self) -> None:
         """Release prisoners whose sentences have elapsed."""
         now = time.time()
@@ -135,7 +150,14 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
+
     # Monitoring ------------------------------------------------------
+
+    # ------------------------------------------------------------------
+    # Surveillance
+
+    # Monitoring infrastructure
+    # ------------------------------------------------------------------
     def register_camera(self, camera_id: str, location: str) -> None:
         self.cameras[camera_id] = Camera(camera_id, location)
         logger.debug(f"Registered camera {camera_id} at {location}")
@@ -188,7 +210,6 @@ class SecuritySystem:
 
     def get_access_log(self) -> List[Dict[str, Any]]:
         return list(self.access_log)
-
 
 _SECURITY_SYSTEM = SecuritySystem()
 
