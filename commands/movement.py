@@ -6,6 +6,7 @@ This module provides handlers for movement commands like go, sprint, etc.
 import logging
 from typing import Optional, Dict, Any
 from engine import register
+from world import get_world
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -79,6 +80,10 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
 
     # Move the player
     previous_location = current_location
+    world = get_world()
+    player = world.get_object(f"player_{client_id}")
+    if player and player.get_component("player"):
+        player.get_component("player").move_to(target_location)
     interface.set_player_location(client_id, target_location)
 
     # Publish the movement event

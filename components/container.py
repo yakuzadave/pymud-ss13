@@ -3,6 +3,7 @@
 from typing import List, Optional, Dict, Any
 import logging
 import os
+import threading
 from events import publish
 from world import get_world
 
@@ -15,6 +16,7 @@ class ContainerComponent:
         self.owner = None
         self.capacity = capacity
         self.items: List[str] = items or []
+        self._lock = threading.Lock()
 
     def _persist(self) -> None:
         """Persist the owning object to disk."""
@@ -30,21 +32,24 @@ class ContainerComponent:
 
     def add_item(self, item_id: str) -> bool:
         """Add an item to the container, respecting capacity."""
-        if len(self.items) >= self.capacity or item_id in self.items:
-            return False
-        self.items.append(item_id)
+        with self._lock:
+            if len(self.items) >= self.capacity or item_id in self.items:
+                return False
+            self.items.append(item_id)
         publish("container_item_added", container_id=self.owner.id if self.owner else None, item_id=item_id)
         self._persist()
         return True
 
     def remove_item(self, item_id: str) -> bool:
         """Remove an item from the container."""
-        if item_id in self.items:
-            self.items.remove(item_id)
-            publish("container_item_removed", container_id=self.owner.id if self.owner else None, item_id=item_id)
-            self._persist()
-            return True
-        return False
+        with self._lock:
+            if item_id in self.items:
+                self.items.remove(item_id)
+            else:
+                return False
+        publish("container_item_removed", container_id=self.owner.id if self.owner else None, item_id=item_id)
+        self._persist()
+        return True
 
     def to_dict(self) -> Dict[str, Any]:
         return {"capacity": self.capacity, "items": self.items}
