@@ -133,3 +133,22 @@ def cmd_event(interface, client_id, args):
             return f"Unknown event: {event_id}"
     else:
         return f"Unknown event command '{cmd}'."
+
+
+@register("who")
+def cmd_who(interface, client_id, args=None):
+    """Return a list of currently connected players."""
+    sessions = getattr(interface, "client_sessions", {})
+    if not sessions:
+        return "No players are currently online."
+
+    names = []
+    for session in sessions.values():
+        name = session.get("character") or session.get("player_name")
+        if name:
+            names.append(name)
+
+    if not names:
+        return "No players are currently online."
+
+    return "Players online: " + ", ".join(sorted(names))
