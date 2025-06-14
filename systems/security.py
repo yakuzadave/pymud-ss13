@@ -105,7 +105,8 @@ class SecuritySystem:
 
 
 _SECURITY_SYSTEM = SecuritySystem()
-=======
+
+
 class Camera:
     """Representation of a security camera."""
 
@@ -125,7 +126,7 @@ class MotionSensor:
     active: bool = True
 
 
-class SecuritySystem:
+class SecurityMonitoringSystem:
     """Central security monitoring system."""
 
     def __init__(self) -> None:
@@ -186,9 +187,6 @@ class SecuritySystem:
 
     def get_access_log(self) -> List[Dict[str, Any]]:
         return list(self.access_log)
-
-
-SECURITY_SYSTEM = SecuritySystem()
 
 
 def get_security_system() -> SecuritySystem:
