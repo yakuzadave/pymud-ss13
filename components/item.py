@@ -126,6 +126,27 @@ class ItemComponent:
                     return f"The {self.owner.name} is empty."
                 self.item_properties["doses_remaining"] = doses - 1
 
+        # Diagnostic scanners provide detailed health information
+        elif self.item_type == "diagnostic":
+            from world import get_world
+
+            world_instance = get_world()
+            player = world_instance.get_object(player_id)
+            if player:
+                comp = player.get_component("player")
+                if comp:
+                    status = []
+                    for part, damage in comp.body_parts.items():
+                        for dtype, val in damage.items():
+                            if val > 0:
+                                status.append(f"{part} {dtype}: {val}")
+                    if comp.diseases:
+                        status.append("Diseases: " + ", ".join(comp.diseases))
+                    if status:
+                        return "; ".join(status)
+                    else:
+                        return "No issues detected."
+
         # Otherwise use the default behavior
         publish(
             "item_used",
@@ -161,6 +182,8 @@ class ItemComponent:
             description += f"Access level: {access_level}"
         elif self.item_type == "medical":
             description += f"It's a medical item. It might have healing properties."
+        elif self.item_type == "diagnostic":
+            description += "A medical scanner capable of detailed health analysis."
 
         # Add additional property information
         if "durability" in self.item_properties:

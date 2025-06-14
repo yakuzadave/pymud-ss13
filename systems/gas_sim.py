@@ -18,7 +18,12 @@ class GasMixture:
     pressure: float = 101.3
     temperature: float = 20.0
     composition: Dict[str, float] = field(
-        default_factory=lambda: {"oxygen": 21.0, "nitrogen": 78.0, "co2": 0.04}
+        default_factory=lambda: {
+            "oxygen": 21.0,
+            "nitrogen": 78.0,
+            "co2": 0.04,
+            "smoke": 0.0,
+        }
     )
 
     def copy(self) -> "GasMixture":
@@ -27,6 +32,16 @@ class GasMixture:
             temperature=self.temperature,
             composition=dict(self.composition),
         )
+
+    def add_gas(self, gas: str, amount: float) -> None:
+        self.composition[gas] = self.composition.get(gas, 0.0) + amount
+
+    def remove_gas(self, gas: str, amount: float) -> float:
+        current = self.composition.get(gas, 0.0)
+        removed = min(current, amount)
+        if removed > 0:
+            self.composition[gas] = current - removed
+        return removed
 
     def mix(self, other: "GasMixture", ratio: float) -> None:
         """Mix another mixture into this one."""
@@ -105,6 +120,20 @@ class AtmosGrid:
             ratio = mix.pressure / total
             tile.gas.mix(mix, ratio)
             tile.gas.pressure = total
+
+    def explosive_decompress(self, src: Tuple[int, int], dst: Tuple[int, int]) -> float:
+        """Instantly equalize pressure between two tiles and return pressure wave magnitude."""
+        s = self.get_tile(*src)
+        d = self.get_tile(*dst)
+        if not s or not d:
+            return 0.0
+        diff = s.gas.pressure - d.gas.pressure
+        if abs(diff) < 20:
+            return 0.0
+        avg = (s.gas.pressure + d.gas.pressure) / 2
+        s.gas.pressure = avg
+        d.gas.pressure = avg
+        return abs(diff)
 
 
 @dataclass
