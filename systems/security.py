@@ -1,3 +1,4 @@
+
 """Security and crime management system."""
 
 import logging
@@ -68,9 +69,10 @@ class SecuritySystem:
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
 
+
         # Surveillance
-=======
         # Monitoring infrastructure
+
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
         self.access_log: List[Dict[str, Any]] = []
@@ -81,6 +83,8 @@ class SecuritySystem:
         subscribe("door_opened", self.on_access_event)
         subscribe("door_closed", self.on_access_event)
         logger.info("Security system initialized")
+
+
 
     # ------------------------------------------------------------------
     # Crime database
@@ -146,6 +150,9 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
+
+    # Monitoring ------------------------------------------------------
+
     # ------------------------------------------------------------------
     # Surveillance
 
@@ -169,7 +176,13 @@ class SecuritySystem:
         self.enabled = False
         logger.info("Security system stopped")
 
-    def on_object_moved(self, object_id: str, from_location: str | None, to_location: str | None, **_: Any) -> None:
+    def on_object_moved(
+        self,
+        object_id: str,
+        from_location: str | None,
+        to_location: str | None,
+        **_: Any,
+    ) -> None:
         if not to_location:
             return
         for sensor in self.sensors.values():

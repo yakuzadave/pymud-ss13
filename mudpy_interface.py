@@ -989,6 +989,13 @@ Biometric scan complete:
             return self.world['items'][item_id].get('name')
         return None
 
+    def get_exits_from_room(self, room_id):
+        """Return exits dictionary for a room."""
+        room = self.world['rooms'].get(room_id)
+        if room:
+            return room.get('exits', {})
+        return {}
+
     def get_player_location(self, client_id):
         """
         Get the location of a player.
