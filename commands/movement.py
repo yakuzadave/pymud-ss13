@@ -69,6 +69,14 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
     # Get target location
     target_location = exits[direction]
 
+    # Check for required items in the target room
+    target_room = interface.world['rooms'].get(target_location, {})
+    if 'requires' in target_room:
+        inventory = interface.player_inventories.get(client_id, [])
+        for required_item, message in target_room['requires'].items():
+            if required_item not in inventory:
+                return message
+
     # Check for locked doors or other barriers
     door_is_locked = False  # This would be checked by calling interface.is_door_locked(current_location, direction)
     if door_is_locked:

@@ -61,6 +61,14 @@ Install pytest and run tests using:
 pytest
 ```
 
+Automated gameplay scenarios are located in `tests/test_ai_gameplay.py` and
+use simple AI players to run through common interactions. Performance
+benchmarks can be executed with:
+
+```bash
+pytest tests/test_performance.py --benchmark-only
+```
+
 
 ## Random Events
 
