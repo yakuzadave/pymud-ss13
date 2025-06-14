@@ -18,7 +18,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 
 ## Requirements
 
-- Python 3.6+
+- Python 3.11+
 - Git
 - WebSockets library for Python
 - MUDpy
