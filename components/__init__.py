@@ -13,6 +13,7 @@ from .access import AccessControlComponent
 
 from .power_consumer import PowerConsumerComponent
 from .structure import StructureComponent
+from .ai import AIComponent, CyborgComponent
 
 
 __all__ = [
@@ -26,6 +27,8 @@ __all__ = [
     "AccessControlComponent",
     "PowerConsumerComponent",
     "StructureComponent",
+    "AIComponent",
+    "CyborgComponent",
 ]
 
 # Mapping of component names in YAML to classes
@@ -40,4 +43,6 @@ COMPONENT_REGISTRY = {
     "access": AccessControlComponent,
     "power_consumer": PowerConsumerComponent,
     "structure": StructureComponent,
+    "ai": AIComponent,
+    "cyborg": CyborgComponent,
 }
