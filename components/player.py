@@ -231,6 +231,38 @@ class PlayerComponent:
     def apply_environmental_effects(
         self, room_atmosphere: Dict[str, float], hazards: List[str]
     ) -> List[str]:
+            logger.debug(f"Updated {self.owner.id}'s {stat_name} from {old_value} to {self.stats[stat_name]}")
+            publish("stat_changed", player_id=self.owner.id, stat=stat_name, old_value=old_value, new_value=self.stats[stat_name])
+
+    def breathe(self, room_comp: "RoomComponent", amount: float = 0.1) -> None:
+        """Simulate the player breathing in a room.
+
+        Oxygen is removed from the room atmosphere and converted to CO2.
+        The player's oxygen stat is adjusted based on the remaining oxygen
+        percentage in the room.
+
+        Args:
+            room_comp: The room component representing the current location.
+            amount: Amount of oxygen consumed each tick.
+        """
+        atmos = getattr(room_comp, "atmosphere", None)
+        if atmos is None and hasattr(room_comp, "gas"):
+            atmos = room_comp.gas.composition
+        if atmos is None:
+            return
+        available = atmos.get("oxygen", 0.0)
+        consumed = min(amount, available)
+        atmos["oxygen"] = max(0.0, available - consumed)
+        atmos["co2"] = atmos.get("co2", 0.0) + consumed
+
+        if atmos.get("oxygen", 21.0) < 10.0:
+            self.update_stat("oxygen", -1.0)
+        else:
+            if self.stats.get("oxygen", 0) < 100.0:
+                self.update_stat("oxygen", 0.5)
+
+    def apply_environmental_effects(self, room_atmosphere: Dict[str, float], hazards: List[str]) -> List[str]:
+
         """
         Apply environmental effects to the player based on room conditions.
 
