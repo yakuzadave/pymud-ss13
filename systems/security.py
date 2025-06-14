@@ -57,18 +57,11 @@ class MotionSensor:
 
 
 class SecuritySystem:
-
-    """Tracks crimes, prisoners and performs security monitoring."""
-
     """Central security monitoring and crime management system."""
 
     def __init__(self) -> None:
-        # Crime/prisoner tracking
-
-    """Central system for crime tracking and security monitoring."""
-
-    def __init__(self) -> None:
         # Crime/prison management
+
 
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
@@ -99,10 +92,21 @@ class SecuritySystem:
         subscribe("door_closed", self.on_access_event)
         logger.info("Security system initialized")
 
+        # Sensor and camera tracking
+        self.cameras: Dict[str, Camera] = {}
+        self.sensors: Dict[str, MotionSensor] = {}
+        self.access_log: List[Dict[str, Any]] = []
+        self.alerts: List[Dict[str, Any]] = []
+
+        self.enabled = False
+        subscribe("object_moved", self.on_object_moved)
+        subscribe("door_opened", self.on_access_event)
+        subscribe("door_closed", self.on_access_event)
+        logger.info("Security system initialized")
 
 
-    # ------------------------------------------------------------------
-    # Crime database
+
+
     # ------------------------------------------------------------------
     # Crime tracking
     def report_crime(
@@ -167,19 +171,18 @@ class SecuritySystem:
 
 
 
+
     # Monitoring ------------------------------------------------------
 
     # ------------------------------------------------------------------
-    # Surveillance
-
-    # Monitoring infrastructure
-    # ------------------------------------------------------------------
     def register_camera(self, camera_id: str, location: str) -> None:
+        """Register a security camera."""
         self.cameras[camera_id] = Camera(camera_id, location)
         logger.debug(f"Registered camera {camera_id} at {location}")
 
     # ------------------------------------------------------------------
     def register_sensor(self, sensor_id: str, location: str, sensitivity: float = 1.0) -> None:
+        """Register a motion sensor."""
         self.sensors[sensor_id] = MotionSensor(sensor_id, location, sensitivity)
         logger.debug(f"Registered sensor {sensor_id} at {location}")
 
@@ -195,14 +198,10 @@ class SecuritySystem:
         self.enabled = False
         logger.info("Security system stopped")
 
+    # ------------------------------------------------------------------
+    def on_object_moved(self, object_id: str, from_location: str | None, to_location: str | None, **_: Any) -> None:
+        """Handle motion sensor triggers for moved objects."""
 
-    def on_object_moved(
-        self,
-        object_id: str,
-        from_location: str | None,
-        to_location: str | None,
-        **_: Any,
-    ) -> None:
         if not to_location:
             return
         for sensor in self.sensors.values():
@@ -214,13 +213,14 @@ class SecuritySystem:
 
     # ------------------------------------------------------------------
     def on_access_event(self, door_id: str, player_id: str, **_: Any) -> None:
+        """Record door access events."""
         entry = {"door": door_id, "player": player_id}
         self.access_log.append(entry)
         logger.debug(f"Access event on {door_id} by {player_id}")
 
     # ------------------------------------------------------------------
     def update(self) -> None:
-        """Process pending alerts."""
+        """Process pending security alerts."""
         if not self.enabled:
             return
         while self.alerts:
@@ -229,11 +229,14 @@ class SecuritySystem:
 
     # ------------------------------------------------------------------
     def get_alerts(self) -> List[Dict[str, Any]]:
+        """Return queued alerts."""
         return list(self.alerts)
 
     # ------------------------------------------------------------------
     def get_access_log(self) -> List[Dict[str, Any]]:
+        """Return door access log."""
         return list(self.access_log)
+
 
 _SECURITY_SYSTEM = SecuritySystem()
 
