@@ -1,4 +1,3 @@
-
 """Security and crime management system."""
 
 import logging
@@ -34,15 +33,49 @@ class Prisoner:
     parole: bool = False
 
 
+@dataclass
+class Camera:
+    """Representation of a security camera."""
+
+    camera_id: str
+    location: str
+    active: bool = True
+    recordings: List[str] = field(default_factory=list)
+
+
+@dataclass
+class MotionSensor:
+    """Representation of a motion sensor."""
+
+    sensor_id: str
+    location: str
+    sensitivity: float = 1.0
+    active: bool = True
+
+
 class SecuritySystem:
-    """Tracks crimes, prisoners and security alerts."""
+    """Central security monitoring and crime management system."""
 
     def __init__(self) -> None:
+        # Crime/prisoner tracking
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
 
+        # Surveillance
+        self.cameras: Dict[str, Camera] = {}
+        self.sensors: Dict[str, MotionSensor] = {}
+        self.access_log: List[Dict[str, Any]] = []
+        self.alerts: List[Dict[str, Any]] = []
+
+        self.enabled = False
+        subscribe("object_moved", self.on_object_moved)
+        subscribe("door_opened", self.on_access_event)
+        subscribe("door_closed", self.on_access_event)
+        logger.info("Security system initialized")
+
     # ------------------------------------------------------------------
+    # Crime tracking
     def report_crime(
         self, reporter_id: str, description: str, suspect_id: Optional[str] = None, severity: str = "minor"
     ) -> CrimeRecord:
@@ -67,7 +100,6 @@ class SecuritySystem:
         logger.info(f"Crime reported {cid} by {reporter_id}")
         return record
 
-    # ------------------------------------------------------------------
     def add_evidence(self, crime_id: int, evidence_desc: str) -> bool:
         record = self.crimes.get(crime_id)
         if not record:
@@ -76,7 +108,6 @@ class SecuritySystem:
         publish("evidence_collected", crime_id=crime_id, description=evidence_desc)
         return True
 
-    # ------------------------------------------------------------------
     def arrest(self, player_id: str, duration: float, cell_id: Optional[str] = None) -> Prisoner:
         """Arrest a player and add them to the prisoner database."""
         release_time = time.time() + duration
@@ -86,7 +117,6 @@ class SecuritySystem:
         logger.info(f"Player {player_id} arrested for {duration} seconds")
         return prisoner
 
-    # ------------------------------------------------------------------
     def release(self, player_id: str) -> bool:
         prisoner = self.prisoners.pop(player_id, None)
         if not prisoner:
@@ -95,7 +125,6 @@ class SecuritySystem:
         logger.info(f"Player {player_id} released from prison")
         return True
 
-    # ------------------------------------------------------------------
     def check_sentence_expirations(self) -> None:
         """Release prisoners whose sentences have elapsed."""
         now = time.time()
@@ -103,43 +132,8 @@ class SecuritySystem:
         for pid in expired:
             self.release(pid)
 
-
-_SECURITY_SYSTEM = SecuritySystem()
-=======
-class Camera:
-    """Representation of a security camera."""
-
-    camera_id: str
-    location: str
-    active: bool = True
-    recordings: List[str] = field(default_factory=list)
-
-
-@dataclass
-class MotionSensor:
-    """Representation of a motion sensor."""
-
-    sensor_id: str
-    location: str
-    sensitivity: float = 1.0
-    active: bool = True
-
-
-class SecuritySystem:
-    """Central security monitoring system."""
-
-    def __init__(self) -> None:
-        self.cameras: Dict[str, Camera] = {}
-        self.sensors: Dict[str, MotionSensor] = {}
-        self.access_log: List[Dict[str, Any]] = []
-        self.alerts: List[Dict[str, Any]] = []
-
-        self.enabled = False
-        subscribe("object_moved", self.on_object_moved)
-        subscribe("door_opened", self.on_access_event)
-        subscribe("door_closed", self.on_access_event)
-        logger.info("Security system initialized")
-
+    # ------------------------------------------------------------------
+    # Surveillance
     def register_camera(self, camera_id: str, location: str) -> None:
         self.cameras[camera_id] = Camera(camera_id, location)
         logger.debug(f"Registered camera {camera_id} at {location}")
@@ -188,10 +182,9 @@ class SecuritySystem:
         return list(self.access_log)
 
 
-SECURITY_SYSTEM = SecuritySystem()
+_SECURITY_SYSTEM = SecuritySystem()
 
 
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
     return _SECURITY_SYSTEM
-
