@@ -6,8 +6,10 @@ This module provides the world state and game object management.
 import logging
 import yaml
 import inspect
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
+from events import publish
+from spatial import SpatialGrid
 import os
 
 # Set up module logger
@@ -24,6 +26,7 @@ class GameObject:
     name: str
     description: str
     location: Optional[str] = None
+    position: Optional[Tuple[int, int]] = None
     components: Dict[str, Any] = field(default_factory=dict)
 
     def add_component(self, comp_name: str, comp: Any) -> None:
@@ -43,6 +46,22 @@ class GameObject:
             except Exception as e:
                 logger.warning(f"on_added for {comp_name} on {self.id} failed: {e}")
         logger.debug(f"Added {comp_name} component to {self.id}")
+
+    def move_to(self, new_location: str) -> None:
+        """Move object to a new logical location and publish an event."""
+        old = self.location
+        self.location = new_location
+        publish("object_moved", object_id=self.id, from_location=old, to_location=new_location)
+
+    def move_position(self, x: int, y: int) -> None:
+        """Update the object's grid position and publish an event."""
+        old = self.position
+        self.position = (x, y)
+        publish("object_moved_xy", object_id=self.id, old=old, new=(x, y))
+
+    def destroy(self) -> None:
+        """Publish an object destroyed event."""
+        publish("object_destroyed", object_id=self.id)
 
     def get_component(self, comp_name: str) -> Optional[Any]:
         """
@@ -86,6 +105,7 @@ class GameObject:
             'name': self.name,
             'description': self.description,
             'location': self.location,
+            'position': self.position,
             'components': components_dict
         }
 
@@ -106,6 +126,7 @@ class World:
         self.rooms: Dict[str, GameObject] = {}
         self.items: Dict[str, GameObject] = {}
         self.npcs: Dict[str, GameObject] = {}
+        self.grid = SpatialGrid()
 
         # Ensure data directory exists
         os.makedirs(data_dir, exist_ok=True)
@@ -138,6 +159,10 @@ class World:
             obj (GameObject): The game object to register.
         """
         self.objects[obj.id] = obj
+        if obj.position is not None:
+            x, y = obj.position
+            self.grid.add_object(obj.id, x, y)
+        publish("object_created", object_id=obj.id)
 
         # Also add to type-specific collections for convenience
         if obj.get_component('room'):
@@ -173,6 +198,40 @@ class World:
         """
         return [obj for obj in self.objects.values() if obj.location == location_id]
 
+    def remove(self, obj_id: str) -> None:
+        obj = self.objects.pop(obj_id, None)
+        if not obj:
+            return
+        if obj_id in self.rooms:
+            del self.rooms[obj_id]
+        if obj_id in self.items:
+            del self.items[obj_id]
+        if obj_id in self.npcs:
+            del self.npcs[obj_id]
+        self.grid.remove_object(obj_id)
+        obj.destroy()
+
+    def move_object_xy(self, obj_id: str, x: int, y: int) -> None:
+        obj = self.get_object(obj_id)
+        if not obj:
+            return
+        self.grid.move_object(obj_id, x, y)
+        obj.move_position(x, y)
+
+    def objects_near(self, obj_id: str, radius: float) -> List[str]:
+        obj = self.get_object(obj_id)
+        if not obj or obj.position is None:
+            return []
+        x, y = obj.position
+        return [oid for oid in self.grid.objects_near(x, y, radius) if oid != obj_id]
+
+    def line_of_sight(self, a_id: str, b_id: str, opaque: Optional[List[str]] = None) -> bool:
+        a = self.get_object(a_id)
+        b = self.get_object(b_id)
+        if not a or not b or a.position is None or b.position is None:
+            return False
+        return self.grid.line_of_sight(a.position, b.position, opaque)
+
     def load_from_file(self, filename: str) -> int:
         """
         Load game objects from a YAML file.
@@ -199,7 +258,8 @@ class World:
                         id=obj_data['id'],
                         name=obj_data['name'],
                         description=obj_data.get('description', ''),
-                        location=obj_data.get('location')
+                        location=obj_data.get('location'),
+                        position=tuple(obj_data['position']) if 'position' in obj_data else None
                     )
 
                     if 'components' in obj_data:

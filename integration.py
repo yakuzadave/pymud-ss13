@@ -19,6 +19,7 @@ import os
 # Set up module logger
 logger = logging.getLogger(__name__)
 
+
 class MudpyIntegration:
     """
     Integration class that connects the MudpyInterface with the new engine.
@@ -68,7 +69,6 @@ class MudpyIntegration:
         if os.path.exists(os.path.join(data_dir, "npcs.yaml")):
             self.world.load_npcs("npcs.yaml")
 
-
         # Load any player files if present
         if os.path.exists(os.path.join(data_dir, "players.yaml")):
             self.world.load_from_file("players.yaml")
@@ -81,11 +81,10 @@ class MudpyIntegration:
 
         # Load saved player objects
         from persistence import load_players
+
         load_players(os.path.join(self.world.data_dir, "players"), self.world)
 
-
         logger.info("World initialization complete")
-
 
     def _setup_event_handlers(self):
         """
@@ -117,7 +116,9 @@ class MudpyIntegration:
         """
         # Convert to string if needed for manipulation
         client_id_str = str(client_id)
-        logger.debug(f"Client connected event handler, client_id: {client_id} (type: {type(client_id)})")
+        logger.debug(
+            f"Client connected event handler, client_id: {client_id} (type: {type(client_id)})"
+        )
 
         # Create a player game object for this client - use string ID for consistency
         player_id = f"player_{client_id_str}"
@@ -125,33 +126,38 @@ class MudpyIntegration:
             id=player_id,
             name=f"Player {client_id_str[-4:]}",  # Use the last 4 digits of the client_id as the player name
             description="A space station crew member.",
-            location="start"  # Start in the Central Hub
+            location="start",  # Start in the Central Hub
         )
 
         # Add player component
         player_comp = PlayerComponent(
             inventory=["comms_device", "biometric_scanner"],
-            stats={
-                "health": 100.0,
-                "energy": 100.0,
-                "oxygen": 100.0,
-                "radiation": 0.0
-            },
+            stats={"health": 100.0, "energy": 100.0, "oxygen": 100.0, "radiation": 0.0},
             access_level=0,
-            current_location="start"
+            current_location="start",
         )
         player_obj.add_component("player", player_comp)
 
         # Register the player in the world
         self.world.register(player_obj)
 
+        from systems.jobs import get_job_system
+
+        job_system = get_job_system()
+        default_job = job_system.assign_job(player_obj.id, "assistant")
+        if default_job:
+            player_comp.role = default_job.job_id
+            job_system.setup_player_for_job(player_obj.id, player_obj.id)
+
         # Ensure client is registered in interface
         if client_id not in self.interface.player_locations:
             logger.debug(f"Adding client {client_id} to player_locations in interface")
-            self.interface.player_locations[client_id] = 'start'
+            self.interface.player_locations[client_id] = "start"
 
         if client_id not in self.interface.client_sessions:
-            logger.debug(f"Client {client_id} not found in client_sessions, reconnecting")
+            logger.debug(
+                f"Client {client_id} not found in client_sessions, reconnecting"
+            )
             self.interface.connect_client(client_id)
 
         logger.info(f"Created player game object for client {client_id}")
@@ -168,9 +174,12 @@ class MudpyIntegration:
         player_obj = self.world.get_object(player_id)
 
         if player_obj:
-            save_path = os.path.join(self.world.data_dir, "players", f"{player_id}.yaml")
+            save_path = os.path.join(
+                self.world.data_dir, "players", f"{player_id}.yaml"
+            )
             try:
                 from persistence import save_game_object
+
                 save_game_object(player_obj, save_path)
             except Exception as e:
                 logger.error(f"Failed to save player {player_id}: {e}")
@@ -223,8 +232,12 @@ class MudpyIntegration:
         if player_id in self.interface.client_sessions:
             if "inventory" in self.interface.client_sessions[player_id]:
                 if item_id in self.interface.client_sessions[player_id]["inventory"]:
-                    self.interface.client_sessions[player_id]["inventory"].remove(item_id)
-                    logger.debug(f"Removed item {item_id} from player {player_id}'s inventory")
+                    self.interface.client_sessions[player_id]["inventory"].remove(
+                        item_id
+                    )
+                    logger.debug(
+                        f"Removed item {item_id} from player {player_id}'s inventory"
+                    )
 
     def _on_item_used(self, item_id: str, player_id: str, item_type: str):
         """
@@ -267,6 +280,7 @@ class MudpyIntegration:
         # Process the command using the engine
         # Convert client_id to string to ensure compatibility
         return self.engine.process_command(str(client_id), command)
+
 
 # This function will be called to create the integration when needed
 def create_integration(interface) -> MudpyIntegration:
