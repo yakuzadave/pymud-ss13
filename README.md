@@ -71,6 +71,9 @@ periodically picks one based on their weights, automatically running the
 corresponding logic. The interval between checks is configured on the
 `RandomEventSystem` and defaults to 60 seconds.
 
+Once the server is running, events are scheduled automatically so random
+incidents will occur periodically without needing any admin commands.
+
 Administrators can view available events with `event list` and manually trigger
 them using `event trigger <event_id>`.
 

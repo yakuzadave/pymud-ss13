@@ -20,6 +20,16 @@ from systems import (
     get_random_event_system,
 )
 
+
+from systems import (
+    get_power_system,
+    get_atmos_system,
+    get_random_event_system,
+)
+
+from systems import get_random_event_system
+
+
 # Module logger
 logger = logging.getLogger(__name__)
 
@@ -43,6 +53,7 @@ async def static_files(request):
         return web.FileResponse(f'web_client/{path}')
     else:
         return web.Response(status=404, text="File not found")
+
 
 
 async def _power_loop():
@@ -80,6 +91,34 @@ async def _random_event_loop():
     except asyncio.CancelledError:
         res.stop()
         raise
+async def _power_task() -> None:
+    """Start and monitor the power system."""
+    system = get_power_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _atmos_task() -> None:
+    """Start and monitor the atmosphere system."""
+    system = get_atmos_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _random_event_task() -> None:
+    """Start and monitor the random event system."""
+    system = get_random_event_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
 
 def signal_handler(sig, frame):
     """
@@ -113,9 +152,12 @@ async def main():
     # Create a task for running the MUD server
     mud_server_task = asyncio.create_task(mud_server.run())
     autosave_task = asyncio.create_task(autosave_loop(get_world(), interval=60))
+
     power_task = asyncio.create_task(_power_loop())
     atmos_task = asyncio.create_task(_atmos_loop())
     random_event_task = asyncio.create_task(_random_event_loop())
+
+
 
     TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task])
 
@@ -130,6 +172,7 @@ async def main():
     await runner.setup()
     site = web.TCPSite(runner, host, port)
     await site.start()
+    get_random_event_system().start()
 
     # Keep the server running
     try:
@@ -144,6 +187,7 @@ async def main():
     except asyncio.CancelledError:
         logger.info("Server tasks cancelled")
     finally:
+        get_random_event_system().stop()
         await runner.cleanup()
 
 if __name__ == "__main__":

@@ -63,6 +63,7 @@ async def static_files(request):
         return web.Response(status=404, text="File not found")
 
 
+
 async def _power_loop():
     """Run the power system update loop."""
     ps = get_power_system()
@@ -98,6 +99,36 @@ async def _random_event_loop():
     except asyncio.CancelledError:
         res.stop()
         raise
+
+async def _power_task() -> None:
+    """Start and monitor the power system."""
+    system = get_power_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _atmos_task() -> None:
+    """Start and monitor the atmosphere system."""
+    system = get_atmos_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
+
+async def _random_event_task() -> None:
+    """Start and monitor the random event system."""
+    system = get_random_event_system()
+    system.start()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        system.stop()
+
 
 def signal_handler(sig, frame):
     """
@@ -173,9 +204,15 @@ async def main():
     app.on_shutdown.append(on_shutdown)
 
     # Background subsystem tasks
+
     power_task = asyncio.create_task(_power_loop())
     atmos_task = asyncio.create_task(_atmos_loop())
     random_event_task = asyncio.create_task(_random_event_loop())
+
+    power_task = asyncio.create_task(_power_task())
+    atmos_task = asyncio.create_task(_atmos_task())
+    random_event_task = asyncio.create_task(_random_event_task())
+
     TASKS.extend([power_task, atmos_task, random_event_task])
 
     # Start the server
