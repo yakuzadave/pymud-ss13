@@ -16,6 +16,7 @@ from .structure import StructureComponent
 from .ai import AIComponent, CyborgComponent
 from .camera import CameraComponent
 from .motion_sensor import MotionSensorComponent
+from .maintenance import MaintainableComponent
 
 __all__ = [
     "RoomComponent",
@@ -32,6 +33,7 @@ __all__ = [
     "CyborgComponent",
     "CameraComponent",
     "MotionSensorComponent",
+    "MaintainableComponent",
 ]
 
 # Mapping of component names in YAML to classes
@@ -50,4 +52,5 @@ COMPONENT_REGISTRY = {
     "cyborg": CyborgComponent,
     "camera": CameraComponent,
     "motion_sensor": MotionSensorComponent,
+    "maintenance": MaintainableComponent,
 }
