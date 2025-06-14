@@ -58,11 +58,19 @@ class SecuritySystem:
 
     def __init__(self) -> None:
         # Crime/prisoner tracking
+
+    """Central system for crime tracking and security monitoring."""
+
+    def __init__(self) -> None:
+        # Crime/prison management
+
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
 
         # Surveillance
+=======
+        # Monitoring infrastructure
         self.cameras: Dict[str, Camera] = {}
         self.sensors: Dict[str, MotionSensor] = {}
         self.access_log: List[Dict[str, Any]] = []
@@ -75,9 +83,15 @@ class SecuritySystem:
         logger.info("Security system initialized")
 
     # ------------------------------------------------------------------
+    # Crime database
+    # ------------------------------------------------------------------
     # Crime tracking
     def report_crime(
-        self, reporter_id: str, description: str, suspect_id: Optional[str] = None, severity: str = "minor"
+        self,
+        reporter_id: str,
+        description: str,
+        suspect_id: Optional[str] = None,
+        severity: str = "minor",
     ) -> CrimeRecord:
         """Record a new crime and return the record."""
         cid = self._next_crime_id
@@ -134,6 +148,9 @@ class SecuritySystem:
 
     # ------------------------------------------------------------------
     # Surveillance
+
+    # Monitoring infrastructure
+    # ------------------------------------------------------------------
     def register_camera(self, camera_id: str, location: str) -> None:
         self.cameras[camera_id] = Camera(camera_id, location)
         logger.debug(f"Registered camera {camera_id} at {location}")
@@ -180,7 +197,6 @@ class SecuritySystem:
 
     def get_access_log(self) -> List[Dict[str, Any]]:
         return list(self.access_log)
-
 
 _SECURITY_SYSTEM = SecuritySystem()
 

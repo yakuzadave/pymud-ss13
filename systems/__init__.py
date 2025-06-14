@@ -17,6 +17,8 @@ from .communications import CommunicationsSystem, get_comms_system
 from .research import ResearchSystem, get_research_system
 from .security import SecuritySystem, get_security_system
 from .communications import CommunicationsSystem, get_comms_system
+from .physics import PhysicsSystem, get_physics_system
+from .maintenance import MaintenanceSystem, get_maintenance_system
 
 
 __all__ = [
@@ -40,6 +42,10 @@ __all__ = [
     "get_security_system",
     "CommunicationsSystem",
     "get_comms_system",
+    "PhysicsSystem",
+    "get_physics_system",
+    "MaintenanceSystem",
+    "get_maintenance_system",
     "GasMixture",
     "AtmosGrid",
     "PipeNetwork",
