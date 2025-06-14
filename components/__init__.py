@@ -13,9 +13,9 @@ from .access import AccessControlComponent
 
 from .power_consumer import PowerConsumerComponent
 from .structure import StructureComponent
+from .ai import AIComponent, CyborgComponent
 from .camera import CameraComponent
 from .motion_sensor import MotionSensorComponent
-
 
 __all__ = [
     "RoomComponent",
@@ -28,6 +28,8 @@ __all__ = [
     "AccessControlComponent",
     "PowerConsumerComponent",
     "StructureComponent",
+    "AIComponent",
+    "CyborgComponent",
     "CameraComponent",
     "MotionSensorComponent",
 ]
@@ -44,6 +46,8 @@ COMPONENT_REGISTRY = {
     "access": AccessControlComponent,
     "power_consumer": PowerConsumerComponent,
     "structure": StructureComponent,
+    "ai": AIComponent,
+    "cyborg": CyborgComponent,
     "camera": CameraComponent,
     "motion_sensor": MotionSensorComponent,
 }
