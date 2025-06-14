@@ -1,5 +1,5 @@
 
-"""Security and crime management system."""
+"""Security monitoring and crime management system."""
 
 import logging
 import time
@@ -34,6 +34,8 @@ class Prisoner:
     parole: bool = False
 
 
+
+
 @dataclass
 class Camera:
     """Representation of a security camera."""
@@ -55,6 +57,9 @@ class MotionSensor:
 
 
 class SecuritySystem:
+
+    """Tracks crimes, prisoners and performs security monitoring."""
+
     """Central security monitoring and crime management system."""
 
     def __init__(self) -> None:
@@ -68,6 +73,16 @@ class SecuritySystem:
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
+        # monitoring
+        self.cameras: Dict[str, Camera] = {}
+        self.sensors: Dict[str, MotionSensor] = {}
+        self.access_log: List[Dict[str, Any]] = []
+        self.alerts: List[Dict[str, Any]] = []
+        self.enabled = False
+        subscribe("object_moved", self.on_object_moved)
+        subscribe("door_opened", self.on_access_event)
+        subscribe("door_closed", self.on_access_event)
+        logger.info("Security system initialized")
 
 
         # Surveillance
@@ -151,6 +166,7 @@ class SecuritySystem:
             self.release(pid)
 
 
+
     # Monitoring ------------------------------------------------------
 
     # ------------------------------------------------------------------
@@ -162,19 +178,23 @@ class SecuritySystem:
         self.cameras[camera_id] = Camera(camera_id, location)
         logger.debug(f"Registered camera {camera_id} at {location}")
 
+    # ------------------------------------------------------------------
     def register_sensor(self, sensor_id: str, location: str, sensitivity: float = 1.0) -> None:
         self.sensors[sensor_id] = MotionSensor(sensor_id, location, sensitivity)
         logger.debug(f"Registered sensor {sensor_id} at {location}")
 
+    # ------------------------------------------------------------------
     def start(self) -> None:
-        """Activate the security system."""
+        """Activate the security monitoring system."""
         self.enabled = True
         logger.info("Security system started")
 
+    # ------------------------------------------------------------------
     def stop(self) -> None:
-        """Deactivate the security system."""
+        """Deactivate the security monitoring system."""
         self.enabled = False
         logger.info("Security system stopped")
+
 
     def on_object_moved(
         self,
@@ -192,11 +212,13 @@ class SecuritySystem:
                 publish("security_alert", alert=alert)
                 logger.debug(f"Motion detected by {sensor.sensor_id} in {to_location}")
 
+    # ------------------------------------------------------------------
     def on_access_event(self, door_id: str, player_id: str, **_: Any) -> None:
         entry = {"door": door_id, "player": player_id}
         self.access_log.append(entry)
         logger.debug(f"Access event on {door_id} by {player_id}")
 
+    # ------------------------------------------------------------------
     def update(self) -> None:
         """Process pending alerts."""
         if not self.enabled:
@@ -205,9 +227,11 @@ class SecuritySystem:
             alert = self.alerts.pop(0)
             publish("security_dispatch", alert=alert)
 
+    # ------------------------------------------------------------------
     def get_alerts(self) -> List[Dict[str, Any]]:
         return list(self.alerts)
 
+    # ------------------------------------------------------------------
     def get_access_log(self) -> List[Dict[str, Any]]:
         return list(self.access_log)
 
@@ -216,4 +240,6 @@ _SECURITY_SYSTEM = SecuritySystem()
 
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
-    return _SECURITY_SYSTEM
+    return SECURITY_SYSTEM
+
+
