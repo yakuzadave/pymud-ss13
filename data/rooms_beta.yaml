@@ -1,0 +1,67 @@
+# Space Station Beta - Alternate Layout
+
+- id: start
+  name: Arrival Dock
+  description: >
+    The docking area for new arrivals. Cargo crates line the walls.
+  components:
+    room:
+      exits:
+        east: corridor_a
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: corridor_a
+  name: Main Corridor
+  description: >
+    A brightly lit corridor that connects to various station sectors.
+  components:
+    room:
+      exits:
+        west: start
+        east: engineering
+        south: medbay
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: engineering
+  name: Engineering Bay
+  description: >
+    Tools and machinery fill this noisy workspace.
+  components:
+    room:
+      exits:
+        west: corridor_a
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 102.0
+      hazards: []
+      is_airlock: false
+
+- id: medbay
+  name: Medical Bay
+  description: >
+    The station's medical center equipped with diagnostic equipment.
+  components:
+    room:
+      exits:
+        north: corridor_a
+      atmosphere:
+        oxygen: 22.0
+        nitrogen: 77.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
