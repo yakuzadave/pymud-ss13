@@ -9,6 +9,7 @@ from .player import PlayerComponent
 from .npc import NPCComponent
 from .container import ContainerComponent
 from .access import AccessControlComponent
+from .power_consumer import PowerConsumerComponent
 
 __all__ = [
     "RoomComponent",
@@ -18,6 +19,7 @@ __all__ = [
     "NPCComponent",
     "ContainerComponent",
     "AccessControlComponent",
+    "PowerConsumerComponent",
 ]
 
 # Mapping of component names in YAML to classes
@@ -29,4 +31,5 @@ COMPONENT_REGISTRY = {
     "npc": NPCComponent,
     "container": ContainerComponent,
     "access": AccessControlComponent,
+    "power_consumer": PowerConsumerComponent,
 }
