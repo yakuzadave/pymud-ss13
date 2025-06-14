@@ -357,3 +357,130 @@
         pressure: 100.0
       hazards: ["low_light"]
       is_airlock: false
+- id: security
+  name: Security Office
+  description: >
+    The station's security headquarters, fitted with surveillance monitors and gear lockers.
+  components:
+    room:
+      exits:
+        east: corridor_north
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: research
+  name: Research Division
+  description: >
+    A wing dedicated to experimental technology and scientific study.
+  components:
+    room:
+      exits:
+        north: science_lab
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: cargo
+  name: Cargo Office
+  description: >
+    The administrative center for supply orders and freight processing.
+  components:
+    room:
+      exits:
+        west: cargo_bay
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: janitorial
+  name: Janitor's Closet
+  description: >
+    Shelves packed with cleaning supplies and a suspicious smell of bleach.
+  components:
+    room:
+      exits:
+        north: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: kitchen
+  name: Crew Kitchen
+  description: >
+    A small galley where meals are prepared for hungry crewmembers.
+  components:
+    room:
+      exits:
+        east: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: arrival
+  name: Arrival Lounge
+  description: >
+    New arrivals disembark here before moving deeper into the station.
+  components:
+    room:
+      exits:
+        south: start
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: core
+  name: AI Core
+  description: >
+    The sealed chamber housing the station's central artificial intelligence.
+  components:
+    room:
+      exits:
+        south: bridge
+      atmosphere:
+        oxygen: 20.0
+        nitrogen: 79.0
+        co2: 0.05
+        pressure: 101.3
+      hazards: ["restricted"]
+      is_airlock: false
+
+- id: robotics
+  name: Robotics Lab
+  description: >
+    Workstations and charging bays line the walls, serving the station's cyborg crew.
+  components:
+    room:
+      exits:
+        west: science_lab
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
