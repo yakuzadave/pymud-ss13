@@ -84,6 +84,17 @@ class MudpyIntegration:
 
         load_players(os.path.join(self.world.data_dir, "players"), self.world)
 
+        # Discover and load mods
+        try:
+            from mod_manager import ModManager
+
+            mod_manager = ModManager(world=self.world)
+            mod_manager.discover()
+            mod_manager.load_all()
+            logger.info("Mods loaded")
+        except Exception as exc:
+            logger.error(f"Failed to load mods: {exc}")
+
         logger.info("World initialization complete")
 
     def _setup_event_handlers(self):
