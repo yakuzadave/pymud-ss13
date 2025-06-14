@@ -41,12 +41,17 @@ class PlayerComponent:
         self.owner = None
         self.inventory = inventory or []
         self._lock = threading.Lock()
-        self.stats = stats or {
+        default_stats = {
             "health": 100.0,
             "energy": 100.0,
             "oxygen": 100.0,
             "radiation": 0.0,
+            "nutrition": 100.0,
         }
+        if stats is None:
+            self.stats = default_stats
+        else:
+            self.stats = {**default_stats, **stats}
         self.access_level = access_level
         self.current_location = current_location
         self.max_inventory_size = 10
@@ -262,6 +267,31 @@ class PlayerComponent:
         if disease in self.diseases:
             self.diseases.remove(disease)
             publish("disease_cured", player_id=self.owner.id, disease=disease)
+
+    # -- Nutrition -------------------------------------------------------------
+    def consume_food(self, nutrition: float) -> None:
+        """Increase the player's nutrition level."""
+        old = self.stats.get("nutrition", 100.0)
+        self.stats["nutrition"] = max(0.0, min(100.0, old + nutrition))
+        publish(
+            "nutrition_changed",
+            player_id=self.owner.id,
+            old_value=old,
+            new_value=self.stats["nutrition"],
+        )
+
+    def digest(self, amount: float = 0.1) -> None:
+        """Reduce nutrition over time and impact energy when starving."""
+        old = self.stats.get("nutrition", 100.0)
+        self.stats["nutrition"] = max(0.0, old - amount)
+        if self.stats["nutrition"] < 20:
+            self.update_stat("energy", -0.5)
+        publish(
+            "nutrition_changed",
+            player_id=self.owner.id,
+            old_value=old,
+            new_value=self.stats["nutrition"],
+        )
 
     def apply_environmental_effects(
         self, room_atmosphere: Dict[str, float], hazards: List[str]
