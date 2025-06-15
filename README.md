@@ -70,9 +70,10 @@ of maintenance tunnels linking engineering, medbay, cargo and security.
 
 ## Running Tests
 
-Install pytest and run tests using:
+Install project dependencies and run the suite with pytest:
 
 ```bash
+pip install -r requirements.txt
 pytest
 ```
 
