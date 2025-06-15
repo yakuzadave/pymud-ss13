@@ -31,6 +31,15 @@ class RobotModule:
 
 
 @dataclass
+class DockingStation:
+    """Location where cyborgs can recharge."""
+
+    station_id: str
+    location: str
+    recharge_rate: int = 5
+
+
+@dataclass
 class CyborgUnit:
     """A chassis with installed modules and a power cell."""
 
@@ -38,6 +47,8 @@ class CyborgUnit:
     chassis: RobotChassis
     modules: List[RobotModule] = field(default_factory=list)
     power: int = 0
+    location: Optional[str] = None
+    docked_at: Optional[str] = None
 
     def install_module(self, module: RobotModule) -> bool:
         if len(self.modules) >= self.chassis.slots:
@@ -46,9 +57,19 @@ class CyborgUnit:
         logger.debug("Installed module %s on %s", module.module_id, self.unit_id)
         return True
 
-    def recharge(self) -> None:
-        self.power = self.chassis.power_capacity
-        publish("cyborg_recharged", unit_id=self.unit_id)
+    def recharge(self, amount: Optional[int] = None) -> None:
+        """Recharge the cyborg's power cell."""
+        if amount is None:
+            self.power = self.chassis.power_capacity
+        else:
+            self.power = min(self.chassis.power_capacity, self.power + amount)
+        if self.power == self.chassis.power_capacity:
+            publish("cyborg_recharged", unit_id=self.unit_id)
+
+    def dock(self, station: DockingStation) -> None:
+        """Move to a docking station and begin recharging."""
+        self.location = station.location
+        self.docked_at = station.station_id
 
     def tick(self) -> None:
         for mod in self.modules:
@@ -64,6 +85,7 @@ class RoboticsSystem:
         self.parts: Dict[str, int] = {}
         self.recipes: Dict[str, Dict[str, int]] = {}
         self.units: Dict[str, CyborgUnit] = {}
+        self.docking_stations: Dict[str, DockingStation] = {}
 
     # ------------------------------------------------------------------
     def add_parts(self, part_id: str, amount: int) -> None:
@@ -74,6 +96,12 @@ class RoboticsSystem:
     def define_recipe(self, chassis_id: str, required: Dict[str, int]) -> None:
         self.recipes[chassis_id] = dict(required)
         logger.debug("Defined recipe for %s", chassis_id)
+
+    # ------------------------------------------------------------------
+    def add_docking_station(self, station: DockingStation) -> None:
+        """Register a new docking station."""
+        self.docking_stations[station.station_id] = station
+        logger.debug("Added docking station %s", station.station_id)
 
     # ------------------------------------------------------------------
     def build_cyborg(self, unit_id: str, chassis: RobotChassis) -> Optional[CyborgUnit]:
@@ -94,6 +122,23 @@ class RoboticsSystem:
     def tick(self) -> None:
         for unit in list(self.units.values()):
             unit.tick()
+
+            if unit.docked_at:
+                station = self.docking_stations.get(unit.docked_at)
+                if station:
+                    unit.recharge(station.recharge_rate)
+                continue
+
+            if unit.power <= unit.chassis.power_capacity * 0.2:
+                if self.docking_stations:
+                    station = next(iter(self.docking_stations.values()))
+                    unit.dock(station)
+                    unit.recharge(station.recharge_rate)
+                    publish(
+                        "cyborg_docking",
+                        unit_id=unit.unit_id,
+                        station_id=station.station_id,
+                    )
 
 
 _ROBOTICS_SYSTEM = RoboticsSystem()
