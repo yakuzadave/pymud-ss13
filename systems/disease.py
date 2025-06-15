@@ -1,4 +1,5 @@
 import logging
+import random
 from typing import Dict, List
 
 from events import publish
@@ -12,8 +13,8 @@ class DiseaseSystem:
 
     def __init__(self) -> None:
         self.definitions: Dict[str, Dict[str, float]] = {
-            "flu": {"damage_per_tick": 1.0},
-            "virus_x": {"damage_per_tick": 2.0},
+            "flu": {"damage_per_tick": 1.0, "transmission_chance": 0.5},
+            "virus_x": {"damage_per_tick": 2.0, "transmission_chance": 0.3},
         }
         self.infected: Dict[str, List[str]] = {}
 
@@ -57,6 +58,25 @@ class DiseaseSystem:
                 )
                 if not comp.alive:
                     diseases.remove(disease)
+
+            # Attempt to spread diseases to others in the same location
+            location = player.location
+            if location:
+                others = world.get_world().get_objects_in_location(location)
+                for other in others:
+                    if other.id == player_id:
+                        continue
+                    ocomp = other.get_component("player")
+                    if not ocomp or ocomp.has_biohazard_protection():
+                        continue
+                    for disease in diseases:
+                        if disease in ocomp.diseases:
+                            continue
+                        chance = self.definitions[disease].get(
+                            "transmission_chance", 0.1
+                        )
+                        if random.random() < chance:
+                            self.infect(other.id, disease)
 
 
 disease_system = DiseaseSystem()

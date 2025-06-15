@@ -113,10 +113,13 @@ class PlayerComponent:
             else:
                 return False
         logger.debug(f"Removed item {item_id} from {self.owner.id}'s inventory")
-        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="remove")
+        publish(
+            "inventory_changed",
+            player_id=self.owner.id,
+            item_id=item_id,
+            action="remove",
+        )
         return True
-
-
 
     def has_item(self, item_id: str) -> bool:
         """
@@ -148,7 +151,12 @@ class PlayerComponent:
                 return False
             self.inventory.remove(item_id)
             self.equipment[slot] = item_id
-        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="equip")
+        publish(
+            "inventory_changed",
+            player_id=self.owner.id,
+            item_id=item_id,
+            action="equip",
+        )
         return True
 
     def unequip_item(self, slot: str) -> Optional[str]:
@@ -158,7 +166,12 @@ class PlayerComponent:
         with self._lock:
             item_id = self.equipment.pop(slot)
             self.inventory.append(item_id)
-        publish("inventory_changed", player_id=self.owner.id, item_id=item_id, action="unequip")
+        publish(
+            "inventory_changed",
+            player_id=self.owner.id,
+            item_id=item_id,
+            action="unequip",
+        )
         return item_id
 
     def move_to(self, location_id: str) -> None:
@@ -296,8 +309,16 @@ class PlayerComponent:
     def apply_environmental_effects(
         self, room_atmosphere: Dict[str, float], hazards: List[str]
     ) -> List[str]:
-            logger.debug(f"Updated {self.owner.id}'s {stat_name} from {old_value} to {self.stats[stat_name]}")
-            publish("stat_changed", player_id=self.owner.id, stat=stat_name, old_value=old_value, new_value=self.stats[stat_name])
+        logger.debug(
+            f"Updated {self.owner.id}'s {stat_name} from {old_value} to {self.stats[stat_name]}"
+        )
+        publish(
+            "stat_changed",
+            player_id=self.owner.id,
+            stat=stat_name,
+            old_value=old_value,
+            new_value=self.stats[stat_name],
+        )
 
     def breathe(self, room_comp: "RoomComponent", amount: float = 0.1) -> None:
         """Simulate the player breathing in a room.
@@ -326,8 +347,9 @@ class PlayerComponent:
             if self.stats.get("oxygen", 0) < 100.0:
                 self.update_stat("oxygen", 0.5)
 
-    def apply_environmental_effects(self, room_atmosphere: Dict[str, float], hazards: List[str]) -> List[str]:
-
+    def apply_environmental_effects(
+        self, room_atmosphere: Dict[str, float], hazards: List[str]
+    ) -> List[str]:
         """
         Apply environmental effects to the player based on room conditions.
 
@@ -405,6 +427,10 @@ class PlayerComponent:
 
     def has_thermal_protection(self) -> bool:
         return self._equipment_has_property("thermal_protection")
+
+    def has_biohazard_protection(self) -> bool:
+        """Check if the player is protected against diseases."""
+        return self._equipment_has_property("biohazard_protection")
 
     def get_access_card_level(self) -> int:
         """
