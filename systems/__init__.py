@@ -27,6 +27,8 @@ from .physics import PhysicsSystem, get_physics_system
 from .maintenance import MaintenanceSystem, get_maintenance_system
 from .genetics import GeneticsSystem, get_genetics_system
 from .robotics import RoboticsSystem, get_robotics_system
+from .botany import BotanySystem, get_botany_system
+from .kitchen import KitchenSystem, get_kitchen_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -63,6 +65,10 @@ __all__ = [
     "get_genetics_system",
     "RoboticsSystem",
     "get_robotics_system",
+    "BotanySystem",
+    "get_botany_system",
+    "KitchenSystem",
+    "get_kitchen_system",
     "GasMixture",
     "AtmosGrid",
     "PipeNetwork",

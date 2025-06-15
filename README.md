@@ -20,6 +20,10 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Away Missions**: Basic shuttle travel and off-station exploration with environmental hazards.
 - **Physics System**: Materials react to pressure and temperature with damage cascading to nearby structures.
 - **Robotics System**: Build cyborg units from parts and manage their modules.
+- **Botany Lab**: Grow plants and harvest produce with a lightweight botany
+  system.
+- **Kitchen & Cafe**: Cook meals for the crew and serve them in the cafe.
+- **Bartender Role & Bar**: Mix drinks and keep the bar running smoothly.
 
 ## Requirements
 
