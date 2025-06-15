@@ -37,6 +37,9 @@ testing.  The systems below run automatically but also accept manual input:
   department inventories automatically.
 - **RoboticsSystem** – handles cyborg assembly and recharging. Robotics staff
   build units from parts, while the system drains power each tick.
+- **CircuitSystem** – manages integrated circuits, their power use and
+  connections to station devices. Shells hold logic components that automate
+  tasks or interface with USB equipment.
 - **GeneticsSystem** – stores DNA profiles and active mutations. Scientists scan
   or apply genes with commands; instability decays over time without input.
 - **AntagonistSystem** – tracks traitors and other hostile roles. Admins assign
