@@ -48,4 +48,12 @@ Circuits can connect to station devices via USB cables. Lightswitches, status di
 - Delay and clock components create timed reactions.
 - Voice activators paired with comparisons make simple voice‑controlled doors.
 
-The circuit framework integrates with existing components by letting shells act like powered items or stationary machinery. A future subsystem can manage fabrication, power usage and data flow between circuits and other station systems.
+The circuit framework integrates with existing components by letting shells act like powered items or stationary machinery. The **CircuitSystem** now manages power drain and USB connections so circuits can interact with devices in the world.
+
+## In-game Commands
+
+Use the following commands to work with assembled circuits:
+
+- `circuit insert <circuit_id> <component>` – add a logic component to a circuit.
+- `circuit toggle <circuit_id> on|off` – activate or deactivate a circuit.
+- `circuit connect <circuit_id> <device_id>` – link a circuit to powered equipment via USB.
