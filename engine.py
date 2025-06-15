@@ -60,6 +60,7 @@ from commands import (  # noqa: F401,E402
     bartender,
     botanist,
     research,
+    cargo,
     antag,
     job,
 )
