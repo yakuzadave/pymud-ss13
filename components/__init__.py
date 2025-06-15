@@ -9,6 +9,7 @@ from .player import PlayerComponent
 from .npc import NPCComponent
 from .container import ContainerComponent
 from systems.chemical_reactions import ChemicalContainerComponent
+from .fluid import FluidContainerComponent
 from .access import AccessControlComponent
 
 from .power_consumer import PowerConsumerComponent
@@ -28,6 +29,7 @@ __all__ = [
     "NPCComponent",
     "ContainerComponent",
     "ChemicalContainerComponent",
+    "FluidContainerComponent",
     "AccessControlComponent",
     "PowerConsumerComponent",
     "StructureComponent",
@@ -49,6 +51,7 @@ COMPONENT_REGISTRY = {
     "npc": NPCComponent,
     "container": ContainerComponent,
     "chemical_container": ChemicalContainerComponent,
+    "fluid_container": FluidContainerComponent,
     "access": AccessControlComponent,
     "power_consumer": PowerConsumerComponent,
     "structure": StructureComponent,
