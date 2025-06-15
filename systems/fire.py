@@ -3,18 +3,22 @@ from typing import List
 from events import publish
 from .gas_sim import AtmosGrid, AtmosTile
 
+
 @dataclass
 class FireSource:
     tile: AtmosTile
     fuel: float = 10.0
     temperature: float = 300.0
 
+
 class FireSystem:
     def __init__(self, grid: AtmosGrid):
         self.grid = grid
         self.fires: List[FireSource] = []
 
-    def ignite(self, x: int, y: int, fuel: float = 10.0, temperature: float = 300.0) -> None:
+    def ignite(
+        self, x: int, y: int, fuel: float = 10.0, temperature: float = 300.0
+    ) -> None:
         tile = self.grid.get_tile(x, y)
         if tile:
             self.fires.append(FireSource(tile, fuel, temperature))

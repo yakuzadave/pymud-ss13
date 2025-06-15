@@ -16,8 +16,7 @@ def main():
 
     # loop indefinitely while the world is not flagged for termination or
     # there are still connected users
-    while (not mudpy.misc.universe.terminate_flag or
-           mudpy.misc.universe.userlist):
+    while not mudpy.misc.universe.terminate_flag or mudpy.misc.universe.userlist:
 
         # the world was flagged for a reload of all code/data
         if mudpy.misc.universe.reload_flag:
@@ -32,5 +31,5 @@ def main():
     mudpy.misc.finish()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

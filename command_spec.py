@@ -10,6 +10,7 @@ from typing import Dict, List, Callable, Optional, Any, Match, Set
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 class CommandSpec:
     """
     Command specification class.
@@ -18,12 +19,17 @@ class CommandSpec:
     against user input.
     """
 
-    def __init__(self, name: str, patterns: List[str], help_text: str,
-                 category: str = 'General',
-                 required_skills: Optional[List[str]] = None,
-                 terrain_restrictions: Optional[List[str]] = None,
-                 item_requirements: Optional[List[str]] = None,
-                 func: Optional[Callable] = None):
+    def __init__(
+        self,
+        name: str,
+        patterns: List[str],
+        help_text: str,
+        category: str = "General",
+        required_skills: Optional[List[str]] = None,
+        terrain_restrictions: Optional[List[str]] = None,
+        item_requirements: Optional[List[str]] = None,
+        func: Optional[Callable] = None,
+    ):
         """
         Initialize a command specification.
 
@@ -73,7 +79,9 @@ class CommandSpec:
             if match:
                 # Return the captured groups as parameters
                 params = match.groupdict()
-                logger.debug(f"Matched '{text}' to pattern '{regex.pattern}' with params: {params}")
+                logger.debug(
+                    f"Matched '{text}' to pattern '{regex.pattern}' with params: {params}"
+                )
                 return params
 
         return None
@@ -92,21 +100,25 @@ class CommandSpec:
         """
         # Check skills
         if self.required_skills:
-            player_skills = getattr(player, 'skills', set())
-            missing_skills = [skill for skill in self.required_skills if skill not in player_skills]
+            player_skills = getattr(player, "skills", set())
+            missing_skills = [
+                skill for skill in self.required_skills if skill not in player_skills
+            ]
             if missing_skills:
                 return f"You need the following skills: {', '.join(missing_skills)}"
 
         # Check terrain
         if self.terrain_restrictions:
-            terrain = getattr(location, 'terrain', None)
+            terrain = getattr(location, "terrain", None)
             if terrain not in self.terrain_restrictions:
                 return f"This command can only be used in: {', '.join(self.terrain_restrictions)}"
 
         # Check required items
         if self.item_requirements:
             inventory_ids = {item.id for item in inventory}
-            missing_items = [item for item in self.item_requirements if item not in inventory_ids]
+            missing_items = [
+                item for item in self.item_requirements if item not in inventory_ids
+            ]
             if missing_items:
                 return f"You need the following items: {', '.join(missing_items)}"
 
@@ -126,19 +138,37 @@ class CommandSpec:
             return f"Command '{self.name}' is not implemented yet."
 
         # Extract player, location, and inventory from context
-        client_id = kwargs.get('client_id')
-        interface = kwargs.get('interface')
+        client_id = kwargs.get("client_id")
+        interface = kwargs.get("interface")
 
         if interface and client_id:
             # Check requirements if we have the necessary context
-            player_data = interface.get_player_data(client_id) if hasattr(interface, 'get_player_data') else None
-            location = interface.get_player_location(client_id) if hasattr(interface, 'get_player_location') else None
-            location_data = interface.get_room_data(location) if hasattr(interface, 'get_room_data') and location else None
-            inventory = interface.get_player_inventory(client_id) if hasattr(interface, 'get_player_inventory') else []
+            player_data = (
+                interface.get_player_data(client_id)
+                if hasattr(interface, "get_player_data")
+                else None
+            )
+            location = (
+                interface.get_player_location(client_id)
+                if hasattr(interface, "get_player_location")
+                else None
+            )
+            location_data = (
+                interface.get_room_data(location)
+                if hasattr(interface, "get_room_data") and location
+                else None
+            )
+            inventory = (
+                interface.get_player_inventory(client_id)
+                if hasattr(interface, "get_player_inventory")
+                else []
+            )
 
             # Check requirements if we have the data
             if player_data and location_data:
-                req_error = self.check_requirements(player_data, location_data, inventory)
+                req_error = self.check_requirements(
+                    player_data, location_data, inventory
+                )
                 if req_error:
                     return req_error
 

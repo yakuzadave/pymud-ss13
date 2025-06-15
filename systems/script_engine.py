@@ -63,11 +63,17 @@ class ScriptEngine:
     # --------------------------------------------------------------
     def list_scripts(self, owner_id: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
         if owner_id:
-            return {sid: info for sid, info in self.scripts.items() if info.get("owner_id") == owner_id}
+            return {
+                sid: info
+                for sid, info in self.scripts.items()
+                if info.get("owner_id") == owner_id
+            }
         return self.scripts.copy()
 
     # --------------------------------------------------------------
-    def execute_script(self, script_id: str, context: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    def execute_script(
+        self, script_id: str, context: Optional[Dict[str, Any]] = None
+    ) -> Optional[Dict[str, Any]]:
         script = self.scripts.get(script_id)
         if not script:
             logger.warning("Unknown script %s", script_id)
@@ -84,14 +90,18 @@ class ScriptEngine:
             return None
 
     # --------------------------------------------------------------
-    def add_verb(self, obj_id: str, verb: str, code: str, owner_id: str) -> Optional[str]:
+    def add_verb(
+        self, obj_id: str, verb: str, code: str, owner_id: str
+    ) -> Optional[str]:
         script_id = f"{obj_id}:{verb}"
         if self.register_script(script_id, code, owner_id, obj_id=obj_id, verb=verb):
             return script_id
         return None
 
     # --------------------------------------------------------------
-    def run_verb(self, obj_id: str, verb: str, context: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    def run_verb(
+        self, obj_id: str, verb: str, context: Optional[Dict[str, Any]] = None
+    ) -> Optional[Dict[str, Any]]:
         script_id = f"{obj_id}:{verb}"
         return self.execute_script(script_id, context)
 

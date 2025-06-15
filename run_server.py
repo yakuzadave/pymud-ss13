@@ -23,8 +23,6 @@ from systems import (
 from system_loops import run_update_loop, run_forever_loop
 
 
-
-
 # Module logger
 logger = logging.getLogger(__name__)
 
@@ -34,22 +32,22 @@ TASKS: list[asyncio.Task] = []
 # Create routes for the HTTP server
 routes = web.RouteTableDef()
 
-@routes.get('/')
+
+@routes.get("/")
 async def index(request):
     """Serve the index.html page."""
-    return web.FileResponse('web_client/index.html')
+    return web.FileResponse("web_client/index.html")
 
-@routes.get('/{path:.+}')
+
+@routes.get("/{path:.+}")
 async def static_files(request):
     """Serve static files."""
-    path = request.match_info['path']
+    path = request.match_info["path"]
 
-    if os.path.isfile(f'web_client/{path}'):
-        return web.FileResponse(f'web_client/{path}')
+    if os.path.isfile(f"web_client/{path}"):
+        return web.FileResponse(f"web_client/{path}")
     else:
         return web.Response(status=404, text="File not found")
-
-
 
 
 def signal_handler(sig, frame):
@@ -61,6 +59,7 @@ def signal_handler(sig, frame):
         task.cancel()
     sys.exit(0)
 
+
 async def main():
     """
     Main entry point for the server.
@@ -70,9 +69,9 @@ async def main():
     signal.signal(signal.SIGTERM, signal_handler)
 
     # Check if web_client directory exists, create it if it doesn't
-    if not os.path.exists('web_client'):
+    if not os.path.exists("web_client"):
         logger.warning("web_client directory not found, creating it...")
-        os.makedirs('web_client')
+        os.makedirs("web_client")
 
     # Create the MUD server
     mud_server = create_mud_server()
@@ -90,12 +89,19 @@ async def main():
     random_event_task = asyncio.create_task(run_forever_loop(get_random_event_system))
     security_task = asyncio.create_task(run_update_loop(get_security_system))
 
-
-
-    TASKS.extend([mud_server_task, autosave_task, power_task, atmos_task, random_event_task, security_task])
+    TASKS.extend(
+        [
+            mud_server_task,
+            autosave_task,
+            power_task,
+            atmos_task,
+            random_event_task,
+            security_task,
+        ]
+    )
 
     # Start the HTTP server
-    host = '0.0.0.0'
+    host = "0.0.0.0"
     port = 5000
 
     logger.info(f"Starting combined HTTP/WebSocket server on {host}:{port}")
@@ -115,13 +121,14 @@ async def main():
             atmos_task,
             random_event_task,
             security_task,
-            asyncio.Future()  # Run forever
+            asyncio.Future(),  # Run forever
         )
     except asyncio.CancelledError:
         logger.info("Server tasks cancelled")
     finally:
         get_random_event_system().stop()
         await runner.cleanup()
+
 
 if __name__ == "__main__":
     try:

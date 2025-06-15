@@ -61,4 +61,8 @@ def profile(section_name: str):
     finally:
         profiler.disable()
         stats = pstats.Stats(profiler)
-        logger.debug("Profile results for %s:\n%s", section_name, stats.sort_stats("cumulative").print_stats(10))
+        logger.debug(
+            "Profile results for %s:\n%s",
+            section_name,
+            stats.sort_stats("cumulative").print_stats(10),
+        )

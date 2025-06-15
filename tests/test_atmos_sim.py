@@ -29,4 +29,3 @@ def test_player_breathe_affects_room():
     comp.breathe(room_tile)
     assert room_tile.gas.composition["oxygen"] < 21.0
     assert room_tile.gas.composition["co2"] > 0.04
-

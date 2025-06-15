@@ -14,9 +14,10 @@ import inspect
 
 logger = logging.getLogger(__name__)
 
+
 def _read_yaml(path: str) -> List[Any]:
     try:
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             data = yaml.safe_load(f) or []
         if not isinstance(data, list):
             logger.error(f"Expected list in {path}, got {type(data)}")
@@ -29,6 +30,7 @@ def _read_yaml(path: str) -> List[Any]:
         logger.error(f"Error reading {path}: {e}")
         return []
 
+
 def load_rooms(path: str, world) -> int:
     """Load rooms from YAML file into the given world."""
     rooms_data = _read_yaml(path)
@@ -36,31 +38,31 @@ def load_rooms(path: str, world) -> int:
     for room_data in rooms_data:
         try:
             room_obj = GameObject(
-                id=room_data['id'],
-                name=room_data['name'],
-                description=room_data.get('description', '')
+                id=room_data["id"],
+                name=room_data["name"],
+                description=room_data.get("description", ""),
             )
-            if 'components' in room_data:
-                comps = room_data['components']
-                if 'room' in comps:
-                    rc = comps['room']
+            if "components" in room_data:
+                comps = room_data["components"]
+                if "room" in comps:
+                    rc = comps["room"]
                     room_comp = RoomComponent(
-                        exits=rc.get('exits', {}),
-                        atmosphere=rc.get('atmosphere', {}),
-                        hazards=rc.get('hazards', []),
-                        is_airlock=rc.get('is_airlock', False)
+                        exits=rc.get("exits", {}),
+                        atmosphere=rc.get("atmosphere", {}),
+                        hazards=rc.get("hazards", []),
+                        is_airlock=rc.get("is_airlock", False),
                     )
-                    room_obj.add_component('room', room_comp)
-                if 'door' in comps:
-                    dc = comps['door']
+                    room_obj.add_component("room", room_comp)
+                if "door" in comps:
+                    dc = comps["door"]
                     door_comp = DoorComponent(
-                        is_open=dc.get('is_open', False),
-                        is_locked=dc.get('is_locked', False),
-                        destination=dc.get('destination'),
-                        requires_power=dc.get('requires_power', True),
-                        access_level=dc.get('access_level', 0)
+                        is_open=dc.get("is_open", False),
+                        is_locked=dc.get("is_locked", False),
+                        destination=dc.get("destination"),
+                        requires_power=dc.get("requires_power", True),
+                        access_level=dc.get("access_level", 0),
                     )
-                    room_obj.add_component('door', door_comp)
+                    room_obj.add_component("door", door_comp)
             world.register(room_obj)
             count += 1
         except Exception as e:
@@ -68,30 +70,31 @@ def load_rooms(path: str, world) -> int:
     logger.info(f"Loaded {count} rooms from {path}")
     return count
 
+
 def load_items(path: str, world) -> int:
     items_data = _read_yaml(path)
     count = 0
     for item_data in items_data:
         try:
             item_obj = GameObject(
-                id=item_data['id'],
-                name=item_data['name'],
-                description=item_data.get('description', ''),
-                location=item_data.get('location')
+                id=item_data["id"],
+                name=item_data["name"],
+                description=item_data.get("description", ""),
+                location=item_data.get("location"),
             )
-            if 'components' in item_data:
-                comps = item_data['components']
-                if 'item' in comps:
-                    ic = comps['item']
+            if "components" in item_data:
+                comps = item_data["components"]
+                if "item" in comps:
+                    ic = comps["item"]
                     item_comp = ItemComponent(
-                        weight=ic.get('weight', 1.0),
-                        is_takeable=ic.get('is_takeable', True),
-                        is_usable=ic.get('is_usable', False),
-                        use_effect=ic.get('use_effect'),
-                        item_type=ic.get('item_type', 'miscellaneous'),
-                        item_properties=ic.get('item_properties', {})
+                        weight=ic.get("weight", 1.0),
+                        is_takeable=ic.get("is_takeable", True),
+                        is_usable=ic.get("is_usable", False),
+                        use_effect=ic.get("use_effect"),
+                        item_type=ic.get("item_type", "miscellaneous"),
+                        item_properties=ic.get("item_properties", {}),
                     )
-                    item_obj.add_component('item', item_comp)
+                    item_obj.add_component("item", item_comp)
             world.register(item_obj)
             count += 1
         except Exception as e:
@@ -99,24 +102,24 @@ def load_items(path: str, world) -> int:
     logger.info(f"Loaded {count} items from {path}")
     return count
 
+
 def load_npcs(path: str, world) -> int:
     npcs_data = _read_yaml(path)
     count = 0
     for npc_data in npcs_data:
         try:
             npc_obj = GameObject(
-                id=npc_data['id'],
-                name=npc_data['name'],
-                description=npc_data.get('description', ''),
-                location=npc_data.get('location')
+                id=npc_data["id"],
+                name=npc_data["name"],
+                description=npc_data.get("description", ""),
+                location=npc_data.get("location"),
             )
-            if 'components' in npc_data and 'npc' in npc_data['components']:
-                nc = npc_data['components']['npc']
+            if "components" in npc_data and "npc" in npc_data["components"]:
+                nc = npc_data["components"]["npc"]
                 npc_comp = NPCComponent(
-                    role=nc.get('role', 'crew'),
-                    dialogue=nc.get('dialogue', [])
+                    role=nc.get("role", "crew"), dialogue=nc.get("dialogue", [])
                 )
-                npc_obj.add_component('npc', npc_comp)
+                npc_obj.add_component("npc", npc_comp)
             world.register(npc_obj)
             count += 1
         except Exception as e:
@@ -152,12 +155,15 @@ def load_players(directory: str, world: World) -> int:
 
             if "components" in data:
                 from components import COMPONENT_REGISTRY
+
                 for comp_name, comp_data in data["components"].items():
                     comp_class = COMPONENT_REGISTRY.get(comp_name)
                     if comp_class and isinstance(comp_data, dict):
                         params = inspect.signature(comp_class.__init__).parameters
                         kwargs = {
-                            k: v for k, v in comp_data.items() if k in params and k != "self"
+                            k: v
+                            for k, v in comp_data.items()
+                            if k in params and k != "self"
                         }
                         try:
                             comp_instance = comp_class(**kwargs)
@@ -200,7 +206,9 @@ def save_game_object(obj: GameObject, path: str) -> None:
     """Serialize a GameObject to YAML and write it to ``path``."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
-        yaml.dump(game_object_to_dict(obj), f, default_flow_style=False, sort_keys=False)
+        yaml.dump(
+            game_object_to_dict(obj), f, default_flow_style=False, sort_keys=False
+        )
     logger.info(f"Saved object {obj.id} to {path}")
 
 
@@ -217,7 +225,13 @@ def save_world(world: World, path: str) -> None:
     logger.info(f"Saved {len(world.objects)} objects to {path}")
 
 
-async def autosave_loop(world: World, interval: int = 60, *, iterations: int | None = None, prefix: str = "autosave") -> None:
+async def autosave_loop(
+    world: World,
+    interval: int = 60,
+    *,
+    iterations: int | None = None,
+    prefix: str = "autosave",
+) -> None:
     """Periodically write world snapshots to ``data/world``."""
     count = 0
     while iterations is None or count < iterations:

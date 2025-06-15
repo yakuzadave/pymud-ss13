@@ -9,7 +9,7 @@ def research_handler(client_id: str, tech_id: str, *args, **kwargs):
     dept = "science"  # Placeholder: in game this would be determined from player role
     if system.research(dept, tech_id):
         return f"Technology {tech_id} researched."
-    return "Research failed." 
+    return "Research failed."
 
 
 @register("prototype")

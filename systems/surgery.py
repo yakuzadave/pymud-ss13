@@ -17,7 +17,14 @@ class SurgerySystem:
                 "required_skill": 2,
                 "required_tools": ["scalpel", "suture_kit"],
                 "healing": [("torso", "brute", 20)],
-            }
+            },
+            "antiviral": {
+                "steps": ["incision", "administer_antiviral", "suture"],
+                "required_skill": 1,
+                "required_tools": ["scalpel", "suture_kit"],
+                "healing": [],
+                "cures": ["virus_x"],
+            },
         }
         self.active: Dict[Tuple[str, str], Dict] = {}
 
@@ -76,6 +83,8 @@ class SurgerySystem:
                 if p_comp:
                     for part, dtype, amt in data.get("healing", []):
                         p_comp.heal_damage(part, dtype, amt)
+                    for disease in data.get("cures", []):
+                        p_comp.cure_disease(disease)
             publish(
                 "surgery_completed",
                 surgeon_id=surgeon_id,

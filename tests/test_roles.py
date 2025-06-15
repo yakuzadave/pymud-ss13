@@ -24,7 +24,9 @@ def teardown_player():
     w = world.get_world()
     if "player_test" in w.objects:
         del w.objects["player_test"]
-        w.players = {k: v for k, v in getattr(w, "players", {}).items() if k != "player_test"}
+        w.players = {
+            k: v for k, v in getattr(w, "players", {}).items() if k != "player_test"
+        }
 
 
 def test_power_grid_power_off_publishes(monkeypatch):
@@ -32,6 +34,7 @@ def test_power_grid_power_off_publishes(monkeypatch):
     mock_pub = mock.Mock()
     monkeypatch.setattr(events, "publish", mock_pub)
     import systems.power as sp
+
     monkeypatch.setattr(sp, "publish", mock_pub)
     grid.power_off()
     mock_pub.assert_called_with("power_loss", grid_id="g1", affected_rooms=[])
@@ -43,6 +46,7 @@ def test_atmos_leak_publishes(monkeypatch):
     monkeypatch.setattr(events, "publish", mock_pub)
     import systems.atmosphere as sa
     import systems.atmos as atmos_mod
+
     monkeypatch.setattr(sa, "publish", mock_pub)
     monkeypatch.setattr(atmos_mod, "publish", mock_pub)
     atmos.create_leak("room1", rate=1.0)

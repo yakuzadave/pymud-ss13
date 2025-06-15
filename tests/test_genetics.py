@@ -31,4 +31,3 @@ def test_dna_scanning():
     p2 = system.get_profile("p2")
     assert p2.genes.get("strength") == 5
     assert "hulk" in p2.mutations
-

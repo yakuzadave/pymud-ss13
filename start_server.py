@@ -27,16 +27,13 @@ from system_loops import run_update_loop, run_forever_loop
 from commands import basic, movement, inventory, system, interaction
 
 # Configure more detailed logging
-if not os.path.exists('logs'):
-    os.makedirs('logs')
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/server.log'),
-        logging.StreamHandler()
-    ]
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("logs/server.log"), logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
@@ -49,23 +46,22 @@ mudpy_interface = None
 # Create routes for the HTTP server
 routes = web.RouteTableDef()
 
-@routes.get('/')
+
+@routes.get("/")
 async def index(request):
     """Serve the index.html page."""
-    return web.FileResponse('web_client/index.html')
+    return web.FileResponse("web_client/index.html")
 
-@routes.get('/{path:.+}')
+
+@routes.get("/{path:.+}")
 async def static_files(request):
     """Serve static files."""
-    path = request.match_info['path']
+    path = request.match_info["path"]
 
-    if os.path.isfile(f'web_client/{path}'):
-        return web.FileResponse(f'web_client/{path}')
+    if os.path.isfile(f"web_client/{path}"):
+        return web.FileResponse(f"web_client/{path}")
     else:
         return web.Response(status=404, text="File not found")
-
-
-
 
 
 def signal_handler(sig, frame):
@@ -88,12 +84,14 @@ def signal_handler(sig, frame):
 
     sys.exit(0)
 
+
 async def on_shutdown(app):
     """Handle graceful shutdown."""
     for ws in active_clients.values():
         await ws.close(code=1001, reason="Server shutdown")
     for task in TASKS:
         task.cancel()
+
 
 async def websocket_handler(request):
     """Handle WebSocket connections."""
@@ -109,6 +107,7 @@ async def websocket_handler(request):
         logger.error(f"Error in WebSocket handler: {e}")
 
     return ws
+
 
 async def main():
     """
@@ -127,16 +126,16 @@ async def main():
     mud_integration = integration.create_integration(mudpy_interface)
 
     # Check if web_client directory exists, create it if it doesn't
-    if not os.path.exists('web_client'):
+    if not os.path.exists("web_client"):
         logger.warning("web_client directory not found, creating it...")
-        os.makedirs('web_client')
+        os.makedirs("web_client")
 
     # Create the app
     app = web.Application()
     app.add_routes(routes)
 
     # Add WebSocket route
-    app.router.add_get('/ws', websocket_handler)
+    app.router.add_get("/ws", websocket_handler)
 
     # Add shutdown handler
     app.on_shutdown.append(on_shutdown)
@@ -151,7 +150,7 @@ async def main():
     TASKS.extend([power_task, atmos_task, random_event_task, security_task])
 
     # Start the server
-    host = '0.0.0.0'
+    host = "0.0.0.0"
     port = 5000
 
     logger.info(f"Starting combined HTTP/WebSocket server on {host}:{port}")
@@ -173,6 +172,7 @@ async def main():
         )
     except asyncio.CancelledError:
         logger.info("Server tasks cancelled")
+
 
 if __name__ == "__main__":
     try:

@@ -41,4 +41,3 @@ def test_replica_pod_cloning(tmp_path):
         assert "podperson" == clone.get_component("player").role
     finally:
         world.WORLD = old_world
-

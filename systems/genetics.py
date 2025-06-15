@@ -60,7 +60,11 @@ class GeneticsSystem:
         target = self.profiles.get(target_id)
         if not target:
             return None
-        copy = GeneticProfile(genes=dict(target.genes), mutations=list(target.mutations), instability=target.instability)
+        copy = GeneticProfile(
+            genes=dict(target.genes),
+            mutations=list(target.mutations),
+            instability=target.instability,
+        )
         self.scanned_dna[player_id] = copy
         publish("dna_scanned", scanner=player_id, target=target_id)
         logger.debug("%s scanned DNA from %s", player_id, target_id)
@@ -70,12 +74,18 @@ class GeneticsSystem:
         data = self.scanned_dna.get(player_id)
         if not data:
             return False
-        self.profiles[player_id] = GeneticProfile(genes=dict(data.genes), mutations=list(data.mutations), instability=data.instability)
+        self.profiles[player_id] = GeneticProfile(
+            genes=dict(data.genes),
+            mutations=list(data.mutations),
+            instability=data.instability,
+        )
         publish("dna_applied", player=player_id)
         logger.debug("Applied scanned DNA to %s", player_id)
         return True
 
-    def mutate_player(self, player_id: str, mutation: str, severity: float = 1.0) -> None:
+    def mutate_player(
+        self, player_id: str, mutation: str, severity: float = 1.0
+    ) -> None:
         profile = self.get_profile(player_id)
         profile.apply_mutation(mutation, severity)
         publish("player_mutated", player=player_id, mutation=mutation)

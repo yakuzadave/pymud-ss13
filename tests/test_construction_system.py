@@ -64,4 +64,3 @@ def test_safety_officer_prevents_accidents(monkeypatch):
     system.update()
     assert project2.is_completed()
     assert project2.quality_score == 100
-

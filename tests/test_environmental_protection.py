@@ -12,7 +12,9 @@ def test_vacuum_protection_from_space_suit():
     w.register(player)
 
     suit = GameObject(id="s", name="suit", description="")
-    suit.add_component("item", ItemComponent(item_properties={"vacuum_protection": True}))
+    suit.add_component(
+        "item", ItemComponent(item_properties={"vacuum_protection": True})
+    )
     w.register(suit)
 
     comp.equipment["body"] = "s"

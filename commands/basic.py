@@ -10,6 +10,7 @@ from engine import register
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 @register("help")
 def help_handler(client_id: str, command: Optional[str] = None, **kwargs) -> str:
     """
@@ -26,7 +27,8 @@ def help_handler(client_id: str, command: Optional[str] = None, **kwargs) -> str
 
     # Access parent module command_parser
     import sys
-    sys.path.append('.')
+
+    sys.path.append(".")
     from engine import command_parser
 
     if command:
@@ -49,7 +51,7 @@ def status_handler(client_id: str, **kwargs) -> str:
     logger.debug(f"Status command called by client {client_id}")
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 

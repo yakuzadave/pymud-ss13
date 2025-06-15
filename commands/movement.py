@@ -11,6 +11,7 @@ from world import get_world
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 @register("move")
 def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> str:
     """
@@ -23,10 +24,12 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
     Returns:
         Result of the movement attempt.
     """
-    logger.debug(f"Move command called by client {client_id} with direction {direction}")
+    logger.debug(
+        f"Move command called by client {client_id} with direction {direction}"
+    )
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 
@@ -70,10 +73,10 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
     target_location = exits[direction]
 
     # Check for required items in the target room
-    target_room = interface.world['rooms'].get(target_location, {})
-    if 'requires' in target_room:
+    target_room = interface.world["rooms"].get(target_location, {})
+    if "requires" in target_room:
         inventory = interface.player_inventories.get(client_id, [])
-        for required_item, message in target_room['requires'].items():
+        for required_item, message in target_room["requires"].items():
             if required_item not in inventory:
                 return message
 
@@ -83,8 +86,8 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
         return f"The door to the {direction} is locked."
 
     # Consume energy
-    if hasattr(interface, 'modify_player_stat'):
-        interface.modify_player_stat(client_id, 'energy', -1)
+    if hasattr(interface, "modify_player_stat"):
+        interface.modify_player_stat(client_id, "energy", -1)
 
     # Move the player
     previous_location = current_location
@@ -96,13 +99,17 @@ def move_handler(client_id: str, direction: Optional[str] = None, **kwargs) -> s
 
     # Publish the movement event
     from events import publish
-    publish("player_moved",
-            player_id=client_id,
-            from_location=previous_location,
-            to_location=target_location)
+
+    publish(
+        "player_moved",
+        player_id=client_id,
+        from_location=previous_location,
+        to_location=target_location,
+    )
 
     # Return a description of the new location
     return interface._look(client_id)
+
 
 @register("sprint")
 def sprint_handler(client_id: str, direction: str, **kwargs) -> str:
@@ -116,16 +123,18 @@ def sprint_handler(client_id: str, direction: str, **kwargs) -> str:
     Returns:
         Result of the sprint attempt.
     """
-    logger.debug(f"Sprint command called by client {client_id} with direction {direction}")
+    logger.debug(
+        f"Sprint command called by client {client_id} with direction {direction}"
+    )
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 
     # Check energy levels
     stats = interface.get_player_stats(client_id)
-    if stats and stats.get('energy', 0) < 10:
+    if stats and stats.get("energy", 0) < 10:
         return "You are too tired to sprint. Rest a bit first."
 
     # Normalize direction
@@ -159,8 +168,8 @@ def sprint_handler(client_id: str, direction: str, **kwargs) -> str:
         # Check if we can continue in the same direction
         if direction in exits:
             # Consume extra energy
-            if hasattr(interface, 'modify_player_stat'):
-                interface.modify_player_stat(client_id, 'energy', -5)
+            if hasattr(interface, "modify_player_stat"):
+                interface.modify_player_stat(client_id, "energy", -5)
 
             # Move again
             result = move_handler(client_id, direction, **kwargs)

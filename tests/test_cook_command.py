@@ -16,13 +16,22 @@ def test_cook_handler(tmp_path):
     world.WORLD = World(data_dir=str(tmp_path))
     try:
         bun = GameObject(id="bun", name="bun", description="")
-        bun.add_component("item", ItemComponent(is_takeable=True, is_usable=False, item_type="food"))
+        bun.add_component(
+            "item", ItemComponent(is_takeable=True, is_usable=False, item_type="food")
+        )
         patty = GameObject(id="patty", name="patty", description="")
-        patty.add_component("item", ItemComponent(is_takeable=True, is_usable=False, item_type="food"))
+        patty.add_component(
+            "item", ItemComponent(is_takeable=True, is_usable=False, item_type="food")
+        )
         world.WORLD.register(bun)
         world.WORLD.register(patty)
         player = GameObject(id="player_test", name="Tester", description="")
-        player.add_component("player", PlayerComponent(role="chef", inventory=["bun", "patty"], stats={"nutrition": 50}))
+        player.add_component(
+            "player",
+            PlayerComponent(
+                role="chef", inventory=["bun", "patty"], stats={"nutrition": 50}
+            ),
+        )
         world.WORLD.register(player)
         system = get_kitchen_system()
         system.recipes = {"burger": {"inputs": ["bun", "patty"], "nutrition": 25}}

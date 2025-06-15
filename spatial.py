@@ -43,7 +43,12 @@ class SpatialGrid:
                 result.append(obj_id)
         return result
 
-    def line_of_sight(self, start: Tuple[int, int], end: Tuple[int, int], opaque: Optional[Iterable[str]] = None) -> bool:
+    def line_of_sight(
+        self,
+        start: Tuple[int, int],
+        end: Tuple[int, int],
+        opaque: Optional[Iterable[str]] = None,
+    ) -> bool:
         """Simple Bresenham line check; returns False if an opaque object blocks."""
         opaque = set(opaque or [])
         x0, y0 = start

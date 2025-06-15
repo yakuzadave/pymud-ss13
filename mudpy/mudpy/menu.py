@@ -19,8 +19,7 @@ def activate_avatar_action_a(user):
 
 def activate_avatar_create(user):
     """List available avatars as choices for the activate_avatar state."""
-    return dict(
-        [(str(x + 1), y) for x, y in enumerate(user.list_avatar_names())])
+    return dict([(str(x + 1), y) for x, y in enumerate(user.list_avatar_names())])
 
 
 def checking_new_account_name_action_d(user):
@@ -85,8 +84,7 @@ def delete_account_action_y(user):
 
 def delete_avatar_action(user):
     """Delete the selected avatar."""
-    return user.delete_avatar(
-        user.account.get("avatars")[int(user.choice) - 1])
+    return user.delete_avatar(user.account.get("avatars")[int(user.choice) - 1])
 
 
 def delete_avatar_action_a(user):
@@ -96,8 +94,7 @@ def delete_avatar_action_a(user):
 
 def delete_avatar_create(user):
     """List available avatars for possible deletion."""
-    return dict(
-        [(str(x + 1), y) for x, y in enumerate(user.list_avatar_names())])
+    return dict([(str(x + 1), y) for x, y in enumerate(user.list_avatar_names())])
 
 
 def main_utility_action_c(user):
@@ -112,8 +109,9 @@ def main_utility_demand_a(user):
 
 def main_utility_demand_c(user):
     """Only include avatar creation if avatar count is below the limit."""
-    return (len(user.account.get("avatars")) <
-            mudpy.misc.universe.contents["mudpy.limit"].get("avatars"))
+    return len(user.account.get("avatars")) < mudpy.misc.universe.contents[
+        "mudpy.limit"
+    ].get("avatars")
 
 
 def main_utility_demand_d(user):

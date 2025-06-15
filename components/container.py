@@ -9,6 +9,7 @@ from world import get_world
 
 logger = logging.getLogger(__name__)
 
+
 class ContainerComponent:
     """Component representing a generic container."""
 
@@ -26,6 +27,7 @@ class ContainerComponent:
         path = os.path.join(world.data_dir, "world", f"{self.owner.id}.yaml")
         try:
             from persistence import save_game_object
+
             save_game_object(self.owner, path)
         except Exception as exc:
             logger.error(f"Failed to save container {self.owner.id}: {exc}")
@@ -36,7 +38,11 @@ class ContainerComponent:
             if len(self.items) >= self.capacity or item_id in self.items:
                 return False
             self.items.append(item_id)
-        publish("container_item_added", container_id=self.owner.id if self.owner else None, item_id=item_id)
+        publish(
+            "container_item_added",
+            container_id=self.owner.id if self.owner else None,
+            item_id=item_id,
+        )
         self._persist()
         return True
 
@@ -47,7 +53,11 @@ class ContainerComponent:
                 self.items.remove(item_id)
             else:
                 return False
-        publish("container_item_removed", container_id=self.owner.id if self.owner else None, item_id=item_id)
+        publish(
+            "container_item_removed",
+            container_id=self.owner.id if self.owner else None,
+            item_id=item_id,
+        )
         self._persist()
         return True
 

@@ -175,4 +175,3 @@ def get_construction_system() -> ConstructionSystem:
     """Return the global construction system."""
 
     return CONSTRUCTION_SYSTEM
-

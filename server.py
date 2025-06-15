@@ -63,6 +63,7 @@ else:
     os.makedirs(web_client_dir)
     app.mount("/static", StaticFiles(directory=web_client_dir), name="static")
 
+
 # Event handlers
 async def on_player_moved(player_id: str, from_location: str, to_location: str) -> None:
     """
@@ -85,25 +86,23 @@ async def on_player_moved(player_id: str, from_location: str, to_location: str) 
 
     # Broadcast to players in the previous location
     await connection_manager.broadcast_to_room(
-        {
-            "type": "location",
-            "message": f"* {player_name} has left to {to_name}."
-        },
+        {"type": "location", "message": f"* {player_name} has left to {to_name}."},
         from_location,
         client_locations,
-        exclude_client=player_id
+        exclude_client=player_id,
     )
 
     # Broadcast to players in the new location
     await connection_manager.broadcast_to_room(
         {
             "type": "location",
-            "message": f"* {player_name} has arrived from {from_name}."
+            "message": f"* {player_name} has arrived from {from_name}.",
         },
         to_location,
         client_locations,
-        exclude_client=player_id
+        exclude_client=player_id,
     )
+
 
 async def on_item_taken(item_id: str, player_id: str) -> None:
     """
@@ -126,14 +125,12 @@ async def on_item_taken(item_id: str, player_id: str) -> None:
 
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
-        {
-            "type": "location",
-            "message": f"* {player_name} picks up {item_name}."
-        },
+        {"type": "location", "message": f"* {player_name} picks up {item_name}."},
         player_location,
         client_locations,
-        exclude_client=player_id
+        exclude_client=player_id,
     )
+
 
 async def on_item_dropped(item_id: str, player_id: str) -> None:
     """
@@ -156,14 +153,12 @@ async def on_item_dropped(item_id: str, player_id: str) -> None:
 
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
-        {
-            "type": "location",
-            "message": f"* {player_name} drops {item_name}."
-        },
+        {"type": "location", "message": f"* {player_name} drops {item_name}."},
         player_location,
         client_locations,
-        exclude_client=player_id
+        exclude_client=player_id,
     )
+
 
 async def on_item_used(item_id: str, player_id: str, item_type: str) -> None:
     """
@@ -187,14 +182,12 @@ async def on_item_used(item_id: str, player_id: str, item_type: str) -> None:
 
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
-        {
-            "type": "location",
-            "message": f"* {player_name} uses {item_name}."
-        },
+        {"type": "location", "message": f"* {player_name} uses {item_name}."},
         player_location,
         client_locations,
-        exclude_client=player_id
+        exclude_client=player_id,
     )
+
 
 async def on_player_said(client_id: str, location: str, message: str) -> None:
     """
@@ -210,14 +203,12 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
 
     # Broadcast to players in the same location
     await connection_manager.broadcast_to_room(
-        {
-            "type": "chat",
-            "message": f"{player_name} says: {message}"
-        },
+        {"type": "chat", "message": f"{player_name} says: {message}"},
         location,
         client_locations,
-        exclude_client=client_id
+        exclude_client=client_id,
     )
+
 
 # FastAPI event handlers
 @app.on_event("startup")
@@ -243,6 +234,7 @@ async def startup_event():
     # Start random events
     random_event_system.start()
 
+
 @app.on_event("shutdown")
 async def shutdown_event():
     """Handle application shutdown."""
@@ -258,6 +250,7 @@ async def shutdown_event():
         except Exception as e:
             logger.error(f"Error shutting down MUDpy interface: {e}")
 
+
 # API routes
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
@@ -266,7 +259,10 @@ async def get_index(request: Request):
     if os.path.exists(index_path):
         return FileResponse(index_path)
     else:
-        return HTMLResponse("<html><body><h1>MUDpy SS13</h1><p>Welcome to the MUDpy SS13 server!</p></body></html>")
+        return HTMLResponse(
+            "<html><body><h1>MUDpy SS13</h1><p>Welcome to the MUDpy SS13 server!</p></body></html>"
+        )
+
 
 @app.get("/{path:path}")
 async def get_static(path: str):
@@ -281,6 +277,7 @@ async def get_static(path: str):
             return FileResponse(index_path)
         else:
             raise HTTPException(status_code=404, detail="File not found")
+
 
 # WebSocket endpoint
 @app.websocket("/ws")
@@ -299,9 +296,9 @@ async def websocket_endpoint(websocket: WebSocket):
         await connection_manager.send_personal_message(
             {
                 "type": "system",
-                "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!"
+                "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!",
             },
-            websocket
+            websocket,
         )
 
         # Connect client to MUDpy interface
@@ -327,27 +324,31 @@ async def websocket_endpoint(websocket: WebSocket):
             await connection_manager.send_personal_message(
                 {
                     "type": "response",
-                    "message": initial_response if initial_response else "Welcome! You find yourself in a mysterious location."
+                    "message": (
+                        initial_response
+                        if initial_response
+                        else "Welcome! You find yourself in a mysterious location."
+                    ),
                 },
-                websocket
+                websocket,
             )
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
             await connection_manager.send_personal_message(
                 {
                     "type": "error",
-                    "message": "Error initializing game state. Please refresh and try again."
+                    "message": "Error initializing game state. Please refresh and try again.",
                 },
-                websocket
+                websocket,
             )
 
         # Announce new player to other clients
         await connection_manager.broadcast(
             {
                 "type": "broadcast",
-                "message": f"* A new crew member has boarded the station."
+                "message": f"* A new crew member has boarded the station.",
             },
-            exclude=websocket
+            exclude=websocket,
         )
 
         # Wait for messages from the client
@@ -359,14 +360,16 @@ async def websocket_endpoint(websocket: WebSocket):
                 # Parse message
                 try:
                     data = json.loads(message)
-                    command = data.get('command', '')
+                    command = data.get("command", "")
                 except json.JSONDecodeError:
                     # If not JSON, treat as plain command
                     command = message.strip()
 
                 # Process command
                 if command:
-                    logger.debug(f"Processing command from client {client_id}: {command}")
+                    logger.debug(
+                        f"Processing command from client {client_id}: {command}"
+                    )
                     response = mud_integration.process_command(client_id, command)
 
                     # Update player location
@@ -376,29 +379,22 @@ async def websocket_endpoint(websocket: WebSocket):
 
                     # Send response back to client
                     await connection_manager.send_personal_message(
-                        {
-                            "type": "response",
-                            "message": response
-                        },
-                        websocket
+                        {"type": "response", "message": response}, websocket
                     )
                 else:
                     logger.warning(f"Empty command received from client {client_id}")
                     await connection_manager.send_personal_message(
-                        {
-                            "type": "error",
-                            "message": "Please enter a command."
-                        },
-                        websocket
+                        {"type": "error", "message": "Please enter a command."},
+                        websocket,
                     )
             except Exception as e:
                 logger.error(f"Error processing message from client {client_id}: {e}")
                 await connection_manager.send_personal_message(
                     {
                         "type": "error",
-                        "message": f"Error processing your command: {str(e)}"
+                        "message": f"Error processing your command: {str(e)}",
                     },
-                    websocket
+                    websocket,
                 )
 
     except WebSocketDisconnect:
@@ -423,11 +419,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
         # Announce departure to other clients
         await connection_manager.broadcast(
-            {
-                "type": "broadcast",
-                "message": f"* A crew member has left the station."
-            }
+            {"type": "broadcast", "message": f"* A crew member has left the station."}
         )
+
 
 # Main entry point
 def run_server():
@@ -438,8 +432,9 @@ def run_server():
         host=settings.host,
         port=settings.port,
         reload=settings.debug,
-        log_level="debug" if settings.debug else "info"
+        log_level="debug" if settings.debug else "info",
     )
+
 
 if __name__ == "__main__":
     run_server()

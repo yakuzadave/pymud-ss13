@@ -49,3 +49,26 @@ def test_diagnostic_scanner(tmp_path):
     msg = scanner.get_component("item").use("patient")
     assert "torso brute: 5" in msg
     assert "Diseases:" in msg
+
+
+def test_antiviral_surgery(tmp_path):
+    w = World(data_dir=str(tmp_path))
+    world.WORLD = w
+
+    surgeon = GameObject(id="surgeon", name="doc", description="")
+    s_comp = PlayerComponent(skills={"surgery": 2}, inventory=["scalpel", "suture_kit"])
+    surgeon.add_component("player", s_comp)
+    w.register(surgeon)
+
+    patient = GameObject(id="patient", name="pat", description="")
+    p_comp = PlayerComponent()
+    patient.add_component("player", p_comp)
+    w.register(patient)
+    p_comp.contract_disease("virus_x")
+
+    system = SurgerySystem()
+    assert system.start_procedure("surgeon", "patient", "antiviral") is True
+    assert system.perform_step("surgeon", "patient") == "incision"
+    assert system.perform_step("surgeon", "patient") == "administer_antiviral"
+    assert system.perform_step("surgeon", "patient") == "suture"
+    assert "virus_x" not in p_comp.diseases
