@@ -1605,3 +1605,27 @@
       is_takeable: true
       is_usable: true
       item_type: chemical
+
+- id: fluid_duct
+  name: Fluid Duct
+  description: >
+    A pipe segment used to route fluids between equipment.
+  location: engineering
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: false
+      item_type: material
+
+- id: plumbing_constructor
+  name: Plumbing Constructor
+  description: >
+    A handheld device for linking fluid ducts together.
+  location: engineering
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: tool
