@@ -7,7 +7,7 @@ They should be disabled in production.
 import logging
 from engine import register
 from events import publish
-import script_manager
+from systems.script_engine import get_script_engine
 
 logger = logging.getLogger(__name__)
 
@@ -41,12 +41,8 @@ def cmd_addverb(interface, client_id, args):
     obj_id, verb_name, code = parts
 
     # Add the verb to the object
-    script_id = script_manager.add_verb_to_object(
-        obj_id=obj_id,
-        verb=verb_name,
-        code=code,
-        owner_id=client_id
-    )
+    engine = get_script_engine()
+    script_id = engine.add_verb(obj_id, verb_name, code, owner_id=client_id)
 
     if script_id:
         return f"Added verb '{verb_name}' to object {obj_id}."
@@ -75,14 +71,16 @@ def cmd_listscripts(interface, client_id, args):
         return "You do not have permission to list scripts for other users."
 
     owner_id = args if args and is_admin else client_id
-    scripts = script_manager.list_scripts(owner_id if args else None)
+    engine = get_script_engine()
+    scripts = engine.list_scripts(owner_id if args else None)
 
     if not scripts:
         return "No scripts found."
 
     script_list = []
     for script_id, info in scripts.items():
-        script_list.append(f"{script_id} - {info['name']} (by {info['owner_id']})")
+        owner = info.get('owner_id', 'unknown')
+        script_list.append(f"{script_id} (by {owner})")
 
     return "Registered scripts:\n" + "\n".join(script_list)
 
@@ -105,7 +103,8 @@ def cmd_delscript(interface, client_id, args):
     script_id = args
 
     # Get script info
-    script_info = script_manager.get_script_info(script_id)
+    engine = get_script_engine()
+    script_info = engine.get_script_info(script_id)
     if not script_info:
         return f"Script '{script_id}' not found."
 
@@ -118,7 +117,7 @@ def cmd_delscript(interface, client_id, args):
         return "You do not have permission to delete this script."
 
     # Delete the script
-    success = script_manager.unregister_script(script_id, client_id)
+    success = engine.remove_script(script_id)
 
     if success:
         return f"Script '{script_id}' deleted."
@@ -144,7 +143,8 @@ def cmd_runscript(interface, client_id, args):
     script_id = args
 
     # Get script info
-    script_info = script_manager.get_script_info(script_id)
+    engine = get_script_engine()
+    script_info = engine.get_script_info(script_id)
     if not script_info:
         return f"Script '{script_id}' not found."
 
@@ -160,7 +160,7 @@ def cmd_runscript(interface, client_id, args):
     }
 
     # Run the script
-    result = script_manager.execute_script(script_id, context)
+    result = engine.execute_script(script_id, context)
 
     if result is None:
         return f"Failed to run script '{script_id}'."
