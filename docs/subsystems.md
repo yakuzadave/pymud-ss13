@@ -31,7 +31,10 @@ testing.  The systems below run automatically but also accept manual input:
   events manually.
 - **CommunicationsSystem** – manages radio channels, intercoms and PDAs.
   Players send messages via the `radio` or `pda` commands. Admins may jam
-  channels or make high priority announcements.
+  channels or make high priority announcements. Recent radio and PDA
+  messages are kept so admins can review logs. PDAs support optional
+  encryption keys shared with other devices. When a key is set, messages
+  must include the matching key to be decrypted.
 - **CargoSystem** – vendors take supply orders that arrive after a delay. Cargo
   technicians place orders; the system processes deliveries and updates
   department inventories automatically.
@@ -50,3 +53,11 @@ testing.  The systems below run automatically but also accept manual input:
 
 Subsystem modules may be extended or replaced as the project grows. They
 communicate using the event bus so features remain decoupled and easy to test.
+
+Example encrypted PDA interaction:
+
+```text
+> pdakey my_pda
+Key for my_pda: 1a2b3c4d
+> pda my_pda other_pda "meet at cargo" key=1a2b3c4d
+```

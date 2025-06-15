@@ -52,6 +52,10 @@ class CommunicationsSystem:
         self.jammed_channels: set[str] = set()
         self.dead_zones: set[str] = set()
         self.announcement_queue: List[Tuple[int, str]] = []
+        self.radio_logs: Dict[str, List[Tuple[str, str]]] = {}
+        self.pda_logs: Dict[str, List[Tuple[str, str]]] = {}
+        self.pda_keys: Dict[str, str] = {}
+        self.max_log = 50
 
     # ------------------------------------------------------------------
     def register_channel(
@@ -107,6 +111,11 @@ class CommunicationsSystem:
                 return False
             text = self._encrypt(message, ch.key)
 
+        log = self.radio_logs.setdefault(channel, [])
+        log.append((sender_id, message))
+        if len(log) > self.max_log:
+            log.pop(0)
+
         publish("radio_message", channel=channel, sender=sender_id, message=text)
         return True
 
@@ -148,6 +157,28 @@ class CommunicationsSystem:
     def register_pda(self, device_id: str, owner_id: str) -> None:
         self.pdas[device_id] = PDADevice(device_id, owner_id)
 
+    def get_radio_log(self, channel: str) -> List[Tuple[str, str]]:
+        return list(self.radio_logs.get(channel, []))
+
+    def get_pda_log(self, device_id: str) -> List[Tuple[str, str]]:
+        return list(self.pda_logs.get(device_id, []))
+
+    # ------------------------------------------------------------------
+    def generate_pda_key(self, device_id: str) -> Optional[str]:
+        if device_id not in self.pdas:
+            return None
+        key = secrets.token_hex(4)
+        self.pda_keys[device_id] = key
+        return key
+
+    # ------------------------------------------------------------------
+    def clear_radio_log(self, channel: str) -> None:
+        self.radio_logs.pop(channel, None)
+
+    # ------------------------------------------------------------------
+    def clear_pda_log(self, device_id: str) -> None:
+        self.pda_logs.pop(device_id, None)
+
     # ------------------------------------------------------------------
     def send_pda_message(
         self,
@@ -156,14 +187,27 @@ class CommunicationsSystem:
         text: str,
         *,
         file: Optional[str] = None,
+        key: Optional[str] = None,
     ) -> bool:
         if sender_device not in self.pdas or target_device not in self.pdas:
             return False
+        target_key = self.pda_keys.get(target_device)
+        send_text = text
+        if target_key:
+            if key != target_key:
+                return False
+            send_text = self._encrypt(text, target_key)
+
+        log = self.pda_logs.setdefault(target_device, [])
+        log.append((sender_device, text))
+        if len(log) > self.max_log:
+            log.pop(0)
+
         publish(
             "pda_message",
             sender=sender_device,
             target=target_device,
-            text=text,
+            text=send_text,
             file=file,
         )
         return True
