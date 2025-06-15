@@ -78,7 +78,9 @@ class CargoSystem:
         demand = self.market_demand.get(item, 1.0)
         cost = ven.get_price(item, demand) * quantity
         if self.get_credits(department) < cost:
-            logger.warning("%s lacks credits for order: %s x%d", department, item, quantity)
+            logger.warning(
+                "%s lacks credits for order: %s x%d", department, item, quantity
+            )
             return None
         self.department_credits[department] = self.get_credits(department) - cost
         eta = time.time() + (5 if emergency else 20)  # seconds until arrival

@@ -13,7 +13,6 @@ import yaml
 
 
 class _IBSEmitter(yaml.emitter.Emitter):
-
     """Override the default YAML Emitter to indent block sequences."""
 
     def expect_block_sequence(self):
@@ -26,22 +25,21 @@ class _IBSEmitter(yaml.emitter.Emitter):
 
 
 class _IBSDumper(yaml.SafeDumper, _IBSEmitter):
-
     """Use our _IBSEmitter instead of the default implementation."""
 
     pass
 
 
 class Data:
-
     """A file containing universe elements and their facets."""
 
-    def __init__(self,
-                 source,
-                 universe,
-                 flags=None,
-                 relative=None,
-                 ):
+    def __init__(
+        self,
+        source,
+        universe,
+        flags=None,
+        relative=None,
+    ):
         self.source = source
         self.universe = universe
         if flags is None:
@@ -55,7 +53,8 @@ class Data:
         """Read a file, create elements and poplulate facets accordingly."""
         self.modified = False
         self.source = find_file(
-                self.source, relative=self.relative, universe=self.universe)
+            self.source, relative=self.relative, universe=self.universe
+        )
         try:
             with open(self.source) as datafd:
                 self.data = yaml.safe_load(datafd)
@@ -63,8 +62,7 @@ class Data:
         except FileNotFoundError:
             # it's normal if the file is one which doesn't exist yet
             self.data = {}
-            log_entry = (
-                "File %s was not found and will be created." % self.source, 6)
+            log_entry = ("File %s was not found and will be created." % self.source, 6)
         try:
             mudpy.misc.log(*log_entry)
         except NameError:
@@ -88,17 +86,16 @@ class Data:
                 element = mudpy.misc.Element(prefix, self.universe, self)
             element.set(node[facet_pos:], self.data[node])
             if prefix.startswith("mudpy.movement."):
-                self.universe.directions.add(
-                    prefix[prefix.rfind(".") + 1:])
+                self.universe.directions.add(prefix[prefix.rfind(".") + 1 :])
         for include_file in includes:
             if not os.path.isabs(include_file):
                 include_file = find_file(
-                    include_file,
-                    relative=self.source,
-                    universe=self.universe
+                    include_file, relative=self.source, universe=self.universe
                 )
-            if (include_file not in self.universe.files or not
-                    self.universe.files[include_file].is_writeable()):
+            if (
+                include_file not in self.universe.files
+                or not self.universe.files[include_file].is_writeable()
+            ):
                 Data(include_file, self.universe)
 
     def save(self):
@@ -108,9 +105,11 @@ class Data:
         private_file_mode = 0o0600
 
         # when modified, writeable and has content or the file exists
-        if self.modified and self.is_writeable() and (
-           self.data or os.path.exists(self.source)
-           ):
+        if (
+            self.modified
+            and self.is_writeable()
+            and (self.data or os.path.exists(self.source))
+        ):
 
             # make parent directories if necessary
             old_umask = os.umask(normal_umask)
@@ -119,29 +118,25 @@ class Data:
 
             # backup the file
             if "mudpy.limit" in self.universe.contents:
-                max_count = self.universe.contents["mudpy.limit"].get(
-                    "backups", 0)
+                max_count = self.universe.contents["mudpy.limit"].get("backups", 0)
             else:
                 max_count = 0
             if os.path.exists(self.source) and max_count:
                 backups = []
                 for candidate in os.listdir(os.path.dirname(self.source)):
                     if re.match(
-                       os.path.basename(self.source) +
-                       r"""\.\d+$""", candidate
-                       ):
+                        os.path.basename(self.source) + r"""\.\d+$""", candidate
+                    ):
                         backups.append(int(candidate.split(".")[-1]))
                 backups.sort()
                 backups.reverse()
                 for old_backup in backups:
                     if old_backup >= max_count - 1:
                         os.remove(self.source + "." + str(old_backup))
-                    elif not os.path.exists(
-                        self.source + "." + str(old_backup + 1)
-                    ):
+                    elif not os.path.exists(self.source + "." + str(old_backup + 1)):
                         os.rename(
                             self.source + "." + str(old_backup),
-                            self.source + "." + str(old_backup + 1)
+                            self.source + "." + str(old_backup + 1),
                         )
                 if not os.path.exists(self.source + ".0"):
                     os.rename(self.source, self.source + ".0")
@@ -150,8 +145,10 @@ class Data:
             if "private" in self.flags:
                 old_umask = os.umask(private_umask)
                 file_descriptor = open(self.source, "w")
-                if oct(stat.S_IMODE(os.stat(
-                        self.source)[stat.ST_MODE])) != private_file_mode:
+                if (
+                    oct(stat.S_IMODE(os.stat(self.source)[stat.ST_MODE]))
+                    != private_file_mode
+                ):
                     # if it's marked private, chmod it appropriately
                     os.chmod(self.source, private_file_mode)
             else:
@@ -160,9 +157,15 @@ class Data:
             os.umask(old_umask)
 
             # write and close the file
-            yaml.dump(self.data, Dumper=_IBSDumper, allow_unicode=True,
-                      default_flow_style=False, explicit_start=True, indent=4,
-                      stream=file_descriptor)
+            yaml.dump(
+                self.data,
+                Dumper=_IBSDumper,
+                allow_unicode=True,
+                default_flow_style=False,
+                explicit_start=True,
+                indent=4,
+                stream=file_descriptor,
+            )
             file_descriptor.close()
 
             # unset the modified flag
@@ -183,7 +186,7 @@ def find_file(
     relative=None,
     search=None,
     stash=None,
-    universe=None
+    universe=None,
 ):
     """Return an absolute file path based on configuration."""
 
@@ -194,8 +197,7 @@ def find_file(
     # if a universe was provided, try to get some defaults from there
     if universe:
 
-        if hasattr(
-                universe, "contents") and "mudpy.filing" in universe.contents:
+        if hasattr(universe, "contents") and "mudpy.filing" in universe.contents:
             filing = universe.contents["mudpy.filing"]
             if not prefix:
                 prefix = filing.get("prefix")
@@ -205,10 +207,11 @@ def find_file(
                 stash = filing.get("stash")
 
         # if there's only one file loaded, try to work around a chicken<egg
-        elif hasattr(universe, "files") and len(
-            universe.files
-        ) == 1 and not universe.files[
-                list(universe.files.keys())[0]].is_writeable():
+        elif (
+            hasattr(universe, "files")
+            and len(universe.files) == 1
+            and not universe.files[list(universe.files.keys())[0]].is_writeable()
+        ):
             data_file = universe.files[list(universe.files.keys())[0]].data
 
             # try for a fallback default directory
@@ -277,8 +280,7 @@ def find_file(
 
         # if the path is a directory, look for an __init__ file
         if os.path.isdir(candidate):
-            file_name = os.path.realpath(
-                    os.path.join(candidate, "__init__.yaml"))
+            file_name = os.path.realpath(os.path.join(candidate, "__init__.yaml"))
             break
 
     # it didn't exist after all, so use the default path instead

@@ -9,6 +9,7 @@ def test_cult_conversion_and_ritual(monkeypatch):
     mock_pub = mock.Mock()
     monkeypatch.setattr(events, "publish", mock_pub)
     import systems.advanced_antagonists as aa
+
     monkeypatch.setattr(aa, "publish", mock_pub)
 
     cult = system.create_cult("blood", "p1")
@@ -25,6 +26,7 @@ def test_changeling_absorb_identity(monkeypatch):
     mock_pub = mock.Mock()
     monkeypatch.setattr(events, "publish", mock_pub)
     import systems.advanced_antagonists as aa
+
     monkeypatch.setattr(aa, "publish", mock_pub)
 
     ling = system.spawn_changeling("c1")
@@ -58,4 +60,3 @@ def test_dynamic_role_generation(monkeypatch):
     monkeypatch.setattr("random.choice", lambda seq: seq[0])
     role = system.generate_antagonist_role("p9")
     assert role in {"cultist", "changeling", "revolutionary", "gangster", "sleeper"}
-

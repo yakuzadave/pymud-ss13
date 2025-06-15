@@ -42,6 +42,7 @@ mud_integration = integration.create_integration(mudpy_interface)
 # Map generation and broadcast helpers
 # ---------------------------------------------------------------------------
 
+
 def generate_room_map(start_id: str = "start"):
     """Generate a simple coordinate map of rooms based on exits."""
     world = mud_integration.world
@@ -121,7 +122,10 @@ def build_map_payload():
 async def broadcast_to_clients(payload: dict) -> None:
     if active_clients:
         await asyncio.gather(
-            *[client.send_str(json.dumps(payload)) for client in active_clients.values()]
+            *[
+                client.send_str(json.dumps(payload))
+                for client in active_clients.values()
+            ]
         )
 
 
@@ -130,22 +134,30 @@ def _register_event_handlers():
 
     def door_lock_handler(door_id: str, **_):
         asyncio.create_task(
-            broadcast_to_clients({"type": "door_status", "door_id": door_id, "locked": True})
+            broadcast_to_clients(
+                {"type": "door_status", "door_id": door_id, "locked": True}
+            )
         )
 
     def door_unlock_handler(door_id: str, **_):
         asyncio.create_task(
-            broadcast_to_clients({"type": "door_status", "door_id": door_id, "locked": False})
+            broadcast_to_clients(
+                {"type": "door_status", "door_id": door_id, "locked": False}
+            )
         )
 
     def atmos_update(room_id: str, atmosphere: dict, hazards: list, **_):
         asyncio.create_task(
-            broadcast_to_clients({"type": "atmos_warning", "room_id": room_id, "hazards": hazards})
+            broadcast_to_clients(
+                {"type": "atmos_warning", "room_id": room_id, "hazards": hazards}
+            )
         )
 
     def power_update(grid_id: str, is_powered: bool, **kwargs):
         asyncio.create_task(
-            broadcast_to_clients({"type": "power_status", "grid_id": grid_id, "is_powered": is_powered})
+            broadcast_to_clients(
+                {"type": "power_status", "grid_id": grid_id, "is_powered": is_powered}
+            )
         )
 
     subscribe("door_locked", door_lock_handler)
@@ -156,6 +168,7 @@ def _register_event_handlers():
 
 
 _register_event_handlers()
+
 
 async def handle_client(websocket):
     """
@@ -176,18 +189,26 @@ async def handle_client(websocket):
 
     try:
         # Send welcome message
-        await websocket.send_str(json.dumps({
-            "type": "system",
-            "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!"
-        }))
+        await websocket.send_str(
+            json.dumps(
+                {
+                    "type": "system",
+                    "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!",
+                }
+            )
+        )
 
         # Start the connection with MUDpy
         logger.info(f"Connecting client to MUDpy interface: {client_id}")
         mudpy_interface.connect_client(client_id)
 
         # Debug client session state
-        logger.debug(f"After connect_client, player_locations: {mudpy_interface.player_locations}")
-        logger.debug(f"After connect_client, client_sessions: {mudpy_interface.client_sessions}")
+        logger.debug(
+            f"After connect_client, player_locations: {mudpy_interface.player_locations}"
+        )
+        logger.debug(
+            f"After connect_client, client_sessions: {mudpy_interface.client_sessions}"
+        )
 
         # Publish client connected event to create player in the world
         # Note: We keep the client_id as an integer throughout the system
@@ -201,22 +222,38 @@ async def handle_client(websocket):
 
             # Safer logging of responses
             if initial_response:
-                trimmed_response = initial_response[:50] + "..." if len(initial_response) > 50 else initial_response
+                trimmed_response = (
+                    initial_response[:50] + "..."
+                    if len(initial_response) > 50
+                    else initial_response
+                )
                 logger.info(f"Received initial response: {trimmed_response}")
             else:
                 logger.info("Received empty initial response")
 
             # Send response back to client
-            await websocket.send_str(json.dumps({
-                "type": "response",
-                "message": initial_response if initial_response else "Welcome! You find yourself in a mysterious location."
-            }))
+            await websocket.send_str(
+                json.dumps(
+                    {
+                        "type": "response",
+                        "message": (
+                            initial_response
+                            if initial_response
+                            else "Welcome! You find yourself in a mysterious location."
+                        ),
+                    }
+                )
+            )
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
-            await websocket.send_str(json.dumps({
-                "type": "error",
-                "message": "Error initializing game state. Please refresh and try again."
-            }))
+            await websocket.send_str(
+                json.dumps(
+                    {
+                        "type": "error",
+                        "message": "Error initializing game state. Please refresh and try again.",
+                    }
+                )
+            )
 
         # Handle client messages
         async for msg in websocket:
@@ -226,43 +263,59 @@ async def handle_client(websocket):
                     # Try to parse JSON, but also handle plain text
                     try:
                         data = json.loads(message)
-                        if data.get('type') == 'map_request':
+                        if data.get("type") == "map_request":
                             await websocket.send_str(json.dumps(build_map_payload()))
                             continue
-                        command = data.get('command', '')
+                        command = data.get("command", "")
                     except json.JSONDecodeError:
                         # If not valid JSON, treat the entire message as a command
                         command = message
-                        logger.debug(f"Received plain text command from client {client_id}: {command}")
+                        logger.debug(
+                            f"Received plain text command from client {client_id}: {command}"
+                        )
 
                     # Forward the command to MUDpy through the integration
                     if command:
                         if command.strip() == "/map":
                             await websocket.send_str(json.dumps(build_map_payload()))
                         else:
-                            logger.debug(f"Processing command from client {client_id}: {command}")
-                            response = mud_integration.process_command(client_id, command)
+                            logger.debug(
+                                f"Processing command from client {client_id}: {command}"
+                            )
+                            response = mud_integration.process_command(
+                                client_id, command
+                            )
 
                             # Send the response back to the client
-                            await websocket.send_str(json.dumps({
-                                "type": "response",
-                                "message": response
-                            }))
+                            await websocket.send_str(
+                                json.dumps({"type": "response", "message": response})
+                            )
                     else:
-                        logger.warning(f"Empty command received from client {client_id}")
-                        await websocket.send_str(json.dumps({
-                            "type": "error",
-                            "message": "Please enter a command."
-                        }))
+                        logger.warning(
+                            f"Empty command received from client {client_id}"
+                        )
+                        await websocket.send_str(
+                            json.dumps(
+                                {"type": "error", "message": "Please enter a command."}
+                            )
+                        )
 
                 except Exception as e:
-                    logger.error(f"Error processing message from client {client_id}: {str(e)}")
-                    await websocket.send_str(json.dumps({
-                        "type": "error",
-                        "message": "Error processing your command. Please try again."
-                    }))
+                    logger.error(
+                        f"Error processing message from client {client_id}: {str(e)}"
+                    )
+                    await websocket.send_str(
+                        json.dumps(
+                            {
+                                "type": "error",
+                                "message": "Error processing your command. Please try again.",
+                            }
+                        )
+                    )
             elif msg.type == WSMsgType.ERROR:
-                logger.error(f"WebSocket connection closed with exception: {websocket.exception()}")
+                logger.error(
+                    f"WebSocket connection closed with exception: {websocket.exception()}"
+                )
             elif msg.type == WSMsgType.CLOSE:
                 logger.info(f"WebSocket connection closed by client")
                 break
@@ -285,6 +338,7 @@ async def handle_client(websocket):
 
         return websocket
 
+
 async def broadcast_message(message):
     """
     Broadcast a message to all connected clients.
@@ -294,13 +348,16 @@ async def broadcast_message(message):
     """
     if active_clients:
         await asyncio.gather(
-            *[client.send_str(json.dumps({
-                "type": "broadcast",
-                "message": message
-            })) for client in active_clients.values()]
+            *[
+                client.send_str(json.dumps({"type": "broadcast", "message": message}))
+                for client in active_clients.values()
+            ]
         )
+
 
 # The WebSocket server is now handled in start_server.py using aiohttp
 
 if __name__ == "__main__":
-    logger.warning("This module should be imported by start_server.py, not run directly.")
+    logger.warning(
+        "This module should be imported by start_server.py, not run directly."
+    )

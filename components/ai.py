@@ -62,13 +62,21 @@ class AIComponent:
     def check_action(self, action: str) -> bool:
         """Very simple conflict resolution for demonstration."""
         for law in self.get_laws():
-            if "harm" in action.lower() and "harm" in law.lower() and "never" in law.lower():
+            if (
+                "harm" in action.lower()
+                and "harm" in law.lower()
+                and "never" in law.lower()
+            ):
                 return False
         return True
 
     def to_dict(self) -> Dict[str, List[Dict[str, int]]]:
         """Serialize this component."""
-        return {"laws": [{"priority": l.priority, "directive": l.directive} for l in self.laws]}
+        return {
+            "laws": [
+                {"priority": l.priority, "directive": l.directive} for l in self.laws
+            ]
+        }
 
 
 class CyborgComponent:

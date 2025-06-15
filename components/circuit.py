@@ -15,6 +15,7 @@ SHELL_CAPACITY = {
     "BCI Shell": 500,
 }
 
+
 @dataclass
 class CircuitComponent:
     """Lightweight representation of an electronic circuit."""

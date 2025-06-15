@@ -11,6 +11,7 @@ from systems.script_engine import get_script_engine
 
 logger = logging.getLogger(__name__)
 
+
 @register("addverb")
 def cmd_addverb(interface, client_id, args):
     """
@@ -49,6 +50,7 @@ def cmd_addverb(interface, client_id, args):
     else:
         return f"Failed to add verb '{verb_name}' to object {obj_id}."
 
+
 @register("listscripts")
 def cmd_listscripts(interface, client_id, args):
     """
@@ -79,10 +81,11 @@ def cmd_listscripts(interface, client_id, args):
 
     script_list = []
     for script_id, info in scripts.items():
-        owner = info.get('owner_id', 'unknown')
+        owner = info.get("owner_id", "unknown")
         script_list.append(f"{script_id} (by {owner})")
 
     return "Registered scripts:\n" + "\n".join(script_list)
+
 
 @register("delscript")
 def cmd_delscript(interface, client_id, args):
@@ -113,7 +116,7 @@ def cmd_delscript(interface, client_id, args):
     is_admin = session.get("is_admin", False)
 
     # Check if the client is allowed to delete this script
-    if script_info['owner_id'] != client_id and not is_admin:
+    if script_info["owner_id"] != client_id and not is_admin:
         return "You do not have permission to delete this script."
 
     # Delete the script
@@ -123,6 +126,7 @@ def cmd_delscript(interface, client_id, args):
         return f"Script '{script_id}' deleted."
     else:
         return f"Failed to delete script '{script_id}'."
+
 
 @register("runscript")
 def cmd_runscript(interface, client_id, args):
@@ -153,10 +157,10 @@ def cmd_runscript(interface, client_id, args):
 
     # Create a context for the script
     context = {
-        'player_id': client_id,
-        'player_name': session.get('player_name', 'Unknown'),
-        'location': session.get('location', 'nowhere'),
-        'result': None
+        "player_id": client_id,
+        "player_name": session.get("player_name", "Unknown"),
+        "location": session.get("location", "nowhere"),
+        "result": None,
     }
 
     # Run the script
@@ -166,7 +170,8 @@ def cmd_runscript(interface, client_id, args):
         return f"Failed to run script '{script_id}'."
     else:
         # Return the script's result if set, otherwise a generic success message
-        return result.get('result', f"Script '{script_id}' ran successfully.")
+        return result.get("result", f"Script '{script_id}' ran successfully.")
+
 
 @register("debug")
 def cmd_debug(interface, client_id, args):
@@ -198,11 +203,15 @@ def cmd_debug(interface, client_id, args):
 
     if target == "session":
         # Debug the client's session
-        return f"Session data for client {client_id}:\n" + "\n".join([f"{k}: {v}" for k, v in session.items()])
+        return f"Session data for client {client_id}:\n" + "\n".join(
+            [f"{k}: {v}" for k, v in session.items()]
+        )
     elif target == "clients":
         # List all connected clients
         clients = interface.client_sessions.keys()
-        return f"Connected clients ({len(clients)}):\n" + "\n".join([str(c) for c in clients])
+        return f"Connected clients ({len(clients)}):\n" + "\n".join(
+            [str(c) for c in clients]
+        )
     elif target == "world":
         # Debug the world state (simple placeholder)
         return "World state debugging not implemented yet."

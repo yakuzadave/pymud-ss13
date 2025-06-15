@@ -15,6 +15,7 @@ from persistence import load_aliases, save_aliases
 
 logger = logging.getLogger(__name__)
 
+
 class MudpyInterface:
     """
     Interface class for MUDpy server (demo version).
@@ -22,7 +23,9 @@ class MudpyInterface:
     This class simulates communication with a MUD server for demonstration purposes.
     """
 
-    def __init__(self, config_file: str = 'config.yaml', alias_dir: str = 'data/aliases'):
+    def __init__(
+        self, config_file: str = "config.yaml", alias_dir: str = "data/aliases"
+    ):
         """
         Initialize the MUDpy interface.
 
@@ -46,153 +49,124 @@ class MudpyInterface:
 
         # World data
         self.world = {
-            'rooms': {
-                'start': {
-                    'name': 'Medical Bay',
-                    'description': 'A sterile room with medical equipment and monitoring devices. Several empty beds line the walls, and a desk with a computer terminal sits in the corner.',
-                    'exits': {
-                        'north': 'corridor',
-                        'east': 'medbay'
-                    }
+            "rooms": {
+                "start": {
+                    "name": "Medical Bay",
+                    "description": "A sterile room with medical equipment and monitoring devices. Several empty beds line the walls, and a desk with a computer terminal sits in the corner.",
+                    "exits": {"north": "corridor", "east": "medbay"},
                 },
-                'corridor': {
-                    'name': 'Main Corridor',
-                    'description': 'A long corridor connecting various parts of the station. The lighting flickers occasionally, creating eerie shadows.',
-                    'exits': {
-                        'north': 'command',
-                        'east': 'research',
-                        'south': 'start',
-                        'west': 'quarters'
+                "corridor": {
+                    "name": "Main Corridor",
+                    "description": "A long corridor connecting various parts of the station. The lighting flickers occasionally, creating eerie shadows.",
+                    "exits": {
+                        "north": "command",
+                        "east": "research",
+                        "south": "start",
+                        "west": "quarters",
                     },
-                    'items': ['keycard']
+                    "items": ["keycard"],
                 },
-                'command': {
-                    'name': 'Command Center',
-                    'description': 'The nerve center of the station. Multiple screens display status information and external camera feeds. The main viewscreen shows a field of stars.',
-                    'exits': {
-                        'south': 'corridor',
-                        'east': 'comms'
-                    }
+                "command": {
+                    "name": "Command Center",
+                    "description": "The nerve center of the station. Multiple screens display status information and external camera feeds. The main viewscreen shows a field of stars.",
+                    "exits": {"south": "corridor", "east": "comms"},
                 },
-                'quarters': {
-                    'name': 'Crew Quarters',
-                    'description': 'A living area with several small rooms. Personal effects are scattered around, suggesting a hasty departure.',
-                    'exits': {
-                        'east': 'corridor',
-                        'north': 'recreation'
+                "quarters": {
+                    "name": "Crew Quarters",
+                    "description": "A living area with several small rooms. Personal effects are scattered around, suggesting a hasty departure.",
+                    "exits": {"east": "corridor", "north": "recreation"},
+                    "items": ["medi_spray"],
+                },
+                "recreation": {
+                    "name": "Recreation Room",
+                    "description": "A lounge area with comfortable seating and entertainment systems. A half-played game of chess sits on a table.",
+                    "exits": {"south": "quarters"},
+                },
+                "medbay": {
+                    "name": "Medical Storage",
+                    "description": "A room filled with medical supplies and equipment. Cabinets line the walls, and a large refrigeration unit hums in the corner.",
+                    "exits": {"west": "start", "north": "quarantine"},
+                    "items": ["hazmat_suit"],
+                },
+                "quarantine": {
+                    "name": "Quarantine Zone",
+                    "description": "A sealed area used for isolating potentially dangerous biological material. Warning signs indicate extreme caution should be exercised.",
+                    "exits": {"south": "medbay"},
+                    "requires": {
+                        "hazmat_suit": "WARNING: Biohazard detected. Hazmat protection required for entry."
                     },
-                    'items': ['medi_spray']
                 },
-                'recreation': {
-                    'name': 'Recreation Room',
-                    'description': 'A lounge area with comfortable seating and entertainment systems. A half-played game of chess sits on a table.',
-                    'exits': {
-                        'south': 'quarters'
-                    }
-                },
-                'medbay': {
-                    'name': 'Medical Storage',
-                    'description': 'A room filled with medical supplies and equipment. Cabinets line the walls, and a large refrigeration unit hums in the corner.',
-                    'exits': {
-                        'west': 'start',
-                        'north': 'quarantine'
+                "research": {
+                    "name": "Research Laboratory",
+                    "description": "A high-tech laboratory with advanced scientific equipment. In the center is a containment field housing a pulsing, otherworldly artifact.",
+                    "exits": {"west": "corridor", "north": "detention"},
+                    "requires": {
+                        "keycard": "The door is locked. It requires a keycard for access."
                     },
-                    'items': ['hazmat_suit']
                 },
-                'quarantine': {
-                    'name': 'Quarantine Zone',
-                    'description': 'A sealed area used for isolating potentially dangerous biological material. Warning signs indicate extreme caution should be exercised.',
-                    'exits': {
-                        'south': 'medbay'
+                "detention": {
+                    "name": "Detention Cell",
+                    "description": "A secure room with reinforced walls. A force field contains what appears to be a non-human entity. It watches you with apparent intelligence.",
+                    "exits": {"south": "research"},
+                },
+                "comms": {
+                    "name": "Communications Center",
+                    "description": "A room filled with communication equipment. Long-range transmitters, receivers, and a large subspace antenna control panel.",
+                    "exits": {"west": "command", "south": "maintenance"},
+                },
+                "maintenance": {
+                    "name": "Maintenance Access",
+                    "description": "A narrow passage with exposed wiring and pipes. Essential systems for the station's operation are accessible from here.",
+                    "exits": {"north": "comms", "east": "reactor"},
+                    "items": ["radiation_badge"],
+                },
+                "reactor": {
+                    "name": "Reactor Core",
+                    "description": "The central power generator for the station. The reactor core pulses with energy, and warning lights indicate higher than normal radiation levels.",
+                    "exits": {"west": "maintenance"},
+                    "requires": {
+                        "radiation_badge": "WARNING: Dangerous radiation levels detected. Radiation protection required for entry."
                     },
-                    'requires': {
-                        'hazmat_suit': 'WARNING: Biohazard detected. Hazmat protection required for entry.'
-                    }
                 },
-                'research': {
-                    'name': 'Research Laboratory',
-                    'description': 'A high-tech laboratory with advanced scientific equipment. In the center is a containment field housing a pulsing, otherworldly artifact.',
-                    'exits': {
-                        'west': 'corridor',
-                        'north': 'detention'
-                    },
-                    'requires': {
-                        'keycard': 'The door is locked. It requires a keycard for access.'
-                    }
-                },
-                'detention': {
-                    'name': 'Detention Cell',
-                    'description': 'A secure room with reinforced walls. A force field contains what appears to be a non-human entity. It watches you with apparent intelligence.',
-                    'exits': {
-                        'south': 'research'
-                    }
-                },
-                'comms': {
-                    'name': 'Communications Center',
-                    'description': 'A room filled with communication equipment. Long-range transmitters, receivers, and a large subspace antenna control panel.',
-                    'exits': {
-                        'west': 'command',
-                        'south': 'maintenance'
-                    }
-                },
-                'maintenance': {
-                    'name': 'Maintenance Access',
-                    'description': 'A narrow passage with exposed wiring and pipes. Essential systems for the station\'s operation are accessible from here.',
-                    'exits': {
-                        'north': 'comms',
-                        'east': 'reactor'
-                    },
-                    'items': ['radiation_badge']
-                },
-                'reactor': {
-                    'name': 'Reactor Core',
-                    'description': 'The central power generator for the station. The reactor core pulses with energy, and warning lights indicate higher than normal radiation levels.',
-                    'exits': {
-                        'west': 'maintenance'
-                    },
-                    'requires': {
-                        'radiation_badge': 'WARNING: Dangerous radiation levels detected. Radiation protection required for entry.'
-                    }
-                }
             },
-            'items': {
-                'comms_device': {
-                    'name': 'Communications Device',
-                    'description': 'A personal communications device that can receive and transmit messages.',
-                    'usable': True,
-                    'use_effect': 'You activate the communications device, but receive only static.'
+            "items": {
+                "comms_device": {
+                    "name": "Communications Device",
+                    "description": "A personal communications device that can receive and transmit messages.",
+                    "usable": True,
+                    "use_effect": "You activate the communications device, but receive only static.",
                 },
-                'keycard': {
-                    'name': 'Security Keycard',
-                    'description': 'A high-clearance security keycard for accessing restricted areas.',
-                    'usable': True,
-                    'use_effect': 'You swipe the keycard through a reader.'
+                "keycard": {
+                    "name": "Security Keycard",
+                    "description": "A high-clearance security keycard for accessing restricted areas.",
+                    "usable": True,
+                    "use_effect": "You swipe the keycard through a reader.",
                 },
-                'biometric_scanner': {
-                    'name': 'Biometric Scanner',
-                    'description': 'A handheld device that can analyze biological signatures and environmental conditions.',
-                    'usable': True,
-                    'use_effect': 'You activate the scanner and analyze your surroundings.'
+                "biometric_scanner": {
+                    "name": "Biometric Scanner",
+                    "description": "A handheld device that can analyze biological signatures and environmental conditions.",
+                    "usable": True,
+                    "use_effect": "You activate the scanner and analyze your surroundings.",
                 },
-                'medi_spray': {
-                    'name': 'Medi-Spray',
-                    'description': 'A medical spray that can heal minor wounds and injuries.',
-                    'usable': True,
-                    'use_effect': 'You apply the medi-spray to your injuries, feeling instant relief.'
+                "medi_spray": {
+                    "name": "Medi-Spray",
+                    "description": "A medical spray that can heal minor wounds and injuries.",
+                    "usable": True,
+                    "use_effect": "You apply the medi-spray to your injuries, feeling instant relief.",
                 },
-                'hazmat_suit': {
-                    'name': 'Hazmat Suit',
-                    'description': 'A protective suit that shields from biological and chemical hazards.',
-                    'usable': True,
-                    'use_effect': 'You put on the hazmat suit, feeling protected from environmental hazards.'
+                "hazmat_suit": {
+                    "name": "Hazmat Suit",
+                    "description": "A protective suit that shields from biological and chemical hazards.",
+                    "usable": True,
+                    "use_effect": "You put on the hazmat suit, feeling protected from environmental hazards.",
                 },
-                'radiation_badge': {
-                    'name': 'Radiation Protection Badge',
-                    'description': 'A device that creates a protective field against radiation.',
-                    'usable': True,
-                    'use_effect': 'You activate the radiation badge, and a soft glow surrounds you.'
-                }
-            }
+                "radiation_badge": {
+                    "name": "Radiation Protection Badge",
+                    "description": "A device that creates a protective field against radiation.",
+                    "usable": True,
+                    "use_effect": "You activate the radiation badge, and a soft glow surrounds you.",
+                },
+            },
         }
 
         # Help text shown to players
@@ -215,12 +189,17 @@ quit - Disconnect from the system
 
     def load_aliases_for(self, client_id: str) -> None:
         """Load saved aliases for a client into ``self.aliases``."""
-        self.aliases[client_id] = load_aliases(os.path.join(self.alias_dir, f"{client_id}.yaml"))
+        self.aliases[client_id] = load_aliases(
+            os.path.join(self.alias_dir, f"{client_id}.yaml")
+        )
 
     def save_aliases_for(self, client_id: str) -> None:
         """Persist aliases for ``client_id`` to disk."""
         if client_id in self.aliases:
-            save_aliases(self.aliases[client_id], os.path.join(self.alias_dir, f"{client_id}.yaml"))
+            save_aliases(
+                self.aliases[client_id],
+                os.path.join(self.alias_dir, f"{client_id}.yaml"),
+            )
 
     def load_config(self):
         """
@@ -228,19 +207,13 @@ quit - Disconnect from the system
         If the file doesn't exist, create it with default values.
         """
         try:
-            with open(self.config_file, 'r') as f:
+            with open(self.config_file, "r") as f:
                 self.config = yaml.safe_load(f) or {}
             logger.info(f"Configuration loaded from {self.config_file}")
         except FileNotFoundError:
             self.config = {
-                'server': {
-                    'host': '0.0.0.0',
-                    'port': 8888
-                },
-                'world': {
-                    'name': 'Space Station Alpha',
-                    'startup_room': 'start'
-                }
+                "server": {"host": "0.0.0.0", "port": 8888},
+                "world": {"name": "Space Station Alpha", "startup_room": "start"},
             }
             self.save_config()
             logger.info(f"Created default configuration at {self.config_file}")
@@ -249,7 +222,7 @@ quit - Disconnect from the system
         """
         Save current configuration to YAML file.
         """
-        with open(self.config_file, 'w') as f:
+        with open(self.config_file, "w") as f:
             yaml.dump(self.config, f, default_flow_style=False)
 
     def connect_client(self, client_id):
@@ -268,7 +241,11 @@ quit - Disconnect from the system
             # Generate a player name - fixed string formatting
             try:
                 # Use modulo as intended for numeric operation
-                short_id = client_id % 1000 if isinstance(client_id, int) else hash(str(client_id)) % 1000
+                short_id = (
+                    client_id % 1000
+                    if isinstance(client_id, int)
+                    else hash(str(client_id)) % 1000
+                )
                 player_name = f"Player_{short_id}"
             except Exception as e:
                 # Fallback if anything goes wrong
@@ -277,38 +254,44 @@ quit - Disconnect from the system
 
             # Record client session
             self.client_sessions[client_id] = {
-                'authenticated': True,  # Auto-authenticate for demo
-                'character': player_name,
-                'connected_at': time.time(),
-                'location': 'start'  # Set location in session too for redundancy
+                "authenticated": True,  # Auto-authenticate for demo
+                "character": player_name,
+                "connected_at": time.time(),
+                "location": "start",  # Set location in session too for redundancy
             }
 
             # Set player location to start room
-            self.player_locations[client_id] = 'start'
+            self.player_locations[client_id] = "start"
             logger.debug(f"Set player {client_id} location to 'start'")
 
             # Initialize player inventory
-            self.player_inventories[client_id] = ['comms_device', 'biometric_scanner']
-            logger.debug(f"Initialized inventory for player {client_id}: {self.player_inventories[client_id]}")
+            self.player_inventories[client_id] = ["comms_device", "biometric_scanner"]
+            logger.debug(
+                f"Initialized inventory for player {client_id}: {self.player_inventories[client_id]}"
+            )
 
             self.player_equipment[client_id] = {}
 
             # Initialize player stats
             self.player_stats[client_id] = {
-                'health': 100,
-                'energy': 100,
-                'credits': 50,
-                'radiation': 0,
-                'oxygen': 100
+                "health": 100,
+                "energy": 100,
+                "credits": 50,
+                "radiation": 0,
+                "oxygen": 100,
             }
-            logger.debug(f"Initialized stats for player {client_id}: {self.player_stats[client_id]}")
+            logger.debug(
+                f"Initialized stats for player {client_id}: {self.player_stats[client_id]}"
+            )
 
             # Load any saved command aliases
             self.load_aliases_for(client_id)
 
             # Log all client information for debugging
-            logger.debug(f"Client {client_id} fully initialized: location={self.player_locations.get(client_id)}, "
-                         f"session={self.client_sessions.get(client_id)}")
+            logger.debug(
+                f"Client {client_id} fully initialized: location={self.player_locations.get(client_id)}, "
+                f"session={self.client_sessions.get(client_id)}"
+            )
 
             # Send welcome message
             welcome_message = f"""
@@ -367,46 +350,46 @@ Type 'help' for a list of commands.
         # Process the command
         command = command.strip().lower()
 
-        if command == 'help':
+        if command == "help":
             return self.help_text
 
-        elif command == 'look':
+        elif command == "look":
             return self._look(client_id)
 
-        elif command.startswith('go '):
+        elif command.startswith("go "):
             direction = command[3:].strip()
             return self._go(client_id, direction)
 
-        elif command.startswith('say '):
+        elif command.startswith("say "):
             message = command[4:].strip()
             return self._say(client_id, message)
 
-        elif command == 'inventory' or command == 'i':
+        elif command == "inventory" or command == "i":
             return self._inventory(client_id)
 
-        elif command.startswith('take '):
+        elif command.startswith("take "):
             item_name = command[5:].strip()
             return self._take(client_id, item_name)
 
-        elif command.startswith('drop '):
+        elif command.startswith("drop "):
             item_name = command[5:].strip()
             return self._drop(client_id, item_name)
 
-        elif command.startswith('use '):
+        elif command.startswith("use "):
             item_name = command[4:].strip()
             return self._use(client_id, item_name)
 
-        elif command.startswith('examine '):
+        elif command.startswith("examine "):
             item_name = command[8:].strip()
             return self._examine(client_id, item_name)
 
-        elif command == 'scan':
+        elif command == "scan":
             return self._scan(client_id)
 
-        elif command == 'stats':
+        elif command == "stats":
             return self._stats(client_id)
 
-        elif command == 'quit':
+        elif command == "quit":
             return "Goodbye! Refresh the page to reconnect."
 
         else:
@@ -429,14 +412,16 @@ Type 'help' for a list of commands.
         # Simplify the client_id handling for this critical method
         # Safety first - if client_id isn't registered, just create a new session
         if client_id not in self.player_locations:
-            logger.info(f"Client {client_id} not found in player_locations, automatically creating new session")
+            logger.info(
+                f"Client {client_id} not found in player_locations, automatically creating new session"
+            )
             self.connect_client(client_id)
-            self.player_locations[client_id] = 'start'
+            self.player_locations[client_id] = "start"
 
         room_id = self.player_locations[client_id]
         logger.debug(f"Looking up room with ID: {room_id}")
 
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
         if room:
             logger.debug(f"Found room: {room['name']}")
         else:
@@ -455,16 +440,18 @@ Exits: {', '.join(room['exits'].keys())}
 """
 
         # Add items if present
-        if 'items' in room and room['items']:
+        if "items" in room and room["items"]:
             response += "\nYou see:\n"
-            for item_id in room['items']:
-                item = self.world['items'].get(item_id)
+            for item_id in room["items"]:
+                item = self.world["items"].get(item_id)
                 if item:
                     response += f"- {item['name']}\n"
                 else:
                     response += f"- {item_id}\n"
 
-        logger.debug(f"Generated look response for client {client_id}: {response[:100]}...")
+        logger.debug(
+            f"Generated look response for client {client_id}: {response[:100]}..."
+        )
         return response
 
     def _go(self, client_id, direction):
@@ -482,25 +469,25 @@ Exits: {', '.join(room['exits'].keys())}
             return "Error: Your location is unknown."
 
         room_id = self.player_locations[client_id]
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
 
         if not room:
             return "Error: Invalid room."
 
-        if direction not in room['exits']:
+        if direction not in room["exits"]:
             return f"You cannot go {direction} from here."
 
         # Get the new room
-        new_room_id = room['exits'][direction]
-        new_room = self.world['rooms'].get(new_room_id)
+        new_room_id = room["exits"][direction]
+        new_room = self.world["rooms"].get(new_room_id)
 
         if not new_room:
             return f"Error: The room '{new_room_id}' doesn't exist."
 
         # Check if access requires an item
-        if 'requires' in new_room:
+        if "requires" in new_room:
             inventory = self.player_inventories.get(client_id, [])
-            for required_item, message in new_room['requires'].items():
+            for required_item, message in new_room["requires"].items():
                 if required_item not in inventory:
                     return message
 
@@ -512,17 +499,23 @@ Exits: {', '.join(room['exits'].keys())}
             stats = self.player_stats[client_id]
 
             # Reset temporary effects
-            stats['radiation'] = 0
+            stats["radiation"] = 0
 
             # Apply room effects
-            if new_room_id == 'reactor' and 'radiation_badge' not in self.player_inventories.get(client_id, []):
-                stats['radiation'] = 75
-                stats['health'] -= 25
-                if stats['health'] < 0:
-                    stats['health'] = 0
+            if (
+                new_room_id == "reactor"
+                and "radiation_badge" not in self.player_inventories.get(client_id, [])
+            ):
+                stats["radiation"] = 75
+                stats["health"] -= 25
+                if stats["health"] < 0:
+                    stats["health"] = 0
 
-            if new_room_id == 'quarantine' and 'hazmat_suit' not in self.player_inventories.get(client_id, []):
-                stats['health'] = 0
+            if (
+                new_room_id == "quarantine"
+                and "hazmat_suit" not in self.player_inventories.get(client_id, [])
+            ):
+                stats["health"] = 0
 
         # Describe the new room with items
         room_description = f"""
@@ -535,10 +528,10 @@ Exits: {', '.join(new_room['exits'].keys())}
 """
 
         # Add items if present
-        if 'items' in new_room and new_room['items']:
+        if "items" in new_room and new_room["items"]:
             room_description += "\nYou see:\n"
-            for item_id in new_room['items']:
-                item = self.world['items'].get(item_id)
+            for item_id in new_room["items"]:
+                item = self.world["items"].get(item_id)
                 if item:
                     room_description += f"- {item['name']}\n"
                 else:
@@ -548,15 +541,15 @@ Exits: {', '.join(new_room['exits'].keys())}
         if client_id in self.player_stats:
             stats = self.player_stats[client_id]
 
-            if stats['radiation'] > 50:
+            if stats["radiation"] > 50:
                 room_description += "\nWARNING: Dangerous radiation levels detected! Seek protection immediately.\n"
 
-            if stats['health'] <= 0:
+            if stats["health"] <= 0:
                 room_description += "\nCRITICAL: You have collapsed due to injuries or environmental hazards. Medical attention required.\n"
 
                 # Reset player health and return to the starting point
-                stats['health'] = 10
-                self.player_locations[client_id] = 'start'
+                stats["health"] = 10
+                self.player_locations[client_id] = "start"
 
                 return f"""
 You have been critically injured and lost consciousness.
@@ -628,7 +621,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         inventory_text = "Inventory:\n"
         for item_id in inventory:
-            item = self.world['items'].get(item_id)
+            item = self.world["items"].get(item_id)
             if item:
                 inventory_text += f"- {item['name']}: {item['description']}\n"
             else:
@@ -638,7 +631,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         if equipped:
             inventory_text += "\nEquipped:\n"
             for slot, iid in equipped.items():
-                item = self.world['items'].get(iid)
+                item = self.world["items"].get(iid)
                 if item:
                     inventory_text += f"[{slot}] {item['name']}\n"
                 else:
@@ -661,20 +654,24 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
             return "Error: Your location is unknown."
 
         room_id = self.player_locations[client_id]
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
 
         if not room:
             return "Error: Invalid room."
 
         # Check if room has items
-        if 'items' not in room:
+        if "items" not in room:
             return f"There's nothing here to take."
 
         # Find the item by partial name match
         item_id = None
-        for i in room['items']:
-            item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+        for i in room["items"]:
+            item = self.world["items"].get(i)
+            if (
+                item
+                and item_name.lower() in i.lower()
+                or (item and item_name.lower() in item["name"].lower())
+            ):
                 item_id = i
                 break
 
@@ -687,9 +684,9 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         # Add to inventory and remove from room
         self.player_inventories[client_id].append(item_id)
-        room['items'].remove(item_id)
+        room["items"].remove(item_id)
 
-        item = self.world['items'].get(item_id)
+        item = self.world["items"].get(item_id)
         if item:
             return f"You take the {item['name']}."
         else:
@@ -706,7 +703,10 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         Returns:
             str: Result of the drop action.
         """
-        if client_id not in self.player_locations or client_id not in self.player_inventories:
+        if (
+            client_id not in self.player_locations
+            or client_id not in self.player_inventories
+        ):
             return "Error: Your location or inventory is unknown."
 
         inventory = self.player_inventories[client_id]
@@ -716,8 +716,12 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         # Find the item by partial name match
         item_id = None
         for i in inventory:
-            item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            item = self.world["items"].get(i)
+            if (
+                item
+                and item_name.lower() in i.lower()
+                or (item and item_name.lower() in item["name"].lower())
+            ):
                 item_id = i
                 break
 
@@ -729,18 +733,18 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         # Add to room
         room_id = self.player_locations[client_id]
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
 
         if not room:
             # If the room doesn't exist, just remove from inventory
             return f"You drop the {item_id}, but it falls into the void!"
 
-        if 'items' not in room:
-            room['items'] = []
+        if "items" not in room:
+            room["items"] = []
 
-        room['items'].append(item_id)
+        room["items"].append(item_id)
 
-        item = self.world['items'].get(item_id)
+        item = self.world["items"].get(item_id)
         if item:
             return f"You drop the {item['name']}."
         else:
@@ -767,50 +771,65 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         # Find the item by partial name match
         item_id = None
         for i in inventory:
-            item = self.world['items'].get(i)
-            if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            item = self.world["items"].get(i)
+            if (
+                item
+                and item_name.lower() in i.lower()
+                or (item and item_name.lower() in item["name"].lower())
+            ):
                 item_id = i
                 break
 
         if not item_id:
             return f"You don't have a '{item_name}'."
 
-        item = self.world['items'].get(item_id)
+        item = self.world["items"].get(item_id)
 
         # Check if the item exists and is usable
         if not item:
             return f"You can't figure out how to use the {item_id}."
 
         # Check if the item is usable
-        if 'usable' not in item or not item['usable']:
+        if "usable" not in item or not item["usable"]:
             return f"You can't figure out how to use the {item['name']}."
 
         # Handle special items
-        if item_id == 'keycard' and client_id in self.player_locations:
+        if item_id == "keycard" and client_id in self.player_locations:
             room_id = self.player_locations[client_id]
-            if room_id == 'corridor' and 'research' in self.world['rooms']['corridor']['exits']:
+            if (
+                room_id == "corridor"
+                and "research" in self.world["rooms"]["corridor"]["exits"]
+            ):
                 return f"{item['use_effect']} The research lab door unlocks."
 
-        if item_id == 'hazmat_suit' and client_id in self.player_locations:
+        if item_id == "hazmat_suit" and client_id in self.player_locations:
             room_id = self.player_locations[client_id]
-            if room_id == 'medbay' and 'quarantine' in self.world['rooms']['medbay']['exits']:
+            if (
+                room_id == "medbay"
+                and "quarantine" in self.world["rooms"]["medbay"]["exits"]
+            ):
                 return f"You put on the {item['name']}. You should now be protected in hazardous environments."
 
-        if item_id == 'radiation_badge' and client_id in self.player_locations:
+        if item_id == "radiation_badge" and client_id in self.player_locations:
             room_id = self.player_locations[client_id]
-            if room_id == 'maintenance' and 'reactor' in self.world['rooms']['maintenance']['exits']:
+            if (
+                room_id == "maintenance"
+                and "reactor" in self.world["rooms"]["maintenance"]["exits"]
+            ):
                 return f"You activate the {item['name']}. A protective field forms around you, shielding you from radiation."
 
-        if item_id == 'medi_spray' and client_id in self.player_stats:
-            if self.player_stats[client_id]['health'] < 100:
-                self.player_stats[client_id]['health'] = 100
+        if item_id == "medi_spray" and client_id in self.player_stats:
+            if self.player_stats[client_id]["health"] < 100:
+                self.player_stats[client_id]["health"] = 100
                 return f"You use the {item['name']} on yourself. Your wounds heal completely."
             else:
-                return f"You're already at full health. No need to use the {item['name']}."
+                return (
+                    f"You're already at full health. No need to use the {item['name']}."
+                )
 
         # Generic use
-        if 'use_effect' in item:
-            return item['use_effect']
+        if "use_effect" in item:
+            return item["use_effect"]
         else:
             return f"You use the {item['name']}, but nothing special happens."
 
@@ -829,8 +848,12 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         inventory_item = None
         if client_id in self.player_inventories:
             for i in self.player_inventories[client_id]:
-                item = self.world['items'].get(i)
-                if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+                item = self.world["items"].get(i)
+                if (
+                    item
+                    and item_name.lower() in i.lower()
+                    or (item and item_name.lower() in item["name"].lower())
+                ):
                     inventory_item = item
                     break
 
@@ -838,11 +861,15 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         room_item = None
         if client_id in self.player_locations:
             room_id = self.player_locations[client_id]
-            room = self.world['rooms'].get(room_id)
-            if room and 'items' in room:
-                for i in room['items']:
-                    item = self.world['items'].get(i)
-                    if item and item_name.lower() in i.lower() or (item and item_name.lower() in item['name'].lower()):
+            room = self.world["rooms"].get(room_id)
+            if room and "items" in room:
+                for i in room["items"]:
+                    item = self.world["items"].get(i)
+                    if (
+                        item
+                        and item_name.lower() in i.lower()
+                        or (item and item_name.lower() in item["name"].lower())
+                    ):
                         room_item = item
                         break
 
@@ -865,20 +892,23 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
             str: Results of the scan.
         """
         # Check if player has a scanner
-        if client_id not in self.player_inventories or 'biometric_scanner' not in self.player_inventories[client_id]:
+        if (
+            client_id not in self.player_inventories
+            or "biometric_scanner" not in self.player_inventories[client_id]
+        ):
             return "You don't have a biometric scanner."
 
         if client_id not in self.player_locations:
             return "Error: Your location is unknown."
 
         room_id = self.player_locations[client_id]
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
 
         if not room:
             return "Error: Invalid room."
 
         # Different scan results based on room
-        if room_id == 'research':
+        if room_id == "research":
             return """SCANNING...
 
 Biometric scan complete:
@@ -886,7 +916,7 @@ Biometric scan complete:
 - Non-terrestrial molecular structure present in containment field
 - Quantum fluctuations exceeding normal parameters
 - WARNING: Psychoactive influence possible - mental shielding recommended"""
-        elif room_id == 'quarantine':
+        elif room_id == "quarantine":
             return """SCANNING...
 
 Biometric scan complete:
@@ -894,7 +924,7 @@ Biometric scan complete:
 - Air quality: Poor (filtered through hazmat suit)
 - Radiation levels: Minimal
 - Recommendation: Maintain quarantine protocols"""
-        elif room_id == 'reactor':
+        elif room_id == "reactor":
             return """SCANNING...
 
 Biometric scan complete:
@@ -902,7 +932,7 @@ Biometric scan complete:
 - Energy output: 98.7% of maximum
 - Structural integrity: 76%
 - WARNING: Reactor instability detected - core temperature rising"""
-        elif room_id == 'detention':
+        elif room_id == "detention":
             return """SCANNING...
 
 Biometric scan complete:
@@ -932,11 +962,11 @@ Biometric scan complete:
         if client_id not in self.player_stats:
             # Initialize with default values
             self.player_stats[client_id] = {
-                'health': 100,
-                'energy': 100,
-                'credits': 50,
-                'radiation': 0,
-                'oxygen': 100
+                "health": 100,
+                "energy": 100,
+                "credits": 50,
+                "radiation": 0,
+                "oxygen": 100,
             }
 
         stats = self.player_stats[client_id]
@@ -947,17 +977,21 @@ Biometric scan complete:
 - Credits: {credits}
 - Radiation: {radiation}%
 - Oxygen: {oxygen}%
-""".format(**stats)
+""".format(
+            **stats
+        )
 
         # Add warnings for concerning status levels
-        if stats['health'] < 50:
+        if stats["health"] < 50:
             status_text += "\nWARNING: Health critical. Seek medical attention.\n"
 
-        if stats['radiation'] > 50:
+        if stats["radiation"] > 50:
             status_text += "\nDANGER: High radiation levels detected! Seek radiation protection immediately.\n"
 
-        if stats['oxygen'] < 80:
-            status_text += "\nWARNING: Oxygen levels depleting. Verify atmospheric containment.\n"
+        if stats["oxygen"] < 80:
+            status_text += (
+                "\nWARNING: Oxygen levels depleting. Verify atmospheric containment.\n"
+            )
 
         return status_text
 
@@ -971,8 +1005,8 @@ Biometric scan complete:
         Returns:
             str: The name of the room, or None if not found.
         """
-        if room_id in self.world['rooms']:
-            return self.world['rooms'][room_id].get('name')
+        if room_id in self.world["rooms"]:
+            return self.world["rooms"][room_id].get("name")
         return None
 
     def get_item_name(self, item_id):
@@ -985,15 +1019,15 @@ Biometric scan complete:
         Returns:
             str: The name of the item, or None if not found.
         """
-        if item_id in self.world['items']:
-            return self.world['items'][item_id].get('name')
+        if item_id in self.world["items"]:
+            return self.world["items"][item_id].get("name")
         return None
 
     def get_exits_from_room(self, room_id):
         """Return exits dictionary for a room."""
-        room = self.world['rooms'].get(room_id)
+        room = self.world["rooms"].get(room_id)
         if room:
-            return room.get('exits', {})
+            return room.get("exits", {})
         return {}
 
     def get_player_location(self, client_id):

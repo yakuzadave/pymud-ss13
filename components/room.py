@@ -8,16 +8,19 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class RoomComponent:
     """
     Component that represents a location in the game world.
     """
 
-    def __init__(self,
-                 exits: Optional[Dict[str, str]] = None,
-                 atmosphere: Optional[Dict[str, float]] = None,
-                 hazards: Optional[List[str]] = None,
-                 is_airlock: bool = False):
+    def __init__(
+        self,
+        exits: Optional[Dict[str, str]] = None,
+        atmosphere: Optional[Dict[str, float]] = None,
+        hazards: Optional[List[str]] = None,
+        is_airlock: bool = False,
+    ):
         """
         Initialize the room component.
 
@@ -29,7 +32,12 @@ class RoomComponent:
         """
         self.owner = None
         self.exits = exits or {}
-        self.atmosphere = atmosphere or {"oxygen": 21.0, "nitrogen": 78.0, "co2": 0.04, "pressure": 101.3}
+        self.atmosphere = atmosphere or {
+            "oxygen": 21.0,
+            "nitrogen": 78.0,
+            "co2": 0.04,
+            "pressure": 101.3,
+        }
         self.hazards = hazards or []
         self.is_airlock = is_airlock
 
@@ -54,7 +62,9 @@ class RoomComponent:
             room_id (str): The ID of the connecting room.
         """
         self.exits[direction.lower()] = room_id
-        logger.debug(f"Added exit from {self.owner.id} to {room_id} in direction {direction}")
+        logger.debug(
+            f"Added exit from {self.owner.id} to {room_id} in direction {direction}"
+        )
 
     def remove_exit(self, direction: str) -> bool:
         """
@@ -130,5 +140,5 @@ class RoomComponent:
             "exits": self.exits,
             "atmosphere": self.atmosphere,
             "hazards": self.hazards,
-            "is_airlock": self.is_airlock
+            "is_airlock": self.is_airlock,
         }

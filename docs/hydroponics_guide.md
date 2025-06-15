@@ -150,10 +150,11 @@ This document outlines the expanded botany and chemistry mechanics for growing a
 - **Yield** determines harvest quantity (0-10 scale)
 - **Production Speed** affects growth time (lower is faster)
 - **Instability** at 60+ causes mutations, 80+ grants random traits
-- **Cross-pollination** spreads traits between adjacent plants when enabled
-- **Plant grafts** can transfer traits between species using the `graft` command
+- **Cross-pollination** spreads traits between nearby trays when enabled
+- **Plant grafts** use secateurs or the `graft` command to permanently transfer
+  genes between species
 - **Autogrow mode** (Ctrl+click tray or `autogrow` command) waters and fertilizes
-  each tick but drains power
+  each tick but consumes tray power
 - **Strange seeds** from hacked vendors have completely random properties
 - Plants with **Electrical Activity** trait make better batteries
 - **Replica pods** can clone dead people back to life as podpeople

@@ -12,6 +12,7 @@ import world
 
 logger = logging.getLogger(__name__)
 
+
 class PowerGrid:
     """
     Represents a power grid in the station.
@@ -32,7 +33,9 @@ class PowerGrid:
         self.name = name
         self.rooms: Set[str] = set()
         self.is_powered = True
-        self.power_source: Optional[str] = None  # ID of the power source (generator, battery, etc.)
+        self.power_source: Optional[str] = (
+            None  # ID of the power source (generator, battery, etc.)
+        )
         self.current_load = 0.0  # Current power load (0-100%)
         self.capacity = 100.0  # Maximum power capacity
 
@@ -81,7 +84,9 @@ class PowerGrid:
         """
         old_load = self.current_load
         self.current_load = max(0, min(100, load))
-        logger.debug(f"Updated power load for grid {self.grid_id} from {old_load}% to {self.current_load}%")
+        logger.debug(
+            f"Updated power load for grid {self.grid_id} from {old_load}% to {self.current_load}%"
+        )
 
     def is_overloaded(self) -> bool:
         """
@@ -108,7 +113,10 @@ class PowerGrid:
         if not self.is_powered:
             self.is_powered = True
             logger.info(f"Power grid {self.grid_id} ({self.name}) powered up")
-            publish("power_restored", grid_id=self.grid_id, affected_rooms=list(self.rooms))
+            publish(
+                "power_restored", grid_id=self.grid_id, affected_rooms=list(self.rooms)
+            )
+
 
 class PowerSystem:
     """
@@ -150,7 +158,9 @@ class PowerSystem:
         self.grids[grid.grid_id] = grid
         logger.debug(f"Registered power grid {grid.grid_id} ({grid.name})")
 
-    def register_generator(self, gen_id: str, grid_id: str, capacity: float = 100.0, is_active: bool = True) -> None:
+    def register_generator(
+        self, gen_id: str, grid_id: str, capacity: float = 100.0, is_active: bool = True
+    ) -> None:
         """
         Register a generator with the system.
 
@@ -164,7 +174,7 @@ class PowerSystem:
             "grid_id": grid_id,
             "capacity": capacity,
             "is_active": is_active,
-            "fuel_level": 100.0
+            "fuel_level": 100.0,
         }
 
         # Set the generator as the power source for the grid
@@ -173,7 +183,13 @@ class PowerSystem:
 
         logger.debug(f"Registered generator {gen_id} for grid {grid_id}")
 
-    def register_battery(self, battery_id: str, grid_id: str, capacity: float = 50.0, charge: float = 100.0) -> None:
+    def register_battery(
+        self,
+        battery_id: str,
+        grid_id: str,
+        capacity: float = 50.0,
+        charge: float = 100.0,
+    ) -> None:
         """
         Register a backup battery with the system.
 
@@ -187,11 +203,17 @@ class PowerSystem:
             "grid_id": grid_id,
             "capacity": capacity,
             "charge": charge,
-            "is_active": False
+            "is_active": False,
         }
         logger.debug(f"Registered battery {battery_id} for grid {grid_id}")
 
-    def register_solar_panel(self, panel_id: str, grid_id: str, efficiency: float = 80.0, is_active: bool = True) -> None:
+    def register_solar_panel(
+        self,
+        panel_id: str,
+        grid_id: str,
+        efficiency: float = 80.0,
+        is_active: bool = True,
+    ) -> None:
         """
         Register a solar panel with the system.
 
@@ -204,12 +226,19 @@ class PowerSystem:
         self.solar_panels[panel_id] = {
             "grid_id": grid_id,
             "efficiency": efficiency,
-            "is_active": is_active
+            "is_active": is_active,
         }
         logger.debug(f"Registered solar panel {panel_id} for grid {grid_id}")
 
-    def register_smes(self, smes_id: str, grid_id: str, capacity: float = 100.0, charge: float = 0.0,
-                      input_rate: float = 20.0, output_rate: float = 20.0) -> None:
+    def register_smes(
+        self,
+        smes_id: str,
+        grid_id: str,
+        capacity: float = 100.0,
+        charge: float = 0.0,
+        input_rate: float = 20.0,
+        output_rate: float = 20.0,
+    ) -> None:
         """Register an SMES unit for energy storage."""
         self.smes_units[smes_id] = {
             "grid_id": grid_id,
@@ -220,7 +249,9 @@ class PowerSystem:
         }
         logger.debug(f"Registered SMES {smes_id} for grid {grid_id}")
 
-    def register_consumer(self, consumer_id: str, grid_id: str, load: float, active: bool = True) -> None:
+    def register_consumer(
+        self, consumer_id: str, grid_id: str, load: float, active: bool = True
+    ) -> None:
         """Register a power consumer device."""
         self.consumers[consumer_id] = {
             "grid_id": grid_id,
@@ -295,11 +326,17 @@ class PowerSystem:
             for smes_id, smes in self.smes_units.items():
                 if smes["grid_id"] == grid_id:
                     if total_power < load and smes["charge"] > 0:
-                        needed = min(load - total_power, smes["output_rate"], smes["charge"])
+                        needed = min(
+                            load - total_power, smes["output_rate"], smes["charge"]
+                        )
                         smes["charge"] -= needed
                         total_power += needed
                     elif total_power > load and smes["charge"] < smes["capacity"]:
-                        surplus = min(total_power - load, smes["input_rate"], smes["capacity"] - smes["charge"])
+                        surplus = min(
+                            total_power - load,
+                            smes["input_rate"],
+                            smes["capacity"] - smes["charge"],
+                        )
                         smes["charge"] += surplus
                         total_power -= surplus
 
@@ -321,14 +358,24 @@ class PowerSystem:
                 logger.warning(
                     f"Power grid {grid_id} overloaded (load: {grid.current_load}%, capacity: {grid.capacity}%)"
                 )
-                publish("grid_overload", grid_id=grid_id, load=grid.current_load, capacity=grid.capacity)
+                publish(
+                    "grid_overload",
+                    grid_id=grid_id,
+                    load=grid.current_load,
+                    capacity=grid.capacity,
+                )
                 self.cause_electrical_hazard(grid_id)
             elif not grid.is_powered:
                 # Power is available and grid is not overloaded, restore power
                 grid.power_on()
 
-            publish("power_status_update", grid_id=grid_id, is_powered=grid.is_powered,
-                   load=grid.current_load, capacity=grid.capacity)
+            publish(
+                "power_status_update",
+                grid_id=grid_id,
+                is_powered=grid.is_powered,
+                load=grid.current_load,
+                capacity=grid.capacity,
+            )
 
     def _activate_backup_batteries(self, grid_id: str) -> float:
         """
@@ -358,11 +405,15 @@ class PowerSystem:
                     logger.info(f"Battery {battery_id} depleted")
                     publish("battery_depleted", battery_id=battery_id, grid_id=grid_id)
                 else:
-                    total_battery_power += battery_data["capacity"] * (battery_data["charge"] / 100.0)
+                    total_battery_power += battery_data["capacity"] * (
+                        battery_data["charge"] / 100.0
+                    )
 
         return total_battery_power
 
-    def cause_power_failure(self, grid_id: str, duration: Optional[float] = None) -> None:
+    def cause_power_failure(
+        self, grid_id: str, duration: Optional[float] = None
+    ) -> None:
         """
         Cause a power failure in a grid.
 
@@ -388,7 +439,9 @@ class PowerSystem:
             if duration is not None:
                 # In a real implementation, you'd use a timer or scheduler
                 # For now, we'll just log that it would be restored
-                logger.info(f"Power will be restored to grid {grid_id} after {duration} seconds")
+                logger.info(
+                    f"Power will be restored to grid {grid_id} after {duration} seconds"
+                )
 
     def on_generator_toggle(self, generator_id: str, active: bool) -> None:
         """
@@ -418,7 +471,11 @@ class PowerSystem:
             # Check if there are any other power sources
             has_power = False
             for gen_id, gen_data in self.generators.items():
-                if gen_data["grid_id"] == grid_id and gen_data["is_active"] and gen_data["fuel_level"] > 0:
+                if (
+                    gen_data["grid_id"] == grid_id
+                    and gen_data["is_active"]
+                    and gen_data["fuel_level"] > 0
+                ):
                     has_power = True
                     break
 
@@ -430,7 +487,12 @@ class PowerSystem:
             # Check if there are other batteries
             other_batteries = False
             for b_id, b_data in self.batteries.items():
-                if b_id != battery_id and b_data["grid_id"] == grid_id and b_data["is_active"] and b_data["charge"] > 0:
+                if (
+                    b_id != battery_id
+                    and b_data["grid_id"] == grid_id
+                    and b_data["is_active"]
+                    and b_data["charge"] > 0
+                ):
                     other_batteries = True
                     break
 
@@ -480,8 +542,10 @@ class PowerSystem:
             rooms = list(self.grids[grid_id].rooms)
             publish("electrical_hazard", grid_id=grid_id, affected_rooms=rooms)
 
+
 # Create a global power system instance
 POWER_SYSTEM = PowerSystem()
+
 
 def get_power_system() -> PowerSystem:
     """

@@ -10,6 +10,7 @@ from engine import register
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 @register("look")
 def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
@@ -25,7 +26,7 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     logger.debug(f"Look command called by client {client_id}")
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 
@@ -78,18 +79,20 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                 other_location = interface.get_player_location(other_id)
                 if other_location == player_location:
                     other_session = interface.get_session(other_id)
-                    if other_session and 'character' in other_session:
-                        other_name = other_session['character']
+                    if other_session and "character" in other_session:
+                        other_name = other_session["character"]
                         if other_name.lower() == target.lower():
                             other_stats = interface.get_player_stats(other_id)
                             health_status = "in good health"
-                            if other_stats and 'health' in other_stats:
-                                health = other_stats['health']
+                            if other_stats and "health" in other_stats:
+                                health = other_stats["health"]
                                 if health < 30:
                                     health_status = "severely injured"
                                 elif health < 70:
                                     health_status = "slightly injured"
-                            return f"{other_name} is here, appears to be {health_status}."
+                            return (
+                                f"{other_name} is here, appears to be {health_status}."
+                            )
 
         # Target not found
         return f"You don't see anything called '{target}' here."
@@ -119,8 +122,8 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                 other_location = interface.get_player_location(other_id)
                 if other_location == player_location:
                     other_session = interface.get_session(other_id)
-                    if other_session and 'character' in other_session:
-                        other_players.append(other_session['character'])
+                    if other_session and "character" in other_session:
+                        other_players.append(other_session["character"])
 
         # Build the room description
         result = f"\n{room_name}\n{room_desc}\n"
@@ -146,6 +149,7 @@ def look_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
 
         return result
 
+
 @register("scan")
 def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     """
@@ -161,7 +165,7 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
     logger.debug(f"Scan command called by client {client_id}")
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 
@@ -194,13 +198,13 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                 if other_id != client_id:  # Don't include self
                     other_location = interface.get_player_location(other_id)
                     other_session = interface.get_session(other_id)
-                    if other_session and 'character' in other_session:
-                        other_name = other_session['character']
+                    if other_session and "character" in other_session:
+                        other_name = other_session["character"]
                         if other_name.lower() == target.lower():
                             other_stats = interface.get_player_stats(other_id)
-                            health = other_stats.get('health', 'unknown')
-                            oxygen = other_stats.get('oxygen', 'unknown')
-                            radiation = other_stats.get('radiation', 'unknown')
+                            health = other_stats.get("health", "unknown")
+                            oxygen = other_stats.get("oxygen", "unknown")
+                            radiation = other_stats.get("radiation", "unknown")
                             return f"Biometric scan of {other_name}:\nHealth: {health}%\nOxygen: {oxygen}%\nRadiation: {radiation} rads"
 
             # Look for the target item
@@ -220,7 +224,9 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                 if item_name and item_name.lower() == target.lower():
                     # Random radiation levels based on item type
                     if "reactor" in item_name.lower():
-                        return f"Radiation scan of {item_name}: DANGER! 345 rads detected!"
+                        return (
+                            f"Radiation scan of {item_name}: DANGER! 345 rads detected!"
+                        )
                     else:
                         return f"Radiation scan of {item_name}: Safe levels (0.1 rads)"
 
@@ -241,7 +247,9 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
                     if other_location == player_location:
                         life_signs += 1
 
-            scan_result += f"Detected {life_signs} humanoid life forms in addition to yourself.\n"
+            scan_result += (
+                f"Detected {life_signs} humanoid life forms in addition to yourself.\n"
+            )
 
             # Check for any non-human life forms
             room_name = interface.get_room_name(player_location)
@@ -261,6 +269,7 @@ def scan_handler(client_id: str, target: Optional[str] = None, **kwargs) -> str:
         # Default scanning behavior
         return f"Scanning with {scanner_type if scanner_type else 'scanner'}... No anomalies detected."
 
+
 @register("map")
 def map_handler(client_id: str, **kwargs) -> str:
     """
@@ -275,7 +284,7 @@ def map_handler(client_id: str, **kwargs) -> str:
     logger.debug(f"Map command called by client {client_id}")
 
     # Get the interface from kwargs
-    interface = kwargs.get('interface')
+    interface = kwargs.get("interface")
     if not interface:
         return "Error: Interface not available"
 
@@ -294,7 +303,9 @@ def map_handler(client_id: str, **kwargs) -> str:
         has_map_device = True
 
     if not has_map_device:
-        return "You need a PDA, tablet, or communications device to view the station map."
+        return (
+            "You need a PDA, tablet, or communications device to view the station map."
+        )
 
     # Get player location
     player_location = interface.get_player_location(client_id)

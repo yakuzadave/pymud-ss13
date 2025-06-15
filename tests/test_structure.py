@@ -17,4 +17,3 @@ def test_structure_damage_and_repair():
 
     struct.repair(30)
     assert struct.integrity == 30
-

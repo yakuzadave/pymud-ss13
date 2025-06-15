@@ -31,7 +31,7 @@ supported = (
     TELOPT_TTYPE,
     TELOPT_EOR,
     TELOPT_NAWS,
-    TELOPT_LINEMODE
+    TELOPT_LINEMODE,
 )
 
 # telnet commands
@@ -95,7 +95,7 @@ def log(message, user):
         client = user.account.get("name", user)
     else:
         client = user
-    mudpy.misc.log('[telnet] %s %s.' % (message, client), 0)
+    mudpy.misc.log("[telnet] %s %s." % (message, client), 0)
 
 
 def telnet_proto(*arguments):
@@ -129,9 +129,7 @@ def send_command(user, *command):
 
 def is_enabled(user, telopt, party, state=YES):
     """Indicates whether a specified Telnet option is enabled."""
-    if (telopt, party) in user.telopts and user.telopts[
-       (telopt, party)
-       ] is state:
+    if (telopt, party) in user.telopts and user.telopts[(telopt, party)] is state:
         return True
     else:
         return False
@@ -143,9 +141,7 @@ def enable(user, telopt, party):
         txpos = DO
     else:
         txpos = WILL
-    if not (telopt, party) in user.telopts or user.telopts[
-       (telopt, party)
-       ] is NO:
+    if not (telopt, party) in user.telopts or user.telopts[(telopt, party)] is NO:
         user.telopts[(telopt, party)] = WANTYES
         send_command(user, txpos, telopt)
     elif user.telopts[(telopt, party)] is WANTNO:
@@ -179,7 +175,7 @@ def request_ttype(user):
         # set to the empty string to indicate it's been requested
         user.ttype = ""
         user.send(telnet_proto(IAC, SB, TELOPT_TTYPE, SEND, IAC, SE), raw=True)
-        log('Sent terminal type request to', user)
+        log("Sent terminal type request to", user)
 
 
 def negotiate_telnet_options(user):
@@ -203,22 +199,20 @@ def negotiate_telnet_options(user):
             break
 
         # the byte following the IAC is our command
-        command = text[position+1]
+        command = text[position + 1]
 
         # replace a double (literal) IAC if there's a CR+NUL or CR+LF later
         if command is IAC:
-            if (
-                    text.find(b"\r\0", position) > 0 or
-                    text.find(b"\r\n", position) > 0):
+            if text.find(b"\r\0", position) > 0 or text.find(b"\r\n", position) > 0:
                 position += 1
-                text = text[:position] + text[position + 1:]
-                log('Escaped IAC from', user)
+                text = text[:position] + text[position + 1 :]
+                log("Escaped IAC from", user)
             else:
                 position += 2
 
         # implement an RFC 1143 option negotiation queue here
         elif len_text > position + 2 and WILL <= command <= DONT:
-            telopt = text[position+2]
+            telopt = text[position + 2]
             log('Received "%s" from' % translate_action(command, telopt), user)
             if telopt in supported:
                 if command <= WONT:
@@ -259,7 +253,7 @@ def negotiate_telnet_options(user):
                 send_command(user, DONT, telopt)
             else:
                 send_command(user, WONT, telopt)
-            text = text[:position] + text[position + 3:]
+            text = text[:position] + text[position + 3 :]
 
         # subnegotiation options
         elif len_text > position + 4 and command is SB:
@@ -267,21 +261,20 @@ def negotiate_telnet_options(user):
             end_subnegotiation = text.find(telnet_proto(IAC, SE), position)
             if end_subnegotiation > 0:
                 if telopt is TELOPT_NAWS:
-                    user.columns = (
-                        text[position + 3] * 256 + text[position + 4])
-                    user.rows = (
-                        text[position + 5] * 256 + text[position + 6])
+                    user.columns = text[position + 3] * 256 + text[position + 4]
+                    user.rows = text[position + 5] * 256 + text[position + 6]
                 elif telopt is TELOPT_TTYPE and text[position + 3] is IS:
-                    user.ttype = (
-                        text[position + 4:end_subnegotiation]).decode("ascii")
-                text = text[:position] + text[end_subnegotiation + 2:]
+                    user.ttype = (text[position + 4 : end_subnegotiation]).decode(
+                        "ascii"
+                    )
+                text = text[:position] + text[end_subnegotiation + 2 :]
             else:
                 position += 1
 
         # otherwise, strip out a two-byte IAC command
         elif len_text > position + 2:
             log("Ignored unknown command %s from" % command, user)
-            text = text[:position] + text[position + 2:]
+            text = text[:position] + text[position + 2 :]
 
         # and this means we got the beginning of an IAC
         else:

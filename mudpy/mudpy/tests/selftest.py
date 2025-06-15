@@ -39,9 +39,7 @@ test_account1_setup = (
     (1, r"Whom would you like to awaken\?", ""),
 )
 
-test_actor_appears = (
-    (0, r"You suddenly realize that .* is here\.", ""),
-)
+test_actor_appears = ((0, r"You suddenly realize that .* is here\.", ""),)
 
 test_explicit_punctuation = (
     (0, "> ", "say Hello there!"),
@@ -64,13 +62,13 @@ test_explicit_punctuation = (
 )
 
 test_implicit_punctuation = (
-    (0, '> ', "say Whatever"),
+    (0, "> ", "say Whatever"),
     (0, r'You say, "Whatever\."', ""),
     (1, r'says, "Whatever\."', ""),
 )
 
 test_typo_replacement = (
-    (1, '> ', "say That's what i think."),
+    (1, "> ", "say That's what i think."),
     (1, r'''You say, "That's what I think\."''', ""),
     (0, r'''says, "That's what I think\."''', "say You know what i'd like."),
     (0, r'''You say, "You know what I'd like\."''', ""),
@@ -94,27 +92,27 @@ test_sentence_capitalization = (
 )
 
 test_chat_mode = (
-    (1, '> ', "chat"),
-    (1, r'(?s)Entering chat mode .*> \(chat\) ', "Feeling chatty."),
+    (1, "> ", "chat"),
+    (1, r"(?s)Entering chat mode .*> \(chat\) ", "Feeling chatty."),
     (1, r'You say, "Feeling chatty\."', "!chat"),
     (0, r'says, "Feeling chatty\."', ""),
-    (1, '> ', "say Now less chatty."),
+    (1, "> ", "say Now less chatty."),
     (1, r'You say, "Now less chatty\."', ""),
     (0, r'says, "Now less chatty\."', ""),
 )
 
 test_wrapping = (
-    (0, '> ', "say " + 100 * "o"),
+    (0, "> ", "say " + 100 * "o"),
     (1, r'says,\r\n"O[o]+\."', ""),
 )
 
 test_forbid_ansi_input = (
-    (0, '> ', "say \x1b[35mfoo\x1b[0m"),
+    (0, "> ", "say \x1b[35mfoo\x1b[0m"),
     (1, r'says, "\[35mfoo\[0m\."', ""),
 )
 
 test_escape_macros = (
-    (0, '> ', "say $(red)bar$(nrm)"),
+    (0, "> ", "say $(red)bar$(nrm)"),
     (1, r'says, "\$\(red\)bar\$\(nrm\)\."', ""),
 )
 
@@ -214,7 +212,7 @@ test_preferences = (
     (2, "> ", "preferences loglevel 0"),
     (2, "> ", "preferences"),
     (2, r"\[31mloglevel\x1b\[0m - 0.*> ", "preferences loglevel zero"),
-    (2, r'''cannot be set to type "<class 'str'>"\..*> ''', ""),
+    (2, r"""cannot be set to type "<class 'str'>"\..*> """, ""),
 )
 
 test_crlf_eol = (
@@ -242,7 +240,7 @@ test_telnet_unknown_command = (
 test_telnet_unknown_option = (
     # Send an unassigned negotiation option #127 which should get logged
     (2, "> ", b"\xff\xfe\x7f\r\0"),
-    (2, r'''Received "don't 127" from admin\..*> ''', ""),
+    (2, r"""Received "don't 127" from admin\..*> """, ""),
 )
 
 test_admin_restriction = (
@@ -272,11 +270,18 @@ test_abbrev = (
 
 test_reload = (
     (2, "> ", "reload"),
-    (2, r"Reloading all code modules, configs and data\."
+    (
+        2,
+        r"Reloading all code modules, configs and data\."
         r".* User admin reloaded the world\.",
-     "show element account.admin"),
-    (2, r'These are the properties of the "account\.admin" element.*'
-        r'  \x1b\[32mpasshash:\r\n\x1b\[31m\$.*> ', ""),
+        "show element account.admin",
+    ),
+    (
+        2,
+        r'These are the properties of the "account\.admin" element.*'
+        r"  \x1b\[32mpasshash:\r\n\x1b\[31m\$.*> ",
+        "",
+    ),
 )
 
 test_set_facet = (
@@ -301,49 +306,67 @@ test_show_time = (
 
 test_show_files = (
     (2, "> ", "show files"),
-    (2, r'These are the current files containing the universe:.*'
-        r'  \x1b\[31m\(rw\) \x1b\[32m/.*/account\.yaml\x1b\[0m'
-        r' \x1b\[33m\[private\]\x1b\[0m.*> ', ""),
+    (
+        2,
+        r"These are the current files containing the universe:.*"
+        r"  \x1b\[31m\(rw\) \x1b\[32m/.*/account\.yaml\x1b\[0m"
+        r" \x1b\[33m\[private\]\x1b\[0m.*> ",
+        "",
+    ),
 )
 
 test_show_file = (
-    (2, "> ", "show file %s" %
-        os.path.join(os.getcwd(), "data/internal.yaml")),
-    (2, r'These are the nodes in the.*file:.*internal\.counters.*> ', ""),
+    (2, "> ", "show file %s" % os.path.join(os.getcwd(), "data/internal.yaml")),
+    (2, r"These are the nodes in the.*file:.*internal\.counters.*> ", ""),
 )
 
 test_show_groups = (
     (2, "> ", "show groups"),
-    (2, r'These are the element groups:.*'
-        r'  \x1b\[32maccount\x1b\[0m.*> ', ""),
+    (2, r"These are the element groups:.*" r"  \x1b\[32maccount\x1b\[0m.*> ", ""),
 )
 
 test_show_group = (
     (2, "> ", "show group account"),
-    (2, r'These are the elements in the "account" group:.*'
-        r'  \x1b\[32maccount\.admin\x1b\[0m.*> ', ""),
+    (
+        2,
+        r'These are the elements in the "account" group:.*'
+        r"  \x1b\[32maccount\.admin\x1b\[0m.*> ",
+        "",
+    ),
 )
 
 test_show_element = (
     (2, "> ", "show element mudpy.limit"),
-    (2, r'These are the properties of the "mudpy\.limit" element.*'
-        r'  \x1b\[32mpassword_tries: \x1b\[31m3.*> ',
-     "show element actor.avatar_admin_0"),
-    (2, r'These are the properties of the "actor\.avatar_admin_0" element.*'
-        r'  \x1b\[32mgender: \x1b\[31mfemale.*> ', ""),
+    (
+        2,
+        r'These are the properties of the "mudpy\.limit" element.*'
+        r"  \x1b\[32mpassword_tries: \x1b\[31m3.*> ",
+        "show element actor.avatar_admin_0",
+    ),
+    (
+        2,
+        r'These are the properties of the "actor\.avatar_admin_0" element.*'
+        r"  \x1b\[32mgender: \x1b\[31mfemale.*> ",
+        "",
+    ),
 )
 
 test_evaluate = (
     (2, "> ", "evaluate 12345*67890"),
     (2, r"\r\n838102050\r\n.*> ", "evaluate 1/0"),
-    (2, "Your expression raised an exception.*division by zero.*> ",
-     "evaluate mudpy"),
+    (2, "Your expression raised an exception.*division by zero.*> ", "evaluate mudpy"),
     (2, "<module 'mudpy' from.*> ", "evaluate re"),
-    (2, "Your expression raised an exception.*name 're' is not defined.*> ",
-     "evaluate universe"),
+    (
+        2,
+        "Your expression raised an exception.*name 're' is not defined.*> ",
+        "evaluate universe",
+    ),
     (2, r"<mudpy\.misc\.Universe object at 0x.*> ", "evaluate actor"),
-    (2, "Your expression raised an exception.*name 'actor' is not defined.*> ",
-        "evaluate dir(mudpy)"),
+    (
+        2,
+        "Your expression raised an exception.*name 'actor' is not defined.*> ",
+        "evaluate dir(mudpy)",
+    ),
     (2, "__builtins__.*> ", "evaluate mudpy.__builtins__.open"),
     (2, "not allowed.*> ", "evaluate (lambda x: x + 1)(2)"),
     (2, "not allowed.*> ", ""),
@@ -363,20 +386,28 @@ test_debug_disabled = (
 
 test_show_log = (
     (2, "> ", "show log"),
-    (2, r"There are [0-9]+ log lines in memory and [0-9]+ at or above level "
-        r"[0-9]+\. The matching.*from [0-9]+ to [0-9]+ are:", ""),
+    (
+        2,
+        r"There are [0-9]+ log lines in memory and [0-9]+ at or above level "
+        r"[0-9]+\. The matching.*from [0-9]+ to [0-9]+ are:",
+        "",
+    ),
 )
 
 test_custom_loglevel = (
     (2, "> ", "set account.admin loglevel 2"),
     (2, "You have successfully .*> ", "show log"),
-    (2, r"There are [0-9]+ log lines in memory and [0-9]+ at or above level "
-        r"[0-9]+\. The matching.*from [0-9]+ to [0-9]+ are:", ""),
+    (
+        2,
+        r"There are [0-9]+ log lines in memory and [0-9]+ at or above level "
+        r"[0-9]+\. The matching.*from [0-9]+ to [0-9]+ are:",
+        "",
+    ),
 )
 
 test_invalid_loglevel = (
     (2, "> ", "set account.admin loglevel two"),
-    (2, r'''Value "two" of type "<class 'str'>" cannot be coerced .*> ''', ""),
+    (2, r"""Value "two" of type "<class 'str'>" cannot be coerced .*> """, ""),
 )
 
 test_log_no_errors = (
@@ -444,13 +475,9 @@ dialogue = {
     final_cleanup: "delete remaining accounts",
 }
 
-debug_tests = (
-    test_evaluate,
-)
+debug_tests = (test_evaluate,)
 
-nondebug_tests = (
-    test_debug_disabled,
-)
+nondebug_tests = (test_debug_disabled,)
 
 
 def start_service(config):
@@ -474,9 +501,9 @@ def start_service(config):
         shutil.rmtree(d, ignore_errors=True)
 
     # Start the service and wait for it to be ready for connections
-    service = subprocess.Popen(("mudpy", config),
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+    service = subprocess.Popen(
+        ("mudpy", config), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     return service
 
 
@@ -522,8 +549,10 @@ def stop_service(service):
     # Error if anything was written on stderr as this may indicate ignored
     # exceptions (e.g. ResourceWarning during garbage collection)
     if stderr:
-        tlog("\nERROR: something was written to stderr, see "
-             "capture_stderr.log for details.")
+        tlog(
+            "\nERROR: something was written to stderr, see "
+            "capture_stderr.log for details."
+        )
         success = False
 
     return success
@@ -539,7 +568,7 @@ def tlog(message, quiet=False):
 
 
 def option_callback(telnet_socket, command, option):
-    if option == b'\x7f':
+    if option == b"\x7f":
         # We use this unassigned option value as a canary, so short-circuit
         # any response to avoid endlessly looping
         pass
@@ -563,7 +592,7 @@ def connect_client(luser, service):
         try:
             # Skipping the retry=0 case gives an immediate first attempt
             if retry:
-                time.sleep((2 ** retry) / 10)
+                time.sleep((2**retry) / 10)
             luser.open("::1", 4000)
             # Attempt to poll the connection, closing if unusable
             try:
@@ -608,29 +637,34 @@ def main():
         tlog("\nTesting %s..." % description)
         test_start = time.time()
         for conversant, question, answer in test:
-            tlog("luser%s waiting for: %s" % (conversant, question),
-                 quiet=True)
+            tlog("luser%s waiting for: %s" % (conversant, question), quiet=True)
             try:
                 index, match, received = lusers[conversant].expect(
-                    [re.compile(question.encode("utf-8"), flags=re.DOTALL)], 5)
+                    [re.compile(question.encode("utf-8"), flags=re.DOTALL)], 5
+                )
                 captures[conversant] += received.decode("utf-8")
             except (ConnectionResetError, EOFError):
-                tlog("\nERROR: luser%s premature disconnection expecting:\n\n"
-                     "%s\n\n"
-                     "Check the end of capture_%s.log for received data."
-                     % (conversant, question, conversant))
+                tlog(
+                    "\nERROR: luser%s premature disconnection expecting:\n\n"
+                    "%s\n\n"
+                    "Check the end of capture_%s.log for received data."
+                    % (conversant, question, conversant)
+                )
                 success = False
                 break
             try:
-                captures[conversant] += lusers[
-                    conversant].read_very_eager().decode("utf-8")
+                captures[conversant] += (
+                    lusers[conversant].read_very_eager().decode("utf-8")
+                )
             except Exception:
                 pass
             if index != 0:
-                tlog("\nERROR: luser%s did not receive expected string:\n\n"
-                     "%s\n\n"
-                     "Check the end of capture_%s.log for received data."
-                     % (conversant, question, conversant))
+                tlog(
+                    "\nERROR: luser%s did not receive expected string:\n\n"
+                    "%s\n\n"
+                    "Check the end of capture_%s.log for received data."
+                    % (conversant, question, conversant)
+                )
                 success = False
                 break
             if type(answer) is str:
@@ -638,13 +672,11 @@ def main():
                 lusers[conversant].write(("%s\r\0" % answer).encode("utf-8"))
                 captures[conversant] += "%s\r\n" % answer
             elif type(answer) is bytes:
-                tlog("luser%s sending raw bytes: %s" % (conversant, answer),
-                     quiet=True)
+                tlog("luser%s sending raw bytes: %s" % (conversant, answer), quiet=True)
                 lusers[conversant].get_socket().send(answer)
                 captures[conversant] += "!!!RAW BYTES: %s" % answer
             else:
-                tlog("\nERROR: answer provided with unsupported type %s"
-                     % type(answer))
+                tlog("\nERROR: answer provided with unsupported type %s" % type(answer))
                 success = False
                 break
         if not success:
@@ -653,8 +685,7 @@ def main():
     duration = time.time() - start
     for conversant in range(len(captures)):
         try:
-            captures[conversant] += lusers[
-                conversant].read_very_eager().decode("utf-8")
+            captures[conversant] += lusers[conversant].read_very_eager().decode("utf-8")
         except Exception:
             pass
         lusers[conversant].close()
@@ -673,5 +704,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

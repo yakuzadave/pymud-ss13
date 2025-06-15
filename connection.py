@@ -13,6 +13,7 @@ from fastapi import WebSocket
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 class ConnectionManager:
     """
     WebSocket connection manager.
@@ -109,7 +110,9 @@ class ConnectionManager:
         # Add message to the client's queue
         await self.queues[websocket].put(message)
 
-    async def broadcast(self, message: Any, exclude: Optional[WebSocket] = None) -> None:
+    async def broadcast(
+        self, message: Any, exclude: Optional[WebSocket] = None
+    ) -> None:
         """
         Broadcast a message to all connected clients.
 
@@ -126,7 +129,13 @@ class ConnectionManager:
             if exclude is None or websocket != exclude:
                 await queue.put(message)
 
-    async def broadcast_to_room(self, message: Any, room: str, client_locations: Dict[str, str], exclude_client: Optional[str] = None) -> None:
+    async def broadcast_to_room(
+        self,
+        message: Any,
+        room: str,
+        client_locations: Dict[str, str],
+        exclude_client: Optional[str] = None,
+    ) -> None:
         """
         Broadcast a message to all clients in a specific room.
 
@@ -176,7 +185,9 @@ class ConnectionManager:
                 queue.task_done()
         except asyncio.CancelledError:
             # Task was cancelled, exit cleanly
-            logger.debug(f"Sender task cancelled for client {self.active_connections.get(websocket, 'unknown')}")
+            logger.debug(
+                f"Sender task cancelled for client {self.active_connections.get(websocket, 'unknown')}"
+            )
         except Exception as e:
             # Unexpected error
             logger.error(f"Unexpected error in sender task: {e}")

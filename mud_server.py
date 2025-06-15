@@ -21,6 +21,7 @@ from events import publish, subscribe
 # Module logger
 logger = logging.getLogger(__name__)
 
+
 class MudServer:
     """
     WebSocket server for the Space Station 13 MUD.
@@ -29,7 +30,9 @@ class MudServer:
     and dispatches commands to the game engine.
     """
 
-    def __init__(self, host: str = '0.0.0.0', port: int = 5000, config_path: str = 'config.yaml'):
+    def __init__(
+        self, host: str = "0.0.0.0", port: int = 5000, config_path: str = "config.yaml"
+    ):
         """
         Initialize the MUD Server.
 
@@ -40,10 +43,10 @@ class MudServer:
         """
         # Load config if it exists
         if os.path.exists(config_path):
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 config = yaml.safe_load(f)
-            self.host = config.get('host', host)
-            self.port = config.get('port', port)
+            self.host = config.get("host", host)
+            self.port = config.get("port", port)
         else:
             self.host = host
             self.port = port
@@ -84,34 +87,46 @@ class MudServer:
                     # Parse the message
                     try:
                         data = json.loads(message)
-                        command = data.get('command', '')
+                        command = data.get("command", "")
                     except json.JSONDecodeError:
                         # If not JSON, treat as plain command
                         command = message.strip()
 
                     # Process the command
                     if command:
-                        logger.debug(f"Processing command from client {client_id}: {command}")
-                        response = self.mud_integration.process_command(client_id, command)
+                        logger.debug(
+                            f"Processing command from client {client_id}: {command}"
+                        )
+                        response = self.mud_integration.process_command(
+                            client_id, command
+                        )
 
                         # Send response back to client
-                        await websocket.send(json.dumps({
-                            "type": "response",
-                            "message": response
-                        }))
+                        await websocket.send(
+                            json.dumps({"type": "response", "message": response})
+                        )
                     else:
-                        logger.warning(f"Empty command received from client {client_id}")
-                        await websocket.send(json.dumps({
-                            "type": "error",
-                            "message": "Please enter a command."
-                        }))
+                        logger.warning(
+                            f"Empty command received from client {client_id}"
+                        )
+                        await websocket.send(
+                            json.dumps(
+                                {"type": "error", "message": "Please enter a command."}
+                            )
+                        )
 
                 except Exception as e:
-                    logger.error(f"Error processing command from client {client_id}: {e}")
-                    await websocket.send(json.dumps({
-                        "type": "error",
-                        "message": f"Error processing your command: {str(e)}"
-                    }))
+                    logger.error(
+                        f"Error processing command from client {client_id}: {e}"
+                    )
+                    await websocket.send(
+                        json.dumps(
+                            {
+                                "type": "error",
+                                "message": f"Error processing your command: {str(e)}",
+                            }
+                        )
+                    )
 
         except websockets.exceptions.ConnectionClosed:
             logger.info(f"Connection closed for client {client_id}")
@@ -137,10 +152,14 @@ class MudServer:
         self.sessions[websocket] = client_id
 
         # Send welcome message
-        await websocket.send(json.dumps({
-            "type": "system",
-            "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!"
-        }))
+        await websocket.send(
+            json.dumps(
+                {
+                    "type": "system",
+                    "message": "Welcome to Space Station Alpha - a sci-fi adventure powered by MUDpy SS13!",
+                }
+            )
+        )
 
         # Connect client to MUDpy interface
         logger.info(f"Connecting client to MUDpy interface: {client_id}")
@@ -157,27 +176,42 @@ class MudServer:
 
             # Safer logging of responses
             if initial_response:
-                trimmed_response = initial_response[:50] + "..." if len(initial_response) > 50 else initial_response
+                trimmed_response = (
+                    initial_response[:50] + "..."
+                    if len(initial_response) > 50
+                    else initial_response
+                )
                 logger.info(f"Received initial response: {trimmed_response}")
             else:
                 logger.info("Received empty initial response")
 
             # Send response back to client
-            await websocket.send(json.dumps({
-                "type": "response",
-                "message": initial_response if initial_response else "Welcome! You find yourself in a mysterious location."
-            }))
+            await websocket.send(
+                json.dumps(
+                    {
+                        "type": "response",
+                        "message": (
+                            initial_response
+                            if initial_response
+                            else "Welcome! You find yourself in a mysterious location."
+                        ),
+                    }
+                )
+            )
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
-            await websocket.send(json.dumps({
-                "type": "error",
-                "message": "Error initializing game state. Please refresh and try again."
-            }))
+            await websocket.send(
+                json.dumps(
+                    {
+                        "type": "error",
+                        "message": "Error initializing game state. Please refresh and try again.",
+                    }
+                )
+            )
 
         # Announce new player to other clients
         await self._broadcast(
-            f"* A new crew member has boarded the station.",
-            exclude_client=client_id
+            f"* A new crew member has boarded the station.", exclude_client=client_id
         )
 
         return client_id
@@ -203,11 +237,12 @@ class MudServer:
 
         # Announce departure to other clients
         await self._broadcast(
-            f"* A crew member has left the station.",
-            exclude_client=client_id
+            f"* A crew member has left the station.", exclude_client=client_id
         )
 
-    async def _broadcast(self, message: str, exclude_client: Optional[int] = None) -> None:
+    async def _broadcast(
+        self, message: str, exclude_client: Optional[int] = None
+    ) -> None:
         """
         Broadcast a message to all connected clients.
 
@@ -218,15 +253,14 @@ class MudServer:
         for ws, client_id in self.sessions.items():
             if exclude_client is None or client_id != exclude_client:
                 try:
-                    await ws.send(json.dumps({
-                        "type": "broadcast",
-                        "message": message
-                    }))
+                    await ws.send(json.dumps({"type": "broadcast", "message": message}))
                 except Exception as e:
                     logger.error(f"Error broadcasting to client {client_id}: {e}")
 
     # Event handlers
-    async def _on_player_moved(self, player_id: int, from_location: str, to_location: str) -> None:
+    async def _on_player_moved(
+        self, player_id: int, from_location: str, to_location: str
+    ) -> None:
         """
         Handle player movement events.
 
@@ -249,17 +283,27 @@ class MudServer:
 
                 if client_id != player_id:
                     if client_location == from_location:
-                        await ws.send(json.dumps({
-                            "type": "location",
-                            "message": f"* {player_name} has left to {to_name}."
-                        }))
+                        await ws.send(
+                            json.dumps(
+                                {
+                                    "type": "location",
+                                    "message": f"* {player_name} has left to {to_name}.",
+                                }
+                            )
+                        )
                     elif client_location == to_location:
-                        await ws.send(json.dumps({
-                            "type": "location",
-                            "message": f"* {player_name} has arrived from {from_name}."
-                        }))
+                        await ws.send(
+                            json.dumps(
+                                {
+                                    "type": "location",
+                                    "message": f"* {player_name} has arrived from {from_name}.",
+                                }
+                            )
+                        )
             except Exception as e:
-                logger.error(f"Error sending movement notification to client {client_id}: {e}")
+                logger.error(
+                    f"Error sending movement notification to client {client_id}: {e}"
+                )
 
     async def _on_item_taken(self, item_id: str, player_id: int) -> None:
         """
@@ -278,14 +322,24 @@ class MudServer:
 
         # Broadcast to players in the same location
         for ws, client_id in self.sessions.items():
-            if client_id != player_id and self.mudpy_interface.get_player_location(client_id) == player_location:
+            if (
+                client_id != player_id
+                and self.mudpy_interface.get_player_location(client_id)
+                == player_location
+            ):
                 try:
-                    await ws.send(json.dumps({
-                        "type": "location",
-                        "message": f"* {player_name} picks up {item_name}."
-                    }))
+                    await ws.send(
+                        json.dumps(
+                            {
+                                "type": "location",
+                                "message": f"* {player_name} picks up {item_name}.",
+                            }
+                        )
+                    )
                 except Exception as e:
-                    logger.error(f"Error sending item taken notification to client {client_id}: {e}")
+                    logger.error(
+                        f"Error sending item taken notification to client {client_id}: {e}"
+                    )
 
     async def _on_item_dropped(self, item_id: str, player_id: int) -> None:
         """
@@ -304,14 +358,24 @@ class MudServer:
 
         # Broadcast to players in the same location
         for ws, client_id in self.sessions.items():
-            if client_id != player_id and self.mudpy_interface.get_player_location(client_id) == player_location:
+            if (
+                client_id != player_id
+                and self.mudpy_interface.get_player_location(client_id)
+                == player_location
+            ):
                 try:
-                    await ws.send(json.dumps({
-                        "type": "location",
-                        "message": f"* {player_name} drops {item_name}."
-                    }))
+                    await ws.send(
+                        json.dumps(
+                            {
+                                "type": "location",
+                                "message": f"* {player_name} drops {item_name}.",
+                            }
+                        )
+                    )
                 except Exception as e:
-                    logger.error(f"Error sending item dropped notification to client {client_id}: {e}")
+                    logger.error(
+                        f"Error sending item dropped notification to client {client_id}: {e}"
+                    )
 
     async def _on_item_used(self, item_id: str, player_id: int, item_type: str) -> None:
         """
@@ -331,16 +395,28 @@ class MudServer:
 
         # Broadcast to players in the same location
         for ws, client_id in self.sessions.items():
-            if client_id != player_id and self.mudpy_interface.get_player_location(client_id) == player_location:
+            if (
+                client_id != player_id
+                and self.mudpy_interface.get_player_location(client_id)
+                == player_location
+            ):
                 try:
-                    await ws.send(json.dumps({
-                        "type": "location",
-                        "message": f"* {player_name} uses {item_name}."
-                    }))
+                    await ws.send(
+                        json.dumps(
+                            {
+                                "type": "location",
+                                "message": f"* {player_name} uses {item_name}.",
+                            }
+                        )
+                    )
                 except Exception as e:
-                    logger.error(f"Error sending item used notification to client {client_id}: {e}")
+                    logger.error(
+                        f"Error sending item used notification to client {client_id}: {e}"
+                    )
 
-    async def _on_player_said(self, client_id: int, location: str, message: str) -> None:
+    async def _on_player_said(
+        self, client_id: int, location: str, message: str
+    ) -> None:
         """
         Handle player communication events.
 
@@ -354,14 +430,24 @@ class MudServer:
 
         # Broadcast to players in the same location
         for ws, other_client_id in self.sessions.items():
-            if other_client_id != client_id and self.mudpy_interface.get_player_location(other_client_id) == location:
+            if (
+                other_client_id != client_id
+                and self.mudpy_interface.get_player_location(other_client_id)
+                == location
+            ):
                 try:
-                    await ws.send(json.dumps({
-                        "type": "chat",
-                        "message": f"{player_name} says: {message}"
-                    }))
+                    await ws.send(
+                        json.dumps(
+                            {
+                                "type": "chat",
+                                "message": f"{player_name} says: {message}",
+                            }
+                        )
+                    )
                 except Exception as e:
-                    logger.error(f"Error sending chat notification to client {other_client_id}: {e}")
+                    logger.error(
+                        f"Error sending chat notification to client {other_client_id}: {e}"
+                    )
 
     async def run(self) -> None:
         """
@@ -373,7 +459,10 @@ class MudServer:
             # Keep the server running until interrupted
             await asyncio.Future()  # Run forever
 
-def create_mud_server(host: str = '0.0.0.0', port: int = 5000, config_path: str = 'config.yaml') -> MudServer:
+
+def create_mud_server(
+    host: str = "0.0.0.0", port: int = 5000, config_path: str = "config.yaml"
+) -> MudServer:
     """
     Create a new MUD server instance.
 
@@ -386,6 +475,7 @@ def create_mud_server(host: str = '0.0.0.0', port: int = 5000, config_path: str 
         MudServer: The MUD server instance.
     """
     return MudServer(host, port, config_path)
+
 
 # For direct execution
 if __name__ == "__main__":

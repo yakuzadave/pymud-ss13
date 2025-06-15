@@ -152,5 +152,3 @@ def cmd_who(interface, client_id, **_):
 
     players.sort()
     return "Online players:\n" + "\n".join(players)
-
-

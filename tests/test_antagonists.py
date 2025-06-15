@@ -9,6 +9,7 @@ def test_assign_and_remove_antagonist(monkeypatch):
     mock_pub = mock.Mock()
     monkeypatch.setattr(events, "publish", mock_pub)
     import systems.antagonists as sa
+
     monkeypatch.setattr(sa, "publish", mock_pub)
 
     antag = system.assign_antagonist("p1", objectives=["steal"], gear=["kit"])

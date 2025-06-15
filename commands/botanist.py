@@ -43,7 +43,9 @@ def harvest_handler(client_id: str, plant_id: str = None, **kwargs):
 
 
 @register("fertilize")
-def fertilize_handler(client_id: str, plant_id: str = None, chemical: str = None, **kwargs):
+def fertilize_handler(
+    client_id: str, plant_id: str = None, chemical: str = None, **kwargs
+):
     """Apply a chemical to a plant."""
     player = _check_role(client_id)
     if not player:
@@ -69,7 +71,9 @@ def autogrow_handler(client_id: str, plant_id: str = None, **kwargs):
 
 
 @register("graft")
-def graft_handler(client_id: str, target_id: str = None, donor_id: str = None, **kwargs):
+def graft_handler(
+    client_id: str, target_id: str = None, donor_id: str = None, **kwargs
+):
     """Graft traits from one plant to another."""
     player = _check_role(client_id)
     if not player:
@@ -95,4 +99,3 @@ def analyze_handler(client_id: str, plant_id: str = None, **kwargs):
     if not stats:
         return "No such plant."
     return ", ".join(f"{k}: {v}" for k, v in stats.items())
-

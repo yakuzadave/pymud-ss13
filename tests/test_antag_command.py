@@ -24,6 +24,7 @@ def test_antag_command_assign_and_list(tmp_path, monkeypatch):
     mock_pub = mock.Mock()
     monkeypatch.setattr("events.publish", mock_pub)
     import systems.antagonists as sa
+
     monkeypatch.setattr(sa, "publish", mock_pub)
 
     out = cmd_antag(interface, "1", "assign 1")

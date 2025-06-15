@@ -46,4 +46,4 @@ class ReplicaPodComponent:
             instability=original_profile.instability,
         )
 
-        return "A podperson clone emerges from the pod." 
+        return "A podperson clone emerges from the pod."

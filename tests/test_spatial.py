@@ -24,7 +24,10 @@ def test_object_events(monkeypatch):
     log = []
     monkeypatch.setattr(events, "publish", lambda *args, **kw: log.append((args, kw)))
     import world as world_mod
-    monkeypatch.setattr(world_mod, "publish", lambda *args, **kw: log.append((args, kw)))
+
+    monkeypatch.setattr(
+        world_mod, "publish", lambda *args, **kw: log.append((args, kw))
+    )
     w = World(data_dir="data")
     obj = GameObject(id="o", name="Obj", description="", position=(0, 0))
     w.register(obj)

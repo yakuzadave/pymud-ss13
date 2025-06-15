@@ -1,5 +1,6 @@
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 from engine import MudEngine, action_queue
@@ -11,7 +12,9 @@ import time
 
 def setup_engine(tmp_path):
     cfg = tmp_path / "config.yaml"
-    interface = MudpyInterface(config_file=str(cfg), alias_dir=str(tmp_path / "aliases"))
+    interface = MudpyInterface(
+        config_file=str(cfg), alias_dir=str(tmp_path / "aliases")
+    )
     engine = MudEngine(interface)
     interface.connect_client("1")
     return interface, engine
@@ -24,6 +27,7 @@ def test_equip_and_remove(tmp_path):
     player = world.get_object("player_1")
     if player is None:
         from components.player import PlayerComponent
+
         player = GameObject(id="player_1", name="Player", description="")
         player.add_component("player", PlayerComponent())
         world.register(player)

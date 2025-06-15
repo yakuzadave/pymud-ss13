@@ -1,6 +1,4 @@
-
 """Security monitoring and crime management system."""
-
 
 import logging
 import time
@@ -35,7 +33,6 @@ class Prisoner:
     parole: bool = False
 
 
-
 @dataclass
 class Camera:
     """Representation of a security camera."""
@@ -62,7 +59,6 @@ class SecuritySystem:
     def __init__(self) -> None:
         # Crime/prison management
 
-
         self._next_crime_id = 1
         self.crimes: Dict[int, CrimeRecord] = {}
         self.prisoners: Dict[str, Prisoner] = {}
@@ -77,12 +73,6 @@ class SecuritySystem:
         subscribe("door_opened", self.on_access_event)
         subscribe("door_closed", self.on_access_event)
         logger.info("Security system initialized")
-
-
-
-
-
-
 
     # ------------------------------------------------------------------
     # Crime tracking
@@ -160,7 +150,9 @@ class SecuritySystem:
         logger.debug(f"Registered camera {camera_id} at {location}")
 
     # ------------------------------------------------------------------
-    def register_sensor(self, sensor_id: str, location: str, sensitivity: float = 1.0) -> None:
+    def register_sensor(
+        self, sensor_id: str, location: str, sensitivity: float = 1.0
+    ) -> None:
         """Register a motion sensor."""
         self.sensors[sensor_id] = MotionSensor(sensor_id, location, sensitivity)
         logger.debug(f"Registered sensor {sensor_id} at {location}")
@@ -178,7 +170,13 @@ class SecuritySystem:
         logger.info("Security system stopped")
 
     # ------------------------------------------------------------------
-    def on_object_moved(self, object_id: str, from_location: str | None, to_location: str | None, **_: Any) -> None:
+    def on_object_moved(
+        self,
+        object_id: str,
+        from_location: str | None,
+        to_location: str | None,
+        **_: Any,
+    ) -> None:
         """Handle motion sensor triggers for moved objects."""
 
         if not to_location:
@@ -222,11 +220,7 @@ class SecuritySystem:
 # Global security system instance
 SECURITY_SYSTEM = SecuritySystem()
 
+
 def get_security_system() -> SecuritySystem:
     """Return the global security system instance."""
     return SECURITY_SYSTEM
-
-
-
-
-

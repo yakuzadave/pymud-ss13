@@ -17,11 +17,11 @@ def load():
     for module in mudpy.__spec__.loader.get_resource_reader().contents():
 
         if (
-                # make sure it's a module file, not a directory
-                module.endswith('.py')
-
-                # don't include this file, we're inside it
-                and module != '__init__.py'):
+            # make sure it's a module file, not a directory
+            module.endswith(".py")
+            # don't include this file, we're inside it
+            and module != "__init__.py"
+        ):
 
             # trim off the .py file extension
             modules.append(module[:-3])
