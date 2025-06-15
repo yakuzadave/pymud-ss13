@@ -55,6 +55,33 @@ def fertilize_handler(client_id: str, plant_id: str = None, chemical: str = None
     return f"You apply {chemical} to {plant_id}."
 
 
+@register("autogrow")
+def autogrow_handler(client_id: str, plant_id: str = None, **kwargs):
+    """Toggle autogrow on a tray."""
+    player = _check_role(client_id)
+    if not player:
+        return "Only botanists can do that."
+    if not plant_id:
+        return "Specify a plant id."
+    system = get_botany_system()
+    status = system.toggle_autogrow(plant_id)
+    return "Autogrow on." if status else "Autogrow off."
+
+
+@register("graft")
+def graft_handler(client_id: str, target_id: str = None, donor_id: str = None, **kwargs):
+    """Graft traits from one plant to another."""
+    player = _check_role(client_id)
+    if not player:
+        return "Only botanists can do that."
+    if not target_id or not donor_id:
+        return "Specify target and donor plant ids."
+    system = get_botany_system()
+    if system.graft(target_id, donor_id):
+        return f"You graft {donor_id} onto {target_id}."
+    return "Grafting failed."
+
+
 @register("analyze")
 def analyze_handler(client_id: str, plant_id: str = None, **kwargs):
     """Analyze a plant for its statistics."""
