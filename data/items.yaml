@@ -1123,3 +1123,211 @@
       item_type: food
       item_properties:
         nutrition: 10
+
+# Bar tools and drinks
+- id: shaker
+  name: Cocktail Shaker
+  description: >
+    A metal shaker used for mixing beverages.
+  location: bar
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: tool
+
+- id: bacchus_blessing
+  name: Bacchus' Blessing
+  description: >
+    A potent mixture of almost everything behind the bar.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You down the strong cocktail.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: hearty_punch
+  name: Hearty Punch
+  description: >
+    A spirited bowl of punch for parties.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You gulp the sweet punch.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: neurotoxin
+  name: Neurotoxin
+  description: >
+    A clear liquid with a faint citrus scent. Best not to drink it.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel dizzy after drinking.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: changeling_sting
+  name: Changeling Sting
+  description: >
+    A deceptively ordinary looking drink with a nasty bite.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You shudder as it goes down.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: bahama_mama
+  name: Bahama Mama
+  description: >
+    A refreshing tropical cocktail served over ice.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the fruity flavor.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: cuba_libre
+  name: Cuba Libre
+  description: >
+    A simple mix of rum and cola.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You sip the classic cocktail.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: demons_blood
+  name: Demons Blood
+  description: >
+    A dark red drink that seems to swirl ominously.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: A chill runs down your spine as you drink.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: doctors_delight
+  name: Doctor's Delight
+  description: >
+    A vitamin rich beverage that promotes healing.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel a bit healthier.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: fetching_fizz
+  name: Fetching Fizz
+  description: >
+    A strange carbonated drink that glows green.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: It crackles slightly as you drink it.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: three_mile_island
+  name: Three Mile Island Iced Tea
+  description: >
+    A dangerously radioactive tea.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel a slight tingle.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: telepole
+  name: Telepole
+  description: >
+    An electrifying blend of wines and soda.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: Your tongue tingles from the fizz.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: pod_tesla
+  name: Pod Tesla
+  description: >
+    A complex multi-bottle cocktail rumored to shock the drinker.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You are briefly energized.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: atomic_bomb
+  name: Atomic Bomb
+  description: >
+    An extremely dangerous beverage that radiates heat.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: It burns on the way down.
+      item_type: drink
+      item_properties:
+        nutrition: 1

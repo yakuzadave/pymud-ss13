@@ -1,0 +1,26 @@
+- output: bacchus_blessing
+  inputs: [ethanol, welder_fuel, universal_enzyme, beer, ale, whiskey, cola, hooch, absinthe]
+- output: hearty_punch
+  inputs: [beer, whiskey, cola, tequila, kahlua, absinthe]
+- output: neurotoxin
+  inputs: [gin, vodka, whiskey, cognac, lime_juice, morphine]
+- output: changeling_sting
+  inputs: [vodka, orange_juice, lemon_lime]
+- output: bahama_mama
+  inputs: [rum, orange_juice, lime_juice, ice]
+- output: cuba_libre
+  inputs: [cola, rum]
+- output: demons_blood
+  inputs: [space_mountain_wind, dr_gibb, rum, blood]
+- output: doctors_delight
+  inputs: [cryoxadone, lime_juice, tomato_juice, orange_juice, milk_cream]
+- output: fetching_fizz
+  inputs: [cola, uranium, iron]
+- output: three_mile_island
+  inputs: [cola, rum, vodka, gin, tequila, uranium]
+- output: telepole
+  inputs: [sol_dry, rum, voltaic_yellow_wine, sake]
+- output: pod_tesla
+  inputs: [telepole, admiralty]
+- output: atomic_bomb
+  inputs: [whiskey, milk_cream, kahlua, cognac, uranium]

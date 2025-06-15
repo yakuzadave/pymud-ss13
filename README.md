@@ -25,6 +25,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Kitchen & Cafe**: Cook meals for the crew using YAML recipes and serve them in the cafe.
 - **Food Guide**: Example cooking mechanics and recipes are covered in
   `docs/food_guide.md`.
+- **Drink Guide**: Bartending recipes are listed in `docs/drink_guide.md`.
 - **Bartender Role & Bar**: Mix drinks and keep the bar running smoothly.
 
 ## Requirements
