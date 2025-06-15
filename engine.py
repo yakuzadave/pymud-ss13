@@ -63,6 +63,7 @@ from commands import (  # noqa: F401,E402
     cargo,
     antag,
     job,
+    circuit,
 )
 
 
