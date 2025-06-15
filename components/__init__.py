@@ -18,6 +18,7 @@ from .camera import CameraComponent
 from .motion_sensor import MotionSensorComponent
 from .maintenance import MaintainableComponent
 from .circuit import CircuitComponent
+from .replica_pod import ReplicaPodComponent
 
 __all__ = [
     "RoomComponent",
@@ -36,6 +37,7 @@ __all__ = [
     "MotionSensorComponent",
     "MaintainableComponent",
     "CircuitComponent",
+    "ReplicaPodComponent",
 ]
 
 # Mapping of component names in YAML to classes
@@ -56,4 +58,5 @@ COMPONENT_REGISTRY = {
     "motion_sensor": MotionSensorComponent,
     "maintenance": MaintainableComponent,
     "circuit": CircuitComponent,
+    "replica_pod": ReplicaPodComponent,
 }

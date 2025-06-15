@@ -61,6 +61,26 @@ class BotanySystem:
         plant = self.plants.get(plant_id)
         if not plant or plant.growth < 1.0:
             return False
+        # Special handling for replica pods which produce a cloning item
+        if plant.species == "replica_pod":
+            from world import get_world, GameObject
+            from components.item import ItemComponent
+            from components.replica_pod import ReplicaPodComponent
+
+            pod_id = f"replica_pod_{plant_id}"
+            pod = GameObject(
+                id=pod_id,
+                name="Replica Pod",
+                description="A strange plant pod capable of cloning the dead.",
+            )
+            pod.add_component(
+                "item",
+                ItemComponent(is_takeable=True, is_usable=True, item_type="botany"),
+            )
+            pod.add_component("replica_pod", ReplicaPodComponent())
+            get_world().register(pod)
+            publish("replica_pod_created", object_id=pod_id)
+
         del self.plants[plant_id]
         publish("plant_harvested", plant_id=plant_id, species=plant.species)
         logger.debug("Harvested %s", plant_id)

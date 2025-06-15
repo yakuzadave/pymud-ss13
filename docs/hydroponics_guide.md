@@ -157,3 +157,7 @@ This document outlines the expanded botany and chemistry mechanics for growing a
 - Plants with **Electrical Activity** trait make better batteries
 - **Replica pods** can clone dead people back to life as podpeople
 
+
+## Replica Pod Cloning
+
+Replica pods are a rare mutation of cabbage. Once a replica pod plant is fully grown, harvest it to obtain a cloning pod item. Dead players may interact with the harvested pod to create a new **podperson** clone. The clone inherits the player's DNA profile and starts life with the "podperson" role.
