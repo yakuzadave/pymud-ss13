@@ -1,0 +1,15 @@
+- output: burger
+  inputs: [bun, patty]
+  nutrition: 25
+- output: sausage
+  inputs: [meatball, cutlet]
+  nutrition: 20
+- output: pancake
+  inputs: [pancake_batter]
+  nutrition: 15
+- output: pizza_bread
+  inputs: [flat_dough]
+  nutrition: 10
+- output: boiled_egg
+  inputs: [egg]
+  nutrition: 5
