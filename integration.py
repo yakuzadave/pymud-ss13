@@ -103,6 +103,11 @@ class MudpyIntegration:
         except Exception as exc:
             logger.error(f"Failed to load mods: {exc}")
 
+        # Load persisted scripts
+        from persistence import load_scripts
+
+        load_scripts(os.path.join(self.world.data_dir, "scripts.yaml"))
+
         logger.info("World initialization complete")
 
     def _setup_event_handlers(self):

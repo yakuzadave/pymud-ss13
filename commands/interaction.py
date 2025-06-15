@@ -6,6 +6,7 @@ These include interacting with objects, NPCs, etc.
 import logging
 from engine import register
 from world import get_world
+from systems.script_engine import get_script_engine
 
 
 def _find_door(interface, client_id: str, identifier: str):
@@ -211,3 +212,36 @@ def cmd_turn(interface, client_id, args):
 
     # This is a placeholder that should be enhanced to use the world and component system
     return f"You turn {args}, but nothing happens."
+
+
+@register("verb")
+def cmd_verb(interface, client_id, args):
+    """Invoke a custom verb on a game object."""
+    if not args:
+        return "Usage: verb <object_id> <verb> [args]"
+
+    parts = args.split(maxsplit=2)
+    if len(parts) < 2:
+        return "Usage: verb <object_id> <verb> [args]"
+
+    obj_id, verb = parts[0], parts[1]
+    extra = parts[2] if len(parts) > 2 else ""
+
+    world = get_world()
+    obj = world.get_object(obj_id)
+    if not obj:
+        return f"Object '{obj_id}' not found."
+
+    engine = get_script_engine()
+    context = {
+        "interface": interface,
+        "client_id": client_id,
+        "args": extra,
+        "object": obj,
+        "result": None,
+    }
+
+    result = engine.run_verb(obj_id, verb, context)
+    if result is None:
+        return f"Verb '{verb}' not found on {obj_id}."
+    return result.get("result", f"{verb} executed.")

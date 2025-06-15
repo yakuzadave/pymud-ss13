@@ -4,8 +4,11 @@ These include quitting, saving, admin commands, etc.
 """
 
 import logging
+import os
 from engine import register
 from events import publish
+from persistence import save_scripts
+from world import get_world
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +60,7 @@ def cmd_save(interface, client_id, args):
 
     # Save the configuration (this should be expanded to use the world system)
     interface.save_config()
+    save_scripts(os.path.join(get_world().data_dir, "scripts.yaml"))
 
     # Publish an event for this save
     publish("game_saved", client_id=client_id, player_name=player_name)

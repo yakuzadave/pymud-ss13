@@ -225,6 +225,7 @@ async def autosave_loop(world: World, interval: int = 60, *, iterations: int | N
         timestamp = int(time.time())
         filename = os.path.join(world.data_dir, "world", f"{prefix}_{timestamp}.yaml")
         save_world(world, filename)
+        save_scripts(os.path.join(world.data_dir, "scripts.yaml"))
         count += 1
 
 
@@ -253,3 +254,30 @@ def save_aliases(aliases: Dict[str, str], path: str) -> None:
             yaml.safe_dump(dict(sorted(aliases.items())), f, default_flow_style=False)
     except Exception as e:
         logger.error(f"Failed to save aliases to {path}: {e}")
+
+
+def load_scripts(path: str) -> int:
+    """Load scripts from ``path`` into the global script engine."""
+    from systems.script_engine import get_script_engine
+
+    engine = get_script_engine()
+    if not os.path.exists(path):
+        logger.debug(f"Script file not found: {path}")
+        return 0
+    try:
+        engine.load_from_file(path)
+        return len(engine.scripts)
+    except Exception as e:
+        logger.error(f"Error loading scripts from {path}: {e}")
+        return 0
+
+
+def save_scripts(path: str) -> None:
+    """Save all registered scripts to ``path``."""
+    from systems.script_engine import get_script_engine
+
+    engine = get_script_engine()
+    try:
+        engine.save_to_file(path)
+    except Exception as e:
+        logger.error(f"Failed to save scripts to {path}: {e}")
