@@ -31,6 +31,7 @@ from .botany import BotanySystem, get_botany_system
 from .kitchen import KitchenSystem, get_kitchen_system
 from .bar import BarSystem, get_bar_system
 from .script_engine import ScriptEngine, get_script_engine
+from .npc_ai import NPCSystem, get_npc_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -79,4 +80,6 @@ __all__ = [
     "AtmosGrid",
     "PipeNetwork",
     "FireSystem",
+    "NPCSystem",
+    "get_npc_system",
 ]
