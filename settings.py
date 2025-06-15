@@ -6,12 +6,14 @@ This module provides configuration settings using Pydantic.
 from pydantic_settings import BaseSettings
 import os
 
+
 class Settings(BaseSettings):
     """
     Settings for the MUDpy server.
 
     These settings can be overridden by environment variables or a .env file.
     """
+
     host: str = "0.0.0.0"
     port: int = 5000
     # Port for WebSocket server
@@ -28,10 +30,8 @@ class Settings(BaseSettings):
     # Debug mode
     debug: bool = True
 
-    model_config = {
-        "env_file": ".env",
-        "env_file_encoding": "utf-8"
-    }
+    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+
 
 # Create settings instance
 settings = Settings()

@@ -110,7 +110,7 @@ class RoboticsSystem:
     # ------------------------------------------------------------------
     def build_cyborg(
         self, unit_id: str, chassis: RobotChassis
-    ) -> Optional[CyborgUnit]:
+    ) -> Optional[CyborgUnit]:  # noqa: E501
         req = self.recipes.get(chassis.chassis_id, {})
         for part, qty in req.items():
             if self.parts.get(part, 0) < qty:

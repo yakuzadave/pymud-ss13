@@ -18,7 +18,13 @@ class MotionSensorComponent:
         self.active = True
 
     def on_added(self) -> None:
-        get_security_system().register_sensor(self.owner.id, self.location, self.sensitivity)
+        get_security_system().register_sensor(
+            self.owner.id, self.location, self.sensitivity
+        )
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"location": self.location, "sensitivity": self.sensitivity, "active": self.active}
+        return {
+            "location": self.location,
+            "sensitivity": self.sensitivity,
+            "active": self.active,
+        }

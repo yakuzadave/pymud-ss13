@@ -41,18 +41,18 @@ def create(actor, parameters):
             if element in actor.universe.contents:
                 message = 'The "' + element + '" element already exists.'
             else:
-                message = ('You create "' +
-                           element + '" within the universe.')
-                logline = actor.owner.account.get(
-                    "name"
-                ) + " created an element: " + element
+                message = 'You create "' + element + '" within the universe.'
+                logline = (
+                    actor.owner.account.get("name") + " created an element: " + element
+                )
                 if filename:
                     logline += " in file " + filename
                     if filename not in actor.universe.files:
                         message += (
                             ' Warning: "' + filename + '" is not yet '
                             "included in any other file and will not be read "
-                            "on startup unless this is remedied.")
+                            "on startup unless this is remedied."
+                        )
                 mudpy.misc.Element(element, actor.universe, filename)
                 mudpy.misc.log(logline, 6)
         elif len(arguments) > 2:
@@ -68,8 +68,9 @@ def delete(actor, parameters):
     else:
         arguments = parameters.split(" ")
         if len(arguments) == 1:
-            message = ('What facet of element "' + arguments[0]
-                       + '" would you like to delete?')
+            message = (
+                'What facet of element "' + arguments[0] + '" would you like to delete?'
+            )
         elif len(arguments) != 2:
             message = "You may only specify an element and a facet."
         else:
@@ -77,14 +78,18 @@ def delete(actor, parameters):
             if element not in actor.universe.contents:
                 message = 'The "' + element + '" element does not exist.'
             elif facet not in actor.universe.contents[element].facets():
-                message = ('The "' + element + '" element has no "' + facet
-                           + '" facet.')
+                message = 'The "' + element + '" element has no "' + facet + '" facet.'
             else:
                 actor.universe.contents[element].remove_facet(facet)
-                message = ('You have successfully deleted the "' + facet
-                           + '" facet of element "' + element
-                           + '". Try "show element ' +
-                           element + '" for verification.')
+                message = (
+                    'You have successfully deleted the "'
+                    + facet
+                    + '" facet of element "'
+                    + element
+                    + '". Try "show element '
+                    + element
+                    + '" for verification.'
+                )
     actor.send(message)
     return True
 
@@ -99,13 +104,12 @@ def destroy(actor, parameters):
                 message = 'The "' + parameters + '" element does not exist.'
             else:
                 actor.universe.contents[parameters].destroy()
-                message = ('You destroy "' + parameters
-                           + '" within the universe.')
+                message = 'You destroy "' + parameters + '" within the universe.'
                 mudpy.misc.log(
-                    actor.owner.account.get(
-                        "name"
-                    ) + " destroyed an element: " + parameters,
-                    6
+                    actor.owner.account.get("name")
+                    + " destroyed an element: "
+                    + parameters,
+                    6,
                 )
         actor.send(message)
     return True
@@ -118,7 +122,7 @@ def error(actor, input_data):
     # Allow the random.randrange() call in bandit since it's not used for
     # security/cryptographic purposes
     if random.randrange(10):  # nosec
-        message = '''I'm not sure what "''' + input_data + '''" means...'''
+        message = '''I'm not sure what "''' + input_data + """" means..."""
 
     # 10% of the time use the classic diku error
     else:
@@ -129,8 +133,9 @@ def error(actor, input_data):
         actor.send(message)
     except Exception:
         mudpy.misc.log(
-            'Sending a command error to user %s raised exception...\n%s' % (
-                actor.owner.account.get("name"), traceback.format_exc()))
+            "Sending a command error to user %s raised exception...\n%s"
+            % (actor.owner.account.get("name"), traceback.format_exc())
+        )
     return True
 
 
@@ -156,8 +161,10 @@ def evaluate(actor, parameters):
             # we can to secure it and allow it for bandit analysis
             message = repr(eval(parameters, eval_globals))  # nosec
         except Exception as e:
-            message = ("$(red)Your expression raised an exception...$(eol)"
-                       "$(eol)$(bld)%s$(nrm)" % e)
+            message = (
+                "$(red)Your expression raised an exception...$(eol)"
+                "$(eol)$(bld)%s$(nrm)" % e
+            )
     actor.send(message)
     return True
 
@@ -167,7 +174,7 @@ def c_get(actor, parameters):
     if not parameters:
         message = "What do you wish to get?"
     else:
-        message = ('Not yet implemented.')
+        message = "Not yet implemented."
     actor.send(message)
     return True
 
@@ -177,7 +184,7 @@ def drop(actor, parameters):
     if not parameters:
         message = "What do you wish to drop?"
     else:
-        message = ('Not yet implemented.')
+        message = "Not yet implemented."
     actor.send(message)
     return True
 
@@ -190,9 +197,7 @@ def halt(actor, parameters):
         if parameters:
             message = "Halting: " + parameters
         else:
-            message = "User " + actor.owner.account.get(
-                "name"
-            ) + " halted the world."
+            message = "User " + actor.owner.account.get("name") + " halted the world."
 
         # let everyone know
         mudpy.misc.broadcast(message, add_prompt=False)
@@ -224,7 +229,10 @@ def help(actor, parameters):
             else:
                 output = "$(grn)"
             output = "%s%s$(nrm) - %s$(eol)$(eol)" % (
-                output, command.subkey, description)
+                output,
+                command.subkey,
+                description,
+            )
 
             # add the help text if provided
             help_text = command.get("help")
@@ -258,12 +266,13 @@ def help(actor, parameters):
     else:
 
         # preamble text
-        output = ("These are the commands available to you [brackets indicate "
-                  "optional portion]:$(eol)$(eol)")
+        output = (
+            "These are the commands available to you [brackets indicate "
+            "optional portion]:$(eol)$(eol)"
+        )
 
         # list command names in alphabetical order
-        for command_name, command in sorted(
-                actor.universe.groups["command"].items()):
+        for command_name, command in sorted(actor.universe.groups["command"].items()):
 
             # skip over disallowed commands
             if actor.can_run(command):
@@ -272,8 +281,7 @@ def help(actor, parameters):
                 for position in range(1, len(command_name) + 1):
 
                     # we've found our shortest possible abbreviation
-                    candidate = mudpy.misc.find_command(
-                            command_name[:position])
+                    candidate = mudpy.misc.find_command(command_name[:position])
                     try:
                         if candidate.subkey == command_name:
                             break
@@ -283,13 +291,16 @@ def help(actor, parameters):
                 # use square brackets to indicate optional part of command name
                 if position < len(command_name):
                     abbrev = "%s[%s]" % (
-                        command_name[:position], command_name[position:])
+                        command_name[:position],
+                        command_name[position:],
+                    )
                 else:
                     abbrev = command_name
 
                 # supply a useful default if the short description is missing
                 description = command.get(
-                    "description", "(no short description provided)")
+                    "description", "(no short description provided)"
+                )
 
                 # administrative command names are in red, others in green
                 if command.is_restricted():
@@ -299,11 +310,17 @@ def help(actor, parameters):
 
                 # format the entry for this command
                 output = "%s   $(%s)%s$(nrm) - %s$(eol)" % (
-                    output, color, abbrev, description)
+                    output,
+                    color,
+                    abbrev,
+                    description,
+                )
 
         # add a footer with instructions on getting additional information
-        output = ('%s $(eol)Enter "help COMMAND" for help on a command named '
-                  '"COMMAND".' % output)
+        output = (
+            '%s $(eol)Enter "help COMMAND" for help on a command named '
+            '"COMMAND".' % output
+        )
 
     # send the accumulated output to the user
     actor.send(output)
@@ -312,7 +329,7 @@ def help(actor, parameters):
 
 def inventory(actor, parameters):
     """List the inventory."""
-    message = ('Not yet implemented.')
+    message = "Not yet implemented."
     actor.send(message)
     return True
 
@@ -328,8 +345,7 @@ def look(actor, parameters):
 
 def move(actor, parameters):
     """Move the avatar in a given direction."""
-    for portal in sorted(
-            actor.universe.contents[actor.get("location")].portals()):
+    for portal in sorted(actor.universe.contents[actor.get("location")].portals()):
         if portal.startswith(parameters):
             actor.move_direction(portal)
             return portal
@@ -362,13 +378,17 @@ def preferences(actor, parameters):
                 color = "grn"
             else:
                 color = "red"
-            message += ("$(eol)   $(%s)%s$(nrm) - %s" % (
-                color, pref, actor.owner.account.get(pref, "<not set>")))
+            message += "$(eol)   $(%s)%s$(nrm) - %s" % (
+                color,
+                pref,
+                actor.owner.account.get(pref, "<not set>"),
+            )
 
     elif arguments[0] not in allowed_prefs:
         message += (
             'Preference "%s" does not exist. Try the `preferences` command by '
-            "itself for a list of valid preferences." % arguments[0])
+            "itself for a list of valid preferences." % arguments[0]
+        )
     elif len(arguments) == 1:
         message += "%s" % actor.owner.account.get(arguments[0], "<not set>")
     else:
@@ -378,9 +398,10 @@ def preferences(actor, parameters):
             actor.owner.account.set(pref, value)
             message += 'Preference "%s" set to "%s".' % (pref, value)
         except ValueError:
-            message = (
-                'Preference "%s" cannot be set to type "%s".' % (
-                    pref, type(value)))
+            message = 'Preference "%s" cannot be set to type "%s".' % (
+                pref,
+                type(value),
+            )
     actor.send(message)
     return True
 
@@ -400,9 +421,7 @@ def reload(actor, parameters):
         # let the user know and log
         actor.send("Reloading all code modules, configs and data.")
         mudpy.misc.log(
-            "User " +
-            actor.owner.account.get("name") + " reloaded the world.",
-            6
+            "User " + actor.owner.account.get("name") + " reloaded the world.", 6
         )
 
         # set a flag to reload
@@ -424,7 +443,7 @@ def say(actor, parameters):
 
     # otherwise, get rid of stray quote marks on the ends of the message
     else:
-        message = parameters.strip('''"'`''')
+        message = parameters.strip(""""'`""")
         literal = False
 
     # the user entered a message
@@ -432,10 +451,10 @@ def say(actor, parameters):
 
         # match the punctuation used, if any, to an action
         if "mudpy.linguistic" in actor.universe.contents:
-            actions = actor.universe.contents[
-                "mudpy.linguistic"].get("actions", {})
-            default_punctuation = (actor.universe.contents[
-                "mudpy.linguistic"].get("default_punctuation", "."))
+            actions = actor.universe.contents["mudpy.linguistic"].get("actions", {})
+            default_punctuation = actor.universe.contents["mudpy.linguistic"].get(
+                "default_punctuation", "."
+            )
         else:
             actions = {}
             default_punctuation = "."
@@ -450,9 +469,7 @@ def say(actor, parameters):
         # add punctuation if needed
         if not action:
             action = actions[default_punctuation]
-            if message and not (
-               literal or unicodedata.category(message[-1]) == "Po"
-               ):
+            if message and not (literal or unicodedata.category(message[-1]) == "Po"):
                 message += default_punctuation
 
         # failsafe checks to avoid unwanted reformatting and null strings
@@ -463,8 +480,7 @@ def say(actor, parameters):
 
             # iterate over all words in message, replacing typos
             if "mudpy.linguistic" in actor.universe.contents:
-                typos = actor.universe.contents[
-                    "mudpy.linguistic"].get("typos", {})
+                typos = actor.universe.contents["mudpy.linguistic"].get("typos", {})
             else:
                 typos = {}
             words = message.split()
@@ -501,12 +517,17 @@ def c_set(actor, parameters):
     else:
         arguments = parameters.split(" ", 2)
         if len(arguments) == 1:
-            message = ('What facet of element "' + arguments[0]
-                       + '" would you like to set?')
+            message = (
+                'What facet of element "' + arguments[0] + '" would you like to set?'
+            )
         elif len(arguments) == 2:
-            message = ('What value would you like to set for the "' +
-                       arguments[1] + '" facet of the "' + arguments[0]
-                       + '" element?')
+            message = (
+                'What value would you like to set for the "'
+                + arguments[1]
+                + '" facet of the "'
+                + arguments[0]
+                + '" element?'
+            )
         else:
             element, facet, value = arguments
             if element not in actor.universe.contents:
@@ -515,19 +536,27 @@ def c_set(actor, parameters):
                 try:
                     actor.universe.contents[element].set(facet, value)
                 except PermissionError:
-                    message = ('The "%s" element is kept in read-only file '
-                               '"%s" and cannot be altered.' %
-                               (element, actor.universe.contents[
-                                        element].origin.source))
+                    message = (
+                        'The "%s" element is kept in read-only file '
+                        '"%s" and cannot be altered.'
+                        % (element, actor.universe.contents[element].origin.source)
+                    )
                 except ValueError:
-                    message = ('Value "%s" of type "%s" cannot be coerced '
-                               'to the correct datatype for facet "%s".' %
-                               (value, type(value), facet))
+                    message = (
+                        'Value "%s" of type "%s" cannot be coerced '
+                        'to the correct datatype for facet "%s".'
+                        % (value, type(value), facet)
+                    )
                 else:
-                    message = ('You have successfully (re)set the "' + facet
-                               + '" facet of element "' + element
-                               + '". Try "show element ' +
-                               element + '" for verification.')
+                    message = (
+                        'You have successfully (re)set the "'
+                        + facet
+                        + '" facet of element "'
+                        + element
+                        + '". Try "show element '
+                        + element
+                        + '" for verification.'
+                    )
     actor.send(message)
     return True
 
@@ -542,7 +571,8 @@ def show(actor, parameters):
         message = repr(actor.universe.versions)
     elif arguments[0] == "time":
         message = "%s increments elapsed since the world was created." % (
-            str(actor.universe.groups["internal"]["counters"].get("elapsed")))
+            str(actor.universe.groups["internal"]["counters"].get("elapsed"))
+        )
     elif arguments[0] == "groups":
         message = "These are the element groups:$(eol)"
         groups = list(actor.universe.groups.keys())
@@ -557,21 +587,21 @@ def show(actor, parameters):
                 status = "rw"
             else:
                 status = "ro"
-            message += ("$(eol)   $(red)(%s) $(grn)%s$(nrm)" %
-                        (status, filename))
+            message += "$(eol)   $(red)(%s) $(grn)%s$(nrm)" % (status, filename)
             if actor.universe.files[filename].flags:
-                message += (" $(yel)[%s]$(nrm)" %
-                            ",".join(actor.universe.files[filename].flags))
+                message += " $(yel)[%s]$(nrm)" % ",".join(
+                    actor.universe.files[filename].flags
+                )
     elif arguments[0] == "group":
         if len(arguments) != 2:
             message = "You must specify one group."
         elif arguments[1] in actor.universe.groups:
-            message = ('These are the elements in the "' + arguments[1]
-                       + '" group:$(eol)')
+            message = (
+                'These are the elements in the "' + arguments[1] + '" group:$(eol)'
+            )
             elements = [
-                (
-                    actor.universe.groups[arguments[1]][x].key
-                ) for x in actor.universe.groups[arguments[1]].keys()
+                (actor.universe.groups[arguments[1]][x].key)
+                for x in actor.universe.groups[arguments[1]].keys()
             ]
             elements.sort()
             for element in elements:
@@ -582,8 +612,7 @@ def show(actor, parameters):
         if len(arguments) != 2:
             message = "You must specify one file."
         elif arguments[1] in actor.universe.files:
-            message = ('These are the nodes in the "' + arguments[1]
-                       + '" file:$(eol)')
+            message = 'These are the nodes in the "' + arguments[1] + '" file:$(eol)'
             elements = sorted(actor.universe.files[arguments[1]].data)
             for element in elements:
                 message += "$(eol)   $(grn)" + element + "$(nrm)"
@@ -594,13 +623,19 @@ def show(actor, parameters):
             message = "You must specify one element."
         elif arguments[1].strip(".") in actor.universe.contents:
             element = actor.universe.contents[arguments[1].strip(".")]
-            message = ('These are the properties of the "' + arguments[1]
-                       + '" element (in "' + element.origin.source
-                       + '"):$(eol)')
+            message = (
+                'These are the properties of the "'
+                + arguments[1]
+                + '" element (in "'
+                + element.origin.source
+                + '"):$(eol)'
+            )
             facets = element.facets()
             for facet in sorted(facets):
-                message += ("$(eol)   $(grn)%s: $(red)%s$(nrm)" %
-                            (facet, str(facets[facet])))
+                message += "$(eol)   $(grn)%s: $(red)%s$(nrm)" % (
+                    facet,
+                    str(facets[facet]),
+                )
         else:
             message = 'Element "' + arguments[1] + '" does not exist.'
     elif arguments[0] == "log":
@@ -619,8 +654,7 @@ def show(actor, parameters):
         else:
             start = 10
         if len(arguments) >= 2:
-            if (re.match(r"^\d+$", arguments[1])
-                    and 0 <= int(arguments[1]) <= 9):
+            if re.match(r"^\d+$", arguments[1]) and 0 <= int(arguments[1]) <= 9:
                 level = int(arguments[1])
             else:
                 level = -1
@@ -631,8 +665,10 @@ def show(actor, parameters):
         if level > -1 and start > -1 and stop > -1:
             message = mudpy.misc.get_loglines(level, start, stop)
         else:
-            message = ("When specified, level must be 0-9 (default 1), "
-                       "start and stop must be >=1 (default 10 and 1).")
+            message = (
+                "When specified, level must be 0-9 (default 1), "
+                "start and stop must be >=1 (default 10 and 1)."
+            )
     else:
         message = '''I don't know what "''' + parameters + '" is.'
     actor.send(message)

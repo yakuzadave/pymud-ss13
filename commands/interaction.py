@@ -48,7 +48,9 @@ def _find_door(interface, client_id: str, identifier: str):
 
     return None, f"There is no door '{identifier}' here."
 
+
 logger = logging.getLogger(__name__)
+
 
 @register("open")
 def cmd_open(interface, client_id, args):
@@ -75,7 +77,10 @@ def cmd_open(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.open(player_id=player.id if player else str(client_id), access_code=access)
+    return door_comp.open(
+        player_id=player.id if player else str(client_id), access_code=access
+    )
+
 
 @register("close")
 def cmd_close(interface, client_id, args):
@@ -102,6 +107,7 @@ def cmd_close(interface, client_id, args):
 
     return door_comp.close(player_id=player.id if player else str(client_id))
 
+
 @register("lock")
 def cmd_lock(interface, client_id, args):
     """
@@ -127,7 +133,10 @@ def cmd_lock(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.lock(player_id=player.id if player else str(client_id), access_code=access)
+    return door_comp.lock(
+        player_id=player.id if player else str(client_id), access_code=access
+    )
+
 
 @register("unlock")
 def cmd_unlock(interface, client_id, args):
@@ -154,7 +163,10 @@ def cmd_unlock(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.unlock(player_id=player.id if player else str(client_id), access_code=access)
+    return door_comp.unlock(
+        player_id=player.id if player else str(client_id), access_code=access
+    )
+
 
 @register("push")
 def cmd_push(interface, client_id, args):
@@ -175,6 +187,7 @@ def cmd_push(interface, client_id, args):
     # This is a placeholder that should be enhanced to use the world and component system
     return f"You push {args}, but nothing happens."
 
+
 @register("pull")
 def cmd_pull(interface, client_id, args):
     """
@@ -193,6 +206,7 @@ def cmd_pull(interface, client_id, args):
 
     # This is a placeholder that should be enhanced to use the world and component system
     return f"You pull {args}, but nothing happens."
+
 
 @register("turn")
 def cmd_turn(interface, client_id, args):

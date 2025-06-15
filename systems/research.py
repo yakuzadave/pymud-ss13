@@ -66,7 +66,9 @@ class ResearchSystem:
 
     # -- Research points ---------------------------------------------------------
     def add_points(self, department: str, points: int) -> None:
-        self.research_points[department] = self.research_points.get(department, 0) + points
+        self.research_points[department] = (
+            self.research_points.get(department, 0) + points
+        )
         logger.debug("Added %s research points to %s", points, department)
 
     def get_points(self, department: str) -> int:
@@ -132,6 +134,7 @@ class ResearchSystem:
 
 # Create global instance
 RESEARCH_SYSTEM = ResearchSystem()
+
 
 def get_research_system() -> ResearchSystem:
     return RESEARCH_SYSTEM

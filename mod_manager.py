@@ -116,4 +116,3 @@ class ModManager:
                         logger.debug(f"Executed script {path}")
                 except Exception as exc:
                     logger.error(f"Failed executing script {path}: {exc}")
-

@@ -40,7 +40,9 @@ class KitchenSystem:
         logger.info("Loaded %d kitchen recipes", len(self.recipes))
         return len(self.recipes)
 
-    def register_recipe(self, output: str, inputs: List[str], nutrition: int = 10) -> None:
+    def register_recipe(
+        self, output: str, inputs: List[str], nutrition: int = 10
+    ) -> None:
         self.recipes[output] = {"inputs": inputs, "nutrition": nutrition}
         logger.debug("Registered recipe for %s", output)
 

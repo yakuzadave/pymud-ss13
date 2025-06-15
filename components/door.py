@@ -9,17 +9,20 @@ from events import publish
 
 logger = logging.getLogger(__name__)
 
+
 class DoorComponent:
     """
     Component that represents a door or airlock.
     """
 
-    def __init__(self,
-                 is_open: bool = False,
-                 is_locked: bool = False,
-                 destination: Optional[str] = None,
-                 requires_power: bool = True,
-                 access_level: int = 0):
+    def __init__(
+        self,
+        is_open: bool = False,
+        is_locked: bool = False,
+        destination: Optional[str] = None,
+        requires_power: bool = True,
+        access_level: int = 0,
+    ):
         """
         Initialize the door component.
 
@@ -56,7 +59,9 @@ class DoorComponent:
         if self.is_locked:
             if access_code is not None and access_code >= self.access_level:
                 self.is_locked = False
-                logger.debug(f"Door {self.owner.id} unlocked with access code {access_code}")
+                logger.debug(
+                    f"Door {self.owner.id} unlocked with access code {access_code}"
+                )
             else:
                 return "The door is locked. You need proper authorization to unlock it."
 
@@ -163,5 +168,5 @@ class DoorComponent:
             "is_locked": self.is_locked,
             "destination": self.destination,
             "requires_power": self.requires_power,
-            "access_level": self.access_level
+            "access_level": self.access_level,
         }

@@ -8,10 +8,13 @@ from systems.power import get_power_system
 
 logger = logging.getLogger(__name__)
 
+
 class PowerConsumerComponent:
     """Component representing a powered piece of equipment."""
 
-    def __init__(self, grid_id: str, power_usage: float = 5.0, active: bool = True) -> None:
+    def __init__(
+        self, grid_id: str, power_usage: float = 5.0, active: bool = True
+    ) -> None:
         self.owner = None
         self.grid_id = grid_id
         self.power_usage = power_usage
@@ -32,7 +35,9 @@ class PowerConsumerComponent:
         room_id = self.owner.location or self.owner.id
         return room_id in rooms
 
-    def _on_power_loss(self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any) -> None:
+    def _on_power_loss(
+        self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any
+    ) -> None:
         if grid_id != self.grid_id:
             return
         if affected_rooms is None or self._room_in_list(affected_rooms):
@@ -40,7 +45,9 @@ class PowerConsumerComponent:
             get_power_system().update_consumer_status(self.owner.id, False)
             publish("equipment_power_off", object_id=self.owner.id)
 
-    def _on_power_restored(self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any) -> None:
+    def _on_power_restored(
+        self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any
+    ) -> None:
         if grid_id != self.grid_id:
             return
         if affected_rooms is None or self._room_in_list(affected_rooms):
@@ -48,7 +55,9 @@ class PowerConsumerComponent:
             get_power_system().update_consumer_status(self.owner.id, True)
             publish("equipment_power_on", object_id=self.owner.id)
 
-    def _on_electrical_hazard(self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any) -> None:
+    def _on_electrical_hazard(
+        self, grid_id: str, affected_rooms: List[str] | None = None, **_: Any
+    ) -> None:
         if grid_id != self.grid_id:
             return
         if affected_rooms is None or self._room_in_list(affected_rooms):

@@ -14,6 +14,7 @@ from command_spec import CommandSpec
 # Configure logging
 logger = logging.getLogger(__name__)
 
+
 class CommandParser:
     """
     Command parser class.
@@ -22,7 +23,7 @@ class CommandParser:
     commands to the appropriate handlers.
     """
 
-    def __init__(self, commands_file: str = 'data/commands.yaml'):
+    def __init__(self, commands_file: str = "data/commands.yaml"):
         """
         Initialize the command parser.
 
@@ -53,18 +54,18 @@ class CommandParser:
             return
 
         try:
-            with open(self.commands_file, 'r') as f:
+            with open(self.commands_file, "r") as f:
                 commands_data = yaml.safe_load(f)
 
             self.command_specs = []
             for cmd in commands_data:
-                name = cmd.get('name', '')
-                patterns = cmd.get('patterns', [])
-                help_text = cmd.get('help', '')
-                category = cmd.get('category', 'General')
-                required_skills = cmd.get('required_skills', [])
-                terrain_restrictions = cmd.get('terrain_restrictions', [])
-                item_requirements = cmd.get('item_requirements', [])
+                name = cmd.get("name", "")
+                patterns = cmd.get("patterns", [])
+                help_text = cmd.get("help", "")
+                category = cmd.get("category", "General")
+                required_skills = cmd.get("required_skills", [])
+                terrain_restrictions = cmd.get("terrain_restrictions", [])
+                item_requirements = cmd.get("item_requirements", [])
 
                 handler = self.command_handlers.get(name)
 
@@ -76,7 +77,7 @@ class CommandParser:
                     required_skills=required_skills,
                     terrain_restrictions=terrain_restrictions,
                     item_requirements=item_requirements,
-                    func=handler
+                    func=handler,
                 )
                 self.command_specs.append(spec)
 
@@ -148,18 +149,26 @@ class CommandParser:
 
                     # Add requirements if any
                     if spec.required_skills:
-                        help_text += f"\nRequired skills: {', '.join(spec.required_skills)}"
+                        help_text += (
+                            f"\nRequired skills: {', '.join(spec.required_skills)}"
+                        )
 
                     if spec.terrain_restrictions:
-                        help_text += f"\nUsable in: {', '.join(spec.terrain_restrictions)}"
+                        help_text += (
+                            f"\nUsable in: {', '.join(spec.terrain_restrictions)}"
+                        )
 
                     if spec.item_requirements:
-                        help_text += f"\nRequired items: {', '.join(spec.item_requirements)}"
+                        help_text += (
+                            f"\nRequired items: {', '.join(spec.item_requirements)}"
+                        )
 
                     return help_text
 
             # Try to find close matches if exact match not found
-            close_matches = difflib.get_close_matches(command_name, self.get_command_names(), n=3)
+            close_matches = difflib.get_close_matches(
+                command_name, self.get_command_names(), n=3
+            )
             if close_matches:
                 return f"Unknown command '{command_name}'. Did you mean: {', '.join(close_matches)}?"
             else:
@@ -176,7 +185,9 @@ class CommandParser:
                 for cmd in commands_by_category[category]:
                     help_text += f"  {cmd}\n"
 
-            help_text += "\nType 'help <command>' for more information on a specific command."
+            help_text += (
+                "\nType 'help <command>' for more information on a specific command."
+            )
             return help_text
 
     def dispatch(self, text: str, context: Dict[str, Any]) -> str:
@@ -209,9 +220,9 @@ class CommandParser:
                     logger.debug(f"Expanded alias '{first}' -> '{text}'")
 
         # Check for help command first
-        if text.lower() == 'help':
+        if text.lower() == "help":
             return self.get_help()
-        elif text.lower().startswith('help '):
+        elif text.lower().startswith("help "):
             command_name = text[5:].strip()
             return self.get_help(command_name)
 
@@ -233,7 +244,9 @@ class CommandParser:
 
         # No match found, try to suggest similar commands
         first_word = text.split()[0].lower()
-        close_matches = difflib.get_close_matches(first_word, self.get_command_names(), n=3)
+        close_matches = difflib.get_close_matches(
+            first_word, self.get_command_names(), n=3
+        )
 
         if close_matches:
             return f"Unknown command '{first_word}'. Did you mean: {', '.join(close_matches)}?"

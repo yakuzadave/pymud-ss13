@@ -1,6 +1,7 @@
 import time
 from typing import Dict
 
+
 class ActionQueue:
     """Simple action queue per player to enforce a delay between actions."""
 

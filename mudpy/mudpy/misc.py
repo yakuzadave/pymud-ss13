@@ -21,7 +21,6 @@ import mudpy
 
 
 class Element:
-
     """An element of the universe."""
 
     def __init__(self, key, universe, origin=None):
@@ -53,8 +52,7 @@ class Element:
         # get an appropriate origin
         if not origin:
             self.universe.add_group(self.group)
-            origin = self.universe.files[
-                    self.universe.origins[self.group]["fallback"]]
+            origin = self.universe.files[self.universe.origins[self.group]["fallback"]]
 
         # record or reset a pointer to the origin file
         self.origin = self.universe.files[origin.source]
@@ -129,8 +127,9 @@ class Element:
             # break if there is an attempt to update an element from a
             # read-only file, unless the universe is in the midst of loading
             # updated data from files
-            raise PermissionError("Altering elements in read-only files is "
-                                  "disallowed")
+            raise PermissionError(
+                "Altering elements in read-only files is " "disallowed"
+            )
         # Coerce some values to appropriate data types
         # TODO(fungi) Move these to a separate validation mechanism
         if facet in ["loglevel"]:
@@ -169,7 +168,7 @@ class Element:
         add_prompt=True,
         just_prompt=False,
         add_terminator=False,
-        prepend_padding=True
+        prepend_padding=True,
     ):
         """Convenience method to pass messages to an owner."""
         if self.owner:
@@ -181,7 +180,7 @@ class Element:
                 add_prompt,
                 just_prompt,
                 add_terminator,
-                prepend_padding
+                prepend_padding,
             )
 
     def is_restricted(self):
@@ -251,11 +250,9 @@ class Element:
         self.echo_to_location("%s exits %s." % (self.get("name"), exit_term))
         self.send("You exit %s." % exit_term, add_prompt=False)
         self.go_to(
-            self.universe.contents[
-                self.get("location")].link_neighbor(direction)
+            self.universe.contents[self.get("location")].link_neighbor(direction)
         )
-        self.echo_to_location("%s arrives from %s." % (
-            self.get("name"), enter_term))
+        self.echo_to_location("%s arrives from %s." % (self.get("name"), enter_term))
 
     def look_at(self, key):
         """Show an element to another element."""
@@ -271,38 +268,28 @@ class Element:
             portal_list = list(element.portals().keys())
             if portal_list:
                 portal_list.sort()
-                message += "$(cyn)[ Exits: " + ", ".join(
-                    portal_list
-                ) + " ]$(nrm)$(eol)"
+                message += "$(cyn)[ Exits: " + ", ".join(portal_list) + " ]$(nrm)$(eol)"
             for element in self.universe.contents[
                 self.get("location")
             ].contents.values():
                 if element.get("is_actor") and element is not self:
-                    message += "$(yel)" + element.get(
-                        "name"
-                    ) + " is here.$(nrm)$(eol)"
+                    message += "$(yel)" + element.get("name") + " is here.$(nrm)$(eol)"
                 elif element is not self:
-                    message += "$(grn)" + element.get(
-                        "impression"
-                    ) + "$(nrm)$(eol)"
+                    message += "$(grn)" + element.get("impression") + "$(nrm)$(eol)"
             self.send(message)
 
     def portals(self):
         """Map the portal directions for an area to neighbors."""
         portals = {}
         if re.match(r"""^area\.-?\d+,-?\d+,-?\d+$""", self.key):
-            coordinates = [(int(x))
-                           for x in self.key.split(".")[-1].split(",")]
+            coordinates = [(int(x)) for x in self.key.split(".")[-1].split(",")]
             offsets = dict(
-                (x,
-                 self.universe.contents["mudpy.movement.%s" % x].get("vector")
-                 ) for x in self.universe.directions)
+                (x, self.universe.contents["mudpy.movement.%s" % x].get("vector"))
+                for x in self.universe.directions
+            )
             for portal in self.get("gridlinks"):
-                adjacent = map(lambda c, o: c + o,
-                               coordinates, offsets[portal])
-                neighbor = "area." + ",".join(
-                    [(str(x)) for x in adjacent]
-                )
+                adjacent = map(lambda c, o: c + o, coordinates, offsets[portal])
+                neighbor = "area." + ",".join([(str(x)) for x in adjacent])
                 if neighbor in self.universe.contents:
                     portals[portal] = neighbor
         for facet in self.facets():
@@ -321,15 +308,12 @@ class Element:
 
     def echo_to_location(self, message):
         """Show a message to other elements in the current location."""
-        for element in self.universe.contents[
-            self.get("location")
-        ].contents.values():
+        for element in self.universe.contents[self.get("location")].contents.values():
             if element is not self:
                 element.send(message)
 
 
 class Universe:
-
     """The universe."""
 
     def __init__(self, filename="", load=False):
@@ -352,7 +336,7 @@ class Universe:
                 "/usr/local/mudpy/etc/mudpy.yaml",
                 "/usr/local/etc/mudpy.yaml",
                 "/etc/mudpy/mudpy.yaml",
-                "/etc/mudpy.yaml"
+                "/etc/mudpy.yaml",
             ]
             for filename in possible_filenames:
                 if os.access(filename, os.R_OK):
@@ -379,8 +363,7 @@ class Universe:
 
         # load default storage locations for groups
         if hasattr(self, "contents") and "mudpy.filing" in self.contents:
-            self.origins.update(self.contents["mudpy.filing"].get(
-                "groups", {}))
+            self.origins.update(self.contents["mudpy.filing"].get("groups", {}))
 
         # add some builtin groups we know we'll need
         for group in ("account", "actor", "internal"):
@@ -393,9 +376,9 @@ class Universe:
                 try:
                     inactive_avatars.append(self.contents[avatar])
                 except KeyError:
-                    pending_loglines.append((
-                        'Missing avatar "%s", possible data corruption' %
-                        avatar, 6))
+                    pending_loglines.append(
+                        ('Missing avatar "%s", possible data corruption' % avatar, 6)
+                    )
         for user in self.userlist:
             if user.avatar in inactive_avatars:
                 inactive_avatars.remove(user.avatar)
@@ -407,8 +390,7 @@ class Universe:
 
         # warn when debug mode has been engaged
         if self.debug_mode():
-            pending_loglines.append((
-                "WARNING: Unsafe debugging mode is enabled!", 6))
+            pending_loglines.append(("WARNING: Unsafe debugging mode is enabled!", 6))
 
         # done loading, so disallow updating elements from read-only files
         self.loading = False
@@ -455,9 +437,7 @@ class Universe:
         # set the socket options to allow existing open ones to be
         # reused (fixes a bug where the server can't bind for a minute
         # when restarting on linux systems)
-        self.listening_socket.setsockopt(
-            socket.SOL_SOCKET, socket.SO_REUSEADDR, 1
-        )
+        self.listening_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # bind the socket to to our desired server ipa and port
         self.listening_socket.bind((host, port))
@@ -470,8 +450,7 @@ class Universe:
         self.listening_socket.listen(1)
 
         # note that we're now ready for user connections
-        log("Listening for Telnet connections on %s port %s" % (
-                host, str(port)))
+        log("Listening for Telnet connections on %s port %s" % (host, str(port)))
 
     def get_time(self):
         """Convenience method to get the elapsed time counter."""
@@ -494,8 +473,7 @@ class Universe:
         if group not in self.origins:
             self.origins[group] = {}
         if not fallback:
-            fallback = mudpy.data.find_file(
-                    ".".join((group, "yaml")), universe=self)
+            fallback = mudpy.data.find_file(".".join((group, "yaml")), universe=self)
         if "fallback" not in self.origins[group]:
             self.origins[group]["fallback"] = fallback
         flags = self.origins[group].get("flags", None)
@@ -508,7 +486,6 @@ class Universe:
 
 
 class User:
-
     """This is a connected user."""
 
     def __init__(self):
@@ -550,8 +527,7 @@ class User:
     def check_idle(self):
         """Warn or disconnect idle users as appropriate."""
         idletime = universe.get_time() - self.last_input
-        linkdead_dict = universe.contents[
-            "mudpy.timing.idle.disconnect"].facets()
+        linkdead_dict = universe.contents["mudpy.timing.idle.disconnect"].facets()
         if self.state in linkdead_dict:
             linkdead_state = self.state
         else:
@@ -561,15 +537,14 @@ class User:
                 "$(eol)$(red)You've done nothing for far too long... goodbye!"
                 + "$(nrm)$(eol)",
                 flush=True,
-                add_prompt=False
+                add_prompt=False,
             )
             logline = "Disconnecting "
             if self.account and self.account.get("name"):
                 logline += self.account.get("name")
             else:
                 logline += "an unknown user"
-            logline += (" after idling too long in the " + self.state
-                        + " state.")
+            logline += " after idling too long in the " + self.state + " state."
             log(logline, 2)
             self.state = "disconnecting"
             self.menu_seen = False
@@ -621,27 +596,28 @@ class User:
         for old_user in universe.userlist:
 
             # the name is the same but it's not us
-            if hasattr(
-               old_user, "account"
-               ) and old_user.account and old_user.account.get(
-                "name"
-            ) == self.account.get(
-                "name"
-            ) and old_user is not self:
+            if (
+                hasattr(old_user, "account")
+                and old_user.account
+                and old_user.account.get("name") == self.account.get("name")
+                and old_user is not self
+            ):
 
                 # make a note of it
                 log(
-                    "User " + self.account.get(
-                        "name"
-                    ) + " reconnected--closing old connection to "
-                    + old_user.address + ".",
-                    2
+                    "User "
+                    + self.account.get("name")
+                    + " reconnected--closing old connection to "
+                    + old_user.address
+                    + ".",
+                    2,
                 )
                 old_user.send(
-                    "$(eol)$(red)New connection from " + self.address
+                    "$(eol)$(red)New connection from "
+                    + self.address
                     + ". Terminating old connection...$(nrm)$(eol)",
                     flush=True,
-                    add_prompt=False
+                    add_prompt=False,
                 )
 
                 # close the old connection
@@ -650,7 +626,8 @@ class User:
                 # replace the old connection with this one
                 old_user.send(
                     "$(eol)$(red)Taking over old connection from "
-                    + old_user.address + ".$(nrm)"
+                    + old_user.address
+                    + ".$(nrm)"
                 )
                 old_user.connection = self.connection
                 old_user.last_address = old_user.address
@@ -671,13 +648,16 @@ class User:
         """Flag the user as authenticated and disconnect duplicates."""
         if self.state != "authenticated":
             self.authenticated = True
-            log("User %s authenticated for account %s." % (
-                    self, self.account.subkey), 2)
-            if ("mudpy.limit" in universe.contents and self.account.subkey in
-                    universe.contents["mudpy.limit"].get("admins")):
+            log(
+                "User %s authenticated for account %s." % (self, self.account.subkey), 2
+            )
+            if (
+                "mudpy.limit" in universe.contents
+                and self.account.subkey
+                in universe.contents["mudpy.limit"].get("admins")
+            ):
                 self.account.set("administrator", True)
-                log("Account %s is an administrator." % (
-                        self.account.subkey), 2)
+                log("Account %s is an administrator." % (self.account.subkey), 2)
 
     def show_menu(self):
         """Send the user their current menu."""
@@ -686,14 +666,14 @@ class User:
             self.send(
                 get_menu(self.state, self.error, self.menu_choices),
                 "",
-                add_terminator=True
+                add_terminator=True,
             )
             self.menu_seen = True
             self.error = False
             self.adjust_echoing()
 
     def prompt(self):
-        """"Generate and return an input prompt."""
+        """ "Generate and return an input prompt."""
 
         # Start with the user's preference, if one was provided
         prompt = self.account.get("prompt")
@@ -705,9 +685,7 @@ class User:
 
         # Allow including the World clock state
         if "$_(time)" in prompt:
-            prompt = prompt.replace(
-                "$_(time)",
-                str(universe.get_time()))
+            prompt = prompt.replace("$_(time)", str(universe.get_time()))
 
         # Append a single space for clear separation from user input
         if prompt[-1] != " ":
@@ -718,14 +696,11 @@ class User:
 
     def adjust_echoing(self):
         """Adjust echoing to match state menu requirements."""
-        if mudpy.telnet.is_enabled(self, mudpy.telnet.TELOPT_ECHO,
-                                   mudpy.telnet.US):
+        if mudpy.telnet.is_enabled(self, mudpy.telnet.TELOPT_ECHO, mudpy.telnet.US):
             if menu_echo_on(self.state):
-                mudpy.telnet.disable(self, mudpy.telnet.TELOPT_ECHO,
-                                     mudpy.telnet.US)
+                mudpy.telnet.disable(self, mudpy.telnet.TELOPT_ECHO, mudpy.telnet.US)
         elif not menu_echo_on(self.state):
-            mudpy.telnet.enable(self, mudpy.telnet.TELOPT_ECHO,
-                                mudpy.telnet.US)
+            mudpy.telnet.enable(self, mudpy.telnet.TELOPT_ECHO, mudpy.telnet.US)
 
     def remove(self):
         """Remove a user from the list of connected users."""
@@ -741,7 +716,7 @@ class User:
         add_prompt=True,
         just_prompt=False,
         add_terminator=False,
-        prepend_padding=True
+        prepend_padding=True,
     ):
         """Send arbitrary text to a connected user."""
 
@@ -755,21 +730,18 @@ class User:
                 output = output[:-6]
             extra_lines = output.find("$(eol)$(eol)$(eol)")
             while extra_lines > -1:
-                output = output[:extra_lines] + output[extra_lines + 6:]
+                output = output[:extra_lines] + output[extra_lines + 6 :]
                 extra_lines = output.find("$(eol)$(eol)$(eol)")
 
             # start with a newline, append the message, then end
             # with the optional eol string passed to this function
             # and the ansi escape to return to normal text
             if not just_prompt and prepend_padding:
-                if (not self.output_queue or not
-                        self.output_queue[-1].endswith(b"\r\n")):
+                if not self.output_queue or not self.output_queue[-1].endswith(b"\r\n"):
                     output = "$(eol)" + output
                 elif not self.output_queue[-1].endswith(
                     b"\r\n\x1b[0m\r\n"
-                ) and not self.output_queue[-1].endswith(
-                    b"\r\n\r\n"
-                ):
+                ) and not self.output_queue[-1].endswith(b"\r\n\r\n"):
                     output = "$(eol)" + output
             output += eol + chr(27) + "[0m"
 
@@ -795,8 +767,9 @@ class User:
                 output = wrap_ansi_text(output, wrap)
 
             # if supported by the client, encode it utf-8
-            if mudpy.telnet.is_enabled(self, mudpy.telnet.TELOPT_BINARY,
-                                       mudpy.telnet.US):
+            if mudpy.telnet.is_enabled(
+                self, mudpy.telnet.TELOPT_BINARY, mudpy.telnet.US
+            ):
                 encoded_output = output.encode("utf-8")
 
             # otherwise just send ascii
@@ -806,13 +779,17 @@ class User:
             # end with a terminator if requested
             if add_prompt or add_terminator:
                 if mudpy.telnet.is_enabled(
-                        self, mudpy.telnet.TELOPT_EOR, mudpy.telnet.US):
+                    self, mudpy.telnet.TELOPT_EOR, mudpy.telnet.US
+                ):
                     encoded_output += mudpy.telnet.telnet_proto(
-                        mudpy.telnet.IAC, mudpy.telnet.EOR)
+                        mudpy.telnet.IAC, mudpy.telnet.EOR
+                    )
                 elif not mudpy.telnet.is_enabled(
-                        self, mudpy.telnet.TELOPT_SGA, mudpy.telnet.US):
+                    self, mudpy.telnet.TELOPT_SGA, mudpy.telnet.US
+                ):
                     encoded_output += mudpy.telnet.telnet_proto(
-                        mudpy.telnet.IAC, mudpy.telnet.GA)
+                        mudpy.telnet.IAC, mudpy.telnet.GA
+                    )
 
             # and tack it onto the queue
             self.output_queue.append(encoded_output)
@@ -910,8 +887,9 @@ class User:
             # if input doesn't end in a newline, replace the
             # held partial input with the last line of it
             if not (
-                    self.partial_input.endswith(b"\r\0") or
-                    self.partial_input.endswith(b"\r\n")):
+                self.partial_input.endswith(b"\r\0")
+                or self.partial_input.endswith(b"\r\n")
+            ):
                 self.partial_input = new_input_lines.pop()
 
             # otherwise, chop off the extra null input and reset
@@ -928,7 +906,8 @@ class User:
 
                 # log non-printable characters remaining
                 if not mudpy.telnet.is_enabled(
-                        self, mudpy.telnet.TELOPT_BINARY, mudpy.telnet.HIM):
+                    self, mudpy.telnet.TELOPT_BINARY, mudpy.telnet.HIM
+                ):
                     asciiline = bytes([x for x in line if 32 <= x <= 126])
                     if line != asciiline:
                         logline = "Non-ASCII characters from "
@@ -960,23 +939,27 @@ class User:
     def new_avatar(self):
         """Instantiate a new, unconfigured avatar for this user."""
         counter = 0
-        while ("avatar_%s_%s" % (self.account.get("name"), counter)
-                in universe.groups.get("actor", {}).keys()):
+        while (
+            "avatar_%s_%s" % (self.account.get("name"), counter)
+            in universe.groups.get("actor", {}).keys()
+        ):
             counter += 1
         self.avatar = Element(
-            "actor.avatar_%s_%s" % (self.account.get("name"), counter),
-            universe)
+            "actor.avatar_%s_%s" % (self.account.get("name"), counter), universe
+        )
         self.avatar.append("inherit", "archetype.avatar")
         self.account.append("avatars", self.avatar.key)
-        log("Created new avatar %s for user %s." % (
-                self.avatar.key, self.account.get("name")), 0)
+        log(
+            "Created new avatar %s for user %s."
+            % (self.avatar.key, self.account.get("name")),
+            0,
+        )
 
     def delete_avatar(self, avatar):
         """Remove an avatar from the world and from the user's list."""
         if self.avatar is universe.contents[avatar]:
             self.avatar = None
-        log("Deleting avatar %s for user %s." % (
-                avatar, self.account.get("name")), 0)
+        log("Deleting avatar %s for user %s." % (avatar, self.account.get("name")), 0)
         universe.contents[avatar].destroy()
         avatars = self.account.get("avatars")
         avatars.remove(avatar)
@@ -984,27 +967,25 @@ class User:
 
     def activate_avatar_by_index(self, index):
         """Enter the world with a particular indexed avatar."""
-        self.avatar = universe.contents[
-            self.account.get("avatars")[index]]
+        self.avatar = universe.contents[self.account.get("avatars")[index]]
         self.avatar.owner = self
         self.state = "active"
-        log("Activated avatar %s (%s)." % (
-                self.avatar.get("name"), self.avatar.key), 0)
+        log("Activated avatar %s (%s)." % (self.avatar.get("name"), self.avatar.key), 0)
         self.avatar.go_home()
 
     def deactivate_avatar(self):
         """Have the active avatar leave the world."""
         if self.avatar:
-            log("Deactivating avatar %s (%s) for user %s." % (
-                    self.avatar.get("name"), self.avatar.key,
-                    self.account.get("name")), 0)
+            log(
+                "Deactivating avatar %s (%s) for user %s."
+                % (self.avatar.get("name"), self.avatar.key, self.account.get("name")),
+                0,
+            )
             current = self.avatar.get("location")
             if current:
                 self.avatar.set("default_location", current)
                 self.avatar.echo_to_location(
-                    "You suddenly wonder where " + self.avatar.get(
-                        "name"
-                    ) + " went."
+                    "You suddenly wonder where " + self.avatar.get("name") + " went."
                 )
                 del universe.contents[current].contents[self.avatar.key]
                 self.avatar.remove_facet("location")
@@ -1015,8 +996,7 @@ class User:
         """Destroy the user and associated avatars."""
         for avatar in self.account.get("avatars"):
             self.delete_avatar(avatar)
-        log("Destroying account %s for user %s." % (
-                self.account.get("name"), self), 0)
+        log("Destroying account %s for user %s." % (self.account.get("name"), self), 0)
         self.account.destroy()
 
     def list_avatar_names(self):
@@ -1026,8 +1006,7 @@ class User:
             try:
                 avatars.append(universe.contents[avatar].get("name"))
             except KeyError:
-                log('Missing avatar "%s", possible data corruption.' %
-                    avatar, 6)
+                log('Missing avatar "%s", possible data corruption.' % avatar, 6)
         return avatars
 
     def is_admin(self):
@@ -1053,7 +1032,7 @@ def log(message, level=0):
         file_name = ""
         max_log_lines = 0
         syslog_name = ""
-    timestamp = datetime.datetime.now().isoformat(' ')
+    timestamp = datetime.datetime.now().isoformat(" ")
 
     # turn the message into a list of nonempty lines
     lines = [x for x in [(x.rstrip()) for x in message.split("\n")] if x != ""]
@@ -1070,8 +1049,9 @@ def log(message, level=0):
         file_descriptor.close()
 
     # send the timestamp and line to standard output
-    if ("mudpy.log" in universe.contents and
-            universe.contents["mudpy.log"].get("stdout")):
+    if "mudpy.log" in universe.contents and universe.contents["mudpy.log"].get(
+        "stdout"
+    ):
         for line in lines:
             print(timestamp + " " + line)
 
@@ -1080,7 +1060,7 @@ def log(message, level=0):
         syslog.openlog(
             syslog_name.encode("utf-8"),
             syslog.LOG_PID,
-            syslog.LOG_INFO | syslog.LOG_DAEMON
+            syslog.LOG_INFO | syslog.LOG_DAEMON,
         )
         for line in lines:
             syslog.syslog(line)
@@ -1089,15 +1069,20 @@ def log(message, level=0):
     # display to connected administrators
     for user in universe.userlist:
         if (
-                user.state == "active"
-                and user.is_admin()
-                and user.account.get("loglevel", 0) <= level):
+            user.state == "active"
+            and user.is_admin()
+            and user.account.get("loglevel", 0) <= level
+        ):
             # iterate over every line in the message
             full_message = ""
             for line in lines:
                 full_message += (
-                    "$(bld)$(red)" + timestamp + " "
-                    + line.replace("$(", "$_(") + "$(nrm)$(eol)")
+                    "$(bld)$(red)"
+                    + timestamp
+                    + " "
+                    + line.replace("$(", "$_(")
+                    + "$(nrm)$(eol)"
+                )
             user.send(full_message, flush=True)
 
     # add to the recent log list
@@ -1135,22 +1120,21 @@ def get_loglines(level, start, stop):
         # some preamble
         message = (
             "There are %s log lines in memory and %s at or above level %s. "
-            "The matching lines from %s to %s are:$(eol)$(eol)" %
-            (total_count, filtered_count, level, stop, start))
+            "The matching lines from %s to %s are:$(eol)$(eol)"
+            % (total_count, filtered_count, level, stop, start)
+        )
 
         # add the text from the selected lines
         if stop > 1:
-            range_lines = loglines[-start:-(stop - 1)]
+            range_lines = loglines[-start : -(stop - 1)]
         else:
             range_lines = loglines[-start:]
         for line in range_lines:
-            message += "   (%s) %s$(eol)" % (
-                line[1], line[0].replace("$(", "$_("))
+            message += "   (%s) %s$(eol)" % (line[1], line[0].replace("$(", "$_("))
 
     # there were no lines
     else:
-        message = "None of the %s lines in memory matches your request." % (
-            total_count)
+        message = "None of the %s lines in memory matches your request." % (total_count)
 
     # pass it back
     return message
@@ -1217,12 +1201,13 @@ def wrap_ansi_text(text, width):
         # the current character meets the requested maximum line width, so we
         # need to wrap unless the current word is wider than the terminal (in
         # which case we let it do the wrapping instead)
-        if last_rel_whitespace != 0 and (rel_pos > width or (
-                rel_pos > width - 1 and glyph_columns(each_character) == 2)):
+        if last_rel_whitespace != 0 and (
+            rel_pos > width
+            or (rel_pos > width - 1 and glyph_columns(each_character) == 2)
+        ):
 
             # insert an eol in place of the last space
-            text = (text[:last_abs_whitespace] + "\r\n" +
-                    text[last_abs_whitespace + 1:])
+            text = text[:last_abs_whitespace] + "\r\n" + text[last_abs_whitespace + 1 :]
 
             # increase the absolute position because an eol is two
             # characters but the space it replaced was only one
@@ -1270,13 +1255,7 @@ def random_name():
     """Returns a random character name."""
 
     # the vowels and consonants needed to create romaji syllables
-    vowels = [
-        "a",
-        "i",
-        "u",
-        "e",
-        "o"
-    ]
+    vowels = ["a", "i", "u", "e", "o"]
     consonants = [
         "'",
         "k",
@@ -1295,7 +1274,7 @@ def random_name():
         "m",
         "y",
         "r",
-        "w"
+        "w",
     ]
 
     # this dict will hold our weighted list of syllables
@@ -1326,7 +1305,7 @@ def replace_macros(user, text, is_input=False):
     pronouns = {
         "female": {"obj": "her", "pos": "hers", "sub": "she"},
         "male": {"obj": "him", "pos": "his", "sub": "he"},
-        "neuter": {"obj": "it", "pos": "its", "sub": "it"}
+        "neuter": {"obj": "it", "pos": "its", "sub": "it"},
     }
 
     # a dict of replacement macros
@@ -1363,7 +1342,7 @@ def replace_macros(user, text, is_input=False):
         if macro_start == -1:
             break
         macro_end = text.find(")", macro_start) + 1
-        macro = text[macro_start + 2:macro_end - 1]
+        macro = text[macro_start + 2 : macro_end - 1]
         if macro in macros.keys():
             replacement = macros[macro]
 
@@ -1387,8 +1366,7 @@ def replace_macros(user, text, is_input=False):
         else:
             replacement = ""
             if not is_input:
-                log("Unexpected replacement macro " +
-                    macro + " encountered.", 6)
+                log("Unexpected replacement macro " + macro + " encountered.", 6)
 
         # and now we act on the replacement
         text = text.replace("$(" + macro + ")", replacement)
@@ -1432,9 +1410,7 @@ def on_pulse():
         )
     else:
         universe.groups["internal"]["counters"].set(
-            "mark", universe.groups["internal"]["counters"].get(
-                "mark"
-            ) - 1
+            "mark", universe.groups["internal"]["counters"].get("mark") - 1
         )
 
     # periodically save everything
@@ -1445,9 +1421,7 @@ def on_pulse():
         )
     else:
         universe.groups["internal"]["counters"].set(
-            "save", universe.groups["internal"]["counters"].get(
-                "save"
-            ) - 1
+            "save", universe.groups["internal"]["counters"].get("save") - 1
         )
 
     # open the listening socket if it hasn't been already
@@ -1526,8 +1500,10 @@ def find_command(command_name):
         command = universe.groups["command"][command_name]
     else:
         for candidate in sorted(universe.groups["command"]):
-            if candidate.startswith(command_name) and not universe.groups[
-                    "command"][candidate].is_restricted():
+            if (
+                candidate.startswith(command_name)
+                and not universe.groups["command"][candidate].is_restricted()
+            ):
                 # the command matches the start of a command word and is not
                 # restricted to administrators
                 command = universe.groups["command"][candidate]
@@ -1596,8 +1572,7 @@ def get_menu_description(state, error):
 
         # try to get an error message matching the condition
         # and current state
-        description = universe.groups[
-            "menu"][state].get("error_" + error)
+        description = universe.groups["menu"][state].get("error_" + error)
         if not description:
             description = "That is not a valid choice..."
         description = "$(red)" + description + "$(nrm)"
@@ -1635,7 +1610,8 @@ def get_menu_choices(user):
     creates = {}
     for facet in state.facets():
         if facet.startswith("demand_") and not call_hook_function(
-                universe.groups["menu"][user.state].get(facet), (user,)):
+            universe.groups["menu"][user.state].get(facet), (user,)
+        ):
             ignores.append(facet.split("_", 2)[1])
         elif facet.startswith("create_"):
             creates[facet] = facet.split("_", 2)[1]
@@ -1643,8 +1619,7 @@ def get_menu_choices(user):
             options[facet] = facet.split("_", 2)[1]
     for facet in creates.keys():
         if not creates[facet] in ignores:
-            choices[creates[facet]] = call_hook_function(
-                state.get(facet), (user,))
+            choices[creates[facet]] = call_hook_function(state.get(facet), (user,))
     for facet in options.keys():
         if not options[facet] in ignores:
             choices[options[facet]] = state.get(facet)
@@ -1657,9 +1632,9 @@ def get_formatted_menu_choices(state, choices):
     choice_keys = list(choices.keys())
     choice_keys.sort()
     for choice in choice_keys:
-        choice_output += "   [$(red)" + choice + "$(nrm)]  " + choices[
-            choice
-        ] + "$(eol)"
+        choice_output += (
+            "   [$(red)" + choice + "$(nrm)]  " + choices[choice] + "$(eol)"
+        )
     if choice_output:
         choice_output += "$(eol)"
     return choice_output
@@ -1670,9 +1645,7 @@ def get_menu_branches(state):
     branches = {}
     for facet in universe.groups["menu"][state].facets():
         if facet.startswith("branch_"):
-            branches[
-                facet.split("_", 2)[1]
-            ] = universe.groups["menu"][state].get(facet)
+            branches[facet.split("_", 2)[1]] = universe.groups["menu"][state].get(facet)
     return branches
 
 
@@ -1697,9 +1670,7 @@ def get_menu_actions(state):
     actions = {}
     for facet in universe.groups["menu"][state].facets():
         if facet.startswith("action_"):
-            actions[
-                facet.split("_", 2)[1]
-            ] = universe.groups["menu"][state].get(facet)
+            actions[facet.split("_", 2)[1]] = universe.groups["menu"][state].get(facet)
     return actions
 
 
@@ -1729,24 +1700,25 @@ def call_hook_function(fname, arglist):
         try:
             function = getattr(function, component)
         except AttributeError:
-            log('Could not find mudpy.%s() for arguments "%s"'
-                % (fname, arglist), 7)
+            log('Could not find mudpy.%s() for arguments "%s"' % (fname, arglist), 7)
             function = None
             break
     if function:
         try:
             return function(*arglist)
         except Exception:
-            log('Calling mudpy.%s(%s) raised an exception...\n%s'
-                % (fname, (*arglist,), traceback.format_exc()), 7)
+            log(
+                "Calling mudpy.%s(%s) raised an exception...\n%s"
+                % (fname, (*arglist,), traceback.format_exc()),
+                7,
+            )
 
 
 def handle_user_input(user):
     """The main handler, branches to a state-specific handler."""
 
     # if the user's client echo is off, send a blank line for aesthetics
-    if mudpy.telnet.is_enabled(user, mudpy.telnet.TELOPT_ECHO,
-                               mudpy.telnet.US):
+    if mudpy.telnet.is_enabled(user, mudpy.telnet.TELOPT_ECHO, mudpy.telnet.US):
         user.send("", add_prompt=False, prepend_padding=False)
 
     # check to make sure the state is expected, then call that handler
@@ -1798,9 +1770,9 @@ def handler_entering_account_name(user):
         name = input_data.lower()
 
         # fail if there are non-alphanumeric characters
-        if name != "".join(filter(
-                lambda x: x >= "0" and x <= "9" or x >= "a" and x <= "z",
-                name)):
+        if name != "".join(
+            filter(lambda x: x >= "0" and x <= "9" or x >= "a" and x <= "z", name)
+        ):
             user.error = "bad_name"
 
         # if that account exists, time to request a password
@@ -1827,8 +1799,7 @@ def handler_checking_password(user):
     input_data = user.input_queue.pop(0)
 
     if "mudpy.limit" in universe.contents:
-        max_password_tries = universe.contents["mudpy.limit"].get(
-            "password_tries", 3)
+        max_password_tries = universe.contents["mudpy.limit"].get("password_tries", 3)
     else:
         max_password_tries = 3
 
@@ -1847,9 +1818,7 @@ def handler_checking_password(user):
 
     # we've exceeded the maximum number of password failures, so disconnect
     else:
-        user.send(
-            "$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)"
-        )
+        user.send("$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)")
         user.state = "disconnecting"
 
 
@@ -1860,19 +1829,17 @@ def handler_entering_new_password(user):
     input_data = user.input_queue.pop(0)
 
     if "mudpy.limit" in universe.contents:
-        max_password_tries = universe.contents["mudpy.limit"].get(
-            "password_tries", 3)
+        max_password_tries = universe.contents["mudpy.limit"].get("password_tries", 3)
     else:
         max_password_tries = 3
 
     # make sure the password is strong--at least one upper, one lower and
     # one digit, seven or more characters in length
-    if len(input_data) > 6 and len(
-       list(filter(lambda x: x >= "0" and x <= "9", input_data))
-       ) and len(
-        list(filter(lambda x: x >= "A" and x <= "Z", input_data))
-    ) and len(
-        list(filter(lambda x: x >= "a" and x <= "z", input_data))
+    if (
+        len(input_data) > 6
+        and len(list(filter(lambda x: x >= "0" and x <= "9", input_data)))
+        and len(list(filter(lambda x: x >= "A" and x <= "Z", input_data)))
+        and len(list(filter(lambda x: x >= "a" and x <= "z", input_data)))
     ):
 
         # hash and store it, then move on to verification
@@ -1886,9 +1853,7 @@ def handler_entering_new_password(user):
 
     # too many tries, so adios
     else:
-        user.send(
-            "$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)"
-        )
+        user.send("$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)")
         user.account.destroy()
         user.state = "disconnecting"
 
@@ -1900,8 +1865,7 @@ def handler_verifying_new_password(user):
     input_data = user.input_queue.pop(0)
 
     if "mudpy.limit" in universe.contents:
-        max_password_tries = universe.contents["mudpy.limit"].get(
-            "password_tries", 3)
+        max_password_tries = universe.contents["mudpy.limit"].get("password_tries", 3)
     else:
         max_password_tries = 3
 
@@ -1922,9 +1886,7 @@ def handler_verifying_new_password(user):
 
     # otherwise, sayonara
     else:
-        user.send(
-            "$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)"
-        )
+        user.send("$(eol)$(red)Too many failed password attempts...$(nrm)$(eol)")
         user.account.destroy()
         user.state = "disconnecting"
 
@@ -1972,8 +1934,9 @@ def daemonize(universe):
     """Fork and disassociate from everything."""
 
     # only if this is what we're configured to do
-    if "mudpy.process" in universe.contents and universe.contents[
-            "mudpy.process"].get("daemon"):
+    if "mudpy.process" in universe.contents and universe.contents["mudpy.process"].get(
+        "daemon"
+    ):
 
         # log before we start forking around, so the terminal gets the message
         log("Disassociating from the controlling terminal.")
@@ -2041,9 +2004,7 @@ def excepthook(excepttype, value, tracebackdata):
     """Handle uncaught exceptions."""
 
     # assemble the list of errors into a single string
-    message = "".join(
-        traceback.format_exception(excepttype, value, tracebackdata)
-    )
+    message = "".join(traceback.format_exception(excepttype, value, tracebackdata))
 
     # try to log it, if possible
     try:

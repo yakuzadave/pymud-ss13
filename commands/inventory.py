@@ -61,7 +61,9 @@ def cmd_get(interface, client_id, item: str, container: Optional[str] = None, **
     player_comp = player.get_component("player")
     location = player.location
     room_objs = world.get_objects_in_location(location)
-    inv_objs = [world.get_object(i) for i in player_comp.inventory if world.get_object(i)]
+    inv_objs = [
+        world.get_object(i) for i in player_comp.inventory if world.get_object(i)
+    ]
 
     cont_obj = _find_object_by_name(container, room_objs + inv_objs)
     if not cont_obj or not cont_obj.get_component("container"):
@@ -83,7 +85,9 @@ def cmd_get(interface, client_id, item: str, container: Optional[str] = None, **
 
 
 @register("take")
-def cmd_take(interface, client_id, item: str, container: Optional[str] = None, **kwargs):
+def cmd_take(
+    interface, client_id, item: str, container: Optional[str] = None, **kwargs
+):
     return cmd_get(interface, client_id, item, container, **kwargs)
 
 
@@ -108,7 +112,10 @@ def cmd_put(interface, client_id, item: str, container: str, **_):
 
     if item not in player_comp.inventory:
         # try fuzzy match
-        itm_obj = _find_object_by_name(item, [world.get_object(i) for i in player_comp.inventory if world.get_object(i)])
+        itm_obj = _find_object_by_name(
+            item,
+            [world.get_object(i) for i in player_comp.inventory if world.get_object(i)],
+        )
         if not itm_obj:
             return f"You aren't carrying {item}."
         item_id = itm_obj.id
@@ -118,7 +125,9 @@ def cmd_put(interface, client_id, item: str, container: str, **_):
 
     location = player.location
     room_objs = world.get_objects_in_location(location)
-    inv_objs = [world.get_object(i) for i in player_comp.inventory if world.get_object(i)]
+    inv_objs = [
+        world.get_object(i) for i in player_comp.inventory if world.get_object(i)
+    ]
 
     cont_obj = _find_object_by_name(container, room_objs + inv_objs)
     if not cont_obj or not cont_obj.get_component("container"):

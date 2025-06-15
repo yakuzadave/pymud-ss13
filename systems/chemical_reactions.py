@@ -26,7 +26,12 @@ class Reaction:
 class ChemicalContainerComponent:
     """Container capable of holding chemical reagents."""
 
-    def __init__(self, capacity: float = 100.0, container_type: str = "beaker", temperature: float = 20.0):
+    def __init__(
+        self,
+        capacity: float = 100.0,
+        container_type: str = "beaker",
+        temperature: float = 20.0,
+    ):
         self.owner = None
         self.capacity = capacity
         self.container_type = container_type
@@ -78,7 +83,10 @@ class ChemicalReactionSystem:
         for reaction in self.reactions:
             if reaction.catalyst and reaction.catalyst not in container.contents:
                 continue
-            if reaction.min_temp is not None and container.temperature < reaction.min_temp:
+            if (
+                reaction.min_temp is not None
+                and container.temperature < reaction.min_temp
+            ):
                 continue
             if all(r in container.contents for r in reaction.reactants):
                 for r in reaction.reactants:

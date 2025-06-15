@@ -36,9 +36,14 @@ def test_botanist_command_flow(tmp_path):
 
 
 def test_cross_pollination_grafting_autogrow():
-    system = BotanySystem(growth_rate=0.1, tick_interval=0, cross_poll_chance=1.0)
-    plant_a = system.plant_seed("tomato")
-    plant_b = system.plant_seed("wheat")
+    system = BotanySystem(
+        growth_rate=0.1,
+        tick_interval=0,
+        cross_poll_chance=1.0,
+        cross_poll_radius=1.0,
+    )
+    plant_a = system.plant_seed("tomato", x=0, y=0)
+    plant_b = system.plant_seed("wheat", x=1, y=0)
     plant_a.traits.add("glow")
     system.cross_pollination = True
     system.start()
@@ -48,6 +53,23 @@ def test_cross_pollination_grafting_autogrow():
     assert plant_a.traits.issubset(plant_b.traits)
     system.toggle_autogrow(plant_a.plant_id)
     nutrient_before = plant_a.nutrient
+    power_before = system.power
     system.update()
     assert plant_a.nutrient > nutrient_before
+    assert system.power < power_before
 
+
+def test_cross_poll_requires_proximity():
+    system = BotanySystem(
+        growth_rate=0.1,
+        tick_interval=0,
+        cross_poll_chance=1.0,
+        cross_poll_radius=1.0,
+    )
+    plant_a = system.plant_seed("tomato", x=0, y=0)
+    plant_b = system.plant_seed("wheat", x=5, y=0)
+    plant_a.traits.add("glow")
+    system.cross_pollination = True
+    system.start()
+    system.update()
+    assert "glow" not in plant_b.traits

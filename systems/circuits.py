@@ -30,7 +30,9 @@ class CircuitSystem:
         self.parts[part_id] = self.parts.get(part_id, 0) + amount
 
     # ------------------------------------------------------------------
-    def define_recipe(self, recipe_id: str, shell_type: str, required: Dict[str, int]) -> None:
+    def define_recipe(
+        self, recipe_id: str, shell_type: str, required: Dict[str, int]
+    ) -> None:
         self.recipes[recipe_id] = CircuitRecipe(shell_type, dict(required))
 
     # ------------------------------------------------------------------

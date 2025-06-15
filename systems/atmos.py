@@ -24,6 +24,7 @@ HIGH_CO2_THRESHOLD = 5.0  # percent
 LOW_PRESSURE_THRESHOLD = 80.0  # kPa
 HIGH_PRESSURE_THRESHOLD = 120.0  # kPa
 
+
 class AtmosphericSystem:
     """
     System that manages atmospheric conditions throughout the station.
@@ -50,7 +51,9 @@ class AtmosphericSystem:
 
         logger.info("Atmospheric system initialized")
 
-    def register_vent(self, room_id: str, output_rate: float = 1.0, is_active: bool = True) -> None:
+    def register_vent(
+        self, room_id: str, output_rate: float = 1.0, is_active: bool = True
+    ) -> None:
         """
         Register a ventilation system for a room.
 
@@ -59,10 +62,7 @@ class AtmosphericSystem:
             output_rate (float): The rate at which the vent normalizes atmosphere.
             is_active (bool): Whether the vent is currently active.
         """
-        self.vents[room_id] = {
-            "output_rate": output_rate,
-            "is_active": is_active
-        }
+        self.vents[room_id] = {"output_rate": output_rate, "is_active": is_active}
         logger.debug(f"Registered vent for room {room_id}")
 
     def start(self) -> None:
@@ -100,13 +100,15 @@ class AtmosphericSystem:
 
         # Update atmosphere for each room
         for room_id, room_obj in world_instance.rooms.items():
-            room_comp = room_obj.get_component('room')
+            room_comp = room_obj.get_component("room")
             if not room_comp:
                 continue
 
             # Apply vent normalization if active
             if room_id in self.vents and self.vents[room_id]["is_active"]:
-                self._normalize_atmosphere(room_comp, self.vents[room_id]["output_rate"])
+                self._normalize_atmosphere(
+                    room_comp, self.vents[room_id]["output_rate"]
+                )
 
             # Apply effects of any leaks affecting this room
             for leak in self.leaks:
@@ -117,7 +119,12 @@ class AtmosphericSystem:
             self._update_hazards(room_comp)
 
             # Publish atmospheric update event for this room
-            publish("atmos_updated", room_id=room_id, atmosphere=room_comp.atmosphere, hazards=room_comp.hazards)
+            publish(
+                "atmos_updated",
+                room_id=room_id,
+                atmosphere=room_comp.atmosphere,
+                hazards=room_comp.hazards,
+            )
 
     def _normalize_atmosphere(self, room_comp: Any, rate: float) -> None:
         """
@@ -197,7 +204,9 @@ class AtmosphericSystem:
             if "low_oxygen" not in room_comp.hazards:
                 room_comp.hazards.append("low_oxygen")
                 logger.debug(f"Low oxygen hazard added to room {room_comp.owner.id}")
-                publish("hazard_warning", room_id=room_comp.owner.id, hazard="low_oxygen")
+                publish(
+                    "hazard_warning", room_id=room_comp.owner.id, hazard="low_oxygen"
+                )
         elif "low_oxygen" in room_comp.hazards:
             room_comp.hazards.remove("low_oxygen")
 
@@ -215,7 +224,9 @@ class AtmosphericSystem:
             if "low_pressure" not in room_comp.hazards:
                 room_comp.hazards.append("low_pressure")
                 logger.debug(f"Low pressure hazard added to room {room_comp.owner.id}")
-                publish("hazard_warning", room_id=room_comp.owner.id, hazard="low_pressure")
+                publish(
+                    "hazard_warning", room_id=room_comp.owner.id, hazard="low_pressure"
+                )
         elif "low_pressure" in room_comp.hazards:
             room_comp.hazards.remove("low_pressure")
 
@@ -224,7 +235,9 @@ class AtmosphericSystem:
             if "high_pressure" not in room_comp.hazards:
                 room_comp.hazards.append("high_pressure")
                 logger.debug(f"High pressure hazard added to room {room_comp.owner.id}")
-                publish("hazard_warning", room_id=room_comp.owner.id, hazard="high_pressure")
+                publish(
+                    "hazard_warning", room_id=room_comp.owner.id, hazard="high_pressure"
+                )
         elif "high_pressure" in room_comp.hazards:
             room_comp.hazards.remove("high_pressure")
 
@@ -239,11 +252,15 @@ class AtmosphericSystem:
         if atmos.get("temperature", 20.0) > 60.0:
             if "extreme_heat" not in room_comp.hazards:
                 room_comp.hazards.append("extreme_heat")
-                publish("hazard_warning", room_id=room_comp.owner.id, hazard="extreme_heat")
+                publish(
+                    "hazard_warning", room_id=room_comp.owner.id, hazard="extreme_heat"
+                )
         elif "extreme_heat" in room_comp.hazards:
             room_comp.hazards.remove("extreme_heat")
 
-    def create_leak(self, room_id: str, rate: float = 1.0, duration: Optional[float] = None) -> None:
+    def create_leak(
+        self, room_id: str, rate: float = 1.0, duration: Optional[float] = None
+    ) -> None:
         """
         Create a leak in a room that will affect its atmosphere.
 
@@ -257,7 +274,7 @@ class AtmosphericSystem:
             "room_id": room_id,
             "rate": rate,
             "created_at": time.time(),
-            "duration": duration
+            "duration": duration,
         }
 
         self.leaks.append(leak)
@@ -289,7 +306,9 @@ class AtmosphericSystem:
 
         return fixed
 
-    def on_power_loss(self, affected_rooms: Optional[List[str]] = None, **_: Any) -> None:
+    def on_power_loss(
+        self, affected_rooms: Optional[List[str]] = None, **_: Any
+    ) -> None:
         """
         Handle power loss event by disabling vents in affected rooms.
 
@@ -307,9 +326,13 @@ class AtmosphericSystem:
             for room_id in affected_rooms:
                 if room_id in self.vents:
                     self.vents[room_id]["is_active"] = False
-            logger.info(f"Vents disabled in {len(affected_rooms)} rooms due to power loss")
+            logger.info(
+                f"Vents disabled in {len(affected_rooms)} rooms due to power loss"
+            )
 
-    def on_power_restored(self, affected_rooms: Optional[List[str]] = None, **_: Any) -> None:
+    def on_power_restored(
+        self, affected_rooms: Optional[List[str]] = None, **_: Any
+    ) -> None:
         """
         Handle power restored event by re-enabling vents in affected rooms.
 
@@ -327,7 +350,9 @@ class AtmosphericSystem:
             for room_id in affected_rooms:
                 if room_id in self.vents:
                     self.vents[room_id]["is_active"] = True
-            logger.info(f"Vents re-enabled in {len(affected_rooms)} rooms due to power restoration")
+            logger.info(
+                f"Vents re-enabled in {len(affected_rooms)} rooms due to power restoration"
+            )
 
     def on_breach(self, room_id: str, severity: float = 1.0) -> None:
         """
@@ -353,8 +378,10 @@ class AtmosphericSystem:
             status = "activated" if active else "deactivated"
             logger.info(f"Vent in room {room_id} {status}")
 
+
 # Create a global atmospheric system instance
 ATMOS_SYSTEM = AtmosphericSystem()
+
 
 def get_atmos_system() -> AtmosphericSystem:
     """

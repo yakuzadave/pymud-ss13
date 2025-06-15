@@ -5,6 +5,7 @@ based atmosphere grid and a minimal pipe network.  It is intentionally
 lightweight but serves as a foundation for more advanced simulation
 in the future.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -51,9 +52,7 @@ class GasMixture:
             b = other.composition.get(gas, 0.0)
             self.composition[gas] = a * (1 - ratio) + b * ratio
         self.pressure = self.pressure * (1 - ratio) + other.pressure * ratio
-        self.temperature = (
-            self.temperature * (1 - ratio) + other.temperature * ratio
-        )
+        self.temperature = self.temperature * (1 - ratio) + other.temperature * ratio
 
 
 @dataclass
@@ -110,7 +109,9 @@ class AtmosGrid:
                 else:
                     # accumulate
                     ex = exchanges[key]
-                    ex.mix(exchange, exchange.pressure / (ex.pressure + exchange.pressure))
+                    ex.mix(
+                        exchange, exchange.pressure / (ex.pressure + exchange.pressure)
+                    )
                     ex.pressure += exchange.pressure
         for key, mix in exchanges.items():
             tile = self.tiles[key]
@@ -151,7 +152,9 @@ class PipeNetwork:
         self.grid = grid
         self.pipes: Dict[Tuple[int, int, int, int], Pipe] = {}
 
-    def add_pipe(self, src: Tuple[int, int], dst: Tuple[int, int], rate: float = 1.0) -> None:
+    def add_pipe(
+        self, src: Tuple[int, int], dst: Tuple[int, int], rate: float = 1.0
+    ) -> None:
         self.pipes[(src[0], src[1], dst[0], dst[1])] = Pipe(src, dst, rate)
 
     def step(self) -> None:
@@ -176,4 +179,3 @@ class PipeNetwork:
             mix_ratio = flow / total if total else 0
             dst_tile.gas.mix(transfer, mix_ratio)
             dst_tile.gas.pressure = total
-

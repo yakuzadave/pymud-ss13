@@ -9,7 +9,9 @@ from mudpy_interface import MudpyInterface
 
 def setup_engine(tmp_path):
     cfg = tmp_path / "config.yaml"
-    interface = MudpyInterface(config_file=str(cfg), alias_dir=str(tmp_path / "aliases"))
+    interface = MudpyInterface(
+        config_file=str(cfg), alias_dir=str(tmp_path / "aliases")
+    )
     engine = MudEngine(interface)
     interface.connect_client("1")
     return interface, engine
@@ -37,7 +39,9 @@ def test_alias_persistence(tmp_path):
     interface.disconnect_client("1")
 
     # new session loads alias
-    interface2 = MudpyInterface(config_file=str(tmp_path / "config.yaml"), alias_dir=str(tmp_path / "aliases"))
+    interface2 = MudpyInterface(
+        config_file=str(tmp_path / "config.yaml"), alias_dir=str(tmp_path / "aliases")
+    )
     interface2.connect_client("1")
     engine2 = MudEngine(interface2)
     assert interface2.aliases["1"]["x"] == "help"

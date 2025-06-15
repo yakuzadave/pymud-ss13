@@ -7,8 +7,10 @@
 import passlib.context
 
 _CONTEXT = passlib.context.CryptContext(
-    default="pbkdf2_sha512", pbkdf2_sha512__default_rounds=1000,
-    schemes=["pbkdf2_sha512"])
+    default="pbkdf2_sha512",
+    pbkdf2_sha512__default_rounds=1000,
+    schemes=["pbkdf2_sha512"],
+)
 
 
 def create(password):

@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 # Dictionary to store registered scripts
 SCRIPTS: Dict[str, Dict[str, Any]] = {}
 
+
 class ScriptSandbox:
     """
     A sandbox for safely executing user-provided Python code.
@@ -32,21 +33,21 @@ class ScriptSandbox:
         self.owner_id = owner_id
         self.globals = {
             # Restricted set of built-ins
-            'abs': abs,
-            'bool': bool,
-            'dict': dict,
-            'float': float,
-            'int': int,
-            'len': len,
-            'list': list,
-            'max': max,
-            'min': min,
-            'range': range,
-            'round': round,
-            'sorted': sorted,
-            'str': str,
-            'sum': sum,
-            'tuple': tuple,
+            "abs": abs,
+            "bool": bool,
+            "dict": dict,
+            "float": float,
+            "int": int,
+            "len": len,
+            "list": list,
+            "max": max,
+            "min": min,
+            "range": range,
+            "round": round,
+            "sorted": sorted,
+            "str": str,
+            "sum": sum,
+            "tuple": tuple,
             # No access to open, eval, exec, import, etc.
         }
 
@@ -60,7 +61,9 @@ class ScriptSandbox:
         """
         self.globals[name] = func
 
-    def execute(self, code: str, locals_dict: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def execute(
+        self, code: str, locals_dict: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Execute code in the sandbox.
 
@@ -79,22 +82,24 @@ class ScriptSandbox:
 
         # Check for dangerous constructs
         dangerous_patterns = [
-            r'import\s+',
-            r'from\s+.*\s+import',
-            r'exec\s*\(',
-            r'eval\s*\(',
-            r'__[a-zA-Z]+__',  # Dunder methods
-            r'globals\s*\(\s*\)',
-            r'locals\s*\(\s*\)',
-            r'open\s*\(',
-            r'file\s*\(',
-            r'compile\s*\(',
+            r"import\s+",
+            r"from\s+.*\s+import",
+            r"exec\s*\(",
+            r"eval\s*\(",
+            r"__[a-zA-Z]+__",  # Dunder methods
+            r"globals\s*\(\s*\)",
+            r"locals\s*\(\s*\)",
+            r"open\s*\(",
+            r"file\s*\(",
+            r"compile\s*\(",
         ]
 
         for pattern in dangerous_patterns:
             if re.search(pattern, code):
                 logger.warning(f"Dangerous pattern found in script: {pattern}")
-                raise ValueError(f"Security violation: {pattern} not allowed in scripts")
+                raise ValueError(
+                    f"Security violation: {pattern} not allowed in scripts"
+                )
 
         # Execute the code with restricted globals
         try:
@@ -107,7 +112,10 @@ class ScriptSandbox:
             logger.error(traceback.format_exc())
             raise
 
-def register_script(script_id: str, owner_id: str, name: str, description: str, code: str) -> bool:
+
+def register_script(
+    script_id: str, owner_id: str, name: str, description: str, code: str
+) -> bool:
     """
     Register a new script.
 
@@ -130,12 +138,12 @@ def register_script(script_id: str, owner_id: str, name: str, description: str, 
 
         # If we got here, the script is valid
         SCRIPTS[script_id] = {
-            'owner_id': owner_id,
-            'name': name,
-            'description': description,
-            'code': code,
-            'created_at': None,  # In a real system, you would use datetime.datetime.now()
-            'modified_at': None  # Same as above
+            "owner_id": owner_id,
+            "name": name,
+            "description": description,
+            "code": code,
+            "created_at": None,  # In a real system, you would use datetime.datetime.now()
+            "modified_at": None,  # Same as above
         }
 
         logger.info(f"Registered script {script_id} ({name}) by {owner_id}")
@@ -146,6 +154,7 @@ def register_script(script_id: str, owner_id: str, name: str, description: str, 
     except Exception as e:
         logger.error(f"Failed to register script {script_id}: {str(e)}")
         return False
+
 
 def unregister_script(script_id: str, requester_id: str) -> bool:
     """
@@ -165,8 +174,10 @@ def unregister_script(script_id: str, requester_id: str) -> bool:
 
     # Check if the requester is the owner or an admin
     # In a real system, you would check if requester_id is an admin
-    if script_info['owner_id'] != requester_id:
-        logger.warning(f"Unauthorized attempt to unregister script {script_id} by {requester_id}")
+    if script_info["owner_id"] != requester_id:
+        logger.warning(
+            f"Unauthorized attempt to unregister script {script_id} by {requester_id}"
+        )
         return False
 
     del SCRIPTS[script_id]
@@ -174,6 +185,7 @@ def unregister_script(script_id: str, requester_id: str) -> bool:
     publish("script_unregistered", script_id=script_id, requester_id=requester_id)
 
     return True
+
 
 def execute_script(script_id: str, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
@@ -193,14 +205,15 @@ def execute_script(script_id: str, context: Dict[str, Any]) -> Optional[Dict[str
     script_info = SCRIPTS[script_id]
 
     try:
-        sandbox = ScriptSandbox(script_info['owner_id'])
-        result = sandbox.execute(script_info['code'], context.copy())
+        sandbox = ScriptSandbox(script_info["owner_id"])
+        result = sandbox.execute(script_info["code"], context.copy())
         logger.debug(f"Successfully executed script {script_id}")
         return result
 
     except Exception as e:
         logger.error(f"Failed to execute script {script_id}: {str(e)}")
         return None
+
 
 def get_script_info(script_id: str) -> Optional[Dict[str, Any]]:
     """
@@ -214,6 +227,7 @@ def get_script_info(script_id: str) -> Optional[Dict[str, Any]]:
     """
     return SCRIPTS.get(script_id)
 
+
 def list_scripts(owner_id: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
     """
     List registered scripts.
@@ -225,11 +239,16 @@ def list_scripts(owner_id: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
         Dict[str, Dict[str, Any]]: Dictionary of script_id -> script info.
     """
     if owner_id:
-        return {sid: info for sid, info in SCRIPTS.items() if info['owner_id'] == owner_id}
+        return {
+            sid: info for sid, info in SCRIPTS.items() if info["owner_id"] == owner_id
+        }
     else:
         return SCRIPTS.copy()
 
-def add_verb_to_object(obj_id: str, verb: str, code: str, owner_id: str) -> Optional[str]:
+
+def add_verb_to_object(
+    obj_id: str, verb: str, code: str, owner_id: str
+) -> Optional[str]:
     """
     Add a custom verb to a game object.
 
@@ -251,7 +270,7 @@ def add_verb_to_object(obj_id: str, verb: str, code: str, owner_id: str) -> Opti
         owner_id=owner_id,
         name=f"Verb '{verb}' for {obj_id}",
         description=f"Custom verb implemented for object {obj_id}",
-        code=code
+        code=code,
     )
 
     if success:

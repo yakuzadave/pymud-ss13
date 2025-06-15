@@ -19,6 +19,7 @@ from events import publish
 # Data classes for individual antagonist role types
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Cult:
     """Simple representation of a cult."""
@@ -122,6 +123,7 @@ class SleeperAgent:
 # Manager that keeps track of all advanced antagonist roles
 # ---------------------------------------------------------------------------
 
+
 class AdvancedAntagonistSystem:
     """Container for advanced antagonist role instances."""
 
@@ -168,7 +170,9 @@ class AdvancedAntagonistSystem:
         return gang
 
     # Sleeper agent management -------------------------------------------
-    def assign_sleeper(self, player_id: str, mission: Optional[str] = None) -> SleeperAgent:
+    def assign_sleeper(
+        self, player_id: str, mission: Optional[str] = None
+    ) -> SleeperAgent:
         agent = SleeperAgent(player_id=player_id, mission=mission)
         self.sleepers[player_id] = agent
         publish("sleeper_assigned", player_id=player_id)
@@ -189,4 +193,3 @@ def get_advanced_antagonist_system() -> AdvancedAntagonistSystem:
     """Return the global advanced antagonist system instance."""
 
     return _ADVANCED_ANTAGONIST_SYSTEM
-

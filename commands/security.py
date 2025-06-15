@@ -5,6 +5,7 @@ from events import publish
 import world
 from systems.security import get_security_system
 
+
 @register("restrain")
 def restrain_handler(client_id: str, target: str = None, **kwargs):
     """Restrain a target if player is security."""
@@ -19,16 +20,26 @@ def restrain_handler(client_id: str, target: str = None, **kwargs):
 
 
 @register("report")
-def report_handler(client_id: str, *, description: str = "", suspect: str = None, severity: str = "minor", **kwargs):
+def report_handler(
+    client_id: str,
+    *,
+    description: str = "",
+    suspect: str = None,
+    severity: str = "minor",
+    **kwargs,
+):
     """Report a crime to the security system."""
     if not description:
         return "You must provide a description of the incident."
     sec = kwargs.get("security_system")
     if not sec:
         from systems.security import get_security_system
+
         sec = get_security_system()
-    record = sec.report_crime(f"player_{client_id}", description, suspect_id=suspect, severity=severity)
-    return f"Crime #{record.crime_id} reported." 
+    record = sec.report_crime(
+        f"player_{client_id}", description, suspect_id=suspect, severity=severity
+    )
+    return f"Crime #{record.crime_id} reported."
 
 
 @register("arrest")
@@ -39,6 +50,7 @@ def arrest_handler(client_id: str, target: str = None, duration: int = 60, **kwa
     sec = kwargs.get("security_system")
     if not sec:
         from systems.security import get_security_system
+
         sec = get_security_system()
     sec.arrest(target, duration)
     return f"{target} has been arrested for {duration} seconds."
@@ -52,6 +64,7 @@ def release_handler(client_id: str, target: str = None, **kwargs):
     sec = kwargs.get("security_system")
     if not sec:
         from systems.security import get_security_system
+
         sec = get_security_system()
     if sec.release(target):
         return f"{target} has been released."
@@ -66,10 +79,12 @@ def evidence_handler(client_id: str, crime_id: int, *, note: str = "", **kwargs)
     sec = kwargs.get("security_system")
     if not sec:
         from systems.security import get_security_system
+
         sec = get_security_system()
     if sec.add_evidence(crime_id, note):
         return "Evidence logged."
     return "Crime not found."
+
 
 @register("view_cameras")
 def view_cameras_handler(client_id: str, **kwargs):
@@ -86,7 +101,10 @@ def view_alerts_handler(client_id: str, **kwargs):
     alerts = system.get_alerts()
     if not alerts:
         return "No active alerts."
-    lines = [f"{idx+1}. {a['type']} detected in {a['location']}" for idx, a in enumerate(alerts)]
+    lines = [
+        f"{idx+1}. {a['type']} detected in {a['location']}"
+        for idx, a in enumerate(alerts)
+    ]
     return "Alerts:\n" + "\n".join(lines)
 
 

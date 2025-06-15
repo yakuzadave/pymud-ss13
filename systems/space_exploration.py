@@ -145,7 +145,9 @@ class SpaceExplorationSystem:
         return site
 
     # ------------------------------------------------------------------
-    def start_mission(self, mission_id: str, shuttle_id: str, site_id: str, crew: List[str]) -> Optional[AwayMission]:
+    def start_mission(
+        self, mission_id: str, shuttle_id: str, site_id: str, crew: List[str]
+    ) -> Optional[AwayMission]:
         shuttle = self.shuttles.get(shuttle_id)
         site = self.sites.get(site_id)
         if not shuttle or not site:
@@ -160,5 +162,3 @@ class SpaceExplorationSystem:
     def tick(self) -> None:
         for mission in list(self.missions.values()):
             mission.tick()
-
-

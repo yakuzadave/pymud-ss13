@@ -19,6 +19,7 @@ EventHandler = Union[Callable[..., Any], Callable[..., Coroutine[Any, Any, Any]]
 # Maps event_name -> list of callback functions
 SUBSCRIBERS: Dict[str, List[EventHandler]] = {}
 
+
 def subscribe(event_name: str, callback: EventHandler) -> None:
     """
     Subscribe a callback function to an event.
@@ -35,6 +36,7 @@ def subscribe(event_name: str, callback: EventHandler) -> None:
         SUBSCRIBERS[event_name].append(callback)
         logger.debug(f"Added subscriber to '{event_name}' event: {callback.__name__}")
 
+
 def unsubscribe(event_name: str, callback: EventHandler) -> bool:
     """
     Unsubscribe a callback function from an event.
@@ -48,9 +50,12 @@ def unsubscribe(event_name: str, callback: EventHandler) -> bool:
     """
     if event_name in SUBSCRIBERS and callback in SUBSCRIBERS[event_name]:
         SUBSCRIBERS[event_name].remove(callback)
-        logger.debug(f"Removed subscriber from '{event_name}' event: {callback.__name__}")
+        logger.debug(
+            f"Removed subscriber from '{event_name}' event: {callback.__name__}"
+        )
         return True
     return False
+
 
 def publish(event_name: str, **kwargs: Any) -> int:
     """
@@ -86,6 +91,7 @@ def publish(event_name: str, **kwargs: Any) -> int:
 
     return subscriber_count
 
+
 async def publish_async(event_name: str, **kwargs: Any) -> int:
     """
     Publish an event to all subscribers and await async callbacks.
@@ -103,7 +109,9 @@ async def publish_async(event_name: str, **kwargs: Any) -> int:
         return 0
 
     subscriber_count = len(SUBSCRIBERS[event_name])
-    logger.debug(f"Publishing '{event_name}' event asynchronously to {subscriber_count} subscribers")
+    logger.debug(
+        f"Publishing '{event_name}' event asynchronously to {subscriber_count} subscribers"
+    )
 
     tasks = []
 
@@ -126,6 +134,7 @@ async def publish_async(event_name: str, **kwargs: Any) -> int:
 
     return subscriber_count
 
+
 def get_event_names() -> List[str]:
     """
     Get a list of all registered event names.
@@ -134,6 +143,7 @@ def get_event_names() -> List[str]:
         List[str]: List of event names with active subscribers.
     """
     return list(SUBSCRIBERS.keys())
+
 
 def get_subscriber_count(event_name: str) -> int:
     """

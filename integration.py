@@ -64,7 +64,9 @@ class MudpyIntegration:
             self.world.load_rooms(rooms_file)
         else:
             if rooms_file != "rooms.yaml":
-                logger.warning(f"Rooms file {rooms_file} not found; falling back to rooms.yaml")
+                logger.warning(
+                    f"Rooms file {rooms_file} not found; falling back to rooms.yaml"
+                )
             default_path = os.path.join(data_dir, "rooms.yaml")
             if os.path.exists(default_path):
                 self.world.load_rooms("rooms.yaml")

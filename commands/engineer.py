@@ -4,6 +4,7 @@ from engine import register
 from events import publish
 import world
 
+
 @register("repair")
 def repair_handler(client_id: str, target: str = None, **kwargs):
     """Repair a subsystem if player is an engineer."""

@@ -60,4 +60,3 @@ def test_init_world_loads_saved_players(tmp_path):
         assert integ.world.get_object("player_42") is not None
     finally:
         world.WORLD = old_world
-

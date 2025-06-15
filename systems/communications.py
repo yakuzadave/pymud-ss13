@@ -55,7 +55,11 @@ class CommunicationsSystem:
 
     # ------------------------------------------------------------------
     def register_channel(
-        self, name: str, department: str, encrypted: bool = False, key: Optional[str] = None
+        self,
+        name: str,
+        department: str,
+        encrypted: bool = False,
+        key: Optional[str] = None,
     ) -> None:
         """Register a radio channel."""
 
@@ -117,13 +121,17 @@ class CommunicationsSystem:
         return self._encrypt(text, key)
 
     # ------------------------------------------------------------------
-    def register_intercom(self, room_id: str, connections: Optional[List[str]] = None) -> None:
+    def register_intercom(
+        self, room_id: str, connections: Optional[List[str]] = None
+    ) -> None:
         """Create an intercom node that can talk to other rooms."""
 
         self.intercom_links[room_id] = connections or []
 
     # ------------------------------------------------------------------
-    def send_intercom(self, room_id: str, message: str, priority: str = "normal") -> bool:
+    def send_intercom(
+        self, room_id: str, message: str, priority: str = "normal"
+    ) -> bool:
         if room_id in self.dead_zones:
             return False
         targets = self.intercom_links.get(room_id, [])
@@ -161,7 +169,9 @@ class CommunicationsSystem:
         return True
 
     # ------------------------------------------------------------------
-    def announce(self, message: str, priority: int = 1, emergency: bool = False) -> None:
+    def announce(
+        self, message: str, priority: int = 1, emergency: bool = False
+    ) -> None:
         """Broadcast a station wide announcement."""
 
         self.announcement_queue.append((priority, message))
@@ -189,4 +199,3 @@ def get_comms_system() -> CommunicationsSystem:
     """Return the global communications system."""
 
     return COMMUNICATIONS_SYSTEM
-

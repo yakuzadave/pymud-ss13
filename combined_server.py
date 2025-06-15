@@ -19,6 +19,7 @@ from connection import ConnectionManager
 # Module logger
 logger = logging.getLogger(__name__)
 
+
 # Signal handler for graceful shutdown
 def signal_handler(sig, frame):
     """
@@ -26,6 +27,7 @@ def signal_handler(sig, frame):
     """
     logger.info("Received shutdown signal, exiting...")
     sys.exit(0)
+
 
 # Register signal handlers
 signal.signal(signal.SIGINT, signal_handler)
@@ -40,5 +42,5 @@ if __name__ == "__main__":
         host=settings.host,
         port=settings.port,
         reload=settings.debug,
-        log_level="debug" if settings.debug else "info"
+        log_level="debug" if settings.debug else "info",
     )

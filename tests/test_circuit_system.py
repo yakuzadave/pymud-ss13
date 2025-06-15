@@ -19,7 +19,9 @@ def test_assemble_and_insert():
 
 
 def test_power_drain_and_auto_off():
-    circuit = CircuitComponent(shell_type="Compact Remote", components=["a", "b"], power=3, active=True)
+    circuit = CircuitComponent(
+        shell_type="Compact Remote", components=["a", "b"], power=3, active=True
+    )
     system = CircuitSystem()
     system.circuits["c1"] = circuit
     system.tick()
