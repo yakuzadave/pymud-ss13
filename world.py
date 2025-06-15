@@ -15,6 +15,7 @@ import os
 # Set up module logger
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class GameObject:
     """
@@ -22,6 +23,7 @@ class GameObject:
 
     Game objects have an ID, name, description, and components.
     """
+
     id: str
     name: str
     description: str
@@ -38,9 +40,9 @@ class GameObject:
             comp (Any): The component instance.
         """
         self.components[comp_name] = comp
-        if hasattr(comp, 'owner'):
+        if hasattr(comp, "owner"):
             comp.owner = self
-        if hasattr(comp, 'on_added'):
+        if hasattr(comp, "on_added"):
             try:
                 comp.on_added()
             except Exception as e:
@@ -51,7 +53,12 @@ class GameObject:
         """Move object to a new logical location and publish an event."""
         old = self.location
         self.location = new_location
-        publish("object_moved", object_id=self.id, from_location=old, to_location=new_location)
+        publish(
+            "object_moved",
+            object_id=self.id,
+            from_location=old,
+            to_location=new_location,
+        )
 
     def move_position(self, x: int, y: int) -> None:
         """Update the object's grid position and publish an event."""
@@ -96,25 +103,26 @@ class GameObject:
         """
         components_dict = {}
         for name, comp in self.components.items():
-            if hasattr(comp, 'to_dict'):
+            if hasattr(comp, "to_dict"):
                 components_dict[name] = comp.to_dict()
             # Skip components that can't be serialized
 
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'location': self.location,
-            'position': self.position,
-            'components': components_dict
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "location": self.location,
+            "position": self.position,
+            "components": components_dict,
         }
+
 
 class World:
     """
     The World class manages all game objects and world state.
     """
 
-    def __init__(self, data_dir: str = 'data'):
+    def __init__(self, data_dir: str = "data"):
         """
         Initialize the world.
 
@@ -136,18 +144,21 @@ class World:
     def load_rooms(self, filename: str = "rooms.yaml") -> int:
         """Load room definitions into the world."""
         from persistence import load_rooms
+
         filepath = os.path.join(self.data_dir, filename)
         return load_rooms(filepath, self)
 
     def load_items(self, filename: str = "items.yaml") -> int:
         """Load item definitions into the world."""
         from persistence import load_items
+
         filepath = os.path.join(self.data_dir, filename)
         return load_items(filepath, self)
 
     def load_npcs(self, filename: str = "npcs.yaml") -> int:
         """Load NPC definitions into the world."""
         from persistence import load_npcs
+
         filepath = os.path.join(self.data_dir, filename)
         return load_npcs(filepath, self)
 
@@ -165,11 +176,17 @@ class World:
         publish("object_created", object_id=obj.id)
 
         # Also add to type-specific collections for convenience
-        if obj.get_component('room'):
+        if obj.get_component("room"):
             self.rooms[obj.id] = obj
-        elif obj.get_component('npc'):
+        elif obj.get_component("npc"):
             self.npcs[obj.id] = obj
-        elif obj.get_component('item'):
+            try:
+                from systems.npc_ai import get_npc_system
+
+                get_npc_system().register(obj.id)
+            except Exception:
+                pass
+        elif obj.get_component("item"):
             self.items[obj.id] = obj
 
         logger.debug(f"Registered object: {obj.id}")
@@ -225,7 +242,9 @@ class World:
         x, y = obj.position
         return [oid for oid in self.grid.objects_near(x, y, radius) if oid != obj_id]
 
-    def line_of_sight(self, a_id: str, b_id: str, opaque: Optional[List[str]] = None) -> bool:
+    def line_of_sight(
+        self, a_id: str, b_id: str, opaque: Optional[List[str]] = None
+    ) -> bool:
         a = self.get_object(a_id)
         b = self.get_object(b_id)
         if not a or not b or a.position is None or b.position is None:
@@ -248,31 +267,44 @@ class World:
             return 0
 
         try:
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 data = yaml.safe_load(f)
 
             count = 0
             if isinstance(data, list):
                 for obj_data in data:
                     obj = GameObject(
-                        id=obj_data['id'],
-                        name=obj_data['name'],
-                        description=obj_data.get('description', ''),
-                        location=obj_data.get('location'),
-                        position=tuple(obj_data['position']) if 'position' in obj_data else None
+                        id=obj_data["id"],
+                        name=obj_data["name"],
+                        description=obj_data.get("description", ""),
+                        location=obj_data.get("location"),
+                        position=(
+                            tuple(obj_data["position"])
+                            if "position" in obj_data
+                            else None
+                        ),
                     )
 
-                    if 'components' in obj_data:
+                    if "components" in obj_data:
                         from components import COMPONENT_REGISTRY
-                        for comp_name, comp_data in obj_data['components'].items():
+
+                        for comp_name, comp_data in obj_data["components"].items():
                             comp_class = COMPONENT_REGISTRY.get(comp_name)
                             if comp_class and isinstance(comp_data, dict):
-                                params = inspect.signature(comp_class.__init__).parameters
-                                kwargs = {k: v for k, v in comp_data.items() if k in params and k != 'self'}
+                                params = inspect.signature(
+                                    comp_class.__init__
+                                ).parameters
+                                kwargs = {
+                                    k: v
+                                    for k, v in comp_data.items()
+                                    if k in params and k != "self"
+                                }
                                 try:
                                     comp_instance = comp_class(**kwargs)
                                 except Exception as e:
-                                    logger.warning(f"Failed to instantiate component {comp_name} for {obj.id}: {e}")
+                                    logger.warning(
+                                        f"Failed to instantiate component {comp_name} for {obj.id}: {e}"
+                                    )
                                     continue
                                 obj.add_component(comp_name, comp_instance)
                             else:
@@ -306,7 +338,7 @@ class World:
             # Convert objects to dictionaries
             obj_list = [obj.to_dict() for obj in self.objects.values()]
 
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 yaml.dump(obj_list, f, default_flow_style=False, sort_keys=False)
 
             logger.info(f"Saved {len(obj_list)} objects to {filepath}")
@@ -316,8 +348,10 @@ class World:
             logger.error(f"Error saving to {filepath}: {e}")
             return False
 
+
 # Create a global world instance
 WORLD = World()
+
 
 def get_world() -> World:
     """
