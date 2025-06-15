@@ -15,6 +15,7 @@ from systems.kitchen import KitchenSystem
 def test_botany_growth():
     system = BotanySystem(growth_rate=1.0, tick_interval=0)
     plant = system.plant_seed("tomato")
+    plant.production_time = 1
     system.start()
     system.update()
     assert plant.growth >= 1.0
@@ -47,6 +48,7 @@ def test_botany_logging(tmp_path, caplog):
     system = BotanySystem(growth_rate=1.0, tick_interval=0)
     with caplog.at_level(logging.DEBUG):
         plant = system.plant_seed("tomato")
+        plant.production_time = 1
         system.start()
         system.update()
         system.harvest(plant.plant_id)

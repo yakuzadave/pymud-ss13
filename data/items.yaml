@@ -1123,3 +1123,666 @@
       item_type: food
       item_properties:
         nutrition: 10
+
+# Bar tools and drinks
+- id: shaker
+  name: Cocktail Shaker
+  description: >
+    A metal shaker used for mixing beverages.
+  location: bar
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: tool
+
+- id: bacchus_blessing
+  name: Bacchus' Blessing
+  description: >
+    A potent mixture of almost everything behind the bar.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You down the strong cocktail.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: hearty_punch
+  name: Hearty Punch
+  description: >
+    A spirited bowl of punch for parties.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You gulp the sweet punch.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: neurotoxin
+  name: Neurotoxin
+  description: >
+    A clear liquid with a faint citrus scent. Best not to drink it.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel dizzy after drinking.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: changeling_sting
+  name: Changeling Sting
+  description: >
+    A deceptively ordinary looking drink with a nasty bite.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You shudder as it goes down.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: bahama_mama
+  name: Bahama Mama
+  description: >
+    A refreshing tropical cocktail served over ice.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the fruity flavor.
+      item_type: drink
+      item_properties:
+        nutrition: 2
+
+- id: cuba_libre
+  name: Cuba Libre
+  description: >
+    A simple mix of rum and cola.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You sip the classic cocktail.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: demons_blood
+  name: Demons Blood
+  description: >
+    A dark red drink that seems to swirl ominously.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: A chill runs down your spine as you drink.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: doctors_delight
+  name: Doctor's Delight
+  description: >
+    A vitamin rich beverage that promotes healing.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel a bit healthier.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: fetching_fizz
+  name: Fetching Fizz
+  description: >
+    A strange carbonated drink that glows green.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: It crackles slightly as you drink it.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: three_mile_island
+  name: Three Mile Island Iced Tea
+  description: >
+    A dangerously radioactive tea.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You feel a slight tingle.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: telepole
+  name: Telepole
+  description: >
+    An electrifying blend of wines and soda.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: Your tongue tingles from the fizz.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: pod_tesla
+  name: Pod Tesla
+  description: >
+    A complex multi-bottle cocktail rumored to shock the drinker.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You are briefly energized.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: atomic_bomb
+  name: Atomic Bomb
+  description: >
+    An extremely dangerous beverage that radiates heat.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: It burns on the way down.
+      item_type: drink
+
+
+# More food items
+- id: meat
+  name: Raw Meat
+  description: >
+    A slab of uncooked meat harvested from animals.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: spider_meat
+  name: Spider Meat
+  description: >
+    A chunk of spider flesh. It's toxic unless cooked.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: bread
+  name: Bread Loaf
+  description: >
+    A baked loaf of bread. Can be sliced for sandwiches.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the warm bread.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: cake
+  name: Cake
+  description: >
+    A sweet cake perfect for celebrations.
+  location: kitchen
+=======
+      item_properties:
+        nutrition: 1
+
+# Hydroponics tools
+- id: plant_analyzer
+  name: Plant Analyzer
+  description: >
+    A handheld scanner that displays plant stats.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: cultivator
+  name: Cultivator
+  description: >
+    A powered tool used to remove weeds from trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You clear the weeds from the tray.
+      item_type: tool
+
+- id: plant_bag
+  name: Plant Bag
+  description: >
+    A large bag for moving harvests between rooms.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.7
+      is_takeable: true
+      is_usable: false
+      item_type: container
+    container:
+      capacity: 50
+      items: []
+
+- id: hydro_wrench
+  name: Hydroponics Wrench
+  description: >
+    Used to reposition hydroponics trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: hatchet
+  name: Hatchet
+  description: >
+    A small axe for chopping tower-caps into planks.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: shovel
+  name: Shovel
+  description: >
+    Useful for digging up grass floors and cleaning dirt.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.2
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: spade
+  name: Spade
+  description: >
+    Removes and destroys plants from trays.
+  location: botany_lab
+
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy a slice of cake.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: pizza
+  name: Pizza
+  description: >
+    A whole pizza loaded with toppings.
+  location: kitchen
+=======
+      item_type: tool
+
+- id: secateurs
+  name: Secateurs
+  description: >
+    Precision cutters used to obtain plant grafts.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: all_in_one_grinder
+  name: All-In-One Grinder
+  description: >
+    Extracts reagents from plants when used.
+  location: botany_lab
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: portable_seed_extractor
+  name: Portable Seed Extractor
+  description: >
+    Converts plants to seeds, though less efficiently than the machine.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.5
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: floral_somatoray
+  name: Floral Somatoray
+  description: >
+    Advanced mutation tool with modes for yield, stats and mutations.
+  location: botany_lab
+
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a slice of pizza.
+      item_type: food
+      item_properties:
+        nutrition: 30
+
+- id: cheese_wheel
+  name: Cheese Wheel
+  description: >
+    A whole wheel of cheese that can be sliced into wedges.
+  location: kitchen
+  components:
+    item:
+      weight: 0.7
+      is_takeable: true
+      is_usable: true
+      use_effect: You nibble on the cheese wheel.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: fries
+  name: Fries
+  description: >
+    Crispy fried potato strips. A popular side dish.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You snack on the fries.
+      item_type: food
+      item_properties:
+        nutrition: 4
+
+- id: ice_cream
+  name: Ice Cream
+  description: >
+    A scoop of sweet frozen dessert.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You savor the cold ice cream.
+      item_type: food
+      item_properties:
+        nutrition: 5
+
+- id: sandwich
+  name: Sandwich
+  description: >
+    Bread slices filled with tasty ingredients.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the sandwich.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: hot_dog
+  name: Hot Dog
+  description: >
+    A grilled sausage served in a bun with condiments.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You chow down on the hot dog.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: muffin
+  name: Muffin
+  description: >
+    A small baked muffin, slightly sweet.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the muffin.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: cookie
+  name: Cookie
+  description: >
+    A baked cookie with a hint of sugar.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You munch on the cookie.
+      item_type: food
+      item_properties:
+        nutrition: 5
+
+- id: pie
+  name: Pie
+  description: >
+    A baked pie with sweet filling.
+  location: kitchen
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a bite of the pie.
+      item_type: food
+      item_properties:
+        nutrition: 10
+      item_type: tool
+
+- id: botanogenetic_shears
+  name: Botanogenetic Shears
+  description: >
+    Experimental shears that remove genes and traits from plants.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+# Basic fertilizers
+- id: nutriment
+  name: Nutriment
+  description: >
+    A basic fertilizer that increases plant nutrient and health.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: ammonia
+  name: Ammonia
+  description: >
+    Standard fertilizer that boosts nutrient and yield.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: diethylamine
+  name: Diethylamine
+  description: >
+    An advanced fertilizer that rapidly promotes growth.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: saltpetre
+  name: Saltpetre
+  description: >
+    Chemical additive that increases potency and speeds growth.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: unstable_mutagen
+  name: Unstable Mutagen
+  description: >
+    Volatile chemical that induces random mutations in plants.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: ash
+  name: Ash
+  description: >
+    Natural fertilizer created by burning oil.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: multiver
+  name: Multiver
+  description: >
+    Plant medicine that reduces toxicity.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: plant_b_gone
+  name: Plant-B-Gone
+  description: >
+    Herbicide that outright kills plants.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: pest_killer
+  name: Pest Killer
+  description: >
+    Chemical used to eliminate pests.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: weed_killer
+  name: Weed Killer
+  description: >
+    Herbicide that removes weeds from trays.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
