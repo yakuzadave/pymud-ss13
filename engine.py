@@ -58,6 +58,7 @@ from commands import (  # noqa: F401,E402
     security,
     chemist,
     bartender,
+    botanist,
     research,
     antag,
     job,

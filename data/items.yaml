@@ -1331,3 +1331,273 @@
       item_type: drink
       item_properties:
         nutrition: 1
+
+# Hydroponics tools
+- id: plant_analyzer
+  name: Plant Analyzer
+  description: >
+    A handheld scanner that displays plant stats.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: cultivator
+  name: Cultivator
+  description: >
+    A powered tool used to remove weeds from trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You clear the weeds from the tray.
+      item_type: tool
+
+- id: plant_bag
+  name: Plant Bag
+  description: >
+    A large bag for moving harvests between rooms.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.7
+      is_takeable: true
+      is_usable: false
+      item_type: container
+    container:
+      capacity: 50
+      items: []
+
+- id: hydro_wrench
+  name: Hydroponics Wrench
+  description: >
+    Used to reposition hydroponics trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: hatchet
+  name: Hatchet
+  description: >
+    A small axe for chopping tower-caps into planks.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: shovel
+  name: Shovel
+  description: >
+    Useful for digging up grass floors and cleaning dirt.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.2
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: spade
+  name: Spade
+  description: >
+    Removes and destroys plants from trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: secateurs
+  name: Secateurs
+  description: >
+    Precision cutters used to obtain plant grafts.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: all_in_one_grinder
+  name: All-In-One Grinder
+  description: >
+    Extracts reagents from plants when used.
+  location: botany_lab
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: portable_seed_extractor
+  name: Portable Seed Extractor
+  description: >
+    Converts plants to seeds, though less efficiently than the machine.
+  location: botany_lab
+  components:
+    item:
+      weight: 1.5
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: floral_somatoray
+  name: Floral Somatoray
+  description: >
+    Advanced mutation tool with modes for yield, stats and mutations.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+- id: botanogenetic_shears
+  name: Botanogenetic Shears
+  description: >
+    Experimental shears that remove genes and traits from plants.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      item_type: tool
+
+# Basic fertilizers
+- id: nutriment
+  name: Nutriment
+  description: >
+    A basic fertilizer that increases plant nutrient and health.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: ammonia
+  name: Ammonia
+  description: >
+    Standard fertilizer that boosts nutrient and yield.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: diethylamine
+  name: Diethylamine
+  description: >
+    An advanced fertilizer that rapidly promotes growth.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: saltpetre
+  name: Saltpetre
+  description: >
+    Chemical additive that increases potency and speeds growth.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: unstable_mutagen
+  name: Unstable Mutagen
+  description: >
+    Volatile chemical that induces random mutations in plants.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: ash
+  name: Ash
+  description: >
+    Natural fertilizer created by burning oil.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: multiver
+  name: Multiver
+  description: >
+    Plant medicine that reduces toxicity.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: plant_b_gone
+  name: Plant-B-Gone
+  description: >
+    Herbicide that outright kills plants.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: pest_killer
+  name: Pest Killer
+  description: >
+    Chemical used to eliminate pests.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
+
+- id: weed_killer
+  name: Weed Killer
+  description: >
+    Herbicide that removes weeds from trays.
+  location: chemistry_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: chemical
