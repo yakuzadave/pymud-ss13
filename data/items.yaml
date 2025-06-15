@@ -504,6 +504,423 @@
       is_usable: false
       item_type: food
 
+# Additional cooking ingredients
+- id: meatball
+  name: Raw Meatball
+  description: >
+    A ball of raw ground meat ready for grilling or sausage.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: cutlet
+  name: Raw Cutlet
+  description: >
+    A thin slice of uncooked meat used in various recipes.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: pancake_batter
+  name: Pancake Batter
+  description: >
+    A sweet batter ready to pour onto the griddle.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: flat_dough
+  name: Flat Dough
+  description: >
+    Dough flattened with a rolling pin, perfect for baking.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: egg
+  name: Egg
+  description: >
+    A fresh egg that can be cooked or eaten raw.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+# Additional produce and staples
+- id: flour
+  name: Flour
+  description: >
+    A bag of milled wheat used as the basis for dough and batter.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: sugar
+  name: Sugar
+  description: >
+    Sweet crystals perfect for baked goods or drinks.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: milk
+  name: Milk
+  description: >
+    A chilled carton of milk for cooking and drinking.
+  location: kitchen
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: cheese_wedge
+  name: Cheese Wedge
+  description: >
+    A slice of cheese ready to melt on top of something tasty.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: tomato
+  name: Tomato
+  description: >
+    A ripe tomato fresh from hydroponics.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: wheat
+  name: Wheat
+  description: >
+    Stalks of wheat harvested from the botany trays.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: onion
+  name: Onion
+  description: >
+    A pungent onion that adds flavor to many dishes.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: potato
+  name: Potato
+  description: >
+    A hearty potato waiting to be baked or fried.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: lettuce
+  name: Lettuce
+  description: >
+    Crisp green leaves perfect for salads.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: fish_fillet
+  name: Raw Fish Fillet
+  description: >
+    A slice of uncooked fish ready for the fryer or grill.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: chicken_cutlet
+  name: Raw Chicken Cutlet
+  description: >
+    A breaded cutlet of chicken that needs cooking.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: rice
+  name: Rice
+  description: >
+    A bowl of uncooked rice grains.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+# Cooked food items
+- id: burger
+  name: Cooked Burger
+  description: >
+    A juicy burger assembled from a bun and patty.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the delicious burger.
+      item_type: food
+      item_properties:
+        nutrition: 25
+
+- id: sausage
+  name: Grilled Sausage
+  description: >
+    A sizzling sausage made from meatball and cutlet.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You bite into the savory sausage.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: pancake
+  name: Pancake
+  description: >
+    A fluffy pancake fresh off the griddle.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the warm pancake.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: pizza_bread
+  name: Pizza Bread
+  description: >
+    Baked flatbread ready for toppings or eating plain.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You munch on the pizza bread.
+      item_type: food
+      item_properties:
+        nutrition: 10
+
+- id: boiled_egg
+  name: Boiled Egg
+  description: >
+    A firm boiled egg, still warm from the microwave.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You peel and eat the egg.
+      item_type: food
+      item_properties:
+        nutrition: 5
+
+- id: grilled_cheese
+  name: Grilled Cheese
+  description: >
+    Melted cheese between two slices of bread, perfectly toasted.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You bite into the gooey grilled cheese.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: fried_fish
+  name: Fried Fish
+  description: >
+    A crispy fillet of fish fresh from the fryer.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the crunchy fried fish.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: fried_chicken
+  name: Fried Chicken
+  description: >
+    A piece of golden fried chicken.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You savor the juicy fried chicken.
+      item_type: food
+      item_properties:
+        nutrition: 25
+
+- id: omelette
+  name: Omelette
+  description: >
+    Fluffy eggs cooked with a splash of milk.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the hearty omelette.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: salad
+  name: Salad
+  description: >
+    A bowl of fresh vegetables tossed together.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the crisp salad.
+      item_type: food
+      item_properties:
+        nutrition: 10
+
+- id: soup
+  name: Soup Bowl
+  description: >
+    A warm bowl of soup made from veggies and broth.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You sip the comforting soup.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: donut
+  name: Donut
+  description: >
+    A fried ring of sweet dough covered in sugar.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the sugary donut.
+      item_type: food
+      item_properties:
+        nutrition: 10
+
+- id: spaghetti
+  name: Spaghetti
+  description: >
+    A plate of noodles topped with tangy tomato sauce.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You twirl the spaghetti and eat it.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: pizza_slice
+  name: Pizza Slice
+  description: >
+    A single slice of cheesy pizza.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You munch on the pizza slice.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
 - id: beer
   name: Chilled Beer
   description: >
@@ -516,3 +933,193 @@
       is_usable: true
       use_effect: You take a swig of the cold beer.
       item_type: drink
+
+# More food items
+- id: meat
+  name: Raw Meat
+  description: >
+    A slab of uncooked meat harvested from animals.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: spider_meat
+  name: Spider Meat
+  description: >
+    A chunk of spider flesh. It's toxic unless cooked.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: bread
+  name: Bread Loaf
+  description: >
+    A baked loaf of bread. Can be sliced for sandwiches.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the warm bread.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: cake
+  name: Cake
+  description: >
+    A sweet cake perfect for celebrations.
+  location: kitchen
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy a slice of cake.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: pizza
+  name: Pizza
+  description: >
+    A whole pizza loaded with toppings.
+  location: kitchen
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a slice of pizza.
+      item_type: food
+      item_properties:
+        nutrition: 30
+
+- id: cheese_wheel
+  name: Cheese Wheel
+  description: >
+    A whole wheel of cheese that can be sliced into wedges.
+  location: kitchen
+  components:
+    item:
+      weight: 0.7
+      is_takeable: true
+      is_usable: true
+      use_effect: You nibble on the cheese wheel.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: fries
+  name: Fries
+  description: >
+    Crispy fried potato strips. A popular side dish.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You snack on the fries.
+      item_type: food
+      item_properties:
+        nutrition: 4
+
+- id: ice_cream
+  name: Ice Cream
+  description: >
+    A scoop of sweet frozen dessert.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You savor the cold ice cream.
+      item_type: food
+      item_properties:
+        nutrition: 5
+
+- id: sandwich
+  name: Sandwich
+  description: >
+    Bread slices filled with tasty ingredients.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the sandwich.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: hot_dog
+  name: Hot Dog
+  description: >
+    A grilled sausage served in a bun with condiments.
+  location: kitchen
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You chow down on the hot dog.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: muffin
+  name: Muffin
+  description: >
+    A small baked muffin, slightly sweet.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You enjoy the muffin.
+      item_type: food
+      item_properties:
+        nutrition: 6
+
+- id: cookie
+  name: Cookie
+  description: >
+    A baked cookie with a hint of sugar.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You munch on the cookie.
+      item_type: food
+      item_properties:
+        nutrition: 5
+
+- id: pie
+  name: Pie
+  description: >
+    A baked pie with sweet filling.
+  location: kitchen
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a bite of the pie.
+      item_type: food
+      item_properties:
+        nutrition: 10

@@ -13,3 +13,63 @@
 - output: boiled_egg
   inputs: [egg]
   nutrition: 5
+- output: grilled_cheese
+  inputs: [cheese_wedge, bun]
+  nutrition: 20
+- output: fried_fish
+  inputs: [fish_fillet]
+  nutrition: 20
+- output: fried_chicken
+  inputs: [chicken_cutlet]
+  nutrition: 25
+- output: omelette
+  inputs: [egg, milk]
+  nutrition: 15
+- output: salad
+  inputs: [lettuce, tomato]
+  nutrition: 10
+- output: soup
+  inputs: [onion, potato]
+  nutrition: 15
+- output: donut
+  inputs: [flour, sugar]
+  nutrition: 10
+- output: spaghetti
+  inputs: [wheat, tomato]
+  nutrition: 20
+- output: pizza_slice
+  inputs: [pizza_bread, cheese_wedge]
+  nutrition: 15
+- output: bread
+  inputs: [flat_dough]
+  nutrition: 6
+- output: cake
+  inputs: [flour, sugar, milk]
+  nutrition: 20
+- output: pizza
+  inputs: [pizza_bread, cheese_wedge, tomato]
+  nutrition: 30
+- output: cheese_wheel
+  inputs: [milk]
+  nutrition: 15
+- output: fries
+  inputs: [potato]
+  nutrition: 4
+- output: ice_cream
+  inputs: [milk, sugar]
+  nutrition: 5
+- output: sandwich
+  inputs: [bread, cheese_wedge]
+  nutrition: 6
+- output: hot_dog
+  inputs: [bun, sausage]
+  nutrition: 6
+- output: muffin
+  inputs: [flour, milk, sugar]
+  nutrition: 6
+- output: cookie
+  inputs: [flour, sugar]
+  nutrition: 5
+- output: pie
+  inputs: [flour, sugar]
+  nutrition: 10

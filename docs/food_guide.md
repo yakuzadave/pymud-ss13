@@ -47,5 +47,24 @@ When a chef runs `cook bun patty` and has those items in their inventory a new f
 - **Ingredients:** egg
 - **Method:** Microwave until cooked.
 
+### Grilled Cheese
+- **Ingredients:** bun, cheese wedge
+- **Method:** Grill until the cheese melts.
+
+### Fried Fish
+- **Ingredients:** raw fish fillet
+- **Method:** Fry in oil until crispy.
+
+### Omelette
+- **Ingredients:** egg, milk
+- **Method:** Cook in a pan until fluffy.
+
 These examples only scratch the surface—see the original TG food guide for a full listing of burgers, breads, cakes, soups, stews and more.
+
+## Additional Items
+
+The kitchen now supports more ingredients and dishes drawn from Space Station 13.
+Notable additions include bread loaves, cakes, full pizzas, fries and cold treats
+like ice cream.  Sandwiches, hot dogs, muffins, cookies and pies can also be
+cooked when the proper ingredients are gathered.
 
