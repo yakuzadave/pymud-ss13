@@ -526,3 +526,52 @@
         pressure: 101.3
       hazards: []
       is_airlock: false
+
+- id: botany_lab
+  name: Botany Lab
+  description: >
+    Rows of hydroponic trays thrive under bright grow lamps.
+  components:
+    room:
+      exits:
+        west: corridor_east
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: cafe
+  name: Crew Cafe
+  description: >
+    A cozy dining area with tables and a few snack machines.
+  components:
+    room:
+      exits:
+        west: kitchen
+        east: bar
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: bar
+  name: Station Bar
+  description: >
+    A well-stocked bar tended by a friendly bartender.
+  components:
+    room:
+      exits:
+        west: cafe
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false

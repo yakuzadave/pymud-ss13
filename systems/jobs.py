@@ -407,6 +407,19 @@ def create_standard_jobs() -> Dict[str, Job]:
     chef.set_spawn_location("kitchen")
     jobs[chef.job_id] = chef
 
+    # Bartender
+    bartender = Job(
+        "bartender",
+        "Bartender",
+        "Serve drinks and keep the bar orderly.",
+    )
+    bartender.add_access_level(10)
+    bartender.add_starting_item("bartender_id_card", {"access_level": 10})
+    bartender.add_starting_item("service_headset", {"channels": ["service"]})
+    bartender.add_starting_item("shaker")
+    bartender.set_spawn_location("bar")
+    jobs[bartender.job_id] = bartender
+
     # Assistant
     assistant = Job(
         "assistant", "Assistant", "Learn the ropes and help out where needed."

@@ -455,3 +455,64 @@
       item_properties:
         charges: 10
 
+
+- id: wheat_seed
+  name: Wheat Seeds
+  description: >
+    A packet of hardy wheat seeds for hydroponic trays.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: seed
+
+- id: tomato_seed
+  name: Tomato Seeds
+  description: >
+    Juicy tomato seeds popular with station chefs.
+  location: botany_lab
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: seed
+
+- id: bun
+  name: Burger Bun
+  description: >
+    A soft bread bun ready to be filled with delicious toppings.
+  location: kitchen
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: patty
+  name: Meat Patty
+  description: >
+    A seasoned patty of mystery meat.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: false
+      item_type: food
+
+- id: beer
+  name: Chilled Beer
+  description: >
+    A refreshing alcoholic beverage served in the bar.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a swig of the cold beer.
+      item_type: drink

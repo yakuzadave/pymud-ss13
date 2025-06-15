@@ -51,3 +51,22 @@
       - space donuts
       - mysterious seeds
   description: A random crate appears in cargo packed with goodies.
+
+- id: botany_bloom
+  name: Rapid Bloom
+  weight: 1
+  params:
+    species: "tomato"
+  description: Hydroponics pumps cause plants to mature instantly.
+
+- id: kitchen_fire
+  name: Kitchen Fire
+  weight: 1
+  params:
+    room_id: "kitchen"
+  description: A grease fire erupts in the kitchen!
+
+- id: bar_brawl
+  name: Bar Brawl
+  weight: 1
+  description: Tempers flare and a fight breaks out in the bar.
