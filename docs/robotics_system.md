@@ -8,5 +8,10 @@ This module introduces a lightweight framework for the station's robotics lab. I
 - **RobotModule** – equipment installed on a cyborg that drains power.
 - **CyborgUnit** – a chassis with attached modules and a power cell.
 - **RoboticsSystem** – manages part inventories, assembly and periodic upkeep.
+- **DockingStation** – location that recharges cyborgs each tick.
+
+Robots will automatically seek the nearest registered docking station when their
+power falls below 20% of capacity. While docked they regain power each tick at
+the station's recharge rate.
 
 The system is intentionally small but acts as a starting point for more elaborate robotics gameplay in the future.
