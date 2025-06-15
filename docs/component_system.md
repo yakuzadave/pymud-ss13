@@ -14,3 +14,5 @@ Example:
 ```
 
 Components keep their own data and provide helper functions used by commands and subsystems. This design lets new functionality be added by introducing a new component without rewriting existing classes.
+
+Recent additions include a **CircuitComponent** for installing programmable circuits into items or machinery. These circuits rely on shells to hold logic components and tie into the power and USB subsystems.
