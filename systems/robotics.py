@@ -54,7 +54,11 @@ class CyborgUnit:
         if len(self.modules) >= self.chassis.slots:
             return False
         self.modules.append(module)
-        logger.debug("Installed module %s on %s", module.module_id, self.unit_id)
+        logger.debug(
+            "Installed module %s on %s",
+            module.module_id,
+            self.unit_id,
+        )
         return True
 
     def recharge(self, amount: Optional[int] = None) -> None:
@@ -104,7 +108,9 @@ class RoboticsSystem:
         logger.debug("Added docking station %s", station.station_id)
 
     # ------------------------------------------------------------------
-    def build_cyborg(self, unit_id: str, chassis: RobotChassis) -> Optional[CyborgUnit]:
+    def build_cyborg(
+        self, unit_id: str, chassis: RobotChassis
+    ) -> Optional[CyborgUnit]:
         req = self.recipes.get(chassis.chassis_id, {})
         for part, qty in req.items():
             if self.parts.get(part, 0) < qty:

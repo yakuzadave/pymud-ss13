@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
-from systems.robotics import (
+from systems.robotics import (  # noqa: E402
     RoboticsSystem,
     RobotChassis,
     RobotModule,
