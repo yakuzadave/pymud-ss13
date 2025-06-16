@@ -4,7 +4,7 @@ import world
 from world import GameObject
 from components.player import PlayerComponent
 from commands.engineer import repair_handler
-from commands.doctor import heal_handler
+from commands.doctor import heal_handler, diagnose_handler
 from commands.security import restrain_handler
 from systems.power import PowerGrid
 from systems.atmosphere import AtmosphericSystem
@@ -68,6 +68,19 @@ def test_doctor_command(monkeypatch):
         result = heal_handler("test", target="crew")
         assert "heal" in result.lower()
     finally:
+        teardown_player()
+
+
+def test_diagnose_command(monkeypatch):
+    setup_player("doctor")
+    target = GameObject(id="player_target", name="Target", description="")
+    target.add_component("player", PlayerComponent())
+    world.get_world().register(target)
+    try:
+        result = diagnose_handler("test", player="target")
+        assert "health" in result.lower()
+    finally:
+        world.get_world().remove("player_target")
         teardown_player()
 
 
