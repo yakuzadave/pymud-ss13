@@ -65,6 +65,9 @@ class CargoSystem:
 
         # Listen for economy-related events
         subscribe("market_event", self.apply_market_event)
+        # Compatibility with legacy and specific event IDs
+        subscribe("market_boom", self.apply_market_event)
+        subscribe("market_crash", self.apply_market_event)
 
     # ------------------------------------------------------------------
     def register_vendor(self, vendor: SupplyVendor) -> None:
@@ -127,7 +130,8 @@ class CargoSystem:
         arrived = [o for o in self.orders if o.eta <= now]
         self.orders = [o for o in self.orders if o.eta > now]
         for order in arrived:
-            dept_inv = self.inventory.setdefault(order.vendor, {})
+            # Items go to the ordering department's inventory
+            dept_inv = self.inventory.setdefault(order.department, {})
             dept_inv[order.item] = dept_inv.get(order.item, 0) + order.quantity
             logger.info("Order received for %s x%d", order.item, order.quantity)
 

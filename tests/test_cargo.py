@@ -1,4 +1,5 @@
 from systems.cargo import CargoSystem, SupplyVendor
+import time
 
 
 def setup_system():
@@ -57,3 +58,21 @@ def test_transfer_supply_moves_items_and_credits():
     assert system.get_inventory("engineering").get("ore") == 2
     assert system.get_credits("mining") == 6
     assert system.get_credits("engineering") == 14
+
+
+def test_market_event_subscription_boom():
+    from events import publish
+
+    system = setup_system()
+    system.set_market_demand("steel", 1.0)
+    publish("market_boom", item="steel", demand_delta=1.0)
+    assert system.market_demand["steel"] == 2.0
+
+
+def test_order_delivery_updates_inventory():
+    system = setup_system()
+    order = system.order_supply("engineering", "steel", 1, "central")
+    assert order is not None
+    order.eta = time.time() - 1
+    system.process_orders()
+    assert system.get_inventory("engineering").get("steel") == 1
