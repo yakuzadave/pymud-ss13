@@ -66,6 +66,7 @@ class MudServer:
         subscribe("item_dropped", self._on_item_dropped)
         subscribe("item_used", self._on_item_used)
         subscribe("player_said", self._on_player_said)
+        subscribe("npc_said", self._on_npc_said)
 
         logger.info(f"MUD Server initialized on {self.host}:{self.port}")
 
@@ -447,6 +448,24 @@ class MudServer:
                 except Exception as e:
                     logger.error(
                         f"Error sending chat notification to client {other_client_id}: {e}"
+                    )
+
+    async def _on_npc_said(
+        self, npc_id: str, location: str, message: str, name: str
+    ) -> None:
+        """Handle NPC chat events."""
+        for ws, other_client_id in self.sessions.items():
+            if (
+                self.mudpy_interface.get_player_location(other_client_id)
+                == location
+            ):
+                try:
+                    await ws.send(
+                        json.dumps({"type": "chat", "message": f"{name} says: {message}"})
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Error sending NPC chat to client {other_client_id}: {e}"
                     )
 
     async def run(self) -> None:
