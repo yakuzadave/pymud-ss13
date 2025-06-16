@@ -7,6 +7,8 @@ Other systems manage jobs and random events.
 from .atmos import AtmosphericSystem, get_atmos_system
 from .gas_sim import GasMixture, AtmosGrid, PipeNetwork
 from .fire import FireSystem
+from .hull_breach import HullBreachSystem
+from .flood import FloodSystem
 from .power import PowerSystem, get_power_system
 from .jobs import JobSystem, get_job_system
 from .random_events import RandomEventSystem, get_random_event_system
@@ -84,6 +86,8 @@ __all__ = [
     "AtmosGrid",
     "PipeNetwork",
     "FireSystem",
+    "HullBreachSystem",
+    "FloodSystem",
     "NPCSystem",
     "get_npc_system",
     "PlumbingSystem",
