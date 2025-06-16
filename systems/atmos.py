@@ -42,6 +42,7 @@ class AtmosphericSystem:
         self.enabled = False
         self.vents: Dict[str, Dict[str, Any]] = {}  # room_id -> vent data
         self.leaks: List[Dict[str, Any]] = []  # List of active leaks
+        self.room_hazards: Dict[str, set] = {}
 
         # Register event handlers
         subscribe("power_loss", self.on_power_loss)
@@ -117,6 +118,16 @@ class AtmosphericSystem:
 
             # Update hazards based on current atmospheric conditions
             self._update_hazards(room_comp)
+
+            prev = self.room_hazards.get(room_id, set())
+            current = set(room_comp.hazards)
+            added = current - prev
+            removed = prev - current
+            for hz in added:
+                publish("room_hazard_added", room_id=room_id, hazard=hz)
+            for hz in removed:
+                publish("room_hazard_removed", room_id=room_id, hazard=hz)
+            self.room_hazards[room_id] = current
 
             # Publish atmospheric update event for this room
             publish(
@@ -305,6 +316,9 @@ class AtmosphericSystem:
             publish("leak_fixed", room_id=room_id)
 
         return fixed
+
+    def get_room_hazards(self, room_id: str) -> List[str]:
+        return list(self.room_hazards.get(room_id, set()))
 
     def on_power_loss(
         self, affected_rooms: Optional[List[str]] = None, **_: Any

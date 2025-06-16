@@ -160,11 +160,41 @@ def _register_event_handlers():
             )
         )
 
+    def room_power_change(room_id: str, powered: bool, **_):
+        name = mud_integration.get_room_name(room_id) or room_id
+        msg = (
+            f"The lights flicker back on in {name}."
+            if powered
+            else f"The lights go out in {name}."
+        )
+        asyncio.create_task(
+            broadcast_to_clients({"type": "broadcast", "message": msg})
+        )
+
+    def hazard_added(room_id: str, hazard: str, **_):
+        name = mud_integration.get_room_name(room_id) or room_id
+        h = hazard.replace("_", " ")
+        msg = f"Warning: {h} detected in {name}!"
+        asyncio.create_task(
+            broadcast_to_clients({"type": "broadcast", "message": msg})
+        )
+
+    def hazard_removed(room_id: str, hazard: str, **_):
+        name = mud_integration.get_room_name(room_id) or room_id
+        h = hazard.replace("_", " ")
+        msg = f"{h.title()} cleared in {name}."
+        asyncio.create_task(
+            broadcast_to_clients({"type": "broadcast", "message": msg})
+        )
+
     subscribe("door_locked", door_lock_handler)
     subscribe("door_emergency_lockdown", door_lock_handler)
     subscribe("door_unlocked", door_unlock_handler)
     subscribe("atmos_updated", atmos_update)
     subscribe("power_status_update", power_update)
+    subscribe("room_power_changed", room_power_change)
+    subscribe("room_hazard_added", hazard_added)
+    subscribe("room_hazard_removed", hazard_removed)
 
 
 _register_event_handlers()
