@@ -31,6 +31,9 @@
 | `diagnose` | Perform a medical diagnosis on a player. |
 | `heal` | Provide medical treatment to a player. |
 | `repair` | Repair a damaged object or device. |
+| `diagnostics` | Run engineering diagnostics on the current room. |
+| `reroute` | Reroute power for a room to another grid. |
+| `seal` | Seal a hull breach in the specified room. |
 | `analyze` | Perform a scientific analysis on an object or sample. |
 | `restrain` | Attempt to restrain a suspect using restraints. |
 | `report` | File a crime report describing an incident. |
