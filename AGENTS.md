@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 21:25:00  
+**Generated:** 2025-06-16 21:38:23  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 41a4097
+**Commit:** 801cecb
 **Branch:** main
 
 ---
@@ -13,49 +13,42 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **41a4097** (42 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md with latest changes and test results
-- **6616c46** (73 seconds ago by Katharsis): Merge pull request #135 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
-- **37420ca** (80 seconds ago by Katharsis): Merge branch 'main' into codex/add-get_player_inventory-method-and-initialize-inventory
-- **0241a20** (3 minutes ago by Katharsis): Fix f-string and remove unused import
-- **d99713b** (4 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md with latest changes and test results
+- **801cecb** (77 seconds ago by Katharsis): Merge pull request #137 from yakuzadave/jlmzln-codex/fix-and-improve-update-agents-md.yml
+- **a57b591** (88 seconds ago by Katharsis): Merge branch 'main' into jlmzln-codex/fix-and-improve-update-agents-md.yml
+- **7f3e073** (3 minutes ago by Katharsis): Fix workflow YAML indentation
+- **9edf2ab** (7 minutes ago by Katharsis): Merge pull request #136 from yakuzadave/codex/fix-and-improve-update-agents-md.yml
+- **91c42bc** (7 minutes ago by Katharsis): fix: update AGENTS workflow
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 41a4097 - 🤖 Auto-update AGENTS.md with latest changes and test results
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-16 21:24:18
+#### Commit 801cecb - Merge pull request #137 from yakuzadave/jlmzln-codex/fix-and-improve-update-agents-md.yml
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 14:37:06
 **Message:**
-- Updated from commit: 6616c4620c4376d4f6d87c35d2a8b5fb9ed7a054
-- Triggered by: push
-- Branch: main
-
-[skip ci]
+Fix AGENTS workflow
+---
+#### Commit a57b591 - Merge branch 'main' into jlmzln-codex/fix-and-improve-update-agents-md.yml
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 14:36:55
+**Message:**
 
 ---
-#### Commit 6616c46 - Merge pull request #135 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
+#### Commit 7f3e073 - Fix workflow YAML indentation
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:23:47
-**Message:**
-Add getter for inventory and track interface progress
----
-#### Commit 37420ca - Merge branch 'main' into codex/add-get_player_inventory-method-and-initialize-inventory
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:23:40
+**Date:** 2025-06-16 14:35:40
 **Message:**
 
 ---
 
 ### 📁 Files Modified Recently
 
-- AGENTS.md
-- docs/mudpy_interface_progress.md
-- mudpy_interface.py
+- .github/workflows/update-agents-md.yml
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 21:25:08
+**Run Date:** 2025-06-16 21:38:31
 
 ### Test Output
 ```
@@ -208,7 +201,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           137     27    80%   40, 51, 100, 107-108, 155-160, 164-169, 184-188, 203-204, 207-208, 228
+systems/cargo.py                           137     21    85%   40, 51, 100, 107-108, 155-160, 184-188, 203-204, 207-208, 228
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -293,18 +286,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9703   3060    68%
+TOTAL                                     9703   3054    69%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.4880  275.7650  49.1893  7.6118  47.4690  3.8970   303;316       20.3296    4114           1
+test_command_performance     41.0560  303.2280  46.3166  7.6155  44.4335  4.0575   245;255       21.5905    3644           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 127 passed in 7.45s ==============================
+============================= 127 passed in 7.46s ==============================
 ```
 
 ### Coverage Summary
@@ -313,12 +306,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9703   3060    68%
+TOTAL                                     9703   3054    69%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.4880  275.7650  49.1893  7.6118  47.4690  3.8970   303;316       20.3296    4114           1
+test_command_performance     41.0560  303.2280  46.3166  7.6155  44.4335  4.0575   245;255       21.5905    3644           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -378,4 +371,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:25:08 (GitHub Actions Run #15692286890)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:38:31 (GitHub Actions Run #15692532984)*
