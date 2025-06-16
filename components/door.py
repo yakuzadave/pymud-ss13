@@ -145,6 +145,17 @@ class DoorComponent:
 
         return f"You unlock the {self.owner.name}."
 
+    def hack(self, player_id: str, skill: int = 0) -> str:
+        """Attempt to hack the door open."""
+        if not self.is_locked:
+            return "The door is already unlocked."
+        if skill < self.access_level:
+            return "You fail to hack the door."
+
+        self.is_locked = False
+        publish("door_hacked", door_id=self.owner.id, player_id=player_id)
+        return f"You hack the {self.owner.name} and unlock it."
+
     def on_power_loss(self) -> None:
         """
         Handle power loss event.

@@ -28,3 +28,16 @@ def test_container_updates_and_persistence(tmp_path):
 
     saved_items = data["components"]["container"]["items"]
     assert saved_items == container.items
+
+
+def test_container_open_and_hack():
+    obj = GameObject(id="locker1", name="Locker", description="")
+    container = ContainerComponent(capacity=3, is_locked=True, access_level=2)
+    obj.add_component("container", container)
+
+    fail = container.open("p1", access_code=0)
+    assert "locked" in fail.lower()
+
+    result = container.hack("p1", skill=2)
+    assert container.is_locked is False
+    assert "hack" in result.lower()

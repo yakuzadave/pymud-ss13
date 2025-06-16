@@ -27,3 +27,9 @@ def test_door_state_changes():
     # unlock door
     door_comp.unlock("player1", access_code=1)
     assert door_comp.is_locked is False
+
+    # hack door when locked
+    door_comp.lock("player1", access_code=1)
+    result = door_comp.hack("player1", skill=1)
+    assert door_comp.is_locked is False
+    assert "hack" in result.lower()

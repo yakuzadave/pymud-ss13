@@ -141,6 +141,22 @@ Rooms, items and NPCs are defined using YAML. A minimal room entry looks like:
 This structure maps directly into the component system discussed in
 [docs/component_system.md](docs/component_system.md).
 
+Additional game objects such as doors or containers can be listed in
+`data/objects.yaml`. Each entry specifies components to attach. For example:
+
+```yaml
+- id: secure_locker
+  name: Secure Locker
+  components:
+    container:
+      capacity: 5
+      is_locked: true
+      access_level: 50
+```
+
+Loading this file with `World.load_from_file("objects.yaml")` makes the locker
+interactable with commands like `open` or `hack`.
+
 ## Usage Guide
 
 Once the server is running, connect to `http://localhost:5000` in your browser.

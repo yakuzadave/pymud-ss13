@@ -21,7 +21,10 @@ def test_load_from_file_components(tmp_path):
             "id": "belt1",
             "name": "Tool Belt",
             "description": "belt",
-            "components": {"item": {}, "container": {"capacity": 3}},
+            "components": {
+                "item": {},
+                "container": {"capacity": 3, "is_locked": True, "access_level": 1},
+            },
         },
     ]
     file_path = tmp_path / "objects.yaml"
@@ -39,3 +42,6 @@ def test_load_from_file_components(tmp_path):
     belt = w.get_object("belt1")
     assert isinstance(belt.get_component("item"), ItemComponent)
     assert isinstance(belt.get_component("container"), ContainerComponent)
+    ccomp = belt.get_component("container")
+    assert ccomp.is_locked is True
+    assert ccomp.access_level == 1
