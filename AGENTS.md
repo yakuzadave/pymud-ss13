@@ -1,8 +1,11 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 21:11:27  
+**Generated:** 2025-06-16 21:21:18  
 **For:** New team member onboarding
+**Repository:** https://github.com/yakuzadave/pymud-ss13
+**Commit:** 9637749
+**Branch:** main
 
 ---
 
@@ -10,54 +13,56 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **baf0d2e** (4 minutes ago by Katharsis): Merge pull request #134 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
-- **33d98a7** (4 minutes ago by Katharsis): docs: track mudpy interface progress
-- **47d7139** (17 minutes ago by Katharsis): Merge pull request #133 from yakuzadave/z1kd58-codex/fix--status--command-execution-error
-- **dc49c4a** (19 minutes ago by Katharsis): Clean up event subscriptions
-- **2abcc4e** (24 minutes ago by Katharsis): Remove deprecated websockets protocol
+- **9637749** (23 seconds ago by Katharsis): updated script and workflow
+- **9d4497d** (9 minutes ago by Katharsis): Add script to add context to AGENTS.md
+- **baf0d2e** (13 minutes ago by Katharsis): Merge pull request #134 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
+- **33d98a7** (14 minutes ago by Katharsis): docs: track mudpy interface progress
+- **47d7139** (27 minutes ago by Katharsis): Merge pull request #133 from yakuzadave/z1kd58-codex/fix--status--command-execution-error
 
 ### 🔍 Detailed Recent Changes
 
+#### Commit 9637749 - updated script and workflow
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 21:20:55
+**Message:**
+
+---
+#### Commit 9d4497d - Add script to add context to AGENTS.md
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 21:12:39
+**Message:**
+
+---
 #### Commit baf0d2e - Merge pull request #134 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
 **Date:** 2025-06-16 14:07:54
 **Message:**
 Add getter for inventory and track interface progress
 ---
-#### Commit 33d98a7 - docs: track mudpy interface progress
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:07:12
-**Message:**
-
----
-#### Commit 47d7139 - Merge pull request #133 from yakuzadave/z1kd58-codex/fix--status--command-execution-error
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 13:54:17
-**Message:**
-Implement player stats retrieval
----
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/update-agents-md.yml
+- AGENTS.md
+- agent_write.sh
+- data/aliases/135333523153856.yaml
 - docs/mudpy_interface_progress.md
-- mud_server.py
 - mudpy_interface.py
-- tests/test_status_command.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 21:11:41
+**Run Date:** 2025-06-16 21:21:27
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.12.1, pytest-8.3.5, pluggy-1.5.0
+platform linux -- Python 3.13.4, pytest-8.4.0, pluggy-1.6.0
 benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
-rootdir: /workspaces/pymud-ss13
+rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
-plugins: anyio-4.9.0, benchmark-5.1.0, html-4.1.1, metadata-3.1.1, cov-6.2.1
+plugins: metadata-3.1.1, benchmark-5.1.0, html-4.1.1, anyio-4.9.0, cov-6.2.1
 collected 127 items
 
 tests/test_action_queue.py .                                             [  0%]
@@ -119,7 +124,7 @@ tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .                                               [100%]
 
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.12.1-final-0 ________________
+_______________ coverage: platform linux, python 3.13.4-final-0 ________________
 
 Name                                     Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------------
@@ -201,7 +206,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           137     21    85%   40, 51, 100, 107-108, 155-160, 184-188, 203-204, 207-208, 228
+systems/cargo.py                           137     27    80%   40, 51, 100, 107-108, 155-160, 164-169, 184-188, 203-204, 207-208, 228
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -286,18 +291,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9704   3054    69%
+TOTAL                                     9704   3060    68%
 
-------------------------------------------------------- benchmark: 1 tests -------------------------------------------------------
-Name (time in us)                Min         Max      Mean    StdDev   Median      IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     43.4410  3,934.9770  104.7816  136.9806  90.7400  25.9280   162;215        9.5437    3331           1
-----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     39.9040  518.4360  45.0469  10.1565  42.9700  4.0480   244;347       22.1991    4793           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 127 passed in 12.52s =============================
+============================= 127 passed in 7.45s ==============================
 ```
 
 ### Coverage Summary
@@ -306,13 +311,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9704   3054    69%
+TOTAL                                     9704   3060    68%
 
-------------------------------------------------------- benchmark: 1 tests -------------------------------------------------------
-Name (time in us)                Min         Max      Mean    StdDev   Median      IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     43.4410  3,934.9770  104.7816  136.9806  90.7400  25.9280   162;215        9.5437    3331           1
-----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     39.9040  518.4360  45.0469  10.1565  42.9700  4.0480   244;347       22.1991    4793           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -321,8 +326,8 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.12.1
-Working Directory: /workspaces/pymud-ss13
+Python Version: Python 3.13.4
+Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
 ```
@@ -371,4 +376,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was auto-generated by `generate_agents_md.sh` on 2025-06-16 21:11:41*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:21:27 (GitHub Actions Run #15692219242)*
