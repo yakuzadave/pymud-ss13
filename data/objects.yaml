@@ -40,3 +40,24 @@
       capacity: 200
       container_type: chamber
       temperature: 20.0
+- id: camera_bridge
+  name: Bridge Camera
+  description: A surveillance camera pointed at the bridge.
+  location: bridge
+  components:
+    camera:
+      location: bridge
+- id: camera_medbay
+  name: Medbay Camera
+  description: Monitors activity within the medbay.
+  location: medbay
+  components:
+    camera:
+      location: medbay
+- id: camera_corridor
+  name: Corridor Camera
+  description: Watches the central corridor.
+  location: corridor_north
+  components:
+    camera:
+      location: corridor_north
