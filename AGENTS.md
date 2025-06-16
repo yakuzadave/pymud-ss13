@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 21:21:18  
+**Generated:** 2025-06-16 21:24:09  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 9637749
+**Commit:** 6616c46
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **9637749** (23 seconds ago by Katharsis): updated script and workflow
-- **9d4497d** (9 minutes ago by Katharsis): Add script to add context to AGENTS.md
-- **baf0d2e** (13 minutes ago by Katharsis): Merge pull request #134 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
-- **33d98a7** (14 minutes ago by Katharsis): docs: track mudpy interface progress
-- **47d7139** (27 minutes ago by Katharsis): Merge pull request #133 from yakuzadave/z1kd58-codex/fix--status--command-execution-error
+- **6616c46** (22 seconds ago by Katharsis): Merge pull request #135 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
+- **37420ca** (29 seconds ago by Katharsis): Merge branch 'main' into codex/add-get_player_inventory-method-and-initialize-inventory
+- **0241a20** (2 minutes ago by Katharsis): Fix f-string and remove unused import
+- **d99713b** (3 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md with latest changes and test results
+- **9637749** (3 minutes ago by Katharsis): updated script and workflow
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 9637749 - updated script and workflow
+#### Commit 6616c46 - Merge pull request #135 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 21:20:55
-**Message:**
-
----
-#### Commit 9d4497d - Add script to add context to AGENTS.md
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 21:12:39
-**Message:**
-
----
-#### Commit baf0d2e - Merge pull request #134 from yakuzadave/codex/add-get_player_inventory-method-and-initialize-inventory
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:07:54
+**Date:** 2025-06-16 14:23:47
 **Message:**
 Add getter for inventory and track interface progress
+---
+#### Commit 37420ca - Merge branch 'main' into codex/add-get_player_inventory-method-and-initialize-inventory
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 14:23:40
+**Message:**
+
+---
+#### Commit 0241a20 - Fix f-string and remove unused import
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 14:22:29
+**Message:**
+
 ---
 
 ### 📁 Files Modified Recently
@@ -45,7 +45,6 @@ Add getter for inventory and track interface progress
 - .github/workflows/update-agents-md.yml
 - AGENTS.md
 - agent_write.sh
-- data/aliases/135333523153856.yaml
 - docs/mudpy_interface_progress.md
 - mudpy_interface.py
 
@@ -53,7 +52,7 @@ Add getter for inventory and track interface progress
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 21:21:27
+**Run Date:** 2025-06-16 21:24:18
 
 ### Test Output
 ```
@@ -184,7 +183,7 @@ mod_manager.py                              80     10    88%   47-48, 73-74, 93,
 mods/example_mod/scripts/example.py          1      0   100%
 mud_server.py                              194     99    49%   52-53, 98-154, 204, 233, 236-237, 239, 253-255, 309-312, 330-358, 371-394, 407-430, 444-467, 483-502, 510-519, 527-531, 548, 553-557
 mud_websocket_server.py                    183    183     0%   8-406
-mudpy_interface.py                         396    257    35%   250-253, 351-400, 419-423, 432, 435-436, 454, 472-569, 582-586, 598-606, 618-644, 648-667, 681, 687, 691, 706, 710, 720, 733-778, 791-861, 875-909, 922-971, 989-1023, 1053, 1065-1067, 1074, 1096-1100
+mudpy_interface.py                         395    257    35%   249-252, 350-399, 418-422, 431, 434-435, 453, 471-568, 581-585, 597-605, 617-643, 647-666, 680, 686, 690, 705, 709, 719, 732-777, 790-860, 874-908, 921-970, 988-1022, 1052, 1064-1066, 1073, 1095-1099
 parser.py                                  114     31    73%   53-54, 85-86, 104-107, 139-175, 205, 226-227, 243, 252
 pathfinding.py                              29      4    86%   18, 30, 33, 46
 performance.py                              43      8    81%   40, 57-64
@@ -291,13 +290,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9704   3060    68%
+TOTAL                                     9703   3060    68%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     39.9040  518.4360  45.0469  10.1565  42.9700  4.0480   244;347       22.1991    4793           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.4670  327.2920  46.5859  8.2695  44.6440  4.0130   256;286       21.4657    4060           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -311,13 +310,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9704   3060    68%
+TOTAL                                     9703   3060    68%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     39.9040  518.4360  45.0469  10.1565  42.9700  4.0480   244;347       22.1991    4793           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.4670  327.2920  46.5859  8.2695  44.6440  4.0130   256;286       21.4657    4060           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -376,4 +375,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:21:27 (GitHub Actions Run #15692219242)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:24:18 (GitHub Actions Run #15692271018)*
