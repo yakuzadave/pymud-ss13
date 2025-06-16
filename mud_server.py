@@ -16,7 +16,7 @@ from websockets.asyncio.server import serve
 from mudpy_interface import MudpyInterface
 import integration
 import engine
-from events import publish, subscribe
+from events import publish, subscribe, unsubscribe
 from systems.jobs import JOB_SYSTEM
 
 # Module logger
@@ -62,6 +62,12 @@ class MudServer:
         self.sessions: Dict[Any, int] = {}
 
         # Register for events
+        self._register_event_handlers()
+
+        logger.info(f"MUD Server initialized on {self.host}:{self.port}")
+
+    def _register_event_handlers(self) -> None:
+        """Subscribe server callbacks to global events."""
         subscribe("player_moved", self._on_player_moved)
         subscribe("item_taken", self._on_item_taken)
         subscribe("item_dropped", self._on_item_dropped)
@@ -69,7 +75,17 @@ class MudServer:
         subscribe("player_said", self._on_player_said)
         subscribe("npc_said", self._on_npc_said)
 
-        logger.info(f"MUD Server initialized on {self.host}:{self.port}")
+    def _unregister_event_handlers(self) -> None:
+        """Remove server callbacks from the event system."""
+        unsubscribe("player_moved", self._on_player_moved)
+        unsubscribe("item_taken", self._on_item_taken)
+        unsubscribe("item_dropped", self._on_item_dropped)
+        unsubscribe("item_used", self._on_item_used)
+        unsubscribe("player_said", self._on_player_said)
+        unsubscribe("npc_said", self._on_npc_said)
+
+    def __del__(self) -> None:
+        self._unregister_event_handlers()
 
     async def handler(self, websocket, path: str) -> None:
         """
@@ -263,6 +279,8 @@ class MudServer:
         # Remove from sessions
         if websocket in self.sessions:
             del self.sessions[websocket]
+        if not self.sessions:
+            self._unregister_event_handlers()
 
         # Publish client disconnected event
         logger.info(f"Client disconnected: {client_id}")

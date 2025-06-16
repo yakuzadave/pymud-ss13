@@ -55,3 +55,4 @@ htmlcov/
 # Windows
 Thumbs.db
 *.bak
+mudpy_venv/

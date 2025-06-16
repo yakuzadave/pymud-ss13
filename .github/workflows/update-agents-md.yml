@@ -1,0 +1,186 @@
+name: Update AGENTS.md
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'AGENTS.md'
+      - '.github/workflows/update-agents-md.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  update-agents-md:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Add pip install commands here if agent_write.sh requires them.
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Make script executable and run
+        run: |
+          set -euo pipefail
+          chmod +x agent_write.sh
+          ./agent_write.sh 2>&1 | tee agent_write.log
+
+      - name: Check if AGENTS.md changed
+        id: check_changes
+        run: |
+          if git diff --quiet AGENTS.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to AGENTS.md"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "AGENTS.md has been updated"
+          fi
+
+      - name: Commit, rebase, and push changes (favor workflow)
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git add AGENTS.md
+          git commit -F - <<'EOF'
+          🤖 Auto-update AGENTS.md
+
+          - Updated from commit: ${{ github.sha }}
+          - Triggered by: ${{ github.event_name }}
+          - Branch: ${{ github.ref_name }}
+
+          [skip ci][autogen AGENTS.md]
+          EOF
+
+          # Now the working directory is clean, safe to rebase
+          set +e
+          git pull --rebase
+          REBASE_EXIT=$?
+          set -e
+          if [ "$REBASE_EXIT" -ne 0 ]; then
+            echo "Rebase conflict detected. Attempting to auto-resolve AGENTS.md in favor of workflow output."
+            git checkout --ours AGENTS.md
+            git add AGENTS.md
+            git rebase --continue
+          fi
+
+          git push
+
+      - name: Create comment on push
+        if: steps.check_changes.outputs.changed == 'true' && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.sha.substring(0, 7);
+            const message = `🤖 **AGENTS.md Updated**
+
+            The onboarding guide has been automatically updated with:
+            - Recent changes from commit ${sha}
+            - Latest test results and coverage (if applicable)
+            - Updated guidance for new team members
+
+            📄 [View AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)`;
+            try {
+              await github.rest.repos.createCommitComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.sha,
+                body: message
+              });
+            } catch (error) {
+              console.log('Could not create commit comment:', error.message);
+            }
+
+      - name: Save AGENTS.md diff as artifact
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git diff HEAD~1 AGENTS.md > AGENTS.md.diff || echo "_No diff available_" > AGENTS.md.diff
+
+      - name: Upload AGENTS.md as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-md-${{ github.sha }}
+          path: AGENTS.md
+          retention-days: 30
+
+      - name: Upload agent_write.log as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-write-log-${{ github.sha }}
+          path: agent_write.log
+          retention-days: 30
+
+      - name: Upload AGENTS.md diff as artifact
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-md-diff-${{ github.sha }}
+          path: AGENTS.md.diff
+          retention-days: 30
+
+      - name: Repo Update Summary
+        env:
+          AGENTS_CHANGED: ${{ steps.check_changes.outputs.changed }}
+          REPO_URL: https://github.com/${{ github.repository }}/blob/main/AGENTS.md
+        run: |
+          echo "## 🤖 AGENTS.md Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$AGENTS_CHANGED" = "true" ]; then
+            echo "✅ **AGENTS.md was successfully updated and committed**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            echo "### AGENTS.md diff (latest commit):" >> $GITHUB_STEP_SUMMARY
+            git diff HEAD~1 AGENTS.md >> $GITHUB_STEP_SUMMARY || echo "_No diff available_" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No changes were needed to AGENTS.md**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### Last 5 commits:" >> $GITHUB_STEP_SUMMARY
+          git log -5 --oneline >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Files changed in last 5 commits:" >> $GITHUB_STEP_SUMMARY
+          git diff --name-only HEAD~5..HEAD | sort | uniq >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Latest contributors:" >> $GITHUB_STEP_SUMMARY
+          git log -5 --format='%an <%ae>' | sort | uniq >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### AGENTS.md stats:" >> $GITHUB_STEP_SUMMARY
+          echo "- Lines: $(wc -l < AGENTS.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- Words: $(wc -w < AGENTS.md)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Repo health:" >> $GITHUB_STEP_SUMMARY
+          echo "- Open PRs: $(gh pr list --limit 1000 | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- Open issues: $(gh issue list --limit 1000 | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### CI Status:" >> $GITHUB_STEP_SUMMARY
+          echo "![CI](https://github.com/${{ github.repository }}/actions/workflows/update-agents-md.yml/badge.svg)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "📄 **[View updated AGENTS.md]($REPO_URL)**" >> $GITHUB_STEP_SUMMARY
