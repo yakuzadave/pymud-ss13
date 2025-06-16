@@ -61,6 +61,7 @@ from commands import (  # noqa: F401,E402
     botanist,
     research,
     cargo,
+    requisition,
     antag,
     job,
     circuit,
