@@ -2,3 +2,17 @@
   inputs:
     - chemical_a
     - chemical_b
+- output: stimulant
+  chain:
+    - inputs: [chemical_a, chemical_b]
+      output: base_med
+    - inputs: [base_med, chemical_b]
+      output: stimulant
+- output: explosive
+  chain:
+    - inputs: [chemical_a, chemical_b]
+      output: unstable_mix
+      conditions:
+        temperature: 60
+    - inputs: [unstable_mix]
+      output: explosive
