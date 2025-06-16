@@ -3,15 +3,11 @@ name: Update AGENTS.md
 on:
   push:
     branches: [ main ]
-    # Avoid triggering on changes to AGENTS.md itself to prevent infinite loops
     paths-ignore:
       - 'AGENTS.md'
       - '.github/workflows/update-agents-md.yml'
-  
-  # Allow manual triggering
   workflow_dispatch:
 
-# Set permissions for the workflow
 permissions:
   contents: write
   actions: read
@@ -19,115 +15,113 @@ permissions:
 jobs:
   update-agents-md:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        # Fetch full history for git log commands
-        fetch-depth: 0
-        # Use a token that can push back to the repo
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4 # <-- pin to SHA in production!
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-        cache: 'pip'
+      - name: Set up Python
+        uses: actions/setup-python@v4 # <-- pin to SHA
+        with:
+          python-version: '3.x'
+          cache: 'pip'
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov pytest-html
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Only install what's needed by agent_write.sh
 
-    - name: Configure Git
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
 
-    - name: Make script executable and run
-      run: |
-        chmod +x agent_write.sh
-        echo "Running agent_write.sh..."
-        ./agent_write.sh
+      - name: Make script executable and run
+        run: |
+          set -euo pipefail
+          chmod +x agent_write.sh
+          ./agent_write.sh 2>&1 | tee agent_write.log
 
-    - name: Check if AGENTS.md changed
-      id: check_changes
-      run: |
-        if git diff --quiet AGENTS.md; then
-          echo "changed=false" >> $GITHUB_OUTPUT
-          echo "No changes to AGENTS.md"
-        else
-          echo "changed=true" >> $GITHUB_OUTPUT
-          echo "AGENTS.md has been updated"
-        fi
+      - name: Check if AGENTS.md changed
+        id: check_changes
+        run: |
+          if git diff --quiet AGENTS.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Commit and push changes
-      if: steps.check_changes.outputs.changed == 'true'
-      run: |
-        git add AGENTS.md
-        git commit -F - <<'EOF'
-        🤖 Auto-update AGENTS.md with latest changes and test results
+      - name: Pull, commit, and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git pull --rebase
+          git add AGENTS.md
+          git commit -F - <<'EOF'
+          🤖 Auto-update AGENTS.md
 
-        - Updated from commit: ${{ github.sha }}
-        - Triggered by: ${{ github.event_name }}
-        - Branch: ${{ github.ref_name }}
+          - Updated from commit: ${{ github.sha }}
+          - Triggered by: ${{ github.event_name }}
+          - Branch: ${{ github.ref_name }}
 
-        [skip ci]
-        EOF
+          [skip ci][autogen AGENTS.md]
+          EOF
 
-        git push
+          git push
 
-    - name: Create comment on push
-      if: steps.check_changes.outputs.changed == 'true' && github.event_name == 'push'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const sha = context.sha.substring(0, 7);
-          const message = `🤖 **AGENTS.md Updated**
-          
-          The onboarding guide has been automatically updated with:
-          - Recent changes from commit ${sha}
-          - Latest test results and coverage
-          - Updated guidance for new team members
-          
-          📄 [View AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)`;
-          
-          // Try to comment on the commit
-          try {
-            await github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: message
-            });
-          } catch (error) {
-            console.log('Could not create commit comment:', error.message);
-          }
+      - name: Create comment on push
+        if: steps.check_changes.outputs.changed == 'true' && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.sha.substring(0, 7);
+            const message = `🤖 **AGENTS.md Updated**
+            
+            The onboarding guide has been automatically updated with:
+            - Recent changes from commit ${sha}
+            - Latest guidance
+            📄 [View AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)`;
+            try {
+              await github.rest.repos.createCommitComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.sha,
+                body: message
+              });
+            } catch (error) {
+              console.log('Could not create commit comment:', error.message);
+            }
 
-    - name: Upload AGENTS.md as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: agents-md-${{ github.sha }}
-        path: AGENTS.md
-        retention-days: 30
+      - name: Upload AGENTS.md as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-md-${{ github.sha }}
+          path: AGENTS.md
+          retention-days: 30
 
-    - name: Summary
-      run: |
-        echo "## 🤖 AGENTS.md Update Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
-          echo "✅ **AGENTS.md was successfully updated and committed**" >> $GITHUB_STEP_SUMMARY
+      - name: Upload agent_write.log as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-write-log-${{ github.sha }}
+          path: agent_write.log
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## 🤖 AGENTS.md Update Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Changes included:" >> $GITHUB_STEP_SUMMARY
-          echo "- Recent git history (last 5 commits)" >> $GITHUB_STEP_SUMMARY
-          echo "- Test results and coverage report" >> $GITHUB_STEP_SUMMARY
-          echo "- Updated guidance for new team members" >> $GITHUB_STEP_SUMMARY
-          echo "- Environment and project information" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📄 **[View updated AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)**" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "ℹ️ **No changes were needed to AGENTS.md**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The file is already up to date with the latest information." >> $GITHUB_STEP_SUMMARY
-        fi
+          if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+            echo "✅ **AGENTS.md was successfully updated and committed**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Changes included:" >> $GITHUB_STEP_SUMMARY
+            git log -5 --oneline >> $GITHUB_STEP_SUMMARY
+            echo "- Environment and project information" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📄 **[View updated AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No changes were needed to AGENTS.md**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "The file is already up to date with the latest information." >> $GITHUB_STEP_SUMMARY
+          fi
