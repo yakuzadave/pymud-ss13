@@ -49,3 +49,28 @@ def test_auto_docking_recharges_unit():
     assert borg.power == 7
     system.tick()
     assert borg.power == 10
+
+
+def test_remote_control_module():
+    system = RoboticsSystem()
+    system.add_parts("frame", 1)
+    system.add_parts("wires", 5)
+    system.define_recipe("basic", {"frame": 1, "wires": 5})
+    chassis = RobotChassis("basic", "Basic Frame", power_capacity=10)
+    borg = system.build_cyborg("borg1", chassis)
+    assert borg is not None
+    tool = RobotModule(
+        "flashlight",
+        "Flashlight",
+        power_usage=1,
+        remote_control=True,
+    )
+    borg.install_module(tool)
+    # turn off via remote so no power used
+    assert system.remote_control("borg1", "flashlight", False)
+    borg.tick()
+    assert borg.power == 10
+    # reactivate and ensure usage
+    assert system.remote_control("borg1", "flashlight", True)
+    borg.tick()
+    assert borg.power == 9
