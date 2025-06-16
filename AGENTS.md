@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 22:35:02  
+**Generated:** 2025-06-16 22:44:38  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** ae10f45
+**Commit:** 3d24a32
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **ae10f45** (21 seconds ago by Katharsis): Merge pull request #140 from yakuzadave/codex/create-round_manager.py-and-integrate-with-game-modes
-- **bff0f04** (67 seconds ago by Katharsis): Add RoundManager with basic modes
-- **3eb6b83** (8 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **a71e26f** (9 minutes ago by Katharsis): Merge pull request #139 from yakuzadave/codex/create-medicalscannercomponent-and-scan-command
-- **9f14cec** (9 minutes ago by Katharsis): Add medical scanner component and scanning command
+- **3d24a32** (18 seconds ago by Katharsis): Merge pull request #141 from yakuzadave/codex/create-round-manager-and-integrate-game-modes
+- **70bd892** (66 seconds ago by Katharsis): docs: mention round manager and game modes
+- **25ab62f** (9 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **ae10f45** (10 minutes ago by Katharsis): Merge pull request #140 from yakuzadave/codex/create-round_manager.py-and-integrate-with-game-modes
+- **bff0f04** (11 minutes ago by Katharsis): Add RoundManager with basic modes
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit ae10f45 - Merge pull request #140 from yakuzadave/codex/create-round_manager.py-and-integrate-with-game-modes
+#### Commit 3d24a32 - Merge pull request #141 from yakuzadave/codex/create-round-manager-and-integrate-game-modes
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 15:34:41
+**Date:** 2025-06-16 15:44:20
 **Message:**
-Implement RoundManager with basic game modes
+Add README section for RoundManager
 ---
-#### Commit bff0f04 - Add RoundManager with basic modes
+#### Commit 70bd892 - docs: mention round manager and game modes
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 15:33:55
+**Date:** 2025-06-16 15:43:32
 **Message:**
 
 ---
-#### Commit 3eb6b83 - 🤖 Auto-update AGENTS.md
+#### Commit 25ab62f - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-16 22:26:44
+**Date:** 2025-06-16 22:35:10
 **Message:**
-- Updated from commit: a71e26f9da497cb97396e4648711f89b55ab85e0
+- Updated from commit: ae10f45b329a647097af195c476646a71f265fa2
 - Triggered by: push
 - Branch: main
 
@@ -48,22 +48,17 @@ Implement RoundManager with basic game modes
 ### 📁 Files Modified Recently
 
 - AGENTS.md
-- commands/doctor.py
-- components/__init__.py
-- components/medical.py
-- data/items.yaml
-- persistence.py
+- README.md
 - run_server.py
 - systems/__init__.py
 - systems/round_manager.py
-- tests/test_medical.py
 - tests/test_round_manager.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 22:35:10
+**Run Date:** 2025-06-16 22:44:48
 
 ### Test Output
 ```
@@ -314,13 +309,13 @@ TOTAL                                     9945   3088    69%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.1370  236.6240  45.7298  6.5530  43.9630  3.6725   279;280       21.8676    4188           1
+test_command_performance     40.5060  312.8060  45.4979  8.7041  43.3910  3.6565   265;315       21.9790    4125           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 133 passed in 7.42s ==============================
+============================= 133 passed in 7.44s ==============================
 ```
 
 ### Coverage Summary
@@ -334,7 +329,7 @@ TOTAL                                     9945   3088    69%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.1370  236.6240  45.7298  6.5530  43.9630  3.6725   279;280       21.8676    4188           1
+test_command_performance     40.5060  312.8060  45.4979  8.7041  43.3910  3.6565   265;315       21.9790    4125           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -394,4 +389,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 22:35:10 (GitHub Actions Run #15693469526)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 22:44:48 (GitHub Actions Run #15693607536)*
