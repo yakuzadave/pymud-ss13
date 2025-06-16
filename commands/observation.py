@@ -337,3 +337,22 @@ def map_handler(client_id: str, **kwargs) -> str:
     """
 
     return map_art
+
+
+@register("roomstatus")
+def room_status_handler(client_id: str, **kwargs) -> str:
+    """Report power and atmospheric status for the current room."""
+    interface = kwargs.get("interface")
+    if not interface:
+        return "Error: Interface not available"
+
+    location = interface.get_player_location(client_id)
+    if not location:
+        return "You are nowhere."
+
+    from systems import get_power_system, get_atmos_system
+
+    power_desc = get_power_system().describe_room_power(location)
+    atmos_desc = get_atmos_system().describe_room_hazards(location)
+    return f"{power_desc} {atmos_desc}"
+

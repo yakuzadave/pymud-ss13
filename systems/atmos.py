@@ -320,6 +320,14 @@ class AtmosphericSystem:
     def get_room_hazards(self, room_id: str) -> List[str]:
         return list(self.room_hazards.get(room_id, set()))
 
+    def describe_room_hazards(self, room_id: str) -> str:
+        """Return a short description of atmospheric hazards in ``room_id``."""
+        hazards = self.get_room_hazards(room_id)
+        if not hazards:
+            return "Atmospheric readings are nominal."
+        nice = ", ".join(h.replace("_", " ") for h in hazards)
+        return f"Hazards present: {nice}."
+
     def on_power_loss(
         self, affected_rooms: Optional[List[str]] = None, **_: Any
     ) -> None:
