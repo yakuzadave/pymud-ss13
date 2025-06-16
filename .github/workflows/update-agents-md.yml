@@ -18,13 +18,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # <-- pin to SHA in production!
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
-        uses: actions/setup-python@v4 # <-- pin to SHA
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
           cache: 'pip'
@@ -32,7 +32,8 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          # Only install what's needed by agent_write.sh
+          # Only install dependencies if your agent_write.sh or Python script requires them.
+          # Example: pip install -r requirements.txt
 
       - name: Configure Git
         run: |
@@ -50,14 +51,16 @@ jobs:
         run: |
           if git diff --quiet AGENTS.md; then
             echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to AGENTS.md"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
+            echo "AGENTS.md has been updated"
           fi
 
-      - name: Pull, commit, and push changes
+      - name: Commit, rebase, and push changes (favor workflow)
         if: steps.check_changes.outputs.changed == 'true'
         run: |
-          git pull --rebase
+          set -euo pipefail
           git add AGENTS.md
           git commit -F - <<'EOF'
           🤖 Auto-update AGENTS.md
@@ -69,6 +72,18 @@ jobs:
           [skip ci][autogen AGENTS.md]
           EOF
 
+          # Now the working directory is clean, safe to rebase
+          set +e
+          git pull --rebase
+          REBASE_EXIT=$?
+          set -e
+          if [ "$REBASE_EXIT" -ne 0 ]; then
+            echo "Rebase conflict detected. Attempting to auto-resolve AGENTS.md in favor of workflow output."
+            git checkout --ours AGENTS.md
+            git add AGENTS.md
+            git rebase --continue
+          fi
+
           git push
 
       - name: Create comment on push
@@ -78,10 +93,12 @@ jobs:
           script: |
             const sha = context.sha.substring(0, 7);
             const message = `🤖 **AGENTS.md Updated**
-            
+
             The onboarding guide has been automatically updated with:
             - Recent changes from commit ${sha}
-            - Latest guidance
+            - Latest test results and coverage (if applicable)
+            - Updated guidance for new team members
+
             📄 [View AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)`;
             try {
               await github.rest.repos.createCommitComment({
@@ -115,13 +132,11 @@ jobs:
           if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
             echo "✅ **AGENTS.md was successfully updated and committed**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Changes included:" >> $GITHUB_STEP_SUMMARY
+            echo "### Last 5 commits:" >> $GITHUB_STEP_SUMMARY
             git log -5 --oneline >> $GITHUB_STEP_SUMMARY
-            echo "- Environment and project information" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "📄 **[View updated AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)**" >> $GITHUB_STEP_SUMMARY
           else
             echo "ℹ️ **No changes were needed to AGENTS.md**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "The file is already up to date with the latest information." >> $GITHUB_STEP_SUMMARY
-          fi
