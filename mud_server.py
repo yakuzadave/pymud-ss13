@@ -17,6 +17,7 @@ from mudpy_interface import MudpyInterface
 import integration
 import engine
 from events import publish, subscribe
+from systems.jobs import JOB_SYSTEM
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -199,6 +200,38 @@ class MudServer:
                     }
                 )
             )
+            # Prompt for job selection
+            job_list = ", ".join(sorted(j.job_id for j in JOB_SYSTEM.get_all_jobs()))
+            await websocket.send(
+                json.dumps(
+                    {
+                        "type": "system",
+                        "message": f"Select your job ({job_list}):",
+                    }
+                )
+            )
+            try:
+                selection_msg = await websocket.recv()
+                try:
+                    sel_data = json.loads(selection_msg)
+                    selection = sel_data.get("command", selection_msg).strip()
+                except json.JSONDecodeError:
+                    selection = selection_msg.strip()
+            except Exception:
+                selection = "assistant"
+            if selection not in JOB_SYSTEM.jobs:
+                selection = "assistant"
+            job = JOB_SYSTEM.assign_job(f"player_{client_id}", selection)
+            if job:
+                JOB_SYSTEM.setup_player_for_job(f"player_{client_id}", f"player_{client_id}")
+                await websocket.send(
+                    json.dumps(
+                        {
+                            "type": "system",
+                            "message": f"You are assigned the role of {job.title}.",
+                        }
+                    )
+                )
         except Exception as e:
             logger.error(f"Error processing initial look command: {e}")
             await websocket.send(

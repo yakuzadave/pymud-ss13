@@ -64,6 +64,7 @@ from commands import (  # noqa: F401,E402
     requisition,
     antag,
     job,
+    admin,
     circuit,
     comms,
 )
