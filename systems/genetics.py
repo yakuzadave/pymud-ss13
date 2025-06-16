@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 import logging
+import time
 
 from events import publish
 
@@ -47,9 +48,12 @@ class GeneticProfile:
 class GeneticsSystem:
     """Manage DNA profiles and genetic experimentation."""
 
-    def __init__(self) -> None:
+    def __init__(self, tick_interval: float = 1.0) -> None:
         self.profiles: Dict[str, GeneticProfile] = {}
         self.scanned_dna: Dict[str, GeneticProfile] = {}
+        self.tick_interval = tick_interval
+        self.last_tick = 0.0
+        self.enabled = False
         logger.info("Genetics system initialized")
 
     def get_profile(self, player_id: str) -> GeneticProfile:
@@ -95,9 +99,33 @@ class GeneticsSystem:
         profile.stabilize(amount)
         publish("genetic_stabilized", player=player_id, amount=amount)
 
+    def start(self) -> None:
+        self.enabled = True
+        self.last_tick = time.time()
+
+    def stop(self) -> None:
+        self.enabled = False
+
+    def update(self) -> None:
+        if not self.enabled:
+            return
+        now = time.time()
+        if now - self.last_tick < self.tick_interval:
+            return
+        self.last_tick = now
+        self.tick()
+
     def tick(self) -> None:
-        for profile in self.profiles.values():
+        from world import get_world
+
+        w = get_world()
+        for player_id, profile in self.profiles.items():
             profile.tick()
+            obj = w.get_object(player_id)
+            if obj:
+                comp = obj.get_component("player")
+                if comp:
+                    comp.apply_genetic_effects()
 
 
 _GENETICS_SYSTEM = GeneticsSystem()

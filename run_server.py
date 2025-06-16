@@ -19,6 +19,7 @@ from systems import (
     get_atmos_system,
     get_random_event_system,
     get_security_system,
+    get_genetics_system,
 )
 from system_loops import run_update_loop, run_forever_loop
 
@@ -88,6 +89,7 @@ async def main():
     atmos_task = asyncio.create_task(run_update_loop(get_atmos_system))
     random_event_task = asyncio.create_task(run_forever_loop(get_random_event_system))
     security_task = asyncio.create_task(run_update_loop(get_security_system))
+    genetics_task = asyncio.create_task(run_update_loop(get_genetics_system))
 
     TASKS.extend(
         [
@@ -97,6 +99,7 @@ async def main():
             atmos_task,
             random_event_task,
             security_task,
+            genetics_task,
         ]
     )
 
