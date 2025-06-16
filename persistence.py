@@ -117,7 +117,10 @@ def load_npcs(path: str, world) -> int:
             if "components" in npc_data and "npc" in npc_data["components"]:
                 nc = npc_data["components"]["npc"]
                 npc_comp = NPCComponent(
-                    role=nc.get("role", "crew"), dialogue=nc.get("dialogue", [])
+                    role=nc.get("role", "crew"),
+                    dialogue=nc.get("dialogue", []),
+                    routine=nc.get("routine", []),
+                    event_dialogue=nc.get("event_dialogue", {}),
                 )
                 npc_obj.add_component("npc", npc_comp)
             world.register(npc_obj)

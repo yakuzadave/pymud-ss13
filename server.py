@@ -210,6 +210,15 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
     )
 
 
+async def on_npc_said(npc_id: str, location: str, message: str, name: str) -> None:
+    """Broadcast NPC chatter to players."""
+    await connection_manager.broadcast_to_room(
+        {"type": "chat", "message": f"{name} says: {message}"},
+        location,
+        client_locations,
+    )
+
+
 async def on_random_event(event_id: str, event: Any) -> None:
     """Broadcast random events to players."""
     description = None
@@ -252,6 +261,7 @@ async def startup_event():
     subscribe("item_dropped", on_item_dropped)
     subscribe("item_used", on_item_used)
     subscribe("player_said", on_player_said)
+    subscribe("npc_said", on_npc_said)
     subscribe("random_event", on_random_event)
 
     logger.info("Event handlers registered")

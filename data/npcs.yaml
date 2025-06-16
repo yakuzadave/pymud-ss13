@@ -14,6 +14,15 @@
       dialogue:
         - "Welcome aboard, crewman."
         - "Keep the station running smoothly."
+      routine:
+        - bridge
+        - start
+        - communications
+      event_dialogue:
+        meteor_shower:
+          - "Those meteors were too close for comfort."
+        power_surge:
+          - "Report any power fluctuations immediately."
 
 - id: npc_janitor
   name: Janitor Bob
@@ -28,6 +37,13 @@
       dialogue:
         - "Another mess to clean up..."
         - "Have you seen my mop?"
+      routine:
+        - janitorial
+        - corridor_east
+        - kitchen
+      event_dialogue:
+        kitchen_fire:
+          - "Not again! I just cleaned that kitchen." 
 
 - id: npc_scientist
   name: Dr. Lin
@@ -42,6 +58,13 @@
       dialogue:
         - "These samples are fascinating."
         - "Please don't touch the equipment."
+      routine:
+        - science_lab
+        - research_storage
+        - science_lab
+      event_dialogue:
+        botany_bloom:
+          - "The hydroponics readings are off the charts!"
 
 - id: npc_security
   name: Officer Patel
@@ -56,6 +79,13 @@
       dialogue:
         - "Stay safe and follow station regulations."
         - "Report any suspicious activity immediately."
+      routine:
+        - corridor_north
+        - security
+        - corridor_north
+      event_dialogue:
+        bar_brawl:
+          - "Break it up or you'll spend the night in the brig!"
 
 - id: npc_engineer
   name: Chief Engineer Torres
@@ -71,3 +101,12 @@
       dialogue:
         - "Keep the power grid stable and we'll all be fine."
         - "Let me know if you see any loose wiring."
+      routine:
+        - engineering
+        - reactor_access
+        - engineering
+      event_dialogue:
+        power_outage:
+          - "I'll get the generators back online." 
+        equipment_failure:
+          - "Looks like something needs my attention." 
