@@ -123,6 +123,19 @@ antagonists with `antag list`. Objectives can be marked complete with
 `antag complete <player_id> <objective>`, allowing simple win/loss checks at
 round end.
 
+## Round Management
+
+The `RoundManager` controls the flow of each game round. When the server
+starts you can specify a game mode with `--mode`. The default mode is
+`traitor`, but a simple `cult` mode is also available.
+
+```bash
+python run_server.py --mode cult
+```
+
+The manager tracks antagonists via the `AntagonistSystem` and checks win
+conditions when `end_round()` is called.
+
 ## Persistence
 
 Game objects are stored as YAML. Player files are written to `data/players` when clients disconnect and the server writes periodic autosave snapshots of the entire world to `data/world`. See [docs/persistence.md](docs/persistence.md) for format details.
