@@ -3,11 +3,12 @@ from unittest import mock
 import world
 from world import GameObject
 from components.player import PlayerComponent
-from commands.engineer import repair_handler
+from commands.engineer import repair_handler, diagnostics_handler, reroute_handler, seal_handler
 from commands.doctor import heal_handler, diagnose_handler
 from commands.security import restrain_handler
 from systems.power import PowerGrid
 from systems.atmosphere import AtmosphericSystem
+import systems
 import events
 
 
@@ -90,4 +91,49 @@ def test_security_command(monkeypatch):
         result = restrain_handler("test", target="intruder")
         assert "restrain" in result.lower()
     finally:
+        teardown_player()
+
+
+def test_engineer_diagnostics(monkeypatch):
+    setup_player("engineer")
+    class DummyInterface:
+        def get_player_location(self, cid):
+            return "room1"
+
+    try:
+        result = diagnostics_handler("test", interface=DummyInterface())
+        assert "power" in result.lower()
+    finally:
+        teardown_player()
+
+
+def test_reroute_command(monkeypatch):
+    setup_player("engineer")
+    ps = systems.get_power_system()
+    ps.grids.clear()
+    g1 = PowerGrid("g1", "A")
+    g1.add_room("room1")
+    g2 = PowerGrid("g2", "B")
+    ps.register_grid(g1)
+    ps.register_grid(g2)
+    try:
+        result = reroute_handler("test", room="room1", grid="g2")
+        assert "rerouted" in result.lower()
+        assert "room1" in ps.grids["g2"].rooms
+    finally:
+        ps.grids.clear()
+        teardown_player()
+
+
+def test_seal_command(monkeypatch):
+    setup_player("engineer")
+    atmos = systems.get_atmos_system()
+    atmos.leaks = []
+    atmos.create_leak("room1", rate=1.0)
+    try:
+        result = seal_handler("test", room="room1")
+        assert "seal" in result.lower()
+        assert not atmos.leaks
+    finally:
+        atmos.leaks = []
         teardown_player()

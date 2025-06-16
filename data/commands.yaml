@@ -293,6 +293,35 @@
   item_requirements:
     - "repair_kit"
 
+- name: diagnostics
+  category: Engineering
+  patterns:
+    - "diagnostics"
+    - "diagnostics {system}"
+  help: |
+    Run engineering diagnostics for the current room or a specific subsystem.
+  required_skills:
+    - "engineering"
+
+- name: reroute
+  category: Engineering
+  patterns:
+    - "reroute {room} {grid}"
+  help: |
+    Reroute power for a room to a different grid.
+  required_skills:
+    - "engineering"
+
+- name: seal
+  category: Engineering
+  patterns:
+    - "seal {room}"
+    - "seal breach"
+  help: |
+    Seal a hull breach in a room.
+  required_skills:
+    - "engineering"
+
 - name: analyze
   category: Science
   patterns:
