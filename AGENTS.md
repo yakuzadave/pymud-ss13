@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 22:10:44  
+**Generated:** 2025-06-16 22:12:34  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 66e90f0
+**Commit:** 1567664
 **Branch:** main
 
 ---
@@ -13,36 +13,40 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **66e90f0** (20 seconds ago by Katharsis): Merge pull request #138 from yakuzadave/codex/extend-firesystem,-add-hullbreach-and-floodsystem
-- **4041d08** (5 minutes ago by Katharsis): Add fire propagation, hull breach, and flood systems
-- **e9223eb** (19 minutes ago by Katharsis): Update update-agents-md.yml
-- **02b705a** (24 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **6160c15** (24 minutes ago by Katharsis): Update update-agents-md.yml
+- **1567664** (17 seconds ago by Katharsis): Merge pull request #132 from yakuzadave/codex/fix--status--command-execution-error
+- **d5172bb** (31 seconds ago by Katharsis): Merge branch 'main' into codex/fix--status--command-execution-error
+- **03e5691** (2 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **66e90f0** (2 minutes ago by Katharsis): Merge pull request #138 from yakuzadave/codex/extend-firesystem,-add-hullbreach-and-floodsystem
+- **4041d08** (7 minutes ago by Katharsis): Add fire propagation, hull breach, and flood systems
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 66e90f0 - Merge pull request #138 from yakuzadave/codex/extend-firesystem,-add-hullbreach-and-floodsystem
+#### Commit 1567664 - Merge pull request #132 from yakuzadave/codex/fix--status--command-execution-error
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 15:10:24
+**Date:** 2025-06-16 15:12:17
 **Message:**
-Add fire, breach and flood systems with tests
+Implement player stats retrieval
 ---
-#### Commit 4041d08 - Add fire propagation, hull breach, and flood systems
+#### Commit d5172bb - Merge branch 'main' into codex/fix--status--command-execution-error
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 15:05:47
+**Date:** 2025-06-16 15:12:03
 **Message:**
 
 ---
-#### Commit e9223eb - Update update-agents-md.yml
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:52:12
+#### Commit 03e5691 - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-16 22:10:52
 **Message:**
-added additional summary items
+- Updated from commit: 66e90f05b6521b75e45e7db8aeec0689b6e30a4b
+- Triggered by: push
+- Branch: main
+
+[skip ci][autogen AGENTS.md]
+
 ---
 
 ### 📁 Files Modified Recently
 
-- .github/workflows/update-agents-md.yml
 - .gitignore
 - AGENTS.md
 - systems/__init__.py
@@ -57,7 +61,7 @@ added additional summary items
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 22:10:52
+**Run Date:** 2025-06-16 22:12:43
 
 ### Test Output
 ```
@@ -189,7 +193,7 @@ mod_manager.py                              80     10    88%   47-48, 73-74, 93,
 mods/example_mod/scripts/example.py          1      0   100%
 mud_server.py                              194     99    49%   52-53, 98-154, 204, 233, 236-237, 239, 253-255, 309-312, 330-358, 371-394, 407-430, 444-467, 483-502, 510-519, 527-531, 548, 553-557
 mud_websocket_server.py                    183    183     0%   8-406
-mudpy_interface.py                         395    257    35%   249-252, 350-399, 418-422, 431, 434-435, 453, 471-568, 581-585, 597-605, 617-643, 647-666, 680, 686, 690, 705, 709, 719, 732-777, 790-860, 874-908, 921-970, 988-1022, 1052, 1064-1066, 1073, 1095-1099
+mudpy_interface.py                         395    257    35%   249-252, 350-399, 418-422, 431, 434-435, 453, 471-568, 581-585, 597-605, 617-643, 647-666, 680, 686, 690, 705, 709, 719, 732-777, 790-860, 874-908, 921-970, 988-1022, 1053, 1065-1067, 1074, 1096-1100
 parser.py                                  114     31    73%   53-54, 85-86, 104-107, 139-175, 205, 226-227, 243, 252
 pathfinding.py                              29      4    86%   18, 30, 33, 46
 performance.py                              43      8    81%   40, 57-64
@@ -301,16 +305,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                     9782   3062    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0060  503.1000  46.6158  10.4210  44.6530  3.9220   226;307       21.4520    4040           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.7560  357.8780  45.5443  8.0109  43.7710  3.7580   352;376       21.9567    5943           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 130 passed in 7.37s ==============================
+============================= 130 passed in 7.75s ==============================
 ```
 
 ### Coverage Summary
@@ -321,11 +325,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                     9782   3062    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0060  503.1000  46.6158  10.4210  44.6530  3.9220   226;307       21.4520    4040           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.7560  357.8780  45.5443  8.0109  43.7710  3.7580   352;376       21.9567    5943           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -384,4 +388,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 22:10:52 (GitHub Actions Run #15693087727)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 22:12:43 (GitHub Actions Run #15693119574)*
