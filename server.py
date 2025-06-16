@@ -210,6 +210,30 @@ async def on_player_said(client_id: str, location: str, message: str) -> None:
     )
 
 
+async def on_random_event(event_id: str, event: Any) -> None:
+    """Broadcast random events to players."""
+    description = None
+    params = {}
+    if hasattr(event, "description"):
+        description = event.description
+        params = getattr(event, "params", {}) or {}
+    elif isinstance(event, dict):
+        description = event.get("description")
+        params = event.get("params", {})
+
+    message = params.get("message") or description or f"Random event: {event_id}"
+
+    room_id = params.get("room_id")
+    if room_id:
+        await connection_manager.broadcast_to_room(
+            {"type": "broadcast", "message": message},
+            room_id,
+            client_locations,
+        )
+    else:
+        await connection_manager.broadcast({"type": "broadcast", "message": message})
+
+
 # FastAPI event handlers
 @app.on_event("startup")
 async def startup_event():
@@ -228,6 +252,7 @@ async def startup_event():
     subscribe("item_dropped", on_item_dropped)
     subscribe("item_used", on_item_used)
     subscribe("player_said", on_player_said)
+    subscribe("random_event", on_random_event)
 
     logger.info("Event handlers registered")
 
