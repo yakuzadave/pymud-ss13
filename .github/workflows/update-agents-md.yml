@@ -67,14 +67,15 @@ jobs:
       run: |
         git add AGENTS.md
         git commit -F - <<'EOF'
-🤖 Auto-update AGENTS.md with latest changes and test results
+        🤖 Auto-update AGENTS.md with latest changes and test results
 
-- Updated from commit: ${{ github.sha }}
-- Triggered by: ${{ github.event_name }}
-- Branch: ${{ github.ref_name }}
+        - Updated from commit: ${{ github.sha }}
+        - Triggered by: ${{ github.event_name }}
+        - Branch: ${{ github.ref_name }}
 
-[skip ci]
-EOF
+        [skip ci]
+        EOF
+
         git push
 
     - name: Create comment on push
