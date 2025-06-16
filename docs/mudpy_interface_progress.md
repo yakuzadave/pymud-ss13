@@ -6,6 +6,7 @@ This document tracks recent updates to `mudpy_interface.py` and outlines potenti
 - **Inventory Preservation** – `connect_client` no longer overwrites an existing inventory. New players receive a default starter kit only if no inventory is recorded.
 - **Inventory Accessor** – Added `get_player_inventory(client_id)` to return the list of item IDs a player currently carries.
 - **Map Command Validation** – Verified that calling `map` works without raising errors after these changes.
+- **Cleanup** – Removed an unused `sys` import and corrected a stray f-string in `take_item`.
 
 ## Next Steps
 - **Persistence Integration** – Ensure inventories persist across server restarts by expanding the autosave routine.

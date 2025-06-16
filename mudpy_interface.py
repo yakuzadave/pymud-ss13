@@ -9,7 +9,6 @@ import queue
 import time
 import yaml
 import os
-import sys
 from typing import Dict
 from persistence import load_aliases, save_aliases
 
@@ -688,7 +687,7 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         # Check if room has items
         if "items" not in room:
-            return f"There's nothing here to take."
+            return "There's nothing here to take."
 
         # Find the item by partial name match
         item_id = None
