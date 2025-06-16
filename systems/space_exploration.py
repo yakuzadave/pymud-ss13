@@ -63,14 +63,22 @@ class AwaySite:
     environment: List[EnvironmentalHazard] = field(default_factory=list)
     resources: Dict[str, int] = field(default_factory=dict)
 
-    def sample_hazards(self) -> List[str]:
+    def sample_hazards(self) -> List[EnvironmentalHazard]:
         """Roll for environmental hazards occurring this tick."""
         hazards = []
         for hazard in self.environment:
             if random.random() < hazard.chance:
-                hazards.append(hazard.name)
+                hazards.append(hazard)
                 publish("away_site_hazard", site_id=self.site_id, hazard=hazard.name)
         return hazards
+
+    def harvest(self, resource: str, amount: int) -> int:
+        """Collect resources from the site."""
+        available = self.resources.get(resource, 0)
+        collected = min(amount, available)
+        if collected:
+            self.resources[resource] -= collected
+        return collected
 
 
 @dataclass
@@ -87,6 +95,17 @@ class EVASuit:
         if self.oxygen <= 0:
             publish("suit_out_of_oxygen", wearer=self.wearer_id)
 
+    def apply_hazard(self, hazard: EnvironmentalHazard) -> None:
+        """Damage the suit if a severe hazard is encountered."""
+        if hazard.severity >= 2:
+            self.integrity = max(0, self.integrity - hazard.severity * 10)
+            publish(
+                "suit_damaged",
+                wearer=self.wearer_id,
+                hazard=hazard.name,
+                integrity=self.integrity,
+            )
+
 
 @dataclass
 class AwayMission:
@@ -97,6 +116,8 @@ class AwayMission:
     site: AwaySite
     crew: List[str] = field(default_factory=list)
     active: bool = False
+    suits: Dict[str, EVASuit] = field(default_factory=dict)
+    collected_resources: Dict[str, int] = field(default_factory=dict)
 
     def launch(self) -> bool:
         if self.active:
@@ -104,6 +125,8 @@ class AwayMission:
         if not self.shuttle.navigate(self.site.site_id):
             return False
         self.active = True
+        self.suits = {cid: EVASuit(cid) for cid in self.crew}
+        self.collected_resources.clear()
         publish("mission_started", mission_id=self.mission_id, site=self.site.site_id)
         return True
 
@@ -112,12 +135,35 @@ class AwayMission:
             return
         hazards = self.site.sample_hazards()
         if hazards:
-            publish("mission_hazard", mission_id=self.mission_id, hazards=hazards)
+            publish(
+                "mission_hazard",
+                mission_id=self.mission_id,
+                hazards=[h.name for h in hazards],
+            )
+            for hazard in hazards:
+                for suit in self.suits.values():
+                    suit.apply_hazard(hazard)
+        for suit in self.suits.values():
+            suit.tick()
 
     def return_to_base(self, dock_id: str = "station") -> None:
         self.shuttle.dock(dock_id)
         self.active = False
-        publish("mission_completed", mission_id=self.mission_id, site=self.site.site_id)
+        publish(
+            "mission_completed",
+            mission_id=self.mission_id,
+            site=self.site.site_id,
+            resources=self.collected_resources,
+        )
+
+    def harvest(self, resource: str, amount: int) -> int:
+        """Harvest resources from the site and store them."""
+        gathered = self.site.harvest(resource, amount)
+        if gathered:
+            self.collected_resources[resource] = (
+                self.collected_resources.get(resource, 0) + gathered
+            )
+        return gathered
 
 
 class SpaceExplorationSystem:
@@ -127,6 +173,7 @@ class SpaceExplorationSystem:
         self.shuttles: Dict[str, Shuttle] = {}
         self.sites: Dict[str, AwaySite] = {}
         self.missions: Dict[str, AwayMission] = {}
+        self.station_resources: Dict[str, int] = {}
 
     # ------------------------------------------------------------------
     def register_shuttle(self, shuttle: Shuttle) -> None:
@@ -140,7 +187,17 @@ class SpaceExplorationSystem:
         hazards: Optional[List[EnvironmentalHazard]] = None,
         resources: Optional[Dict[str, int]] = None,
     ) -> AwaySite:
-        site = AwaySite(site_id, name, hazards or [], resources or {})
+        if hazards is None:
+            hazards = [
+                EnvironmentalHazard("radiation pocket", chance=0.1, severity=2),
+                EnvironmentalHazard("vacuum section", chance=0.1, severity=3),
+            ]
+        if resources is None:
+            resources = {}
+            for res_name in ["ore", "crystal", "ice"]:
+                if random.random() < 0.5:
+                    resources[res_name] = random.randint(1, 5)
+        site = AwaySite(site_id, name, hazards, resources)
         self.sites[site_id] = site
         return site
 
@@ -162,3 +219,17 @@ class SpaceExplorationSystem:
     def tick(self) -> None:
         for mission in list(self.missions.values()):
             mission.tick()
+
+    # ------------------------------------------------------------------
+    def complete_mission(self, mission_id: str, dock_id: str = "station") -> None:
+        mission = self.missions.pop(mission_id, None)
+        if not mission:
+            return
+        mission.return_to_base(dock_id)
+        for res, qty in mission.collected_resources.items():
+            self.station_resources[res] = self.station_resources.get(res, 0) + qty
+        publish(
+            "mission_resources_returned",
+            mission_id=mission_id,
+            resources=mission.collected_resources,
+        )

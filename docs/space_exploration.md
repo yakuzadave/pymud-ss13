@@ -1,20 +1,22 @@
 # Space Exploration and Away Missions
 
-This module introduces very small-scale support for off-station exploration.
+This module introduces lightweight support for off-station exploration.
 Shuttles can travel to procedurally defined sites, where random hazards may
 occur each tick. Away teams should wear EVA suits to monitor their oxygen
-supply. The system is intentionally lightweight and acts as a hook for future
-expansion.
+supply. Radiation pockets and vacuum sections are common threats and sites may
+contain random deposits of ore, crystal or ice. The system acts as a hook for
+future expansion and integration with more robust gameplay.
 
 ## Key Components
 
 - **Shuttle** – manages navigation, fuel consumption and docking events.
 - **AwaySite** – represents a destination with environmental hazards and
   resource deposits.
-- **EVASuit** – tracks oxygen levels during extravehicular activity.
+- **EVASuit** – tracks oxygen levels and suffers damage from severe hazards.
 - **AwayMission** – combines a shuttle, a site and a list of crew members.
 
 `SpaceExplorationSystem` ties these pieces together so game logic can launch a
-mission and advance it with regular ticks.
+mission and advance it with regular ticks. Resources gathered during missions
+are returned to the station when the shuttle docks.
 
 
