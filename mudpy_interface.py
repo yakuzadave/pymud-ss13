@@ -264,11 +264,15 @@ quit - Disconnect from the system
             self.player_locations[client_id] = "start"
             logger.debug(f"Set player {client_id} location to 'start'")
 
-            # Initialize player inventory
-            self.player_inventories[client_id] = ["comms_device", "biometric_scanner"]
-            logger.debug(
-                f"Initialized inventory for player {client_id}: {self.player_inventories[client_id]}"
-            )
+            # Initialize player inventory if it doesn't already exist
+            if client_id not in self.player_inventories:
+                self.player_inventories[client_id] = [
+                    "comms_device",
+                    "biometric_scanner",
+                ]
+                logger.debug(
+                    f"Initialized inventory for player {client_id}: {self.player_inventories[client_id]}"
+                )
 
             self.player_equipment[client_id] = {}
 
@@ -1029,6 +1033,10 @@ Biometric scan complete:
             has not been initialized.
         """
         return self.player_stats.get(client_id)
+
+    def get_player_inventory(self, client_id):
+        """Return a list of item IDs currently carried by the player."""
+        return self.player_inventories.get(client_id, [])
 
     def get_room_name(self, room_id):
         """
