@@ -32,8 +32,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          # Only install dependencies if your agent_write.sh or Python script requires them.
-          # Example: pip install -r requirements.txt
+          # Add pip install commands here if agent_write.sh requires them.
 
       - name: Configure Git
         run: |
@@ -111,6 +110,11 @@ jobs:
               console.log('Could not create commit comment:', error.message);
             }
 
+      - name: Save AGENTS.md diff as artifact
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git diff HEAD~1 AGENTS.md > AGENTS.md.diff || echo "_No diff available_" > AGENTS.md.diff
+
       - name: Upload AGENTS.md as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -125,18 +129,58 @@ jobs:
           path: agent_write.log
           retention-days: 30
 
-      - name: Summary
+      - name: Upload AGENTS.md diff as artifact
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-md-diff-${{ github.sha }}
+          path: AGENTS.md.diff
+          retention-days: 30
+
+      - name: Repo Update Summary
+        env:
+          AGENTS_CHANGED: ${{ steps.check_changes.outputs.changed }}
+          REPO_URL: https://github.com/${{ github.repository }}/blob/main/AGENTS.md
         run: |
           echo "## 🤖 AGENTS.md Update Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+
+          if [ "$AGENTS_CHANGED" = "true" ]; then
             echo "✅ **AGENTS.md was successfully updated and committed**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Last 5 commits:" >> $GITHUB_STEP_SUMMARY
-            git log -5 --oneline >> $GITHUB_STEP_SUMMARY
+
+            echo "### AGENTS.md diff (latest commit):" >> $GITHUB_STEP_SUMMARY
+            git diff HEAD~1 AGENTS.md >> $GITHUB_STEP_SUMMARY || echo "_No diff available_" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "📄 **[View updated AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)**" >> $GITHUB_STEP_SUMMARY
           else
             echo "ℹ️ **No changes were needed to AGENTS.md**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "The file is already up to date with the latest information." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### Last 5 commits:" >> $GITHUB_STEP_SUMMARY
+          git log -5 --oneline >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Files changed in last 5 commits:" >> $GITHUB_STEP_SUMMARY
+          git diff --name-only HEAD~5..HEAD | sort | uniq >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Latest contributors:" >> $GITHUB_STEP_SUMMARY
+          git log -5 --format='%an <%ae>' | sort | uniq >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### AGENTS.md stats:" >> $GITHUB_STEP_SUMMARY
+          echo "- Lines: $(wc -l < AGENTS.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- Words: $(wc -w < AGENTS.md)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Repo health:" >> $GITHUB_STEP_SUMMARY
+          echo "- Open PRs: $(gh pr list --limit 1000 | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- Open issues: $(gh issue list --limit 1000 | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### CI Status:" >> $GITHUB_STEP_SUMMARY
+          echo "![CI](https://github.com/${{ github.repository }}/actions/workflows/update-agents-md.yml/badge.svg)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "📄 **[View updated AGENTS.md]($REPO_URL)**" >> $GITHUB_STEP_SUMMARY
