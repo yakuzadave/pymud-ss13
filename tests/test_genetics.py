@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
-from systems.genetics import GeneticsSystem
+from systems.genetics import GeneticsSystem, get_genetics_system
 
 
 def test_basic_mutation_cycle():
@@ -31,3 +31,29 @@ def test_dna_scanning():
     p2 = system.get_profile("p2")
     assert p2.genes.get("strength") == 5
     assert "hulk" in p2.mutations
+
+
+def test_mutation_effect_applied(tmp_path):
+    import world as world_mod
+    from world import World, GameObject
+    from components.player import PlayerComponent
+
+    old_world = world_mod.WORLD
+    world_mod.WORLD = World(data_dir=str(tmp_path))
+    try:
+        player = GameObject(id="p1", name="Tester", description="")
+        player.add_component("player", PlayerComponent())
+        world_mod.WORLD.register(player)
+
+        system = get_genetics_system()
+        system.profiles.clear()
+        system.scanned_dna.clear()
+        system.tick_interval = 0.0
+        system.mutate_player("p1", "hulk")
+        system.start()
+        system.update()
+        p_comp = player.get_component("player")
+        assert p_comp.has_ability("smash")
+        assert p_comp.stats["health"] > 100
+    finally:
+        world_mod.WORLD = old_world
