@@ -11,6 +11,7 @@ from .container import ContainerComponent
 from systems.chemical_reactions import ChemicalContainerComponent
 from .fluid import FluidContainerComponent
 from .access import AccessControlComponent
+from .id_card import IDCardComponent
 
 from .power_consumer import PowerConsumerComponent
 from .structure import StructureComponent
@@ -31,6 +32,7 @@ __all__ = [
     "ChemicalContainerComponent",
     "FluidContainerComponent",
     "AccessControlComponent",
+    "IDCardComponent",
     "PowerConsumerComponent",
     "StructureComponent",
     "AIComponent",
@@ -62,4 +64,5 @@ COMPONENT_REGISTRY = {
     "maintenance": MaintainableComponent,
     "circuit": CircuitComponent,
     "replica_pod": ReplicaPodComponent,
+    "id_card": IDCardComponent,
 }

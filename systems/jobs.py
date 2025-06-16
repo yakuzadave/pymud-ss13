@@ -208,12 +208,37 @@ class JobSystem:
             player_comp.move_to(job.spawn_location)
 
         # Give starting items
+        from components import IDCardComponent
+
         for item_spec in job.starting_items:
-            # In a real implementation, you'd create a new item from the template
-            # For now, just log that it would be added
-            logger.info(
-                f"Would add {item_spec['item_id']} to player {player_id}'s inventory"
-            )
+            item_id = item_spec["item_id"]
+            properties = item_spec.get("properties", {})
+            item_obj = world_instance.get_object(item_id)
+
+            if item_obj:
+                if item_obj.get_component("item") is None:
+                    logger.info(
+                        f"Item {item_id} missing item component; skipping"
+                    )
+                else:
+                    if (
+                        item_obj.get_component("item").item_type == "id_card"
+                        and not item_obj.get_component("id_card")
+                    ):
+                        access = properties.get(
+                            "access_level",
+                            item_obj.get_component("item").item_properties.get(
+                                "access_level", 0
+                            ),
+                        )
+                        item_obj.add_component(
+                            "id_card", IDCardComponent(access_level=access)
+                        )
+                player_comp.add_to_inventory(item_id)
+            else:
+                logger.info(
+                    f"Would add {item_id} to player {player_id}'s inventory"
+                )
 
         message = f"You have been assigned the role of {job.title}. {job.description}"
         return message

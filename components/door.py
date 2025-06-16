@@ -6,6 +6,7 @@ Represents a door or airlock that can be opened, closed, and locked.
 from typing import Dict, Any, Optional
 import logging
 from events import publish
+from world import get_world
 
 logger = logging.getLogger(__name__)
 
@@ -55,12 +56,29 @@ class DoorComponent:
         if self.is_open:
             return "The door is already open."
 
-        # Check if door is locked
+        world = get_world()
+        level = 0
+        player_obj = world.get_object(player_id)
+        if player_obj:
+            pcomp = player_obj.get_component("player")
+            if pcomp:
+                level = pcomp.access_level
+                for item_id in pcomp.inventory:
+                    item = world.get_object(item_id)
+                    if item:
+                        card = item.get_component("id_card")
+                        if card and card.access_level > level:
+                            level = card.access_level
+
+        if access_code is not None:
+            level = access_code
+
+        # Handle locked doors
         if self.is_locked:
-            if access_code is not None and access_code >= self.access_level:
+            if level >= self.access_level:
                 self.is_locked = False
                 logger.debug(
-                    f"Door {self.owner.id} unlocked with access code {access_code}"
+                    f"Door {self.owner.id} unlocked with access level {level}"
                 )
             else:
                 return "The door is locked. You need proper authorization to unlock it."
