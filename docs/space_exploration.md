@@ -3,9 +3,10 @@
 This module introduces lightweight support for off-station exploration.
 Shuttles can travel to procedurally defined sites, where random hazards may
 occur each tick. Away teams should wear EVA suits to monitor their oxygen
-supply. Radiation pockets and vacuum sections are common threats and sites may
-contain random deposits of ore, crystal or ice. The system acts as a hook for
-future expansion and integration with more robust gameplay.
+supply. Radiation pockets, meteor showers and alien spores are common threats
+and sites may contain random deposits of ore, crystal or ice. New resources can
+spawn over time so diligent crews can harvest them for the station. The system
+acts as a hook for future expansion and integration with more robust gameplay.
 
 ## Key Components
 
