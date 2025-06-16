@@ -2,7 +2,7 @@ name: Update AGENTS.md
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
     # Avoid triggering on changes to AGENTS.md itself to prevent infinite loops
     paths-ignore:
       - 'AGENTS.md'
@@ -66,13 +66,15 @@ jobs:
       if: steps.check_changes.outputs.changed == 'true'
       run: |
         git add AGENTS.md
-        git commit -m "🤖 Auto-update AGENTS.md with latest changes and test results
-        
-        - Updated from commit: ${{ github.sha }}
-        - Triggered by: ${{ github.event_name }}
-        - Branch: ${{ github.ref_name }}
-        
-        [skip ci]"
+        git commit -F - <<'EOF'
+🤖 Auto-update AGENTS.md with latest changes and test results
+
+- Updated from commit: ${{ github.sha }}
+- Triggered by: ${{ github.event_name }}
+- Branch: ${{ github.ref_name }}
+
+[skip ci]
+EOF
         git push
 
     - name: Create comment on push
