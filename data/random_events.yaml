@@ -70,3 +70,20 @@
   name: Bar Brawl
   weight: 1
   description: Tempers flare and a fight breaks out in the bar.
+
+# Economy-focused events
+- id: market_boom
+  name: Market Boom
+  weight: 1
+  params:
+    item: steel
+    demand_delta: 1.0
+  description: Demand surges for steel as off-station buyers compete.
+
+- id: market_crash
+  name: Market Crash
+  weight: 1
+  params:
+    item: steel
+    demand_delta: -0.8
+  description: Prices tumble for steel after a glutted supply.
