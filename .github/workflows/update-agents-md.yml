@@ -75,6 +75,7 @@ jobs:
 
         [skip ci]
         EOF
+
         git push
 
     - name: Create comment on push
