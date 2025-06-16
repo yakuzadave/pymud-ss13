@@ -17,3 +17,26 @@
       is_open: false
       is_locked: true
       access_level: 30
+- id: beaker
+  name: Laboratory Beaker
+  description: A glass beaker for mixing and holding reagents.
+  components:
+    chemical_container:
+      capacity: 50
+      container_type: beaker
+      temperature: 20.0
+- id: chemical_dispenser
+  name: Chemical Dispenser
+  description: A wall-mounted unit that dispenses common reagents.
+  components:
+    chemical_container:
+      capacity: 100
+      container_type: dispenser
+- id: reaction_chamber
+  name: Reaction Chamber
+  description: A sealed vessel for performing controlled reactions.
+  components:
+    chemical_container:
+      capacity: 200
+      container_type: chamber
+      temperature: 20.0
