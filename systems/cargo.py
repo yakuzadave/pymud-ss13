@@ -8,6 +8,8 @@ import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
+from events import subscribe
+
 logger = logging.getLogger(__name__)
 
 
@@ -60,6 +62,12 @@ class CargoSystem:
         self.department_credits: Dict[str, int] = {}
         # Track temporary supply shortages per item (remaining ticks)
         self.supply_shortages: Dict[str, int] = {}
+
+        # Listen for economy-related events
+        subscribe("market_event", self.apply_market_event)
+        # Compatibility with legacy and specific event IDs
+        subscribe("market_boom", self.apply_market_event)
+        subscribe("market_crash", self.apply_market_event)
 
     # ------------------------------------------------------------------
     def register_vendor(self, vendor: SupplyVendor) -> None:
@@ -122,7 +130,8 @@ class CargoSystem:
         arrived = [o for o in self.orders if o.eta <= now]
         self.orders = [o for o in self.orders if o.eta > now]
         for order in arrived:
-            dept_inv = self.inventory.setdefault(order.vendor, {})
+            # Items go to the ordering department's inventory
+            dept_inv = self.inventory.setdefault(order.department, {})
             dept_inv[order.item] = dept_inv.get(order.item, 0) + order.quantity
             logger.info("Order received for %s x%d", order.item, order.quantity)
 
@@ -158,6 +167,58 @@ class CargoSystem:
                 if item in ven.stock:
                     ven.stock[item] = 0
             logger.info("Supply shortage started for %s", item)
+
+    # ------------------------------------------------------------------
+    def apply_market_event(
+        self, item: str, demand_delta: float = 0.0, shortage: Optional[int] = None
+    ) -> None:
+        """Handle external market events by adjusting demand or creating shortages."""
+        if item:
+            current = self.market_demand.get(item, 1.0)
+            self.market_demand[item] = max(0.1, current + demand_delta)
+            logger.info(
+                "Market event changed demand for %s to %.2f", item, self.market_demand[item]
+            )
+
+        if shortage and shortage > 0:
+            self.supply_shortages[item] = shortage
+            for ven in self.vendors.values():
+                if item in ven.stock:
+                    ven.stock[item] = 0
+            logger.info("Market event caused shortage of %s for %d ticks", item, shortage)
+
+    # ------------------------------------------------------------------
+    def transfer_supply(
+        self,
+        from_department: str,
+        to_department: str,
+        item: str,
+        quantity: int,
+        price: int,
+    ) -> bool:
+        """Move items between departments and handle credit exchange."""
+        source = self.get_inventory(from_department)
+        dest = self.get_inventory(to_department)
+        if source.get(item, 0) < quantity:
+            logger.warning("%s lacks %s x%d", from_department, item, quantity)
+            return False
+        total_cost = price * quantity
+        if self.get_credits(to_department) < total_cost:
+            logger.warning("%s cannot afford transfer cost", to_department)
+            return False
+        source[item] -= quantity
+        dest[item] = dest.get(item, 0) + quantity
+        self.add_credits(from_department, total_cost)
+        self.add_credits(to_department, -total_cost)
+        logger.info(
+            "%s transferred %s x%d to %s for %d credits",
+            from_department,
+            item,
+            quantity,
+            to_department,
+            total_cost,
+        )
+        return True
 
 
 CARGO_SYSTEM = CargoSystem()

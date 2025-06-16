@@ -9,6 +9,8 @@ This module implements a minimal logistics framework for ordering supplies and t
 - **Department inventories** stored per vendor/department
 - **Market demand** controls pricing and can be adjusted dynamically
 - **Fluctuating economy** with periodic demand changes and temporary supply shortages
+- **Market events** triggered via the event bus
+- **Player transfers** move goods between departments for credits
 
 The system is intentionally lightweight but provides a foundation for more complex economic mechanics.
 
@@ -58,3 +60,23 @@ requisition 20
 Call `update_economy()` periodically to simulate shifting demand and random
 supply shortages. When a shortage is active, vendors run out of stock and orders
 for the affected item are blocked until the shortage ends.
+
+## Market Events
+
+Economy-related random events may fire via the global event bus. These events
+adjust demand values or trigger new shortages by calling `market_event`. The
+`CargoSystem` listens for these events automatically.
+
+Example event payload:
+
+```python
+from events import publish
+
+publish("market_event", item="steel", demand_delta=1.5, shortage=3)
+```
+
+## Player Supply Transfers
+
+Players can move items between departments to create their own supply chains.
+Use `transfer_supply(from_dept, to_dept, item, qty, price)` to exchange goods
+and credits.

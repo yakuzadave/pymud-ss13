@@ -1,4 +1,5 @@
 from systems.cargo import CargoSystem, SupplyVendor
+import time
 
 
 def setup_system():
@@ -37,3 +38,41 @@ def test_shortage_blocks_order():
     system.supply_shortages["steel"] = 2
     order = system.order_supply("engineering", "steel", 1, "central")
     assert order is None
+
+
+def test_market_event_adjusts_demand():
+    system = setup_system()
+    system.set_market_demand("steel", 1.0)
+    system.apply_market_event(item="steel", demand_delta=2.0)
+    assert system.market_demand["steel"] == 3.0
+
+
+def test_transfer_supply_moves_items_and_credits():
+    system = setup_system()
+    system.get_inventory("mining")["ore"] = 5
+    system.set_credits("mining", 0)
+    system.set_credits("engineering", 20)
+    transferred = system.transfer_supply("mining", "engineering", "ore", 2, 3)
+    assert transferred
+    assert system.get_inventory("mining").get("ore") == 3
+    assert system.get_inventory("engineering").get("ore") == 2
+    assert system.get_credits("mining") == 6
+    assert system.get_credits("engineering") == 14
+
+
+def test_market_event_subscription_boom():
+    from events import publish
+
+    system = setup_system()
+    system.set_market_demand("steel", 1.0)
+    publish("market_boom", item="steel", demand_delta=1.0)
+    assert system.market_demand["steel"] == 2.0
+
+
+def test_order_delivery_updates_inventory():
+    system = setup_system()
+    order = system.order_supply("engineering", "steel", 1, "central")
+    assert order is not None
+    order.eta = time.time() - 1
+    system.process_orders()
+    assert system.get_inventory("engineering").get("steel") == 1

@@ -45,8 +45,8 @@ This roadmap outlines major phases and tasks required to build the core structur
 
 ### Phase 8 – Advanced Systems
 - [ ] **Robotics & Cyborg Expansion** – extend robotics modules with remote control and power management.
+- [x] **Economy & Cargo** – deepen the trading system with market events and player-driven supply chains.
 - [x] **Genetics & Cloning** – integrate the genetics system with cloning mechanics and mutation effects.
-- [ ] **Economy & Cargo** – deepen the trading system with market events and player-driven supply chains.
 - [ ] **Space Exploration** – broaden away missions with random hazards and resource gathering.
 - [ ] **Enhanced Frontend** – improve the browser UI with inventory management and richer map interactions.
 - [ ] **Account Management** – persistent user accounts with authentication and admin permissions.
