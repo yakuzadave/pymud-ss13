@@ -6,6 +6,8 @@ This module introduces a lightweight framework for the station's robotics lab. I
 
 - **RobotChassis** – defines module slots and power capacity.
 - **RobotModule** – equipment installed on a cyborg that drains power.
+- Modules can optionally be *remote controlled* and toggled on or off to
+  conserve power. Inactive modules do not drain energy during a tick.
 - **CyborgUnit** – a chassis with attached modules and a power cell.
 - **RoboticsSystem** – manages part inventories, assembly and periodic upkeep.
 - **DockingStation** – location that recharges cyborgs each tick.

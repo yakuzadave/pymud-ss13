@@ -23,11 +23,21 @@ class RobotChassis:
 
 @dataclass
 class RobotModule:
-    """Equipment that consumes power when installed."""
+    """Equipment installed on a cyborg that can be remotely toggled."""
 
     module_id: str
     name: str
     power_usage: int = 1
+    remote_control: bool = False
+    active: bool = True
+
+    def set_active(self, active: bool) -> None:
+        """Activate or deactivate the module."""
+        self.active = active
+        publish(
+            "module_activated" if active else "module_deactivated",
+            module_id=self.module_id,
+        )
 
 
 @dataclass
@@ -61,6 +71,14 @@ class CyborgUnit:
         )
         return True
 
+    def remote_control_module(self, module_id: str, active: bool) -> bool:
+        """Toggle a module if it supports remote control."""
+        for mod in self.modules:
+            if mod.module_id == module_id and mod.remote_control:
+                mod.set_active(active)
+                return True
+        return False
+
     def recharge(self, amount: Optional[int] = None) -> None:
         """Recharge the cyborg's power cell."""
         if amount is None:
@@ -77,7 +95,8 @@ class CyborgUnit:
 
     def tick(self) -> None:
         for mod in self.modules:
-            self.power = max(0, self.power - mod.power_usage)
+            if mod.active:
+                self.power = max(0, self.power - mod.power_usage)
         if self.power == 0:
             publish("cyborg_out_of_power", unit_id=self.unit_id)
 
@@ -146,6 +165,16 @@ class RoboticsSystem:
                         unit_id=unit.unit_id,
                         station_id=station.station_id,
                     )
+
+    # ------------------------------------------------------------------
+    def remote_control(
+        self, unit_id: str, module_id: str, active: bool
+    ) -> bool:
+        """Remotely toggle a module on a cyborg."""
+        unit = self.units.get(unit_id)
+        if not unit:
+            return False
+        return unit.remote_control_module(module_id, active)
 
 
 _ROBOTICS_SYSTEM = RoboticsSystem()
