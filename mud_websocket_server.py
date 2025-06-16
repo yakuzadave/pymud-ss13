@@ -187,6 +187,14 @@ def _register_event_handlers():
             broadcast_to_clients({"type": "broadcast", "message": msg})
         )
 
+    def hazard_warning(room_id: str, hazard: str, **_):
+        name = mud_integration.get_room_name(room_id) or room_id
+        h = hazard.replace("_", " ")
+        msg = f"Warning: {h} in {name}!"
+        asyncio.create_task(
+            broadcast_to_clients({"type": "broadcast", "message": msg})
+        )
+
     subscribe("door_locked", door_lock_handler)
     subscribe("door_emergency_lockdown", door_lock_handler)
     subscribe("door_unlocked", door_unlock_handler)
@@ -195,6 +203,7 @@ def _register_event_handlers():
     subscribe("room_power_changed", room_power_change)
     subscribe("room_hazard_added", hazard_added)
     subscribe("room_hazard_removed", hazard_removed)
+    subscribe("hazard_warning", hazard_warning)
 
 
 _register_event_handlers()

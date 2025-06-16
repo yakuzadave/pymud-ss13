@@ -557,6 +557,15 @@ class PowerSystem:
     def get_room_power_status(self, room_id: str) -> bool:
         return self.room_power_status.get(room_id, True)
 
+    def describe_room_power(self, room_id: str) -> str:
+        """Return a short text description of power in ``room_id``."""
+        powered = self.get_room_power_status(room_id)
+        return (
+            f"Power is flowing normally in {room_id}."
+            if powered
+            else f"{room_id} is without power."
+        )
+
     def cause_electrical_hazard(self, grid_id: str) -> None:
         if grid_id in self.grids:
             rooms = list(self.grids[grid_id].rooms)
