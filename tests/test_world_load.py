@@ -1,5 +1,6 @@
 import os
-import yaml
+import pytest
+yaml = pytest.importorskip("yaml")
 from world import World
 from components import (
     ContainerComponent,

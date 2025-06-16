@@ -21,3 +21,19 @@ def test_block_order_no_funds():
     order = system.order_supply("engineering", "steel", 2, "central")
     assert order is None
     assert system.get_credits("engineering") == 5
+
+
+def test_market_update_changes_demand():
+    system = setup_system()
+    system.set_market_demand("steel", 1.0)
+    before = system.market_demand["steel"]
+    system.update_economy()
+    after = system.market_demand["steel"]
+    assert before != after
+
+
+def test_shortage_blocks_order():
+    system = setup_system()
+    system.supply_shortages["steel"] = 2
+    order = system.order_supply("engineering", "steel", 1, "central")
+    assert order is None

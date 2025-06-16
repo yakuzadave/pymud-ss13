@@ -1,6 +1,7 @@
 import os
 import sys
-import yaml
+import pytest
+yaml = pytest.importorskip("yaml")
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 

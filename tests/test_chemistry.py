@@ -1,4 +1,5 @@
-import yaml
+import pytest
+yaml = pytest.importorskip("yaml")
 import world
 from world import GameObject, World
 from components.player import PlayerComponent

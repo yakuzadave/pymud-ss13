@@ -1,4 +1,5 @@
-import yaml
+import pytest
+yaml = pytest.importorskip("yaml")
 import world
 from world import World
 from mudpy_interface import MudpyInterface
