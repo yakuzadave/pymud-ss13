@@ -1037,6 +1037,7 @@ Biometric scan complete:
         """Return a list of item IDs currently carried by the player."""
         return self.player_inventories.get(client_id, [])
 
+
     def get_room_name(self, room_id):
         """
         Get the name of a room.
