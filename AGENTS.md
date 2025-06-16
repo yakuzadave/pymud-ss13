@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 21:38:23  
+**Generated:** 2025-06-16 21:46:52  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 801cecb
+**Commit:** 6160c15
 **Branch:** main
 
 ---
@@ -13,42 +13,48 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **801cecb** (77 seconds ago by Katharsis): Merge pull request #137 from yakuzadave/jlmzln-codex/fix-and-improve-update-agents-md.yml
-- **a57b591** (88 seconds ago by Katharsis): Merge branch 'main' into jlmzln-codex/fix-and-improve-update-agents-md.yml
-- **7f3e073** (3 minutes ago by Katharsis): Fix workflow YAML indentation
-- **9edf2ab** (7 minutes ago by Katharsis): Merge pull request #136 from yakuzadave/codex/fix-and-improve-update-agents-md.yml
-- **91c42bc** (7 minutes ago by Katharsis): fix: update AGENTS workflow
+- **6160c15** (36 seconds ago by Katharsis): Update update-agents-md.yml
+- **104bbb2** (5 minutes ago by Katharsis): Update update-agents-md.yml
+- **c387f49** (8 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md with latest changes and test results
+- **801cecb** (10 minutes ago by Katharsis): Merge pull request #137 from yakuzadave/jlmzln-codex/fix-and-improve-update-agents-md.yml
+- **a57b591** (10 minutes ago by Katharsis): Merge branch 'main' into jlmzln-codex/fix-and-improve-update-agents-md.yml
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 801cecb - Merge pull request #137 from yakuzadave/jlmzln-codex/fix-and-improve-update-agents-md.yml
+#### Commit 6160c15 - Update update-agents-md.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:37:06
+**Date:** 2025-06-16 14:46:16
 **Message:**
-Fix AGENTS workflow
+improved git steps on workflow
 ---
-#### Commit a57b591 - Merge branch 'main' into jlmzln-codex/fix-and-improve-update-agents-md.yml
+#### Commit 104bbb2 - Update update-agents-md.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:36:55
+**Date:** 2025-06-16 14:42:07
 **Message:**
+Improved workflow and made it more robust
+---
+#### Commit c387f49 - 🤖 Auto-update AGENTS.md with latest changes and test results
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-16 21:38:31
+**Message:**
+- Updated from commit: 801cecb5f4c3051f7c2b8da367551d19ca81a33d
+- Triggered by: workflow_dispatch
+- Branch: main
 
----
-#### Commit 7f3e073 - Fix workflow YAML indentation
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 14:35:40
-**Message:**
+[skip ci]
 
 ---
 
 ### 📁 Files Modified Recently
 
 - .github/workflows/update-agents-md.yml
+- AGENTS.md
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 21:38:31
+**Run Date:** 2025-06-16 21:47:01
 
 ### Test Output
 ```
@@ -201,7 +207,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           137     21    85%   40, 51, 100, 107-108, 155-160, 184-188, 203-204, 207-208, 228
+systems/cargo.py                           137     27    80%   40, 51, 100, 107-108, 155-160, 164-169, 184-188, 203-204, 207-208, 228
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -286,18 +292,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9703   3054    69%
+TOTAL                                     9703   3060    68%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0560  303.2280  46.3166  7.6155  44.4335  4.0575   245;255       21.5905    3644           1
+test_command_performance     41.3270  257.0510  45.9326  6.3917  44.2330  3.8680   274;253       21.7710    3903           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 127 passed in 7.46s ==============================
+============================= 127 passed in 7.37s ==============================
 ```
 
 ### Coverage Summary
@@ -306,12 +312,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                     9703   3054    69%
+TOTAL                                     9703   3060    68%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0560  303.2280  46.3166  7.6155  44.4335  4.0575   245;255       21.5905    3644           1
+test_command_performance     41.3270  257.0510  45.9326  6.3917  44.2330  3.8680   274;253       21.7710    3903           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -371,4 +377,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:38:31 (GitHub Actions Run #15692532984)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 21:47:01 (GitHub Actions Run #15692695161)*
