@@ -46,3 +46,27 @@ def test_resource_return(monkeypatch):
 
     assert system.station_resources.get("ore") == 2
 
+
+def test_resource_spawn(monkeypatch):
+    system = SpaceExplorationSystem()
+    shuttle = Shuttle("s3", "Rover")
+    system.register_shuttle(shuttle)
+    system.create_site(
+        "site3",
+        "Ice Field",
+        hazards=[],
+        resources={},
+    )
+
+    mock_pub = mock.Mock()
+    monkeypatch.setattr("events.publish", mock_pub)
+
+    mission = system.start_mission("m3", "s3", "site3", ["p2"])
+    assert mission is not None
+
+    # Force resource spawn by setting chance high
+    mission.site.resource_chance = 1.0
+    system.tick()
+
+    assert mission.site.resources != {}
+

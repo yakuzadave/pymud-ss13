@@ -54,6 +54,15 @@ class EnvironmentalHazard:
     severity: int = 1
 
 
+# Default hazards used when creating exploration sites
+DEFAULT_HAZARDS = [
+    EnvironmentalHazard("radiation pocket", chance=0.1, severity=2),
+    EnvironmentalHazard("vacuum section", chance=0.1, severity=3),
+    EnvironmentalHazard("micro-meteoroids", chance=0.05, severity=1),
+    EnvironmentalHazard("alien spores", chance=0.05, severity=2),
+]
+
+
 @dataclass
 class AwaySite:
     """Procedurally generated exploration site."""
@@ -79,6 +88,22 @@ class AwaySite:
         if collected:
             self.resources[resource] -= collected
         return collected
+
+    def spawn_resources(self) -> Dict[str, int]:
+        """Randomly generate new resource deposits."""
+        spawned: Dict[str, int] = {}
+        for res_name in ["ore", "crystal", "ice"]:
+            if random.random() < self.resource_chance:
+                amount = random.randint(1, 3)
+                self.resources[res_name] = self.resources.get(res_name, 0) + amount
+                spawned[res_name] = spawned.get(res_name, 0) + amount
+                publish(
+                    "away_site_resource_spawned",
+                    site_id=self.site_id,
+                    resource=res_name,
+                    amount=amount,
+                )
+        return spawned
 
 
 @dataclass
@@ -188,10 +213,9 @@ class SpaceExplorationSystem:
         resources: Optional[Dict[str, int]] = None,
     ) -> AwaySite:
         if hazards is None:
-            hazards = [
-                EnvironmentalHazard("radiation pocket", chance=0.1, severity=2),
-                EnvironmentalHazard("vacuum section", chance=0.1, severity=3),
-            ]
+            hazards = random.sample(
+                DEFAULT_HAZARDS, k=random.randint(2, min(3, len(DEFAULT_HAZARDS)))
+            )
         if resources is None:
             resources = {}
             for res_name in ["ore", "crystal", "ice"]:
@@ -219,6 +243,7 @@ class SpaceExplorationSystem:
     def tick(self) -> None:
         for mission in list(self.missions.values()):
             mission.tick()
+            mission.site.spawn_resources()
 
     # ------------------------------------------------------------------
     def complete_mission(self, mission_id: str, dock_id: str = "station") -> None:
