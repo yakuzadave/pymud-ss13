@@ -1,0 +1,12 @@
+messages:
+  - role: system
+    content: >-
+      You are tasked with looking at information provided to you by the user to
+      determine what is needed to work on next for the code repository and and
+      what can be improved
+  - role: user
+    content: 'Pull out the action items from: {{input}}'
+model: openai/gpt-4o
+responseFormat: text
+modelParameters:
+  temperature: 0.69
