@@ -139,6 +139,7 @@ class PowerSystem:
         self.batteries: Dict[str, Dict[str, Any]] = {}
         self.smes_units: Dict[str, Dict[str, Any]] = {}
         self.consumers: Dict[str, Dict[str, Any]] = {}
+        self.room_power_status: Dict[str, bool] = {}
 
         # Register event handlers
         subscribe("generator_toggle", self.on_generator_toggle)
@@ -156,6 +157,8 @@ class PowerSystem:
             grid (PowerGrid): The power grid to register.
         """
         self.grids[grid.grid_id] = grid
+        for room_id in grid.rooms:
+            self.room_power_status[room_id] = grid.is_powered
         logger.debug(f"Registered power grid {grid.grid_id} ({grid.name})")
 
     def register_generator(
@@ -369,6 +372,9 @@ class PowerSystem:
                 # Power is available and grid is not overloaded, restore power
                 grid.power_on()
 
+            # Update room power status for this grid
+            self._update_rooms_for_grid(grid)
+
             publish(
                 "power_status_update",
                 grid_id=grid_id,
@@ -536,6 +542,20 @@ class PowerSystem:
             for data in self.consumers.values()
             if data["grid_id"] == grid_id and data["active"]
         )
+
+    def _update_rooms_for_grid(self, grid: PowerGrid) -> None:
+        for room_id in grid.rooms:
+            prev = self.room_power_status.get(room_id)
+            if prev is None or prev != grid.is_powered:
+                self.room_power_status[room_id] = grid.is_powered
+                publish(
+                    "room_power_changed",
+                    room_id=room_id,
+                    powered=grid.is_powered,
+                )
+
+    def get_room_power_status(self, room_id: str) -> bool:
+        return self.room_power_status.get(room_id, True)
 
     def cause_electrical_hazard(self, grid_id: str) -> None:
         if grid_id in self.grids:
