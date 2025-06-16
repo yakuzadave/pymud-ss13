@@ -44,3 +44,4 @@
 | `view_alerts` | Show pending security alerts. |
 | `access_log` | Review recent door access events. |
 | `prototype` | Construct a prototype item if technology and materials are available. |
+| `announce_ai` | Make a high priority station-wide announcement as the AI. |
