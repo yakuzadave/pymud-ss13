@@ -1,0 +1,19 @@
+- id: secure_locker
+  name: Secure Locker
+  description: A reinforced locker for valuables.
+  location: bridge
+  components:
+    container:
+      capacity: 5
+      items: [keycard_captain]
+      is_open: false
+      is_locked: true
+      access_level: 50
+- id: maintenance_door
+  name: Maintenance Door
+  description: An old service door.
+  components:
+    door:
+      is_open: false
+      is_locked: true
+      access_level: 30

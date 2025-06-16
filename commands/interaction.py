@@ -9,8 +9,8 @@ from world import get_world
 from systems.script_engine import get_script_engine
 
 
-def _find_door(interface, client_id: str, identifier: str):
-    """Locate a DoorComponent by direction or object id."""
+def _find_openable(interface, client_id: str, identifier: str):
+    """Locate a DoorComponent or ContainerComponent."""
     world = get_world()
     player = world.get_object(f"player_{client_id}")
     if not player:
@@ -37,16 +37,22 @@ def _find_door(interface, client_id: str, identifier: str):
                 if target_obj:
                     door_comp = target_obj.get_component("door")
                     if door_comp:
-                        return door_comp, None
+                        return door_comp, "door", None
+                    cont_comp = target_obj.get_component("container")
+                    if cont_comp:
+                        return cont_comp, "container", None
 
     # Otherwise treat identifier as an object id
     target_obj = world.get_object(identifier)
     if target_obj:
         door_comp = target_obj.get_component("door")
         if door_comp:
-            return door_comp, None
+            return door_comp, "door", None
+        cont_comp = target_obj.get_component("container")
+        if cont_comp:
+            return cont_comp, "container", None
 
-    return None, f"There is no door '{identifier}' here."
+    return None, "", f"There is no door or container '{identifier}' here."
 
 
 logger = logging.getLogger(__name__)
@@ -68,8 +74,8 @@ def cmd_open(interface, client_id, args):
     if not args:
         return "Open what? Specify a direction (e.g., 'open north') or an object."
 
-    door_comp, err = _find_door(interface, client_id, args)
-    if not door_comp:
+    comp, ctype, err = _find_openable(interface, client_id, args)
+    if not comp:
         return err
 
     world = get_world()
@@ -77,7 +83,7 @@ def cmd_open(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.open(
+    return comp.open(
         player_id=player.id if player else str(client_id), access_code=access
     )
 
@@ -98,14 +104,14 @@ def cmd_close(interface, client_id, args):
     if not args:
         return "Close what? Specify a direction (e.g., 'close north') or an object."
 
-    door_comp, err = _find_door(interface, client_id, args)
-    if not door_comp:
+    comp, ctype, err = _find_openable(interface, client_id, args)
+    if not comp:
         return err
 
     world = get_world()
     player = world.get_object(f"player_{client_id}")
 
-    return door_comp.close(player_id=player.id if player else str(client_id))
+    return comp.close(player_id=player.id if player else str(client_id))
 
 
 @register("lock")
@@ -124,8 +130,8 @@ def cmd_lock(interface, client_id, args):
     if not args:
         return "Lock what? Specify a direction (e.g., 'lock north') or an object."
 
-    door_comp, err = _find_door(interface, client_id, args)
-    if not door_comp:
+    comp, ctype, err = _find_openable(interface, client_id, args)
+    if not comp:
         return err
 
     world = get_world()
@@ -133,7 +139,7 @@ def cmd_lock(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.lock(
+    return comp.lock(
         player_id=player.id if player else str(client_id), access_code=access
     )
 
@@ -154,8 +160,8 @@ def cmd_unlock(interface, client_id, args):
     if not args:
         return "Unlock what? Specify a direction (e.g., 'unlock north') or an object."
 
-    door_comp, err = _find_door(interface, client_id, args)
-    if not door_comp:
+    comp, ctype, err = _find_openable(interface, client_id, args)
+    if not comp:
         return err
 
     world = get_world()
@@ -163,9 +169,29 @@ def cmd_unlock(interface, client_id, args):
     pcomp = player.get_component("player") if player else None
     access = pcomp.access_level if pcomp else 0
 
-    return door_comp.unlock(
+    return comp.unlock(
         player_id=player.id if player else str(client_id), access_code=access
     )
+
+
+@register("hack")
+def cmd_hack(interface, client_id, args):
+    """Attempt to hack open a door or container."""
+    if not args:
+        return "Hack what? Specify a target."
+
+    comp, ctype, err = _find_openable(interface, client_id, args)
+    if not comp:
+        return err
+
+    world = get_world()
+    player = world.get_object(f"player_{client_id}")
+    pcomp = player.get_component("player") if player else None
+    skill = 0
+    if pcomp:
+        skill = pcomp.skills.get("hacking", 0)
+
+    return comp.hack(player_id=player.id if player else str(client_id), skill=skill)
 
 
 @register("push")
