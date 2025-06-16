@@ -21,3 +21,14 @@ def prototype_handler(client_id: str, proto_id: str, *materials):
     if system.build_prototype(dept, proto_id, list(materials), equipment):
         return f"Prototype {proto_id} constructed."
     return "Prototype construction failed."
+
+
+@register("manufacture")
+def manufacture_handler(client_id: str, proto_id: str, *materials):
+    """Fabricate an item using an unlocked blueprint."""
+    system = get_research_system()
+    dept = "science"
+    equipment = ["workbench"]
+    if system.build_prototype(dept, proto_id, list(materials), equipment):
+        return f"Manufactured {proto_id}."
+    return "Manufacturing failed."

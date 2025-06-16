@@ -40,6 +40,7 @@ class Prototype:
     technology: str
     required_materials: List[str] = field(default_factory=list)
     required_equipment: List[str] = field(default_factory=list)
+    object_id: Optional[str] = None
 
 
 class ResearchSystem:
@@ -51,6 +52,7 @@ class ResearchSystem:
         self.research_points: Dict[str, int] = {}
         self.completed: Set[str] = set()
         self.owners: Dict[str, Set[str]] = {}
+        self.unlocked_blueprints: Set[str] = set()
         logger.info("Research system initialized")
 
     # -- Technology registration -------------------------------------------------
@@ -92,6 +94,8 @@ class ResearchSystem:
         self.research_points[department] -= tech.points_required
         self.completed.add(tech_id)
         self.owners.setdefault(department, set()).add(tech_id)
+        for pid in tech.prototype_ids:
+            self.unlocked_blueprints.add(pid)
         logger.info("Department %s completed research: %s", department, tech_id)
         return True
 
@@ -109,12 +113,16 @@ class ResearchSystem:
         proto = self.prototypes.get(proto_id)
         if not proto:
             return False
+        if proto_id not in self.unlocked_blueprints:
+            return False
         if not self.has_technology(department, proto.technology):
             return False
         if any(req not in materials for req in proto.required_materials):
             return False
         if any(req not in equipment for req in proto.required_equipment):
             return False
+        if proto.object_id:
+            self._spawn_object(proto.object_id)
         logger.info("%s successfully built prototype %s", department, proto_id)
         return True
 
@@ -130,6 +138,44 @@ class ResearchSystem:
     def is_obsolete(self, tech_id: str) -> bool:
         tech = self.technologies.get(tech_id)
         return bool(tech and tech.obsolete_by and tech.obsolete_by in self.completed)
+
+    # -- Object spawning -------------------------------------------------------
+    def _spawn_object(self, object_id: str) -> None:
+        """Spawn an object from the objects data file."""
+        from world import get_world, GameObject
+        from components import COMPONENT_REGISTRY
+        import yaml, os, inspect
+
+        path = os.path.join("data", "objects.yaml")
+        try:
+            with open(path, "r") as f:
+                data = yaml.safe_load(f) or []
+        except Exception:
+            return
+        for obj_data in data:
+            if obj_data.get("id") != object_id:
+                continue
+            obj = GameObject(
+                id=obj_data["id"],
+                name=obj_data.get("name", object_id),
+                description=obj_data.get("description", ""),
+                location=obj_data.get("location"),
+            )
+            comps = obj_data.get("components", {})
+            for comp_name, comp_data in comps.items():
+                comp_class = COMPONENT_REGISTRY.get(comp_name)
+                if comp_class and isinstance(comp_data, dict):
+                    params = inspect.signature(comp_class.__init__).parameters
+                    kwargs = {k: v for k, v in comp_data.items() if k in params and k != "self"}
+                    try:
+                        comp_instance = comp_class(**kwargs)
+                    except Exception:
+                        continue
+                    obj.add_component(comp_name, comp_instance)
+                else:
+                    obj.components[comp_name] = comp_data
+            get_world().register(obj)
+            break
 
 
 # Create global instance

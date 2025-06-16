@@ -61,3 +61,23 @@
   components:
     camera:
       location: corridor_north
+- id: autolathe
+  name: Autolathe
+  description: Automated machine for fabricating simple items.
+  components:
+    power_consumer:
+      grid_id: engineering
+      power_usage: 5.0
+    lathe:
+      recipes:
+        crowbar: [metal]
+- id: protolathe
+  name: Protolathe
+  description: Advanced device capable of producing complex prototypes.
+  components:
+    power_consumer:
+      grid_id: science
+      power_usage: 10.0
+    lathe:
+      recipes:
+        circuit_board: [glass, metal]
