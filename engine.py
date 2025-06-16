@@ -67,6 +67,7 @@ from commands import (  # noqa: F401,E402
     admin,
     circuit,
     comms,
+    ai,
 )
 
 
