@@ -22,6 +22,7 @@ def test_replica_pod_cloning(tmp_path):
         genetics = get_genetics_system()
         profile = genetics.get_profile("p1")
         profile.add_gene("strength", 5)
+        genetics.mutate_player("p1", "hulk")
 
         comp = player.get_component("player")
         comp.apply_damage("torso", "brute", 200)
@@ -38,6 +39,10 @@ def test_replica_pod_cloning(tmp_path):
         assert clone is not None
         clone_profile = genetics.get_profile("p1_podclone")
         assert clone_profile.genes.get("strength") == 5
-        assert "podperson" == clone.get_component("player").role
+        assert "hulk" in clone_profile.mutations
+        player_comp = clone.get_component("player")
+        assert "podperson" == player_comp.role
+        assert player_comp.stats.get("health") > 100
+        assert player_comp.has_ability("smash")
     finally:
         world.WORLD = old_world

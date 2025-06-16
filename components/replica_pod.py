@@ -46,4 +46,8 @@ class ReplicaPodComponent:
             instability=original_profile.instability,
         )
 
+        clone_player = clone.get_component("player")
+        if clone_player:
+            clone_player.apply_genetic_effects()
+
         return "A podperson clone emerges from the pod."

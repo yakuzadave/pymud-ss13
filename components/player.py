@@ -74,6 +74,7 @@ class PlayerComponent:
         self.diseases = diseases or []
         self.skills: Dict[str, int] = skills or {}
         self.alive = True
+        self.active_mutations: List[str] = []
 
     def add_to_inventory(self, item_id: str) -> bool:
         """
@@ -454,6 +455,27 @@ class PlayerComponent:
 
     def has_ability(self, ability: str) -> bool:
         return ability in self.abilities
+
+    # ------------------------------------------------------------------
+    def apply_genetic_effects(self) -> None:
+        """Apply mutation effects from the genetics system."""
+        from systems.genetics import get_genetics_system
+
+        genetics = get_genetics_system()
+        profile = genetics.get_profile(self.owner.id)
+
+        # Hulk mutation boosts max health and grants smash ability
+        if "hulk" in profile.mutations:
+            if "hulk" not in self.active_mutations:
+                self.stats["health"] = self.stats.get("health", 100.0) + 50.0
+                if "smash" not in self.abilities:
+                    self.abilities.append("smash")
+                self.active_mutations.append("hulk")
+        elif "hulk" in self.active_mutations:
+            self.stats["health"] = min(self.stats.get("health", 100.0), 100.0)
+            if "smash" in self.abilities:
+                self.abilities.remove("smash")
+            self.active_mutations.remove("hulk")
 
     def to_dict(self) -> Dict[str, Any]:
         """
