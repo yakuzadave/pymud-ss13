@@ -47,7 +47,11 @@ cd mudpy && pip install . && cd ..
 
 # Install additional required packages
 echo "📦 Installing additional packages..."
-pip install websockets aiohttp
+if [ -f requirements.txt ]; then
+    pip install -r requirements.txt
+else
+    pip install websockets aiohttp pyyaml psutil rapidfuzz
+fi
 
 # Create necessary directories if they don't exist
 mkdir -p web_client

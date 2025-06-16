@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearTerminalButton = document.getElementById('clear-terminal');
     const showMapButton = document.getElementById('show-map');
     const mapContainer = document.getElementById('map-container');
+    const showInventoryButton = document.getElementById('show-inventory');
+    const inventoryPanel = document.getElementById('inventory-panel');
+    const inventoryList = document.getElementById('inventory-list');
+    const equipmentList = document.getElementById('equipment-list');
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
     const serverUrlInput = document.getElementById('server-url');
     const saveSettingsButton = document.getElementById('save-settings');
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let doorStates = {};
     let hazardStates = {};
     let powerStates = {};
+    let inventoryData = null;
     // Set dark mode to true by default
     let darkModeEnabled = localStorage.getItem('darkMode') !== 'false';
 
@@ -99,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             roomPositions[r.id] = { x: r.x, y: r.y, name: r.name };
                         });
                         renderMap();
+                    } else if (data.type === 'inventory') {
+                        inventoryData = data.inventory;
+                        renderInventory();
                     } else if (data.type === 'door_status') {
                         doorStates[data.door_id] = data.locked;
                         renderMap();
@@ -236,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (powerStates[key] === false) icons += '<i data-feather="zap-off"></i>';
                     overlay.innerHTML = icons;
                     cell.appendChild(overlay);
+                    cell.addEventListener('click', () => handleMapClick(key));
                 }
                 grid.appendChild(cell);
             }
@@ -244,10 +253,56 @@ document.addEventListener('DOMContentLoaded', function() {
         feather.replace();
     }
 
+    function handleMapClick(roomId) {
+        let msg = roomPositions[roomId].name;
+        if (hazardStates[roomId] && hazardStates[roomId].length > 0) {
+            msg += ' - Hazards: ' + hazardStates[roomId].join(', ');
+        }
+        if (doorStates[roomId]) {
+            msg += ' [Door Locked]';
+        }
+        if (powerStates[roomId] === false) {
+            msg += ' [No Power]';
+        }
+        appendToTerminal(msg, 'system-message');
+    }
+
     function requestMap() {
         if (webSocket && webSocket.readyState === WebSocket.OPEN) {
             webSocket.send(JSON.stringify({ type: 'map_request' }));
         }
+    }
+
+    function requestInventory() {
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+            webSocket.send(JSON.stringify({ type: 'inventory_request' }));
+        }
+    }
+
+    function renderInventory() {
+        if (!inventoryPanel) return;
+        inventoryList.innerHTML = '';
+        equipmentList.innerHTML = '';
+
+        if (!inventoryData) return;
+
+        if (inventoryData.items.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = 'Empty';
+            inventoryList.appendChild(li);
+        } else {
+            inventoryData.items.forEach(it => {
+                const li = document.createElement('li');
+                li.textContent = it.name;
+                inventoryList.appendChild(li);
+            });
+        }
+
+        inventoryData.equipment.forEach(eq => {
+            const li = document.createElement('li');
+            li.textContent = `[${eq.slot}] ${eq.name}`;
+            equipmentList.appendChild(li);
+        });
     }
 
     // Event Listeners
@@ -288,6 +343,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showMapButton.addEventListener('click', function() {
         requestMap();
+    });
+
+    showInventoryButton.addEventListener('click', function() {
+        if (inventoryPanel.style.display === 'none') {
+            requestInventory();
+            inventoryPanel.style.display = 'block';
+        } else {
+            inventoryPanel.style.display = 'none';
+        }
     });
 
     toggleDarkModeButton.addEventListener('click', function() {

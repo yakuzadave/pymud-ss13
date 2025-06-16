@@ -384,6 +384,26 @@ footer {
     right: 2px;
 }
 
+/* Inventory panel */
+.inventory-panel {
+    background-color: var(--history-bg);
+    border: 1px solid var(--accent-color);
+    padding: 10px;
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.inventory-panel ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+.inventory-panel li {
+    margin: 2px 0;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {

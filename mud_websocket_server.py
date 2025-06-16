@@ -305,6 +305,12 @@ async def handle_client(websocket):
                         if data.get("type") == "map_request":
                             await websocket.send_str(json.dumps(build_map_payload()))
                             continue
+                        if data.get("type") == "inventory_request":
+                            inv = mudpy_interface.get_inventory_data(client_id)
+                            await websocket.send_str(
+                                json.dumps({"type": "inventory", "inventory": inv})
+                            )
+                            continue
                         command = data.get("command", "")
                     except json.JSONDecodeError:
                         # If not valid JSON, treat the entire message as a command

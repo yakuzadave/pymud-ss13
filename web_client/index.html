@@ -38,6 +38,13 @@
                 <h3>Command History</h3>
                 <ul id="history-list" class="history-list"></ul>
             </div>
+
+            <div id="inventory-panel" class="inventory-panel" style="display:none">
+                <h3>Inventory</h3>
+                <ul id="inventory-list"></ul>
+                <h3>Equipped</h3>
+                <ul id="equipment-list"></ul>
+            </div>
         </main>
 
         <div class="help-panel" id="help-panel">
@@ -72,6 +79,9 @@
                 </button>
                 <button id="show-map" class="btn btn-outline-primary">
                     <i data-feather="map"></i> Map
+                </button>
+                <button id="show-inventory" class="btn btn-outline-warning">
+                    <i data-feather="box"></i> Inventory
                 </button>
                 <button id="toggle-dark-mode" class="btn btn-outline-dark">
                     <i data-feather="moon"></i> Dark Mode
