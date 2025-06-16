@@ -12,11 +12,11 @@ import os
 import yaml
 from typing import Dict, List, Callable, Any, Optional, Set, Coroutine
 import websockets
-from websockets.server import WebSocketServerProtocol, serve
+from websockets.asyncio.server import serve
 from mudpy_interface import MudpyInterface
 import integration
 import engine
-from events import publish, subscribe
+from events import publish, subscribe, unsubscribe
 from systems.jobs import JOB_SYSTEM
 
 # Module logger
@@ -59,9 +59,15 @@ class MudServer:
         self.mud_integration = integration.create_integration(self.mudpy_interface)
 
         # Track active sessions: WebSocket -> client_id mapping
-        self.sessions: Dict[WebSocketServerProtocol, int] = {}
+        self.sessions: Dict[Any, int] = {}
 
         # Register for events
+        self._register_event_handlers()
+
+        logger.info(f"MUD Server initialized on {self.host}:{self.port}")
+
+    def _register_event_handlers(self) -> None:
+        """Subscribe server callbacks to global events."""
         subscribe("player_moved", self._on_player_moved)
         subscribe("item_taken", self._on_item_taken)
         subscribe("item_dropped", self._on_item_dropped)
@@ -69,9 +75,19 @@ class MudServer:
         subscribe("player_said", self._on_player_said)
         subscribe("npc_said", self._on_npc_said)
 
-        logger.info(f"MUD Server initialized on {self.host}:{self.port}")
+    def _unregister_event_handlers(self) -> None:
+        """Remove server callbacks from the event system."""
+        unsubscribe("player_moved", self._on_player_moved)
+        unsubscribe("item_taken", self._on_item_taken)
+        unsubscribe("item_dropped", self._on_item_dropped)
+        unsubscribe("item_used", self._on_item_used)
+        unsubscribe("player_said", self._on_player_said)
+        unsubscribe("npc_said", self._on_npc_said)
 
-    async def handler(self, websocket: WebSocketServerProtocol, path: str) -> None:
+    def __del__(self) -> None:
+        self._unregister_event_handlers()
+
+    async def handler(self, websocket, path: str) -> None:
         """
         Handle a client WebSocket connection.
 
@@ -137,7 +153,7 @@ class MudServer:
         finally:
             await self._logout(websocket, client_id)
 
-    async def _login(self, websocket: WebSocketServerProtocol) -> int:
+    async def _login(self, websocket) -> int:
         """
         Handle client login process.
 
@@ -223,7 +239,9 @@ class MudServer:
                 selection = "assistant"
             job = JOB_SYSTEM.assign_job(f"player_{client_id}", selection)
             if job:
-                JOB_SYSTEM.setup_player_for_job(f"player_{client_id}", f"player_{client_id}")
+                JOB_SYSTEM.setup_player_for_job(
+                    f"player_{client_id}", f"player_{client_id}"
+                )
                 await websocket.send(
                     json.dumps(
                         {
@@ -250,7 +268,7 @@ class MudServer:
 
         return client_id
 
-    async def _logout(self, websocket: WebSocketServerProtocol, client_id: int) -> None:
+    async def _logout(self, websocket, client_id: int) -> None:
         """
         Handle client logout process.
 
@@ -261,6 +279,8 @@ class MudServer:
         # Remove from sessions
         if websocket in self.sessions:
             del self.sessions[websocket]
+        if not self.sessions:
+            self._unregister_event_handlers()
 
         # Publish client disconnected event
         logger.info(f"Client disconnected: {client_id}")
@@ -488,13 +508,12 @@ class MudServer:
     ) -> None:
         """Handle NPC chat events."""
         for ws, other_client_id in self.sessions.items():
-            if (
-                self.mudpy_interface.get_player_location(other_client_id)
-                == location
-            ):
+            if self.mudpy_interface.get_player_location(other_client_id) == location:
                 try:
                     await ws.send(
-                        json.dumps({"type": "chat", "message": f"{name} says: {message}"})
+                        json.dumps(
+                            {"type": "chat", "message": f"{name} says: {message}"}
+                        )
                     )
                 except Exception as e:
                     logger.error(
