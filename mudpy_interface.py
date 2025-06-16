@@ -639,6 +639,29 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
 
         return inventory_text
 
+    def get_inventory_data(self, client_id):
+        """Return structured inventory data for UI consumption."""
+        if client_id not in self.player_inventories:
+            return {"items": [], "equipment": []}
+
+        items = []
+        for iid in self.player_inventories.get(client_id, []):
+            item = self.world["items"].get(iid, {})
+            items.append(
+                {
+                    "id": iid,
+                    "name": item.get("name", iid),
+                    "description": item.get("description", ""),
+                }
+            )
+
+        equipment = []
+        for slot, iid in self.player_equipment.get(client_id, {}).items():
+            item = self.world["items"].get(iid, {})
+            equipment.append({"slot": slot, "id": iid, "name": item.get("name", iid)})
+
+        return {"items": items, "equipment": equipment}
+
     def _take(self, client_id, item_name):
         """
         Handle the 'take' command.
