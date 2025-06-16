@@ -73,6 +73,254 @@
         issued_to: "Engineering Staff"
         serial: "ENG-291"
 
+- id: captain_id_card
+  name: Captain ID Card
+  description: >
+    Identification for the station captain.
+  location: bridge
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 100
+
+- id: security_id_card
+  name: Security ID Card
+  description: >
+    Identification for security personnel.
+  location: security
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 30
+
+- id: engineering_id_card
+  name: Engineering ID Card
+  description: >
+    Identification for station engineers.
+  location: engineering
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 40
+
+- id: medical_id_card
+  name: Medical ID Card
+  description: >
+    Identification for medical staff.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 50
+
+- id: science_id_card
+  name: Science ID Card
+  description: >
+    Identification for research staff.
+  location: research
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 60
+
+- id: cargo_id_card
+  name: Cargo ID Card
+  description: >
+    Identification for cargo technicians.
+  location: cargo
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 70
+
+- id: janitor_id_card
+  name: Janitor ID Card
+  description: >
+    Identification for janitorial staff.
+  location: janitorial
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 10
+
+- id: chef_id_card
+  name: Chef ID Card
+  description: >
+    Identification for the station chef.
+  location: kitchen
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 10
+
+- id: bartender_id_card
+  name: Bartender ID Card
+  description: >
+    Identification for the station bartender.
+  location: bar
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 10
+
+- id: assistant_id_card
+  name: Assistant ID Card
+  description: >
+    Identification for junior crew members.
+  location: arrival
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      item_type: id_card
+      item_properties:
+        access_level: 10
+
+- id: captain_uniform
+  name: Captain's Uniform
+  description: >
+    Formal attire signifying command authority.
+  location: bridge
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: security_uniform
+  name: Security Uniform
+  description: >
+    Standard garb for security officers.
+  location: security
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: engineering_uniform
+  name: Engineering Uniform
+  description: >
+    Protective clothing for station engineers.
+  location: engineering
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: medical_uniform
+  name: Medical Uniform
+  description: >
+    A crisp uniform worn by medical staff.
+  location: medbay
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: science_uniform
+  name: Science Uniform
+  description: >
+    Lab wear for researchers and scientists.
+  location: research
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: cargo_uniform
+  name: Cargo Uniform
+  description: >
+    Durable gear for cargo technicians.
+  location: cargo
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: janitor_uniform
+  name: Janitor Uniform
+  description: >
+    Smells faintly of cleaning solution.
+  location: janitorial
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: chef_uniform
+  name: Chef Uniform
+  description: >
+    Traditional kitchen whites.
+  location: kitchen
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
+- id: assistant_uniform
+  name: Assistant Uniform
+  description: >
+    Basic clothing issued to new arrivals.
+  location: arrival
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      item_type: apparel
+
 - id: biometric_scanner
   name: Biometric Scanner
   description: >
