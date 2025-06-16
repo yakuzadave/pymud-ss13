@@ -31,6 +31,9 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 - **Circuits Guide**: Basic electronic logic with shells and components is covered in `docs/circuits_guide.md`.
 - **Bartender Role & Bar**: Mix drinks and keep the bar running smoothly.
 - **Botanist Commands**: Plant seeds, fertilize and analyze crops with new botany mechanics.
+- **Medical Treatment**: Diagnose and heal crewmates using doctor commands.
+- **Security Enforcement**: Restrain suspects and manage arrests through security actions.
+- **Engineering Repairs**: Fix equipment and prototype new devices with engineering tasks.
 
 ## Requirements
 

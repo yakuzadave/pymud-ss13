@@ -32,3 +32,12 @@
 | `heal` | Provide medical treatment to a player. |
 | `repair` | Repair a damaged object or device. |
 | `analyze` | Perform a scientific analysis on an object or sample. |
+| `restrain` | Attempt to restrain a suspect using restraints. |
+| `report` | File a crime report describing an incident. |
+| `arrest` | Arrest a player and send them to the brig. |
+| `release` | Release a prisoner from the brig. |
+| `evidence` | Add an evidence note to an existing case. |
+| `view_cameras` | View the list of registered security cameras. |
+| `view_alerts` | Show pending security alerts. |
+| `access_log` | Review recent door access events. |
+| `prototype` | Construct a prototype item if technology and materials are available. |
