@@ -10,6 +10,7 @@ import logging
 import os
 import signal
 import sys
+import argparse
 from aiohttp import web
 from mud_server import create_mud_server
 from world import get_world
@@ -20,6 +21,7 @@ from systems import (
     get_random_event_system,
     get_security_system,
     get_genetics_system,
+    get_round_manager,
 )
 from system_loops import run_update_loop, run_forever_loop
 
@@ -68,6 +70,13 @@ async def main():
     # Register signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
+
+    parser = argparse.ArgumentParser(description="Run MUD server")
+    parser.add_argument("--mode", default="traitor", help="Game mode to start")
+    args = parser.parse_args()
+
+    round_manager = get_round_manager()
+    round_manager.start_round(args.mode)
 
     # Check if web_client directory exists, create it if it doesn't
     if not os.path.exists("web_client"):
@@ -130,6 +139,7 @@ async def main():
         logger.info("Server tasks cancelled")
     finally:
         get_random_event_system().stop()
+        get_round_manager().end_round()
         await runner.cleanup()
 
 

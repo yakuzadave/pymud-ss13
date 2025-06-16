@@ -36,6 +36,7 @@ from .script_engine import ScriptEngine, get_script_engine
 from .circuits import CircuitSystem, get_circuit_system
 from .npc_ai import NPCSystem, get_npc_system
 from .plumbing import PlumbingSystem, get_plumbing_system
+from .round_manager import RoundManager, get_round_manager
 
 __all__ = [
     "AtmosphericSystem",
@@ -92,4 +93,6 @@ __all__ = [
     "get_npc_system",
     "PlumbingSystem",
     "get_plumbing_system",
+    "RoundManager",
+    "get_round_manager",
 ]
