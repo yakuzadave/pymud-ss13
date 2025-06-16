@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 23:09:12  
+**Generated:** 2025-06-16 23:12:59  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** f3911bb
+**Commit:** 7f3ef4b
 **Branch:** main
 
 ---
@@ -13,57 +13,54 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **f3911bb** (21 seconds ago by Katharsis): Merge pull request #143 from yakuzadave/codex/add-autolathe-and-protolathe-system
-- **b1125fd** (75 seconds ago by Katharsis): feat(research): add lathe machines and manufacturing
-- **a79df3c** (16 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **2c12425** (17 minutes ago by Katharsis): Merge pull request #142 from yakuzadave/codex/add-camera-objects,-ai-laws,-and-commands
-- **0e5dea8** (18 minutes ago by Katharsis): feat(ai): add camera network and law system
+- **7f3ef4b** (23 seconds ago by Katharsis): Create stale.yml
+- **d9c706f** (4 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **f3911bb** (4 minutes ago by Katharsis): Merge pull request #143 from yakuzadave/codex/add-autolathe-and-protolathe-system
+- **b1125fd** (5 minutes ago by Katharsis): feat(research): add lathe machines and manufacturing
+- **a79df3c** (20 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit f3911bb - Merge pull request #143 from yakuzadave/codex/add-autolathe-and-protolathe-system
+#### Commit 7f3ef4b - Create stale.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 16:08:51
+**Date:** 2025-06-16 16:12:36
 **Message:**
-Add lathe prototypes and manufacturing via research
+Added workflow for stale issue tracking.
 ---
-#### Commit b1125fd - feat(research): add lathe machines and manufacturing
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 16:07:57
-**Message:**
-
----
-#### Commit a79df3c - 🤖 Auto-update AGENTS.md
+#### Commit d9c706f - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-16 22:52:48
+**Date:** 2025-06-16 23:09:20
 **Message:**
-- Updated from commit: 2c12425248908c4afeb911ef4c02ace6a51d20a0
+- Updated from commit: f3911bb45df8af467715ae3c25cecdddef7609c7
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
+#### Commit f3911bb - Merge pull request #143 from yakuzadave/codex/add-autolathe-and-protolathe-system
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 16:08:51
+**Message:**
+Add lathe prototypes and manufacturing via research
+---
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/stale.yml
 - AGENTS.md
-- commands/ai.py
 - commands/research.py
 - components/__init__.py
 - components/lathe.py
 - data/objects.yaml
-- systems/__init__.py
-- systems/ai.py
 - systems/research.py
-- tests/test_ai_system.py
 - tests/test_research.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 23:09:20
+**Run Date:** 2025-06-16 23:13:08
 
 ### Test Output
 ```
@@ -314,16 +311,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10128   3113    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0160  487.4490  46.5763  10.3550  44.5230  3.9070   246;304       21.4701    3875           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.2070  333.1840  45.7764  8.1747  43.8730  3.8002   259;291       21.8453    4129           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 136 passed in 7.52s ==============================
+============================= 136 passed in 7.85s ==============================
 ```
 
 ### Coverage Summary
@@ -334,11 +331,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10128   3113    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0160  487.4490  46.5763  10.3550  44.5230  3.9070   246;304       21.4701    3875           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.2070  333.1840  45.7764  8.1747  43.8730  3.8002   259;291       21.8453    4129           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -397,4 +394,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 23:09:20 (GitHub Actions Run #15693950078)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 23:13:08 (GitHub Actions Run #15694001631)*
