@@ -1018,6 +1018,18 @@ Biometric scan complete:
 
         return status_text
 
+    def get_player_stats(self, client_id):
+        """Return the player's stats if known.
+
+        Args:
+            client_id: ID of the player.
+
+        Returns:
+            dict | None: Stats dictionary or ``None`` if the player
+            has not been initialized.
+        """
+        return self.player_stats.get(client_id)
+
     def get_room_name(self, room_id):
         """
         Get the name of a room.
