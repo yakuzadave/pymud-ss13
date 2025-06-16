@@ -2,6 +2,8 @@ import world
 from world import GameObject, World
 from components.player import PlayerComponent
 from components.item import ItemComponent
+from components.medical import MedicalScannerComponent
+from commands.doctor import scan_handler
 from systems.disease import DiseaseSystem
 
 
@@ -100,3 +102,32 @@ def test_protection_prevents_spread(tmp_path, monkeypatch):
     disease_system.infect("p1", "flu")
     disease_system.tick()
     assert "flu" not in c2.diseases
+
+
+def test_scan_command_records_damage(tmp_path):
+    w = World(data_dir=str(tmp_path))
+    world.WORLD = w
+
+    doctor = GameObject(id="player_doc", name="Doc", description="")
+    doctor.add_component("player", PlayerComponent(role="doctor"))
+    w.register(doctor)
+
+    patient = GameObject(id="player_pat", name="Pat", description="")
+    patient.add_component("player", PlayerComponent())
+    w.register(patient)
+
+    scanner = GameObject(id="scanner", name="Scanner", description="")
+    scanner.add_component(
+        "item", ItemComponent(is_takeable=True, item_type="diagnostic")
+    )
+    scanner.add_component("medical_scanner", MedicalScannerComponent())
+    w.register(scanner)
+    doctor.get_component("player").add_to_inventory("scanner")
+
+    pcomp = patient.get_component("player")
+    pcomp.apply_damage("left_arm", "brute", 12)
+
+    result = scan_handler("doc", player="pat")
+    assert "left_arm brute: 12" in result
+    scan_comp = scanner.get_component("medical_scanner")
+    assert "player_pat" in scan_comp.records

@@ -84,17 +84,26 @@ def load_items(path: str, world) -> int:
             )
             if "components" in item_data:
                 comps = item_data["components"]
-                if "item" in comps:
-                    ic = comps["item"]
-                    item_comp = ItemComponent(
-                        weight=ic.get("weight", 1.0),
-                        is_takeable=ic.get("is_takeable", True),
-                        is_usable=ic.get("is_usable", False),
-                        use_effect=ic.get("use_effect"),
-                        item_type=ic.get("item_type", "miscellaneous"),
-                        item_properties=ic.get("item_properties", {}),
-                    )
-                    item_obj.add_component("item", item_comp)
+                from components import COMPONENT_REGISTRY
+                for comp_name, comp_data in comps.items():
+                    comp_class = COMPONENT_REGISTRY.get(comp_name)
+                    if comp_class and isinstance(comp_data, dict):
+                        params = inspect.signature(comp_class.__init__).parameters
+                        kwargs = {
+                            k: v
+                            for k, v in comp_data.items()
+                            if k in params and k != "self"
+                        }
+                        try:
+                            comp_instance = comp_class(**kwargs)
+                        except Exception as e:
+                            logger.warning(
+                                f"Failed to instantiate component {comp_name} for {item_obj.id}: {e}"
+                            )
+                            continue
+                        item_obj.add_component(comp_name, comp_instance)
+                    else:
+                        item_obj.components[comp_name] = comp_data
             world.register(item_obj)
             count += 1
         except Exception as e:
