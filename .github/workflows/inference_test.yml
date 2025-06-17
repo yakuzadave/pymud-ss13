@@ -43,5 +43,5 @@ jobs:
         run: |
           echo "Prompt-file response:"
           cat <<EOF
-${{ steps.inference_file.outputs.response }}
-EOF
+          ${{ steps.inference_file.outputs.response }}
+          EOF
