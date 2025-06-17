@@ -69,6 +69,15 @@ def test_market_event_subscription_boom():
     assert system.market_demand["steel"] == 2.0
 
 
+def test_market_event_shortage_sets_stock():
+    system = setup_system()
+    ven = system.vendors["central"]
+    ven.stock["steel"] = 5
+    system.apply_market_event(item="steel", shortage=2)
+    assert system.supply_shortages["steel"] == 2
+    assert ven.stock["steel"] == 0
+
+
 def test_order_delivery_updates_inventory():
     system = setup_system()
     order = system.order_supply("engineering", "steel", 1, "central")
@@ -76,3 +85,19 @@ def test_order_delivery_updates_inventory():
     order.eta = time.time() - 1
     system.process_orders()
     assert system.get_inventory("engineering").get("steel") == 1
+
+
+def test_trade_command_transfers_goods(monkeypatch):
+    from commands import cargo as cmd_cargo
+
+    system = setup_system()
+    system.get_inventory("mining")["ore"] = 5
+    system.set_credits("mining", 0)
+    system.set_credits("engineering", 20)
+    monkeypatch.setattr(cmd_cargo, "get_cargo_system", lambda: system)
+    out = cmd_cargo.trade_handler(None, "1", "mining engineering ore 2 3")
+    assert "Transferred" in out
+    assert system.get_inventory("mining").get("ore") == 3
+    assert system.get_inventory("engineering").get("ore") == 2
+    assert system.get_credits("mining") == 6
+    assert system.get_credits("engineering") == 14

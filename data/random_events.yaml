@@ -87,3 +87,20 @@
     item: steel
     demand_delta: -0.8
   description: Prices tumble for steel after a glutted supply.
+
+# New economic events
+- id: demand_spike
+  name: Demand Spike
+  weight: 1
+  params:
+    item: electronics
+    demand_delta: 1.2
+  description: Demand for electronics skyrockets for a new station upgrade.
+
+- id: trade_embargo
+  name: Trade Embargo
+  weight: 1
+  params:
+    item: steel
+    shortage: 3
+  description: Diplomatic tensions halt incoming steel shipments, causing a shortage.
