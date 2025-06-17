@@ -42,4 +42,6 @@ jobs:
       - name: Print AI Output from prompt file
         run: |
           echo "Prompt-file response:"
-          echo "${{ steps.inference_file.outputs.response }}"
+          cat <<EOF
+          ${{ steps.inference_file.outputs.response }}
+          EOF
