@@ -16,7 +16,14 @@ class Job:
     Represents a crew job/role in the station.
     """
 
-    def __init__(self, job_id: str, title: str, description: str, department: str = "general"):
+    def __init__(
+        self,
+        job_id: str,
+        title: str,
+        description: str,
+        department: str = "general",
+        rank: int = 1,
+    ) -> None:
         """
         Initialize a job.
 
@@ -29,6 +36,7 @@ class Job:
         self.title = title
         self.description = description
         self.department = department
+        self.rank = rank
         self.access_levels: List[int] = []
         self.starting_items: List[Dict[str, Any]] = []
         self.spawn_location: Optional[str] = None
@@ -88,6 +96,7 @@ class Job:
             "title": self.title,
             "description": self.description,
             "department": self.department,
+            "rank": self.rank,
             "access_levels": self.access_levels,
             "starting_items": self.starting_items,
             "spawn_location": self.spawn_location,
@@ -106,6 +115,7 @@ class JobSystem:
         """
         self.jobs: Dict[str, Job] = {}
         self.assigned_jobs: Dict[str, str] = {}  # player_id -> job_id
+        self.commanding_officers: Dict[str, str] = {}
 
         # Register event handlers
         subscribe("player_join", self.on_player_join)
@@ -121,6 +131,9 @@ class JobSystem:
             job (Job): The job to register.
         """
         self.jobs[job.job_id] = job
+        current = self.commanding_officers.get(job.department)
+        if not current or self.jobs[current].rank < job.rank:
+            self.commanding_officers[job.department] = job.job_id
         logger.debug(f"Registered job {job.job_id} ({job.title})")
 
     def assign_job(self, player_id: str, job_id: str) -> Optional[Job]:
@@ -272,6 +285,12 @@ class JobSystem:
 
         return any(level >= required_level for level in job.access_levels)
 
+    def get_commanding_officer(self, department: str) -> Optional[Job]:
+        job_id = self.commanding_officers.get(department)
+        if job_id:
+            return self.jobs.get(job_id)
+        return None
+
     def reset_assignments(self) -> None:
         """
         Reset all job assignments.
@@ -318,7 +337,11 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     # Captain
     captain = Job(
-        "captain", "Captain", "You are in command of the station and its crew.", "command"
+        "captain",
+        "Captain",
+        "You are in command of the station and its crew.",
+        "command",
+        rank=90,
     )
     captain.add_access_level(100)  # All access
     captain.add_starting_item("captain_id_card", {"access_level": 100})
@@ -342,7 +365,11 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     # Security Officer
     security = Job(
-        "security", "Security Officer", "Maintain order and protect the crew.", "security"
+        "security",
+        "Security Officer",
+        "Maintain order and protect the crew.",
+        "security",
+        rank=50,
     )
     security.add_access_level(30)  # Security access
     security.add_starting_item("security_id_card", {"access_level": 30})
@@ -358,6 +385,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Station Engineer",
         "Keep the station's power and life support systems running.",
         "engineering",
+        rank=50,
     )
     engineer.add_access_level(40)  # Engineering access
     engineer.add_starting_item("engineering_id_card", {"access_level": 40})
@@ -368,7 +396,13 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[engineer.job_id] = engineer
 
     # Medical Doctor
-    doctor = Job("doctor", "Medical Doctor", "Treat injuries and save lives.", "medical")
+    doctor = Job(
+        "doctor",
+        "Medical Doctor",
+        "Treat injuries and save lives.",
+        "medical",
+        rank=50,
+    )
     doctor.add_access_level(50)  # Medical access
     doctor.add_starting_item("medical_id_card", {"access_level": 50})
     doctor.add_starting_item("medical_headset", {"channels": ["medical"]})
@@ -379,7 +413,11 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     # Scientist
     scientist = Job(
-        "scientist", "Scientist", "Research new technologies and study anomalies.", "science"
+        "scientist",
+        "Scientist",
+        "Research new technologies and study anomalies.",
+        "science",
+        rank=50,
     )
     scientist.add_access_level(60)  # Science access
     scientist.add_starting_item("science_id_card", {"access_level": 60})
@@ -395,6 +433,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Chemist",
         "Create new compounds and manage reagents for the station.",
         "science",
+        rank=40,
     )
     chemist.add_access_level(60)  # Science access
     chemist.add_starting_item("science_id_card", {"access_level": 60})
@@ -406,7 +445,11 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     # Cargo Technician
     cargo = Job(
-        "cargo", "Cargo Technician", "Order and deliver supplies to the station.", "supply"
+        "cargo",
+        "Cargo Technician",
+        "Order and deliver supplies to the station.",
+        "supply",
+        rank=40,
     )
     cargo.add_access_level(70)  # Cargo access
     cargo.add_starting_item("cargo_id_card", {"access_level": 70})
@@ -416,7 +459,13 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[cargo.job_id] = cargo
 
     # Janitor
-    janitor = Job("janitor", "Janitor", "Keep the station clean and tidy.", "service")
+    janitor = Job(
+        "janitor",
+        "Janitor",
+        "Keep the station clean and tidy.",
+        "service",
+        rank=20,
+    )
     janitor.add_access_level(10)  # Basic access
     janitor.add_starting_item("janitor_id_card", {"access_level": 10})
     janitor.add_starting_item("janitor_headset", {"channels": ["service"]})
@@ -427,7 +476,13 @@ def create_standard_jobs() -> Dict[str, Job]:
     jobs[janitor.job_id] = janitor
 
     # Chef
-    chef = Job("chef", "Chef", "Prepare meals for the crew.", "service")
+    chef = Job(
+        "chef",
+        "Chef",
+        "Prepare meals for the crew.",
+        "service",
+        rank=20,
+    )
     chef.add_access_level(10)  # Basic access
     chef.add_starting_item("chef_id_card", {"access_level": 10})
     chef.add_starting_item("chef_headset", {"channels": ["service"]})
@@ -442,6 +497,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Bartender",
         "Serve drinks and keep the bar orderly.",
         "service",
+        rank=20,
     )
     bartender.add_access_level(10)
     bartender.add_starting_item("bartender_id_card", {"access_level": 10})
@@ -452,7 +508,11 @@ def create_standard_jobs() -> Dict[str, Job]:
 
     # Assistant
     assistant = Job(
-        "assistant", "Assistant", "Learn the ropes and help out where needed.", "service"
+        "assistant",
+        "Assistant",
+        "Learn the ropes and help out where needed.",
+        "service",
+        rank=10,
     )
     assistant.add_access_level(10)  # Basic access
     assistant.add_starting_item("assistant_id_card", {"access_level": 10})
@@ -467,6 +527,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Traitor",
         "Undermine the station and complete covert objectives.",
         "antagonist",
+        rank=30,
     )
     traitor.add_access_level(20)
     traitor.add_starting_item("traitor_kit")
@@ -480,6 +541,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Station AI",
         "Oversee station operations and assist the crew.",
         "command",
+        rank=85,
     )
     ai.add_access_level(100)
     ai.set_spawn_location("core")
@@ -492,6 +554,7 @@ def create_standard_jobs() -> Dict[str, Job]:
         "Cyborg",
         "Robotic assistant with specialized modules.",
         "engineering",
+        rank=40,
     )
     cyborg.add_access_level(60)
     cyborg.set_spawn_location("robotics")

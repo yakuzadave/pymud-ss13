@@ -32,6 +32,15 @@ budget set engineering 500
 budget add science 100
 ```
 
+Only characters with a high **rank** (or administrators) may modify budgets.
+Each `Job` has a `rank` attribute and the `JobSystem` keeps track of the
+commanding officer for each department. Rank also gates the new `finance`
+command which reports departmental spending and then resets the counters.
+
+```text
+finance
+```
+
 ## Ordering with Credits
 
 Supplies are ordered through the API and will only succeed if the requesting

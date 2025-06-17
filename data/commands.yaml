@@ -391,3 +391,19 @@
     - "prototype {item} {materials}"
   help: |
     Construct a prototype item if technology and materials are available.
+
+# Finance and budget management
+- name: budget
+  category: Administration
+  patterns:
+    - "budget"
+    - "budget {args}"
+  help: |
+    Adjust or list department budgets.
+
+- name: finance
+  category: Administration
+  patterns:
+    - "finance"
+  help: |
+    Display a summary of department credits and recent spending.

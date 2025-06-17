@@ -60,6 +60,7 @@ class CargoSystem:
         self.inventory: Dict[str, Dict[str, int]] = {}
         self.market_demand: Dict[str, float] = {}
         self.department_credits: Dict[str, int] = {}
+        self.department_spending: Dict[str, int] = {}
         # Track temporary supply shortages per item (remaining ticks)
         self.supply_shortages: Dict[str, int] = {}
 
@@ -115,6 +116,9 @@ class CargoSystem:
             )
             return None
         self.department_credits[department] = self.get_credits(department) - cost
+        self.department_spending[department] = (
+            self.department_spending.get(department, 0) + cost
+        )
         eta = time.time() + (5 if emergency else 20)  # seconds until arrival
         order = SupplyOrder(item, quantity, cost, eta, vendor, department, emergency)
         self.orders.append(order)
@@ -210,6 +214,9 @@ class CargoSystem:
         dest[item] = dest.get(item, 0) + quantity
         self.add_credits(from_department, total_cost)
         self.add_credits(to_department, -total_cost)
+        self.department_spending[to_department] = (
+            self.department_spending.get(to_department, 0) + total_cost
+        )
         logger.info(
             "%s transferred %s x%d to %s for %d credits",
             from_department,
@@ -219,6 +226,13 @@ class CargoSystem:
             total_cost,
         )
         return True
+
+    # ------------------------------------------------------------------
+    def get_spending(self, department: str) -> int:
+        return self.department_spending.get(department, 0)
+
+    def clear_spending(self) -> None:
+        self.department_spending.clear()
 
 
 CARGO_SYSTEM = CargoSystem()
