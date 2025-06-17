@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 02:37:50  
+**Generated:** 2025-06-17 02:41:17  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 0296cd5
+**Commit:** 74c2b93
 **Branch:** main
 
 ---
@@ -13,35 +13,35 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **0296cd5** (21 seconds ago by Katharsis): Merge pull request #150 from yakuzadave/codex/extend-robotics.py-for-cyborg-control-and-maintenance
-- **4565606** (4 minutes ago by Katharsis): chore: sync AGENTS and workflow with origin
-- **847f976** (11 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **104ca39** (11 minutes ago by Katharsis): Update weekly_doc_maker.yml
-- **ec37834** (17 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **74c2b93** (23 seconds ago by Katharsis): added extra requirements to requirements.txt
+- **c35be1a** (3 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **0296cd5** (4 minutes ago by Katharsis): Merge pull request #150 from yakuzadave/codex/extend-robotics.py-for-cyborg-control-and-maintenance
+- **4565606** (7 minutes ago by Katharsis): chore: sync AGENTS and workflow with origin
+- **847f976** (14 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 0296cd5 - Merge pull request #150 from yakuzadave/codex/extend-robotics.py-for-cyborg-control-and-maintenance
+#### Commit 74c2b93 - added extra requirements to requirements.txt
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:37:29
+**Date:** 2025-06-16 19:40:54
 **Message:**
 
 ---
-#### Commit 4565606 - chore: sync AGENTS and workflow with origin
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:34:19
-**Message:**
-
----
-#### Commit 847f976 - 🤖 Auto-update AGENTS.md
+#### Commit c35be1a - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 02:26:52
+**Date:** 2025-06-17 02:38:01
 **Message:**
-- Updated from commit: 104ca3912db9503000afab6ffd936e08f6fc3c0b
+- Updated from commit: 0296cd55036c6aec28af772887052e53828b6b1d
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
+
+---
+#### Commit 0296cd5 - Merge pull request #150 from yakuzadave/codex/extend-robotics.py-for-cyborg-control-and-maintenance
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 19:37:29
+**Message:**
 
 ---
 
@@ -50,6 +50,7 @@ The following commits show recent development activity. Review these to understa
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 - docs/robotics_system.md
+- requirements.txt
 - systems/robotics.py
 - tests/test_robotics.py
 
@@ -57,7 +58,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 02:38:01
+**Run Date:** 2025-06-17 02:41:26
 
 ### Test Output
 ```
@@ -313,16 +314,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10400   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4150  390.3930  45.8615  9.7308  43.9320  3.8437   227;286       21.8048    3779           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     39.7040  546.9760  44.1473  10.5002  42.3100  3.5970   249;368       22.6515    5673           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 144 passed in 8.63s ==============================
+============================= 144 passed in 7.90s ==============================
 ```
 
 ### Coverage Summary
@@ -333,11 +334,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10400   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4150  390.3930  45.8615  9.7308  43.9320  3.8437   227;286       21.8048    3779           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     39.7040  546.9760  44.1473  10.5002  42.3100  3.5970   249;368       22.6515    5673           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -396,4 +397,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:38:01 (GitHub Actions Run #15696732688)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:41:26 (GitHub Actions Run #15696778318)*
