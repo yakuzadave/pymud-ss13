@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 06:07:36  
+**Generated:** 2025-06-17 06:47:35  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 456248f
+**Commit:** fb62aed
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **456248f** (19 seconds ago by Katharsis): Merge pull request #163 from yakuzadave/codex/create-account-system-and-integrate-with-menu
-- **86fe438** (34 seconds ago by Katharsis): Add YAML-backed account system with login
-- **d3e3044** (60 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **b62c764** (88 seconds ago by Katharsis): Merge pull request #162 from yakuzadave/codex/add-private-message-encryption-and-jamming-options
-- **c6e9737** (2 minutes ago by Katharsis): feat(comms): add encryption and jamming options
+- **fb62aed** (24 seconds ago by Katharsis): Merge pull request #164 from yakuzadave/codex/improve-player-creation-and-login-workflow
+- **24ce02c** (5 minutes ago by Katharsis): feat(login): add shuttle arrival instructions
+- **8b8c29f** (40 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **456248f** (40 minutes ago by Katharsis): Merge pull request #163 from yakuzadave/codex/create-account-system-and-integrate-with-menu
+- **86fe438** (41 minutes ago by Katharsis): Add YAML-backed account system with login
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 456248f - Merge pull request #163 from yakuzadave/codex/create-account-system-and-integrate-with-menu
+#### Commit fb62aed - Merge pull request #164 from yakuzadave/codex/improve-player-creation-and-login-workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 23:07:17
+**Date:** 2025-06-16 23:47:11
 **Message:**
 
 ---
-#### Commit 86fe438 - Add YAML-backed account system with login
+#### Commit 24ce02c - feat(login): add shuttle arrival instructions
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 23:07:02
+**Date:** 2025-06-16 23:42:13
 **Message:**
 
 ---
-#### Commit d3e3044 - 🤖 Auto-update AGENTS.md
+#### Commit 8b8c29f - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 06:06:36
+**Date:** 2025-06-17 06:07:46
 **Message:**
-- Updated from commit: b62c764ef238841a3f0d499a9673bafc2ea6b4d1
+- Updated from commit: 456248f7bd0a8a31003b078e62fe6b503df36bfa
 - Triggered by: push
 - Branch: main
 
@@ -50,25 +50,21 @@ The following commits show recent development activity. Review these to understa
 - AGENTS.md
 - README.md
 - account_system.py
-- commands/comms.py
-- docs/subsystems.md
 - mud_server.py
 - mudpy_interface.py
-- systems/communications.py
 - tests/test_accounts.py
-- tests/test_communications.py
 - tests/test_manifest_and_login.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 06:07:46
+**Run Date:** 2025-06-17 06:47:44
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.13.5, pytest-8.4.0, pluggy-1.6.0
+platform linux -- Python 3.13.4, pytest-8.4.0, pluggy-1.6.0
 benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
@@ -140,7 +136,7 @@ tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .                                               [100%]
 
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+_______________ coverage: platform linux, python 3.13.4-final-0 ________________
 
 Name                                     Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------------
@@ -202,9 +198,9 @@ events.py                                   53     20    62%   89-90, 108-135, 1
 integration.py                             127     24    81%   64, 67, 72, 76, 80, 84, 105-106, 210-211, 217, 230-231, 242-247, 258-264, 293
 mod_manager.py                              80     10    88%   47-48, 73-74, 93, 100-101, 106, 117-118
 mods/example_mod/scripts/example.py          1      0   100%
-mud_server.py                              221    107    52%   53-54, 99-155, 189, 192-193, 200, 203-204, 210-211, 237, 266, 269-270, 272, 286-288, 342-345, 363-391, 404-427, 440-463, 477-500, 516-535, 543-552, 560-564, 581, 586-590
+mud_server.py                              223    107    52%   53-54, 99-155, 189, 192-193, 200, 203-204, 210-211, 250, 282, 285-286, 288, 310-312, 366-369, 387-415, 428-451, 464-487, 501-524, 540-559, 567-576, 584-588, 605, 610-614
 mud_websocket_server.py                    183    183     0%   8-406
-mudpy_interface.py                         395    257    35%   249-252, 352-401, 420-424, 433, 436-437, 455, 473-570, 583-587, 599-607, 619-645, 649-668, 682, 688, 692, 707, 711, 721, 734-779, 792-862, 876-910, 923-972, 990-1024, 1055, 1067-1069, 1076, 1098-1102
+mudpy_interface.py                         395    256    35%   249-252, 352-401, 420-424, 433, 436-437, 455, 473-570, 583-587, 599-607, 619-645, 649-668, 682, 688, 692, 707, 711, 721, 734-779, 792-862, 876-910, 923-972, 990-1024, 1067-1069, 1076, 1098-1102
 parser.py                                  114     31    73%   53-54, 85-86, 104-107, 139-175, 205, 226-227, 243, 252
 pathfinding.py                              29      4    86%   18, 30, 33, 46
 performance.py                              43      8    81%   40, 57-64
@@ -226,7 +222,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           151     23    85%   40, 51, 96, 99, 112, 119-120, 170-175, 179-184, 218-219, 222-223
+systems/cargo.py                           151     17    89%   40, 51, 96, 99, 112, 119-120, 170-175, 218-219, 222-223
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -320,18 +316,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10813   3216    70%
+TOTAL                                    10815   3209    70%
 
------------------------------------------------------- benchmark: 1 tests -----------------------------------------------------
-Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
--------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3170  1,109.9130  45.9164  16.2812  44.0530  3.6460    57;402       21.7787    6410           1
--------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.8460  320.6570  45.8676  7.4827  44.0725  3.7570   266;288       21.8019    3902           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 157 passed in 8.22s ==============================
+============================= 157 passed in 8.09s ==============================
 ```
 
 ### Coverage Summary
@@ -340,13 +336,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10813   3216    70%
+TOTAL                                    10815   3209    70%
 
------------------------------------------------------- benchmark: 1 tests -----------------------------------------------------
-Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
--------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3170  1,109.9130  45.9164  16.2812  44.0530  3.6460    57;402       21.7787    6410           1
--------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.8460  320.6570  45.8676  7.4827  44.0725  3.7570   266;288       21.8019    3902           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -355,7 +351,7 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.13.5
+Python Version: Python 3.13.4
 Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
@@ -405,4 +401,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 06:07:46 (GitHub Actions Run #15699512764)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 06:47:44 (GitHub Actions Run #15700180111)*
