@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 03:35:44  
+**Generated:** 2025-06-17 03:40:21  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 8ef5edd
+**Commit:** 909b372
 **Branch:** main
 
 ---
@@ -13,34 +13,34 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **8ef5edd** (22 seconds ago by Katharsis): Update inference_test.yml
-- **1cbff87** (4 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **ebab7fe** (4 minutes ago by Katharsis): Create inference_test.yml
-- **36d5b7b** (17 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **6e4cf7d** (17 minutes ago by Katharsis): Merge pull request #153 from yakuzadave/codex/implement-player-driven-supply-transfers
+- **909b372** (19 seconds ago by Katharsis): Update inference_test.yml
+- **355a92a** (4 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **8ef5edd** (5 minutes ago by Katharsis): Update inference_test.yml
+- **1cbff87** (9 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **ebab7fe** (9 minutes ago by Katharsis): Create inference_test.yml
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 8ef5edd - Update inference_test.yml
+#### Commit 909b372 - Update inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:35:22
+**Date:** 2025-06-16 20:40:02
 **Message:**
 
 ---
-#### Commit 1cbff87 - 🤖 Auto-update AGENTS.md
+#### Commit 355a92a - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 03:31:47
+**Date:** 2025-06-17 03:35:54
 **Message:**
-- Updated from commit: ebab7fe9c63cd371f52e100afabb721d6ccc6913
+- Updated from commit: 8ef5edd5c1b71da1e4f4f24824e9bfee28f3d3ff
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit ebab7fe - Create inference_test.yml
+#### Commit 8ef5edd - Update inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:31:15
+**Date:** 2025-06-16 20:35:22
 **Message:**
 
 ---
@@ -54,7 +54,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 03:35:54
+**Run Date:** 2025-06-17 03:40:30
 
 ### Test Output
 ```
@@ -215,7 +215,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           144     15    90%   40, 51, 101, 108-109, 159-164, 207-208, 211-212
+systems/cargo.py                           144     21    85%   40, 51, 101, 108-109, 159-164, 168-173, 207-208, 211-212
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -308,18 +308,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10492   3144    70%
+TOTAL                                    10492   3150    70%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8060  309.4090  45.4809  7.3781  43.7820  3.6270   249;275       21.9873    4203           1
+test_command_performance     40.6670  345.4550  45.4560  7.8740  43.7620  3.7570   231;264       21.9993    3811           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 148 passed in 8.20s ==============================
+============================= 148 passed in 7.87s ==============================
 ```
 
 ### Coverage Summary
@@ -328,12 +328,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10492   3144    70%
+TOTAL                                    10492   3150    70%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8060  309.4090  45.4809  7.3781  43.7820  3.6270   249;275       21.9873    4203           1
+test_command_performance     40.6670  345.4550  45.4560  7.8740  43.7620  3.7570   231;264       21.9993    3811           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -393,4 +393,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:35:54 (GitHub Actions Run #15697469099)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:40:30 (GitHub Actions Run #15697525970)*
