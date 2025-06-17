@@ -73,6 +73,15 @@ hashed password. Administrators are determined by the
 `accounts.yaml` manually while the server is offline to promote or
 demote users.
 
+## Player Arrival
+
+When you first connect the server greets you aboard a small shuttle bound for
+Space Station Alpha. After providing your account credentials the shuttle crew
+asks which job you would like to perform. Type the job name from the list to
+select your role. Once chosen the job system equips your character and moves you
+to the appropriate department. Other players will see a message that a new crew
+member has arrived.
+
 ### Grid Map and Overlays
 
 Click the **Map** button in the web client to request the current station layout
