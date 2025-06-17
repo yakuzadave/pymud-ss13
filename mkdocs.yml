@@ -20,3 +20,4 @@ nav:
       - Cargo System: cargo_system.md
       - Circuits Guide: circuits_guide.md
       - Command Reference: commands_reference.md
+      - GitHub Models API: github_models_api.md

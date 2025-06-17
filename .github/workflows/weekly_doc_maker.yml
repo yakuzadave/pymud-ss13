@@ -165,7 +165,7 @@ jobs:
         uses: actions/ai-inference@v1
         id: docs
         with:
-          model: "claude-3-7-sonnet"
+          model: "openai/gpt-4"
           system-prompt: ${{ steps.prompts.outputs.system_prompt }}
           prompt: ${{ steps.prompts.outputs.project_context }}
           max-tokens: 4000
