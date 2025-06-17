@@ -48,13 +48,15 @@ jobs:
       - name: Check if AGENTS.md changed
         id: check_changes
         run: |
-          if git diff --quiet AGENTS.md; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No changes to AGENTS.md"
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "AGENTS.md has been updated"
-          fi
+          python - <<'PY'
+          import os
+          import subprocess
+
+          changed = subprocess.run(["git", "diff", "--quiet", "AGENTS.md"]).returncode != 0
+          with open(os.environ["GITHUB_OUTPUT"], "a") as gh:
+              gh.write(f"changed={'true' if changed else 'false'}\n")
+          print("AGENTS.md has been updated" if changed else "No changes to AGENTS.md")
+          PY
 
       - name: Commit, rebase, and push changes (favor workflow)
         if: steps.check_changes.outputs.changed == 'true'
