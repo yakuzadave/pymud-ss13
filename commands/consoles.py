@@ -22,6 +22,12 @@ def engconsole_handler(client_id: str, action: str = "power", target: str = None
             state = "ON" if grid.is_powered else "OFF"
             lines.append(f"{grid.grid_id}: {grid.current_load:.0f}/{grid.capacity:.0f}% {state}")
         return "Power Grids:\n" + "\n".join(lines)
+    if action == "usage":
+        grid_id = target or next(iter(ps.grids)) if ps.grids else None
+        if not grid_id:
+            return "No power grids defined."
+        graph = ps.get_usage_graph(grid_id)
+        return f"Usage for {grid_id}:\n{graph}"
     if action in {"atmos", "atmosphere"}:
         room = target
         if not room and interface:
@@ -65,11 +71,27 @@ def cargoconsole_handler(client_id: str, action: str = "budgets", *args: str, **
         if order:
             return f"Order placed for {item} x{qty} via {vendor}."
         return "Order failed."
+    if action == "route":
+        if not args:
+            if not cargo.shuttle_routes:
+                return "No routes defined."
+            lines = [f"{rid}: {' -> '.join(stops)}" for rid, stops in cargo.shuttle_routes.items()]
+            return "Shuttle Routes:\n" + "\n".join(lines)
+        sub = args[0].lower()
+        if sub == "set" and len(args) >= 3:
+            route_id = args[1]
+            stops = list(args[2:])
+            cargo.set_route(route_id, stops)
+            return f"Route {route_id} set."
+        if sub == "clear" and len(args) == 2:
+            cargo.clear_route(args[1])
+            return f"Route {args[1]} cleared."
+        return "Usage: cargoconsole route [set <id> <stops...>|clear <id>]"
     return "Unknown action."
 
 
 @register("secconsole")
-def secconsole_handler(client_id: str, action: str = "alerts", **_):
+def secconsole_handler(client_id: str, action: str = "alerts", target: str = None, **_):
     """Interface with a security terminal."""
     sec = get_security_system()
     action = (action or "alerts").lower()
@@ -84,4 +106,9 @@ def secconsole_handler(client_id: str, action: str = "alerts", **_):
             return "No crime records."
         lines = [f"{c.crime_id}: {c.severity} - {c.description}" for c in sec.crimes.values()]
         return "Crime Records:\n" + "\n".join(lines)
+    if action == "pardon":
+        if not target:
+            return "Usage: secconsole pardon <player>"
+        released = sec.release(target)
+        return "Prisoner released." if released else "No such prisoner."
     return "Unknown action."

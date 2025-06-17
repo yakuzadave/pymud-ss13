@@ -63,6 +63,7 @@ class CargoSystem:
         self.department_spending: Dict[str, int] = {}
         # Track temporary supply shortages per item (remaining ticks)
         self.supply_shortages: Dict[str, int] = {}
+        self.shuttle_routes: Dict[str, List[str]] = {}
 
         # Listen for economy-related events
         subscribe("market_event", self.apply_market_event)
@@ -86,6 +87,16 @@ class CargoSystem:
 
     def get_credits(self, department: str) -> int:
         return self.department_credits.get(department, 0)
+
+    # ------------------------------------------------------------------
+    def set_route(self, route_id: str, stops: List[str]) -> None:
+        self.shuttle_routes[route_id] = stops
+
+    def clear_route(self, route_id: str) -> None:
+        self.shuttle_routes.pop(route_id, None)
+
+    def get_route(self, route_id: str) -> Optional[List[str]]:
+        return self.shuttle_routes.get(route_id)
 
     # ------------------------------------------------------------------
     def order_supply(

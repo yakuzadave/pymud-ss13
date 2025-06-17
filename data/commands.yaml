@@ -417,6 +417,7 @@
     - "engconsole {action} {target}"
   help: |
     Access an engineering console to monitor or adjust power grids or atmosphere.
+    Use `engconsole usage <grid>` to view recent power levels.
 
 - name: cargoconsole
   category: Cargo
@@ -425,12 +426,13 @@
     - "cargoconsole {action}"
     - "cargoconsole {action} {args}"
   help: |
-    Use a cargo computer to check budgets or place orders.
+    Use a cargo computer to check budgets, place orders or manage shuttle routes.
 
 - name: secconsole
   category: Security
   patterns:
     - "secconsole"
     - "secconsole {action}"
+    - "secconsole {action} {target}"
   help: |
-    Review security alerts or crime records via terminal.
+    Review security alerts or crime records via terminal. Use `pardon <player>` to release a prisoner.

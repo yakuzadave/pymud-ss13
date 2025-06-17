@@ -45,3 +45,6 @@
 | `access_log` | Review recent door access events. |
 | `prototype` | Construct a prototype item if technology and materials are available. |
 | `announce_ai` | Make a high priority station-wide announcement as the AI. |
+| `engconsole` | Operate an engineering console. Use `usage` to view power history. |
+| `cargoconsole` | Interact with cargo computers and manage shuttle routes. |
+| `secconsole` | Review security alerts or pardon prisoners. |
