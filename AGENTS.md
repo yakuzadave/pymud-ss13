@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 03:57:59  
+**Generated:** 2025-06-17 04:03:01  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 70d2171
+**Commit:** ea13232
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **70d2171** (19 seconds ago by Katharsis): Merge pull request #154 from yakuzadave/codex/fix-unexpected-eof-error-in-inference_test.yml
-- **3777275** (42 seconds ago by Katharsis): Fix quoting issue in inference workflow
-- **ea7d001** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **f390622** (6 minutes ago by Katharsis): Update inference_test.yml
-- **417d688** (8 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **ea13232** (27 seconds ago by Katharsis): Merge pull request #155 from yakuzadave/8dxtda-codex/fix-unexpected-eof-error-in-inference_test.yml
+- **9c8bf16** (80 seconds ago by Katharsis): Add complex inference workflow
+- **cd5a6df** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **70d2171** (5 minutes ago by Katharsis): Merge pull request #154 from yakuzadave/codex/fix-unexpected-eof-error-in-inference_test.yml
+- **3777275** (6 minutes ago by Katharsis): Fix quoting issue in inference workflow
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 70d2171 - Merge pull request #154 from yakuzadave/codex/fix-unexpected-eof-error-in-inference_test.yml
+#### Commit ea13232 - Merge pull request #155 from yakuzadave/8dxtda-codex/fix-unexpected-eof-error-in-inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:57:40
+**Date:** 2025-06-16 21:02:34
 **Message:**
-Fix quoting bug in inference workflow
+Add complex inference workflow
 ---
-#### Commit 3777275 - Fix quoting issue in inference workflow
+#### Commit 9c8bf16 - Add complex inference workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:57:17
+**Date:** 2025-06-16 21:01:41
 **Message:**
 
 ---
-#### Commit ea7d001 - 🤖 Auto-update AGENTS.md
+#### Commit cd5a6df - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 03:52:54
+**Date:** 2025-06-17 03:58:08
 **Message:**
-- Updated from commit: f3906220b12abdbf9fed094ca07e408391b0ed40
+- Updated from commit: 70d2171cc3bedd960c8a28d504913632ce1a83d8
 - Triggered by: push
 - Branch: main
 
@@ -47,6 +47,7 @@ Fix quoting bug in inference workflow
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/inference_complex.yml
 - .github/workflows/inference_test.yml
 - AGENTS.md
 
@@ -54,7 +55,7 @@ Fix quoting bug in inference workflow
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 03:58:08
+**Run Date:** 2025-06-17 04:03:10
 
 ### Test Output
 ```
@@ -313,13 +314,13 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4560  258.7760  45.6041  7.4420  43.7320  3.7268   303;322       21.9279    4187           1
+test_command_performance     39.0330  246.1790  45.5460  8.7092  42.9410  4.6685   402;434       21.9558    4120           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 148 passed in 7.88s ==============================
+============================= 148 passed in 8.01s ==============================
 ```
 
 ### Coverage Summary
@@ -333,7 +334,7 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4560  258.7760  45.6041  7.4420  43.7320  3.7268   303;322       21.9279    4187           1
+test_command_performance     39.0330  246.1790  45.5460  8.7092  42.9410  4.6685   402;434       21.9558    4120           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -393,4 +394,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:58:08 (GitHub Actions Run #15697761681)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 04:03:10 (GitHub Actions Run #15697825862)*
