@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-16 23:45:16  
+**Generated:** 2025-06-17 00:33:25  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** cd92211
+**Commit:** 72a0df3
 **Branch:** main
 
 ---
@@ -13,42 +13,43 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **cd92211** (17 seconds ago by Katharsis): Create find_action_items.prompt.yml
-- **b0c5989** (11 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **fa40b0c** (11 minutes ago by Katharsis): Create summary.yml
-- **833411e** (18 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **29ef664** (19 minutes ago by Katharsis): Create pylint.yml
+- **72a0df3** (29 seconds ago by Katharsis): add  workflow and prompt for doc gen
+- **e7f3cdb** (48 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **cd92211** (48 minutes ago by Katharsis): Create find_action_items.prompt.yml
+- **b0c5989** (59 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **fa40b0c** (60 minutes ago by Katharsis): Create summary.yml
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit cd92211 - Create find_action_items.prompt.yml
+#### Commit 72a0df3 - add  workflow and prompt for doc gen
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 16:44:59
+**Date:** 2025-06-17 00:32:15
 **Message:**
 
 ---
-#### Commit b0c5989 - 🤖 Auto-update AGENTS.md
+#### Commit e7f3cdb - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-16 23:34:24
+**Date:** 2025-06-16 23:45:25
 **Message:**
-- Updated from commit: fa40b0c739c9d1524b13aa61d98e09278840f30b
+- Updated from commit: cd922114fc484834cf04cd550bfd753529826f28
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit fa40b0c - Create summary.yml
+#### Commit cd92211 - Create find_action_items.prompt.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 16:33:55
+**Date:** 2025-06-16 16:44:59
 **Message:**
 
 ---
 
 ### 📁 Files Modified Recently
 
-- .github/workflows/pylint.yml
+- .github/prompts/documentation/mud-system.md
 - .github/workflows/summary.yml
+- .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 - find_action_items.prompt.yml
 
@@ -56,7 +57,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-16 23:45:25
+**Run Date:** 2025-06-17 00:33:33
 
 ### Test Output
 ```
@@ -214,7 +215,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           137     27    80%   40, 51, 100, 107-108, 155-160, 164-169, 184-188, 203-204, 207-208, 228
+systems/cargo.py                           137     21    85%   40, 51, 100, 107-108, 155-160, 184-188, 203-204, 207-208, 228
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -305,18 +306,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10128   3113    69%
+TOTAL                                    10128   3107    69%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9170  311.5860  46.5266  8.5786  44.5340  3.8760   300;338       21.4931    4042           1
+test_command_performance     40.8870  312.4650  45.5344  8.0026  43.5210  3.7970   277;293       21.9614    3835           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 136 passed in 7.68s ==============================
+============================= 136 passed in 7.43s ==============================
 ```
 
 ### Coverage Summary
@@ -325,12 +326,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10128   3113    69%
+TOTAL                                    10128   3107    69%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9170  311.5860  46.5266  8.5786  44.5340  3.8760   300;338       21.4931    4042           1
+test_command_performance     40.8870  312.4650  45.5344  8.0026  43.5210  3.7970   277;293       21.9614    3835           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -390,4 +391,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-16 23:45:25 (GitHub Actions Run #15694433917)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:33:33 (GitHub Actions Run #15695080054)*
