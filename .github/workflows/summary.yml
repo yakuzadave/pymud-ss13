@@ -27,7 +27,21 @@ jobs:
 
       - name: Comment with AI summary
         run: |
-          gh issue comment $ISSUE_NUMBER --body '${{ steps.inference.outputs.response }}'
+          python - <<'PY'
+          import os
+          import subprocess
+
+          issue_number = os.environ["ISSUE_NUMBER"]
+          body = os.environ["RESPONSE"]
+          subprocess.check_call([
+              "gh",
+              "issue",
+              "comment",
+              issue_number,
+              "--body",
+              body,
+          ])
+          PY
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
