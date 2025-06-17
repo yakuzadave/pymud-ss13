@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 02:20:21  
+**Generated:** 2025-06-17 02:26:43  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** d1f03c6
+**Commit:** 104ca39
 **Branch:** main
 
 ---
@@ -13,53 +13,48 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **d1f03c6** (19 seconds ago by Katharsis): Update weekly_doc_maker.yml
-- **4a6ab81** (6 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **08203dd** (7 minutes ago by Katharsis): Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
-- **8e8660a** (7 minutes ago by Katharsis): Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
-- **d44a84f** (8 minutes ago by Katharsis): docs: add github models API reference
+- **104ca39** (18 seconds ago by Katharsis): Update weekly_doc_maker.yml
+- **ec37834** (6 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **d1f03c6** (7 minutes ago by Katharsis): Update weekly_doc_maker.yml
+- **4a6ab81** (12 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **08203dd** (13 minutes ago by Katharsis): Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit d1f03c6 - Update weekly_doc_maker.yml
+#### Commit 104ca39 - Update weekly_doc_maker.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:20:02
+**Date:** 2025-06-16 19:26:25
 **Message:**
-fixed api reference for models
+
 ---
-#### Commit 4a6ab81 - 🤖 Auto-update AGENTS.md
+#### Commit ec37834 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 02:14:15
+**Date:** 2025-06-17 02:20:30
 **Message:**
-- Updated from commit: 08203dd763061fbd00da978ad746c34d6513b428
+- Updated from commit: d1f03c6c18da4096b1126511a29b4a1616881404
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit 08203dd - Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+#### Commit d1f03c6 - Update weekly_doc_maker.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:13:44
+**Date:** 2025-06-16 19:20:02
 **Message:**
-Fix docs workflow caching and output checks
+fixed api reference for models
 ---
 
 ### 📁 Files Modified Recently
 
-- .github/scripts/generate_command_reference.py
-- .github/scripts/process_generated_docs.py
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
-- docs/github_models_api.md
-- docs/index.md
-- mkdocs.yml
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 02:20:30
+**Run Date:** 2025-06-17 02:26:52
 
 ### Test Output
 ```
@@ -318,13 +313,13 @@ TOTAL                                    10318   3139    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     43.5720  240.8310  48.4542  7.0740  46.5770  3.7780   287;301       20.6381    3995           1
+test_command_performance     40.4070  315.6940  44.8704  7.7502  43.0810  3.7248   309;337       22.2864    5051           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 142 passed in 7.90s ==============================
+============================= 142 passed in 7.84s ==============================
 ```
 
 ### Coverage Summary
@@ -338,7 +333,7 @@ TOTAL                                    10318   3139    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     43.5720  240.8310  48.4542  7.0740  46.5770  3.7780   287;301       20.6381    3995           1
+test_command_performance     40.4070  315.6940  44.8704  7.7502  43.0810  3.7248   309;337       22.2864    5051           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -398,4 +393,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:20:30 (GitHub Actions Run #15696506802)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:26:52 (GitHub Actions Run #15696583311)*
