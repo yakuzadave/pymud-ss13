@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 00:56:15  
+**Generated:** 2025-06-17 01:12:11  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 26ef635
+**Commit:** 2f209b1
 **Branch:** main
 
 ---
@@ -13,34 +13,34 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **26ef635** (32 seconds ago by Katharsis): removed pylint workflow
-- **d867472** (66 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **9cb763b** (2 minutes ago by Katharsis): Fixed workflow
-- **39ae967** (22 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **a680f21** (22 minutes ago by Katharsis): Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
+- **2f209b1** (22 seconds ago by Katharsis): update workflow to fix inference issue
+- **41a79c6** (16 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **26ef635** (16 minutes ago by Katharsis): removed pylint workflow
+- **d867472** (17 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **9cb763b** (18 minutes ago by Katharsis): Fixed workflow
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 26ef635 - removed pylint workflow
+#### Commit 2f209b1 - update workflow to fix inference issue
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-17 00:55:17
+**Date:** 2025-06-16 18:11:49
 **Message:**
 
 ---
-#### Commit d867472 - 🤖 Auto-update AGENTS.md
+#### Commit 41a79c6 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 00:55:09
+**Date:** 2025-06-17 00:56:24
 **Message:**
-- Updated from commit: 9cb763b424b6c4690e2503c94ac5f97a516f8231
+- Updated from commit: 26ef635f3ff6ccf59894cd91a3e6c733a97c3016
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit 9cb763b - Fixed workflow
+#### Commit 26ef635 - removed pylint workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-17 00:54:35
+**Date:** 2025-06-17 00:55:17
 **Message:**
 
 ---
@@ -55,7 +55,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 00:56:23
+**Run Date:** 2025-06-17 01:12:20
 
 ### Test Output
 ```
@@ -308,16 +308,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.3750  503.3630  45.9301  11.3236  43.7620  3.9895   194;309       21.7722    4057           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3170  309.5280  46.5113  8.1293  44.5530  3.9152   295;328       21.5001    4151           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 139 passed in 7.72s ==============================
+============================= 139 passed in 7.69s ==============================
 ```
 
 ### Coverage Summary
@@ -328,11 +328,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.3750  503.3630  45.9301  11.3236  43.7620  3.9895   194;309       21.7722    4057           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3170  309.5280  46.5113  8.1293  44.5530  3.9152   295;328       21.5001    4151           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -391,4 +391,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:56:24 (GitHub Actions Run #15695396020)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:12:20 (GitHub Actions Run #15695607686)*
