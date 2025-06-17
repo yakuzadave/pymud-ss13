@@ -407,3 +407,30 @@
     - "finance"
   help: |
     Display a summary of department credits and recent spending.
+
+# Console interfaces
+- name: engconsole
+  category: Engineering
+  patterns:
+    - "engconsole"
+    - "engconsole {action}"
+    - "engconsole {action} {target}"
+  help: |
+    Access an engineering console to monitor or adjust power grids or atmosphere.
+
+- name: cargoconsole
+  category: Cargo
+  patterns:
+    - "cargoconsole"
+    - "cargoconsole {action}"
+    - "cargoconsole {action} {args}"
+  help: |
+    Use a cargo computer to check budgets or place orders.
+
+- name: secconsole
+  category: Security
+  patterns:
+    - "secconsole"
+    - "secconsole {action}"
+  help: |
+    Review security alerts or crime records via terminal.

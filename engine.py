@@ -68,6 +68,7 @@ from commands import (  # noqa: F401,E402
     circuit,
     comms,
     ai,
+    consoles,
 )
 
 
