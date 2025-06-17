@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 03:19:00  
+**Generated:** 2025-06-17 03:31:38  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 6e4cf7d
+**Commit:** ebab7fe
 **Branch:** main
 
 ---
@@ -13,40 +13,41 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **6e4cf7d** (20 seconds ago by Katharsis): Merge pull request #153 from yakuzadave/codex/implement-player-driven-supply-transfers
-- **35c1479** (30 seconds ago by Katharsis): feat(cargo): add trading command and new economic events
-- **ca05162** (75 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **e9e52c0** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **7586b8b** (5 minutes ago by Katharsis): Merge pull request #152 from yakuzadave/codex/expand-space_exploration.py-with-hazards-and-tracking
+- **ebab7fe** (23 seconds ago by Katharsis): Create inference_test.yml
+- **36d5b7b** (12 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **6e4cf7d** (13 minutes ago by Katharsis): Merge pull request #153 from yakuzadave/codex/implement-player-driven-supply-transfers
+- **35c1479** (13 minutes ago by Katharsis): feat(cargo): add trading command and new economic events
+- **ca05162** (14 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
+#### Commit ebab7fe - Create inference_test.yml
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 20:31:15
+**Message:**
+
+---
+#### Commit 36d5b7b - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-17 03:19:09
+**Message:**
+- Updated from commit: 6e4cf7dbabaa325bc127d361cc37e2feb83818a8
+- Triggered by: push
+- Branch: main
+
+[skip ci][autogen AGENTS.md]
+
+---
 #### Commit 6e4cf7d - Merge pull request #153 from yakuzadave/codex/implement-player-driven-supply-transfers
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
 **Date:** 2025-06-16 20:18:40
 **Message:**
 Enable cargo trading and economic events
 ---
-#### Commit 35c1479 - feat(cargo): add trading command and new economic events
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:18:30
-**Message:**
-
----
-#### Commit ca05162 - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 03:17:45
-**Message:**
-- Updated from commit: e9e52c02b7fc95339265654fc0bab9602b41105e
-- Triggered by: workflow_dispatch
-- Branch: main
-
-[skip ci][autogen AGENTS.md]
-
----
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/inference_test.yml
 - AGENTS.md
 - commands/cargo.py
 - data/random_events.yaml
@@ -57,7 +58,7 @@ Enable cargo trading and economic events
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 03:19:09
+**Run Date:** 2025-06-17 03:31:47
 
 ### Test Output
 ```
@@ -316,13 +317,13 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3670  247.7050  45.8880  6.7827  44.1430  3.5665   269;285       21.7922    4144           1
+test_command_performance     41.1170  280.4730  45.5392  6.9197  43.7710  3.6670   252;264       21.9591    3853           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 148 passed in 7.91s ==============================
+============================= 148 passed in 7.93s ==============================
 ```
 
 ### Coverage Summary
@@ -336,7 +337,7 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3670  247.7050  45.8880  6.7827  44.1430  3.5665   269;285       21.7922    4144           1
+test_command_performance     41.1170  280.4730  45.5392  6.9197  43.7710  3.6670   252;264       21.9591    3853           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -396,4 +397,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:19:09 (GitHub Actions Run #15697250174)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:31:47 (GitHub Actions Run #15697418698)*
