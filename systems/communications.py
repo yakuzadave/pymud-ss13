@@ -54,7 +54,11 @@ class CommunicationsSystem:
         self.announcement_queue: List[Tuple[int, str]] = []
         self.radio_logs: Dict[str, List[Tuple[str, str]]] = {}
         self.pda_logs: Dict[str, List[Tuple[str, str]]] = {}
+        self.pda_file_logs: Dict[str, List[Tuple[str, str]]] = {}
         self.pda_keys: Dict[str, str] = {}
+        self.private_logs: Dict[str, List[Tuple[str, str]]] = {}
+        self.private_keys: Dict[str, str] = {}
+        self.private_jammed: bool = False
         self.max_log = 50
 
     # ------------------------------------------------------------------
@@ -163,12 +167,23 @@ class CommunicationsSystem:
     def get_pda_log(self, device_id: str) -> List[Tuple[str, str]]:
         return list(self.pda_logs.get(device_id, []))
 
+    def get_pda_file_log(self, device_id: str) -> List[Tuple[str, str]]:
+        return list(self.pda_file_logs.get(device_id, []))
+
+    def get_private_log(self, player_id: str) -> List[Tuple[str, str]]:
+        return list(self.private_logs.get(player_id, []))
+
     # ------------------------------------------------------------------
     def generate_pda_key(self, device_id: str) -> Optional[str]:
         if device_id not in self.pdas:
             return None
         key = secrets.token_hex(4)
         self.pda_keys[device_id] = key
+        return key
+
+    def generate_private_key(self, player_id: str) -> str:
+        key = secrets.token_hex(4)
+        self.private_keys[player_id] = key
         return key
 
     # ------------------------------------------------------------------
@@ -178,6 +193,12 @@ class CommunicationsSystem:
     # ------------------------------------------------------------------
     def clear_pda_log(self, device_id: str) -> None:
         self.pda_logs.pop(device_id, None)
+
+    def clear_pda_file_log(self, device_id: str) -> None:
+        self.pda_file_logs.pop(device_id, None)
+
+    def clear_private_log(self, player_id: str) -> None:
+        self.private_logs.pop(player_id, None)
 
     # ------------------------------------------------------------------
     def send_pda_message(
@@ -203,12 +224,54 @@ class CommunicationsSystem:
         if len(log) > self.max_log:
             log.pop(0)
 
+        if file:
+            flogs = self.pda_file_logs.setdefault(target_device, [])
+            flogs.append((sender_device, file))
+            if len(flogs) > self.max_log:
+                flogs.pop(0)
+
         publish(
             "pda_message",
             sender=sender_device,
             target=target_device,
             text=send_text,
             file=file,
+        )
+        return True
+
+    # ------------------------------------------------------------------
+    def jam_private_messages(self) -> None:
+        self.private_jammed = True
+        publish("private_jammed")
+
+    def unjam_private_messages(self) -> None:
+        self.private_jammed = False
+        publish("private_unjammed")
+
+    # ------------------------------------------------------------------
+    def send_private_message(
+        self, sender_id: str, target_id: str, message: str, *, key: Optional[str] = None
+    ) -> bool:
+        if self.private_jammed:
+            return False
+
+        target_key = self.private_keys.get(target_id)
+        send_text = message
+        if target_key:
+            if key != target_key:
+                return False
+            send_text = self._encrypt(message, target_key)
+
+        log = self.private_logs.setdefault(target_id, [])
+        log.append((sender_id, message))
+        if len(log) > self.max_log:
+            log.pop(0)
+
+        publish(
+            "private_message",
+            sender=sender_id,
+            target=target_id,
+            text=send_text,
         )
         return True
 

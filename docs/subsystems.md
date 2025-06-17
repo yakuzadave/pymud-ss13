@@ -61,3 +61,18 @@ Example encrypted PDA interaction:
 Key for my_pda: 1a2b3c4d
 > pda my_pda other_pda "meet at cargo" key=1a2b3c4d
 ```
+
+Additional commands:
+
+```text
+> jam eng
+Channel eng jammed
+> unjam eng
+Channel eng restored
+> tellkey player2
+Key for player2: abcd1234
+> tell player2 "are you there?" key=abcd1234
+```
+
+Use `pda my_pda other_pda file=report.txt` to send files between PDAs. Admins
+can inspect message and file logs with `clearpdalog` and `clearpdafiles`.
