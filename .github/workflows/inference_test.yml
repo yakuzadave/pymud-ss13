@@ -9,7 +9,6 @@ jobs:
       models: read
       contents: read
     steps:
-      # --- (Optional) Checkout if you need prompt-file from repo ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -23,13 +22,19 @@ jobs:
       - name: Print Output for Basic Prompt
         run: echo "${{ steps.basic_test.outputs.response }}"
 
-      # --- Second AI inference step using prompt file ---
-      - name: Run AI Inference with Prompt File
+      - name: Read MUD system prompt file
+        id: read_mud_prompt
+        run: |
+          cat .github/prompts/documentation/mud-system.md > prompt.txt
+
+      - name: Run AI Inference with Prompt Content
         id: inference_file
         uses: actions/ai-inference@v1
         with:
-          prompt-file: '.github/prompts/documentation/mud-system.md'
+          prompt: ${{ steps.read_mud_prompt.outputs.prompt_content }}
           max-tokens: 1000
+        env:
+          prompt_content: ${{ steps.read_mud_prompt.outputs.prompt_content }}
 
       - name: Print AI Output from prompt file
         run: |
