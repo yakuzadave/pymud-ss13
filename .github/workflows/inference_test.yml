@@ -1,23 +1,45 @@
 name: 'AI inference Test'
+
 on: workflow_dispatch
 
 jobs:
-  inference:
+  lint-and-inference:
+    runs-on: ubuntu-latest
     permissions:
       models: read
-    runs-on: ubuntu-latest
     steps:
+      # --- YAML Linter Step ---
+      - name: Lint Workflow YAML (actionlint)
+        uses: rhysd/actionlint@v1
+        with:
+          args: .github/workflows/ai-inference-test.yml
+
+      # --- (Optional) Checkout if you need prompt-file from repo ---
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- First AI inference step ---
       - name: Test Local Action
         id: inference
         uses: actions/ai-inference@v1
         with:
           prompt: 'Hello! I would like you to create some documentation covering this codebase'
+
+      # --- Second AI inference step using prompt file ---
       - name: Run AI Inference with Prompt File
-        id: inference-file
+        id: inference_file
         uses: actions/ai-inference@v1
         with:
-          prompt-file: '/.github/prompts/documentation/mud-system.md'
+          prompt-file: '.github/prompts/documentation/mud-system.md'
           max-tokens: 1000
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.inference.outputs.response }}"
+
+      # --- Print outputs of both steps for debugging ---
+      - name: Print AI Output from direct prompt
+        run: |
+          echo "Direct prompt response:"
+          echo "${{ steps.inference.outputs.response }}"
+
+      - name: Print AI Output from prompt file
+        run: |
+          echo "Prompt-file response:"
+          echo "${{ steps.inference_file.outputs.response }}"
