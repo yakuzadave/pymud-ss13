@@ -4,14 +4,6 @@ on:
   schedule:
     - cron: '0 2 * * 1'
   workflow_dispatch:
-  push:
-    paths:
-      - 'src/**'
-      - 'game/**'
-      - 'commands/**'
-      - 'world/**'
-      - 'docs/**'
-      - '*.py'
 
 jobs:
   build-and-docs:
@@ -32,6 +24,7 @@ jobs:
       - name: Fetch available AI models (GitHub Models API)
         id: fetch_models
         run: |
+          set -euxo pipefail
           mkdir -p .github/ai-inputs
           curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                -H "Accept: application/vnd.github+json" \
@@ -44,6 +37,7 @@ jobs:
       - name: Export selected model id for downstream steps
         id: set_model_id
         run: |
+          set -euxo pipefail
           echo "MODEL_ID=$(cat .github/ai-inputs/model-id.txt)" >> "$GITHUB_ENV"
 
       # ------ Caching for pip ------
@@ -58,7 +52,7 @@ jobs:
       # ------ Install Python + doc dependencies ------
       - name: Install dependencies and doc tools
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install sphinx==7.2.6 sphinx-rtd-theme==2.0.0 pydoc-markdown==4.7.0
@@ -67,7 +61,8 @@ jobs:
       # ------ Run Tests ------
       - name: Run tests
         run: |
-          set -euo pipefail
+          set -euxo pipefail
+          echo "Running pytest"
           pytest --junitxml=pytest-results.xml
 
       - name: Upload test results
@@ -80,6 +75,8 @@ jobs:
       # ------ Analyze MUD Code Coverage ------
       - name: Analyze MUD Code Coverage
         run: |
+          set -euxo pipefail
+          echo "Generating documentation context"
           python - <<'PY'
           import os
           import subprocess
@@ -155,6 +152,8 @@ jobs:
       - name: Read Prompt Files
         id: prompts
         run: |
+          set -euxo pipefail
+          echo "Reading prompt files"
           python - <<'PY'
           import os
           from pathlib import Path
@@ -190,7 +189,8 @@ jobs:
 
       - name: Verify AI Output is Non-Empty
         run: |
-          set -euo pipefail
+          set -euxo pipefail
+          echo "Validating AI response"
           if [ -z "${{ steps.docs.outputs.response }}" ]; then
             echo "AI output is empty. Attempting retry..."
             exit 1
@@ -205,17 +205,20 @@ jobs:
       # ------ Section Extraction, Command Reference, Site Build ------
       - name: Process Generated Documentation
         run: |
-          set -euo pipefail
+          set -euxo pipefail
+          echo "Processing generated docs"
           python .github/scripts/process_generated_docs.py
 
       - name: Generate Command Reference
         run: |
-          set -euo pipefail
+          set -euxo pipefail
+          echo "Generating command reference"
           python .github/scripts/generate_command_reference.py
 
       - name: Generate Interactive Documentation Site
         run: |
-          set -euo pipefail
+          set -euxo pipefail
+          echo "Building documentation site"
           mkdocs build --clean --site-dir site
 
       # ------ Link Check ------
