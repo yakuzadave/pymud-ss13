@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 02:50:57  
+**Generated:** 2025-06-17 03:08:44  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 01a0808
+**Commit:** 5285c28
 **Branch:** main
 
 ---
@@ -13,49 +13,49 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **01a0808** (22 seconds ago by Katharsis): changed workflow trigger
-- **1d53b2b** (10 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **74c2b93** (10 minutes ago by Katharsis): added extra requirements to requirements.txt
-- **c35be1a** (13 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **0296cd5** (13 minutes ago by Katharsis): Merge pull request #150 from yakuzadave/codex/extend-robotics.py-for-cyborg-control-and-maintenance
+- **5285c28** (20 seconds ago by Katharsis): Merge pull request #151 from yakuzadave/codex/add-logging-and-update-triggers-in-weekly_doc_maker.yml
+- **f43f948** (33 seconds ago by Katharsis): chore: refine weekly doc workflow logging
+- **4be7efd** (18 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **01a0808** (18 minutes ago by Katharsis): changed workflow trigger
+- **1d53b2b** (27 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 01a0808 - changed workflow trigger
+#### Commit 5285c28 - Merge pull request #151 from yakuzadave/codex/add-logging-and-update-triggers-in-weekly_doc_maker.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:50:35
+**Date:** 2025-06-16 20:08:24
+**Message:**
+Refine weekly docs workflow
+---
+#### Commit f43f948 - chore: refine weekly doc workflow logging
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 20:08:11
 **Message:**
 
 ---
-#### Commit 1d53b2b - 🤖 Auto-update AGENTS.md
+#### Commit 4be7efd - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 02:41:26
+**Date:** 2025-06-17 02:51:05
 **Message:**
-- Updated from commit: 74c2b9348eb2d3629bc694f1c8ad9110a7020a01
+- Updated from commit: 01a0808940a03b87efd0e248b12de510480ca520
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit 74c2b93 - added extra requirements to requirements.txt
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:40:54
-**Message:**
-
----
 
 ### 📁 Files Modified Recently
 
 - .github/workflows/ci.yml
+- .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
-- requirements.txt
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 02:51:05
+**Run Date:** 2025-06-17 03:08:53
 
 ### Test Output
 ```
@@ -216,7 +216,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           144     20    86%   40, 51, 101, 108-109, 159-164, 188-192, 207-208, 211-212
+systems/cargo.py                           144     26    82%   40, 51, 101, 108-109, 159-164, 168-173, 188-192, 207-208, 211-212
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -309,18 +309,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10400   3144    70%
+TOTAL                                    10400   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9960  457.0260  46.1652  9.5286  44.4040  3.6070   228;286       21.6613    3876           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3880  398.4240  46.7654  10.4234  44.6030  4.0913   200;261       21.3833    3537           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 144 passed in 7.80s ==============================
+============================= 144 passed in 7.88s ==============================
 ```
 
 ### Coverage Summary
@@ -329,13 +329,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10400   3144    70%
+TOTAL                                    10400   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9960  457.0260  46.1652  9.5286  44.4040  3.6070   228;286       21.6613    3876           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3880  398.4240  46.7654  10.4234  44.6030  4.0913   200;261       21.3833    3537           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -394,4 +394,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:51:05 (GitHub Actions Run #15696902526)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:08:53 (GitHub Actions Run #15697122458)*
