@@ -63,6 +63,16 @@ python run_server.py
 
 The web client will be available on `http://localhost:5000`.
 
+## Accounts
+
+User credentials are stored in `data/accounts.yaml`. When a new
+username logs in the server will create an entry in this file with a
+hashed password. Administrators are determined by the
+`administrator` flag on their account. The first account named
+`admin` is automatically granted administrator status. You can edit
+`accounts.yaml` manually while the server is offline to promote or
+demote users.
+
 ### Grid Map and Overlays
 
 Click the **Map** button in the web client to request the current station layout

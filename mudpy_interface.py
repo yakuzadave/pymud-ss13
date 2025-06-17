@@ -224,7 +224,7 @@ quit - Disconnect from the system
         with open(self.config_file, "w") as f:
             yaml.dump(self.config, f, default_flow_style=False)
 
-    def connect_client(self, client_id):
+    def connect_client(self, client_id, username=None, is_admin=False):
         """
         Create a new session for a client.
 
@@ -253,10 +253,12 @@ quit - Disconnect from the system
 
             # Record client session
             self.client_sessions[client_id] = {
-                "authenticated": True,  # Auto-authenticate for demo
+                "authenticated": True,
                 "character": player_name,
                 "connected_at": time.time(),
-                "location": "start",  # Set location in session too for redundancy
+                "location": "start",
+                "username": username or str(client_id),
+                "is_admin": bool(is_admin),
             }
 
             # Set player location to start room
