@@ -55,3 +55,23 @@ def test_ai_check_action():
     ai.add_law(1, "Never harm a human")
     assert not ai.check_action("harm human")
     assert ai.check_action("open door")
+
+
+def test_cyborg_refuses_unlawful_command():
+    ai, borg = setup_objs()
+    ai.add_law(1, "Never harm a human")
+    try:
+        msg = ai.issue_command("borg_test", "harm human")
+        assert "unable to comply" in msg.lower()
+    finally:
+        teardown()
+
+
+def test_cyborg_status_report():
+    ai, borg = setup_objs()
+    try:
+        status = borg.report_status()
+        assert "power" in status
+        assert status["power"] == 100
+    finally:
+        teardown()

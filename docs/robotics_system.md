@@ -25,3 +25,14 @@ Entire cyborg units may receive remote commands from the robotics console or AI.
 ## Specialized Modules
 
 New `SpecializedRobotModule` objects allow creating equipment with unique power usage and a description of what they do. For example a medical probe might drain 3 power per tick while enabling healing actions. Install these modules the same way as standard modules to expand your cyborg's capabilities.
+
+## AI Integration
+
+AI cores may register cyborg units and issue remote commands. A cyborg
+checks the AI's laws before executing orders, refusing any directive
+that conflicts with a higher-priority law (such as harming humans).
+
+When linked to the robotics system, cyborgs can send diagnostic reports
+back to the controlling AI which include module status and current
+power level. These reports are published via the event bus so consoles
+or scripts can react accordingly.
