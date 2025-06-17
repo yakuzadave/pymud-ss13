@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 01:48:34  
+**Generated:** 2025-06-17 02:00:53  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 8b67466
+**Commit:** a6bd898
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **8b67466** (18 seconds ago by Katharsis): Merge pull request #147 from yakuzadave/codex/add-text-based-interfaces-for-consoles
-- **07a985f** (2 minutes ago by Katharsis): feat: add console interfaces for subsystems
-- **ec23acf** (11 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **44a9ed2** (12 minutes ago by Katharsis): Merge pull request #146 from yakuzadave/codex/improve-github-actions-for-reports
-- **7d00df7** (12 minutes ago by Katharsis): ci: add config and component report workflow
+- **a6bd898** (26 seconds ago by Katharsis): Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+- **04d911b** (52 seconds ago by Katharsis): docs: build site with mkdocs
+- **7d96dea** (12 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **8b67466** (13 minutes ago by Katharsis): Merge pull request #147 from yakuzadave/codex/add-text-based-interfaces-for-consoles
+- **07a985f** (14 minutes ago by Katharsis): feat: add console interfaces for subsystems
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 8b67466 - Merge pull request #147 from yakuzadave/codex/add-text-based-interfaces-for-consoles
+#### Commit a6bd898 - Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 18:48:16
+**Date:** 2025-06-16 19:00:27
 **Message:**
-Add subsystem console commands
+Fix docs workflow caching and output checks
 ---
-#### Commit 07a985f - feat: add console interfaces for subsystems
+#### Commit 04d911b - docs: build site with mkdocs
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 18:46:47
+**Date:** 2025-06-16 19:00:01
 **Message:**
 
 ---
-#### Commit ec23acf - 🤖 Auto-update AGENTS.md
+#### Commit 7d96dea - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 01:37:31
+**Date:** 2025-06-17 01:48:43
 **Message:**
-- Updated from commit: 44a9ed2289107d1595da834f39dab56a27690380
+- Updated from commit: 8b67466e214f63247d08cee7c3ae780557bec301
 - Triggered by: push
 - Branch: main
 
@@ -47,20 +47,23 @@ Add subsystem console commands
 
 ### 📁 Files Modified Recently
 
-- .github/scripts/generate_config_component_report.py
-- .github/workflows/config_component_report.yml
+- .github/scripts/generate_command_reference.py
+- .github/scripts/process_generated_docs.py
+- .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 - commands/consoles.py
 - data/commands.yaml
+- docs/index.md
 - docs/text_interaction_design.md
 - engine.py
+- mkdocs.yml
 - tests/test_console_commands.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 01:48:42
+**Run Date:** 2025-06-17 02:01:02
 
 ### Test Output
 ```
@@ -316,16 +319,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10318   3139    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8960  542.6430  45.6317  10.9138  43.6910  3.7870   166;267       21.9146    3868           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.9370  307.4730  45.8923  8.2878  43.9520  3.8770   275;305       21.7901    4156           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 142 passed in 7.84s ==============================
+============================= 142 passed in 7.82s ==============================
 ```
 
 ### Coverage Summary
@@ -336,11 +339,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10318   3139    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8960  542.6430  45.6317  10.9138  43.6910  3.7870   166;267       21.9146    3868           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.9370  307.4730  45.8923  8.2878  43.9520  3.8770   275;305       21.7901    4156           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -399,4 +402,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:48:42 (GitHub Actions Run #15696086792)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:01:02 (GitHub Actions Run #15696252331)*
