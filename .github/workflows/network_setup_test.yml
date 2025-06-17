@@ -1,0 +1,34 @@
+name: Network Setup and Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run setup script
+        run: |
+          chmod +x setup.sh
+          ./setup.sh
+
+      - name: Activate venv and install pytest
+        run: |
+          source mudpy_venv/bin/activate
+          pip install pytest
+          pytest --junitxml=pytest-results.xml
+        shell: bash
+
+      - name: Upload pytest results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results-${{ github.run_id }}
+          path: pytest-results.xml
