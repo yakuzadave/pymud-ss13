@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 00:34:28  
+**Generated:** 2025-06-17 00:54:59  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** a680f21
+**Commit:** 9cb763b
 **Branch:** main
 
 ---
@@ -13,41 +13,40 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **a680f21** (18 seconds ago by Katharsis): Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
-- **7a9ce65** (40 seconds ago by Katharsis): Add rank and finance mechanics
-- **5639ec5** (55 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **72a0df3** (2 minutes ago by Katharsis): add  workflow and prompt for doc gen
-- **e7f3cdb** (49 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **9cb763b** (24 seconds ago by Katharsis): Fixed workflow
+- **39ae967** (20 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **a680f21** (21 minutes ago by Katharsis): Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
+- **7a9ce65** (21 minutes ago by Katharsis): Add rank and finance mechanics
+- **5639ec5** (21 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit a680f21 - Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
+#### Commit 9cb763b - Fixed workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 17:34:10
-**Message:**
-Add finance tracking and rank mechanics
----
-#### Commit 7a9ce65 - Add rank and finance mechanics
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 17:33:48
+**Date:** 2025-06-17 00:54:35
 **Message:**
 
 ---
-#### Commit 5639ec5 - 🤖 Auto-update AGENTS.md
+#### Commit 39ae967 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 00:33:33
+**Date:** 2025-06-17 00:34:37
 **Message:**
-- Updated from commit: 72a0df3bbc7569ce3e76782b3638669c6e4496e7
+- Updated from commit: a680f21eb4ac0614b2171ff53d50eb164c5b5480
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
+#### Commit a680f21 - Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 17:34:10
+**Message:**
+Add finance tracking and rank mechanics
+---
 
 ### 📁 Files Modified Recently
 
-- .github/prompts/documentation/mud-system.md
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 - commands/cargo.py
@@ -61,7 +60,7 @@ Add finance tracking and rank mechanics
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 00:34:37
+**Run Date:** 2025-06-17 00:55:09
 
 ### Test Output
 ```
@@ -317,13 +316,13 @@ TOTAL                                    10221   3099    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     39.0330  288.3380  45.3829  9.1710  43.2210  4.7380   350;389       22.0347    3815           1
+test_command_performance     41.4770  268.8010  46.0917  6.8404  44.2330  3.9270   264;261       21.6959    3798           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 139 passed in 7.72s ==============================
+============================= 139 passed in 7.86s ==============================
 ```
 
 ### Coverage Summary
@@ -337,7 +336,7 @@ TOTAL                                    10221   3099    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     39.0330  288.3380  45.3829  9.1710  43.2210  4.7380   350;389       22.0347    3815           1
+test_command_performance     41.4770  268.8010  46.0917  6.8404  44.2330  3.9270   264;261       21.6959    3798           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -397,4 +396,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:34:37 (GitHub Actions Run #15695094248)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:55:09 (GitHub Actions Run #15695378813)*
