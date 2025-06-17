@@ -1,0 +1,23 @@
+site_name: PyMUD-SS13 Documentation
+site_url: https://pymud-ss13.example.com
+theme:
+  name: material
+  palette:
+    - scheme: slate
+plugins:
+  - search
+  - mermaid2
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - toc:
+      permalink: true
+nav:
+  - Home: index.md
+  - Guides:
+      - Advanced Chemistry: advanced_chemistry.md
+      - Cargo System: cargo_system.md
+      - Circuits Guide: circuits_guide.md
+      - Command Reference: commands_reference.md
+      - GitHub Models API: github_models_api.md

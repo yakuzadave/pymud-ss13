@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -76,9 +76,10 @@ jobs:
               f.write('## Code Structure Analysis\n')
               f.write('### Undocumented Functions\n')
 
-              for path in Path('.').rglob('*.py'):
-                  if 'venv' in path.parts or '.git' in path.parts:
-                      continue
+              python_files = [p for p in Path('.').rglob('*.py') if 'venv' not in p.parts and '.git' not in p.parts]
+              if not python_files:
+                  f.write('No Python files found.\n')
+              for path in python_files:
                   lines = path.read_text().splitlines()
                   undoc_funcs = sum(
                       1 for i, line in enumerate(lines)
@@ -98,6 +99,8 @@ jobs:
               if cmd_dir.is_dir():
                   for cmd in sorted(cmd_dir.glob('*.py')):
                       f.write(f'{cmd.stem}\n')
+              else:
+                  f.write('No commands directory found.\n')
 
               f.write('\n## Game Systems\n')
               for system in ['combat', 'atmosphere', 'jobs', 'roles', 'departments']:
@@ -105,11 +108,15 @@ jobs:
                       f.write(f'- {system} system found\n')
 
               f.write('\n## Recent Changes (Last 7 Days)\n')
-              recent = subprocess.run(
+              result = subprocess.run(
                   ['git', 'log', '--since=7 days ago', '--pretty=format:- %s (%h by %an)'],
                   capture_output=True, text=True
-              ).stdout.splitlines()[:20]
-              f.write('\n'.join(recent) + '\n')
+              )
+              recent = result.stdout.splitlines()[:20]
+              if recent:
+                  f.write('\n'.join(recent) + '\n')
+              else:
+                  f.write('No recent commits found.\n')
 
               f.write('\n## Configuration\n')
               for config in ['config.py', 'settings.py', 'requirements.txt', 'setup.py']:
@@ -158,23 +165,18 @@ jobs:
         uses: actions/ai-inference@v1
         id: docs
         with:
-          model: "claude-3-7-sonnet"
+          model: "openai/gpt-4"
           system-prompt: ${{ steps.prompts.outputs.system_prompt }}
           prompt: ${{ steps.prompts.outputs.project_context }}
           max-tokens: 4000
 
       - name: Verify AI Output is Non-Empty
         run: |
-          python - <<'PY'
-          import os
-          import sys
-
-          if not os.environ.get('AI_RESPONSE'):
-              print('AI output is empty. Exiting!')
-              sys.exit(1)
-          PY
-        env:
-          AI_RESPONSE: ${{ steps.docs.outputs.response }}
+          set -euo pipefail
+          if [ -z "${{ steps.docs.outputs.response }}" ]; then
+            echo "AI output is empty. Attempting retry..."
+            exit 1
+          fi
 
       - name: Save AI Output as Artifact
         uses: actions/upload-artifact@v4
@@ -182,22 +184,21 @@ jobs:
           name: ai-docs-raw-${{ env.TODAY }}
           path: .github/ai-outputs/docs/generated-docs-raw.md
 
-      # ------ Section Extraction, Command Reference, Site Build (your existing python/mkdocs steps go here) ------
-      # Example:
-      # - name: Process Generated Documentation
-      #   run: |
-      #     set -euo pipefail
-      #     # (python extraction script here)
-      #
-      # - name: Generate Command Reference
-      #   run: |
-      #     set -euo pipefail
-      #     # (python script here)
-      #
-      # - name: Generate Interactive Documentation Site
-      #   run: |
-      #     set -euo pipefail
-      #     # (mkdocs build here)
+      # ------ Section Extraction, Command Reference, Site Build ------
+      - name: Process Generated Documentation
+        run: |
+          set -euo pipefail
+          python .github/scripts/process_generated_docs.py
+
+      - name: Generate Command Reference
+        run: |
+          set -euo pipefail
+          python .github/scripts/generate_command_reference.py
+
+      - name: Generate Interactive Documentation Site
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --site-dir site
 
       # ------ Link Check ------
       - name: Check Documentation Links
