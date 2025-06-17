@@ -4,6 +4,7 @@ from unittest import mock
 import sys
 import os
 import pytest
+
 yaml = pytest.importorskip("yaml")
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
@@ -96,3 +97,33 @@ def test_event_command(monkeypatch):
     out = cmd_event(interface, "1", "trigger meteor_shower")
     assert "triggered" in out
     assert mock_publish.call_count >= 2
+
+
+def test_random_event_conditions_and_severity(tmp_path, monkeypatch):
+    events = [
+        {
+            "id": "cond_event",
+            "condition": "allow",
+            "severity": "low",
+        },
+        {"id": "fallback", "severity": "high"},
+    ]
+    path = tmp_path / "events.yaml"
+    with open(path, "w") as f:
+        yaml.safe_dump(events, f)
+
+    system = RandomEventSystem(str(path), context={"allow": False})
+    system.load_events()
+    mock_publish = mock.Mock()
+    monkeypatch.setattr("events.publish", mock_publish)
+    import systems.random_events as sr
+
+    monkeypatch.setattr(sr, "publish", mock_publish)
+    monkeypatch.setattr("random.choices", lambda seq, weights=None, k=1: [seq[0]])
+
+    asyncio.run(system.update())
+
+    assert mock_publish.call_count == 2
+    first_call = mock_publish.call_args_list[0]
+    assert first_call.args[0] == "fallback"
+    assert first_call.kwargs.get("severity") == "high"

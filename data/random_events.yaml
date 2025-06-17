@@ -104,3 +104,19 @@
     item: steel
     shortage: 3
   description: Diplomatic tensions halt incoming steel shipments, causing a shortage.
+
+- id: sabotage_core
+  name: Reactor Sabotage
+  weight: 1
+  severity: high
+  params:
+    room_id: "engine_room"
+  description: Critical systems have been sabotaged in engineering.
+
+- id: hull_breach
+  name: Hull Breach
+  weight: 1
+  severity: severe
+  params:
+    room_id: "airlock"
+  description: A sudden rupture exposes a section of the station to space.
