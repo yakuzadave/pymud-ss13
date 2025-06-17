@@ -11,6 +11,7 @@ This module implements a minimal logistics framework for ordering supplies and t
 - **Fluctuating economy** with periodic demand changes and temporary supply shortages
 - **Market events** triggered via the event bus
 - **Player transfers** move goods between departments for credits
+- **Trade command** lets crew exchange items via `trade <from> <to> <item> <qty> <price>`
 
 The system is intentionally lightweight but provides a foundation for more complex economic mechanics.
 
@@ -84,8 +85,20 @@ from events import publish
 publish("market_event", item="steel", demand_delta=1.5, shortage=3)
 ```
 
+Two predefined economic events exist in `data/random_events.yaml`:
+
+- `demand_spike` increases demand for electronics.
+- `trade_embargo` creates a temporary steel shortage.
+
 ## Player Supply Transfers
 
 Players can move items between departments to create their own supply chains.
-Use `transfer_supply(from_dept, to_dept, item, qty, price)` to exchange goods
-and credits.
+Use `transfer_supply(from_dept, to_dept, item, qty, price)` or the `trade`
+command to exchange goods and credits.
+
+```
+trade mining engineering ore 5 2
+```
+
+The above example trades 5 units of ore from mining to engineering for 2 credits
+each.

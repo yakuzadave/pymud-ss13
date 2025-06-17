@@ -56,3 +56,27 @@ def finance_handler(interface, client_id, args=None):
     system.clear_spending()
     return "Financial Summary:\n" + "\n".join(lines)
 
+
+@register("trade")
+def trade_handler(interface, client_id, args=None):
+    """Transfer goods between departments for credits."""
+    if not args:
+        return "Usage: trade <from> <to> <item> <qty> <price>"
+
+    parts = args.split()
+    if len(parts) != 5:
+        return "Usage: trade <from> <to> <item> <qty> <price>"
+
+    from_dept, to_dept, item, qty_str, price_str = parts
+    try:
+        qty = int(qty_str)
+        price = int(price_str)
+    except ValueError:
+        return "Quantity and price must be numbers."
+
+    cargo = get_cargo_system()
+    success = cargo.transfer_supply(from_dept, to_dept, item, qty, price)
+    if success:
+        return f"Transferred {item} x{qty} from {from_dept} to {to_dept}."
+    return "Transfer failed."
+
