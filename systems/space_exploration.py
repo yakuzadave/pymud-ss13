@@ -7,6 +7,8 @@ import random
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
+from .cargo import get_cargo_system
+
 from events import publish
 
 logger = logging.getLogger(__name__)
@@ -60,6 +62,8 @@ DEFAULT_HAZARDS = [
     EnvironmentalHazard("vacuum section", chance=0.1, severity=3),
     EnvironmentalHazard("micro-meteoroids", chance=0.05, severity=1),
     EnvironmentalHazard("alien spores", chance=0.05, severity=2),
+    EnvironmentalHazard("radiation storm", chance=0.05, severity=3),
+    EnvironmentalHazard("hull breach", chance=0.03, severity=4),
 ]
 
 
@@ -133,6 +137,14 @@ class EVASuit:
 
 
 @dataclass
+class CrewStatus:
+    """Tracks per-crew condition during a mission."""
+
+    oxygen_used: int = 0
+    radiation: int = 0
+
+
+@dataclass
 class AwayMission:
     """Tracks the state of an off-station mission."""
 
@@ -143,6 +155,7 @@ class AwayMission:
     active: bool = False
     suits: Dict[str, EVASuit] = field(default_factory=dict)
     collected_resources: Dict[str, int] = field(default_factory=dict)
+    crew_status: Dict[str, CrewStatus] = field(default_factory=dict)
 
     def launch(self) -> bool:
         if self.active:
@@ -151,6 +164,7 @@ class AwayMission:
             return False
         self.active = True
         self.suits = {cid: EVASuit(cid) for cid in self.crew}
+        self.crew_status = {cid: CrewStatus() for cid in self.crew}
         self.collected_resources.clear()
         publish("mission_started", mission_id=self.mission_id, site=self.site.site_id)
         return True
@@ -166,10 +180,20 @@ class AwayMission:
                 hazards=[h.name for h in hazards],
             )
             for hazard in hazards:
-                for suit in self.suits.values():
+                for cid, suit in self.suits.items():
                     suit.apply_hazard(hazard)
-        for suit in self.suits.values():
+                    status = self.crew_status.get(cid)
+                    if status:
+                        if "radiation" in hazard.name:
+                            status.radiation += hazard.severity * 5
+                        if "hull breach" in hazard.name or "vacuum" in hazard.name:
+                            loss = min(suit.oxygen, hazard.severity * 2)
+                            suit.oxygen -= loss
+                            status.oxygen_used += loss
+        for cid, suit in self.suits.items():
+            before = suit.oxygen
             suit.tick()
+            self.crew_status[cid].oxygen_used += before - suit.oxygen
 
     def return_to_base(self, dock_id: str = "station") -> None:
         self.shuttle.dock(dock_id)
@@ -179,6 +203,7 @@ class AwayMission:
             mission_id=self.mission_id,
             site=self.site.site_id,
             resources=self.collected_resources,
+            crew_status=self.crew_status,
         )
 
     def harvest(self, resource: str, amount: int) -> int:
@@ -253,8 +278,12 @@ class SpaceExplorationSystem:
         mission.return_to_base(dock_id)
         for res, qty in mission.collected_resources.items():
             self.station_resources[res] = self.station_resources.get(res, 0) + qty
+            cargo = get_cargo_system()
+            inv = cargo.get_inventory("mining")
+            inv[res] = inv.get(res, 0) + qty
         publish(
             "mission_resources_returned",
             mission_id=mission_id,
             resources=mission.collected_resources,
+            crew_status=mission.crew_status,
         )
