@@ -51,6 +51,7 @@ This document outlines a structured approach for implementing text-based version
 4. **Emergency Scenarios**
    - Script random events that challenge players, from simple fires to complex traitor objectives.
    - Provide text-based interfaces for consoles and devices to resolve these events.
+   - Implement simple console commands such as `engconsole`, `cargoconsole` and `secconsole` for engineers, quartermasters and security officers.
 5. **Polish and Iterate**
    - Continuously refine command responses, balancing detail and brevity.
    - Gather feedback on how well SS13 scenarios translate to text and adjust mechanics accordingly.
