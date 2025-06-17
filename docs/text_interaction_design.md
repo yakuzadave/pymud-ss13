@@ -52,6 +52,10 @@ This document outlines a structured approach for implementing text-based version
    - Script random events that challenge players, from simple fires to complex traitor objectives.
    - Provide text-based interfaces for consoles and devices to resolve these events.
    - Implement simple console commands such as `engconsole`, `cargoconsole` and `secconsole` for engineers, quartermasters and security officers.
+   - Administrators may trigger emergencies directly using the `event` command, for example:
+     - `event list` to view available events.
+     - `event trigger sabotage_core` to simulate reactor sabotage.
+     - `event trigger hull_breach room_id=airlock severity=severe`.
 5. **Polish and Iterate**
    - Continuously refine command responses, balancing detail and brevity.
    - Gather feedback on how well SS13 scenarios translate to text and adjust mechanics accordingly.

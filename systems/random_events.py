@@ -22,6 +22,8 @@ class RandomEvent:
     weight: int = 1
     params: Dict[str, Any] = field(default_factory=dict)
     description: Optional[str] = None
+    condition: Optional[str] = None
+    severity: str = "normal"
 
 
 class RandomEventSystem:
@@ -31,9 +33,11 @@ class RandomEventSystem:
         self,
         events_file: str = "data/random_events.yaml",
         interval: float = 60.0,
+        context: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.events_file = events_file
         self.interval = interval
+        self.context: Dict[str, Any] = context or {}
         self.events: List[RandomEvent] = []
         self.weights: List[int] = []
         self.events_by_id: Dict[str, RandomEvent] = {}
@@ -51,16 +55,22 @@ class RandomEventSystem:
             with Path(self.events_file).open("r") as f:
                 data = yaml.safe_load(f) or []
 
-            self.events = [
-                RandomEvent(
-                    id=evt.get("id"),
-                    name=evt.get("name", evt.get("id", "event")),
-                    weight=evt.get("weight", 1),
-                    params=evt.get("params", {}),
-                    description=evt.get("description"),
+            self.events = []
+            for evt in data:
+                severity = evt.get("severity")
+                if not severity:
+                    severity = evt.get("params", {}).get("severity", "normal")
+                self.events.append(
+                    RandomEvent(
+                        id=evt.get("id"),
+                        name=evt.get("name", evt.get("id", "event")),
+                        weight=evt.get("weight", 1),
+                        params=evt.get("params", {}),
+                        description=evt.get("description"),
+                        condition=evt.get("condition"),
+                        severity=severity,
+                    )
                 )
-                for evt in data
-            ]
             self.weights = [evt.weight for evt in self.events]
             self.events_by_id = {evt.id: evt for evt in self.events if evt.id}
             logger.info(f"Loaded {len(self.events)} random events")
@@ -106,10 +116,27 @@ class RandomEventSystem:
         if not self.weights:
             self.weights = [evt.weight for evt in self.events]
 
-        event = random.choices(self.events, weights=self.weights, k=1)[0]
+        valid_events = [
+            evt
+            for evt in self.events
+            if not evt.condition or self._evaluate_condition(evt.condition)
+        ]
+        if not valid_events:
+            return
+
+        weights = [evt.weight for evt in valid_events]
+        event = random.choices(valid_events, weights=weights, k=1)[0]
         logger.debug(f"Triggering random event {event.id}")
-        publish(event.id, **event.params)
+        publish(event.id, severity=event.severity, **event.params)
         publish("random_event", event_id=event.id, event=event)
+
+    def _evaluate_condition(self, condition: str) -> bool:
+        """Safely evaluate an event condition against the current context."""
+        try:
+            return bool(eval(condition, {"__builtins__": {}}, self.context))  # nosec
+        except Exception as e:
+            logger.error(f"Failed evaluating condition '{condition}': {e}")
+            return False
 
     def list_events(self) -> List[str]:
         """Return available event IDs."""
@@ -121,7 +148,7 @@ class RandomEventSystem:
         if not event:
             return False
         params = {**event.params, **kwargs}
-        publish(event.id, **params)
+        publish(event.id, severity=event.severity, **params)
         publish("random_event", event_id=event.id, event=event)
         return True
 
