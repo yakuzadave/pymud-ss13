@@ -1,0 +1,39 @@
+name: Generate Config and Component Report
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate report
+        run: python .github/scripts/generate_config_component_report.py
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: config-component-report-${{ github.run_id }}
+          path: .github/reports/config_component_report.md
+
+      - name: Add report to summary
+        run: |
+          echo '## Configuration and Components Report' >> $GITHUB_STEP_SUMMARY
+          cat .github/reports/config_component_report.md >> $GITHUB_STEP_SUMMARY
