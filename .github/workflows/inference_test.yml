@@ -7,11 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       models: read
+      contents: read
     steps:
-
       # --- (Optional) Checkout if you need prompt-file from repo ---
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Run Basic AI Inference
+        id: basic_test
+        uses: actions/ai-inference@v1
+        with:
+          prompt: "This is a basic test prompt. What is the weather like today?"
+          max-tokens: 100
+
+      - name: Print Output for Basic Prompt
+        run: echo "${{ steps.basic_test.outputs.response }}"
 
       # --- Second AI inference step using prompt file ---
       - name: Run AI Inference with Prompt File
