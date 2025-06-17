@@ -17,3 +17,11 @@ power falls below 20% of capacity. While docked they regain power each tick at
 the station's recharge rate.
 
 The system is intentionally small but acts as a starting point for more elaborate robotics gameplay in the future.
+
+## Remote Control and Maintenance
+
+Entire cyborg units may receive remote commands from the robotics console or AI. Commands like `shutdown` and `restart` affect every module at once. Engineers can also run `diagnostics` on a unit to get a simple status report and issue `repair` to fully recharge and reactivate all modules.
+
+## Specialized Modules
+
+New `SpecializedRobotModule` objects allow creating equipment with unique power usage and a description of what they do. For example a medical probe might drain 3 power per tick while enabling healing actions. Install these modules the same way as standard modules to expand your cyborg's capabilities.

@@ -41,6 +41,13 @@ class RobotModule:
 
 
 @dataclass
+class SpecializedRobotModule(RobotModule):
+    """Module with a specific functionality and custom power usage."""
+
+    functionality: str = ""
+
+
+@dataclass
 class DockingStation:
     """Location where cyborgs can recharge."""
 
@@ -77,6 +84,44 @@ class CyborgUnit:
             if mod.module_id == module_id and mod.remote_control:
                 mod.set_active(active)
                 return True
+        return False
+
+    def diagnostics(self) -> Dict[str, object]:
+        """Return a status report for the cyborg."""
+        return {
+            "unit": self.unit_id,
+            "power": self.power,
+            "modules": {m.module_id: m.active for m in self.modules},
+        }
+
+    def repair(self) -> None:
+        """Restore power and reactivate all modules."""
+        for mod in self.modules:
+            mod.active = True
+        self.recharge()
+        publish("cyborg_repaired", unit_id=self.unit_id)
+
+    def execute_command(self, command: str) -> bool:
+        """Handle remote commands affecting the whole unit."""
+        cmd = command.lower()
+        if cmd == "shutdown":
+            for mod in self.modules:
+                mod.active = False
+            self.power = 0
+            publish("cyborg_shutdown", unit_id=self.unit_id)
+            return True
+        if cmd == "restart":
+            for mod in self.modules:
+                mod.active = True
+            self.recharge()
+            publish("cyborg_restarted", unit_id=self.unit_id)
+            return True
+        if cmd == "repair":
+            self.repair()
+            return True
+        if cmd == "diagnostics":
+            publish("cyborg_diagnostics", unit_id=self.unit_id, info=self.diagnostics())
+            return True
         return False
 
     def recharge(self, amount: Optional[int] = None) -> None:
@@ -175,6 +220,29 @@ class RoboticsSystem:
         if not unit:
             return False
         return unit.remote_control_module(module_id, active)
+
+    # ------------------------------------------------------------------
+    def remote_command(self, unit_id: str, command: str) -> bool:
+        """Send a high level command to a cyborg unit."""
+        unit = self.units.get(unit_id)
+        if not unit:
+            return False
+        return unit.execute_command(command)
+
+    # ------------------------------------------------------------------
+    def diagnose_unit(self, unit_id: str) -> Optional[Dict[str, object]]:
+        unit = self.units.get(unit_id)
+        if not unit:
+            return None
+        return unit.diagnostics()
+
+    # ------------------------------------------------------------------
+    def repair_unit(self, unit_id: str) -> bool:
+        unit = self.units.get(unit_id)
+        if not unit:
+            return False
+        unit.repair()
+        return True
 
 
 _ROBOTICS_SYSTEM = RoboticsSystem()
