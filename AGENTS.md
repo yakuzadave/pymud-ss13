@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 01:12:11  
+**Generated:** 2025-06-17 01:32:08  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 2f209b1
+**Commit:** e55f158
 **Branch:** main
 
 ---
@@ -13,41 +13,42 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **2f209b1** (22 seconds ago by Katharsis): update workflow to fix inference issue
-- **41a79c6** (16 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **26ef635** (16 minutes ago by Katharsis): removed pylint workflow
-- **d867472** (17 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **9cb763b** (18 minutes ago by Katharsis): Fixed workflow
+- **e55f158** (23 seconds ago by Katharsis): Merge pull request #145 from yakuzadave/codex/update-github-actions-to-use-python
+- **cd5e031** (60 seconds ago by Katharsis): refactor: use python scripts in workflows
+- **8c4f4fa** (20 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **2f209b1** (20 minutes ago by Katharsis): update workflow to fix inference issue
+- **41a79c6** (36 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 2f209b1 - update workflow to fix inference issue
+#### Commit e55f158 - Merge pull request #145 from yakuzadave/codex/update-github-actions-to-use-python
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 18:11:49
+**Date:** 2025-06-16 18:31:45
 **Message:**
 
 ---
-#### Commit 41a79c6 - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 00:56:24
+#### Commit cd5e031 - refactor: use python scripts in workflows
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 18:31:08
 **Message:**
-- Updated from commit: 26ef635f3ff6ccf59894cd91a3e6c733a97c3016
+
+---
+#### Commit 8c4f4fa - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-17 01:12:20
+**Message:**
+- Updated from commit: 2f209b16517f3dfeca567bee451778e32a4f6b13
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit 26ef635 - removed pylint workflow
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-17 00:55:17
-**Message:**
-
----
 
 ### 📁 Files Modified Recently
 
-- .github/workflows/pylint.yml
+- .github/workflows/summary.yml
+- .github/workflows/update-agents-md.yml
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 
@@ -55,7 +56,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 01:12:20
+**Run Date:** 2025-06-17 01:32:19
 
 ### Test Output
 ```
@@ -311,13 +312,13 @@ TOTAL                                    10221   3099    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3170  309.5280  46.5113  8.1293  44.5530  3.9152   295;328       21.5001    4151           1
+test_command_performance     40.5360  231.9830  45.1656  6.3978  43.4210  3.7270   301;297       22.1407    4438           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 139 passed in 7.69s ==============================
+============================= 139 passed in 8.18s ==============================
 ```
 
 ### Coverage Summary
@@ -331,7 +332,7 @@ TOTAL                                    10221   3099    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.3170  309.5280  46.5113  8.1293  44.5530  3.9152   295;328       21.5001    4151           1
+test_command_performance     40.5360  231.9830  45.1656  6.3978  43.4210  3.7270   301;297       22.1407    4438           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -391,4 +392,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:12:20 (GitHub Actions Run #15695607686)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:32:19 (GitHub Actions Run #15695865547)*
