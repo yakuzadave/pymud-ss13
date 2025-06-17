@@ -1,0 +1,23 @@
+name: 'AI inference Test'
+on: workflow_dispatch
+
+jobs:
+  inference:
+    permissions:
+      models: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Local Action
+        id: inference
+        uses: actions/ai-inference@v1
+        with:
+          prompt: 'Hello! I would like you to create some documentation covering this codebase'
+      - name: Run AI Inference with Prompt File
+        id: inference-file
+        uses: actions/ai-inference@v1
+        with:
+          prompt-file: '/.github/prompts/documentation/mud-system.md'
+          max-tokens: 1000
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.inference.outputs.response }}"
