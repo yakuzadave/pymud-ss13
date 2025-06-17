@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 03:49:32  
+**Generated:** 2025-06-17 03:52:45  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** bc26880
+**Commit:** f390622
 **Branch:** main
 
 ---
@@ -13,34 +13,34 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **bc26880** (21 seconds ago by Katharsis): Update inference_test.yml
-- **7091160** (2 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **e0ce8f5** (3 minutes ago by Katharsis): Update inference_test.yml
-- **bd545b2** (9 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **909b372** (10 minutes ago by Katharsis): Update inference_test.yml
+- **f390622** (21 seconds ago by Katharsis): Update inference_test.yml
+- **417d688** (3 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **bc26880** (4 minutes ago by Katharsis): Update inference_test.yml
+- **7091160** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **e0ce8f5** (6 minutes ago by Katharsis): Update inference_test.yml
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit bc26880 - Update inference_test.yml
+#### Commit f390622 - Update inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:49:11
+**Date:** 2025-06-16 20:52:24
 **Message:**
 
 ---
-#### Commit 7091160 - 🤖 Auto-update AGENTS.md
+#### Commit 417d688 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 03:47:35
+**Date:** 2025-06-17 03:49:41
 **Message:**
-- Updated from commit: e0ce8f54c6e102665be77e4f622f6ffafc1e87ee
+- Updated from commit: bc26880de9690d4afae2d3e428017375cd497d55
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit e0ce8f5 - Update inference_test.yml
+#### Commit bc26880 - Update inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 20:46:55
+**Date:** 2025-06-16 20:49:11
 **Message:**
 
 ---
@@ -54,12 +54,12 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 03:49:41
+**Run Date:** 2025-06-17 03:52:54
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.13.5, pytest-8.4.0, pluggy-1.6.0
+platform linux -- Python 3.13.4, pytest-8.4.0, pluggy-1.6.0
 benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
@@ -130,7 +130,7 @@ tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .                                               [100%]
 
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+_______________ coverage: platform linux, python 3.13.4-final-0 ________________
 
 Name                                     Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------------
@@ -313,13 +313,13 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.2270  234.9980  45.7510  6.6412  44.0320  3.5470   281;292       21.8575    4103           1
+test_command_performance     40.7060  250.3760  45.7724  7.4061  43.6010  4.1575   334;340       21.8472    4192           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 148 passed in 7.88s ==============================
+============================= 148 passed in 8.13s ==============================
 ```
 
 ### Coverage Summary
@@ -333,7 +333,7 @@ TOTAL                                    10492   3150    70%
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.2270  234.9980  45.7510  6.6412  44.0320  3.5470   281;292       21.8575    4103           1
+test_command_performance     40.7060  250.3760  45.7724  7.4061  43.6010  4.1575   334;340       21.8472    4192           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -343,7 +343,7 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.13.5
+Python Version: Python 3.13.4
 Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
@@ -393,4 +393,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:49:41 (GitHub Actions Run #15697650349)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:52:54 (GitHub Actions Run #15697692108)*
