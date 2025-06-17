@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 01:32:08  
+**Generated:** 2025-06-17 01:37:22  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** e55f158
+**Commit:** 44a9ed2
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **e55f158** (23 seconds ago by Katharsis): Merge pull request #145 from yakuzadave/codex/update-github-actions-to-use-python
-- **cd5e031** (60 seconds ago by Katharsis): refactor: use python scripts in workflows
-- **8c4f4fa** (20 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **2f209b1** (20 minutes ago by Katharsis): update workflow to fix inference issue
-- **41a79c6** (36 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **44a9ed2** (20 seconds ago by Katharsis): Merge pull request #146 from yakuzadave/codex/improve-github-actions-for-reports
+- **7d00df7** (38 seconds ago by Katharsis): ci: add config and component report workflow
+- **9ee2d29** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **e55f158** (6 minutes ago by Katharsis): Merge pull request #145 from yakuzadave/codex/update-github-actions-to-use-python
+- **cd5e031** (6 minutes ago by Katharsis): refactor: use python scripts in workflows
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit e55f158 - Merge pull request #145 from yakuzadave/codex/update-github-actions-to-use-python
+#### Commit 44a9ed2 - Merge pull request #146 from yakuzadave/codex/improve-github-actions-for-reports
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 18:31:45
+**Date:** 2025-06-16 18:37:02
 **Message:**
 
 ---
-#### Commit cd5e031 - refactor: use python scripts in workflows
+#### Commit 7d00df7 - ci: add config and component report workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 18:31:08
+**Date:** 2025-06-16 18:36:44
 **Message:**
 
 ---
-#### Commit 8c4f4fa - 🤖 Auto-update AGENTS.md
+#### Commit 9ee2d29 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 01:12:20
+**Date:** 2025-06-17 01:32:19
 **Message:**
-- Updated from commit: 2f209b16517f3dfeca567bee451778e32a4f6b13
+- Updated from commit: e55f158d9cdda89109c9a51cea43976dbd355b10
 - Triggered by: push
 - Branch: main
 
@@ -47,6 +47,8 @@ The following commits show recent development activity. Review these to understa
 
 ### 📁 Files Modified Recently
 
+- .github/scripts/generate_config_component_report.py
+- .github/workflows/config_component_report.yml
 - .github/workflows/summary.yml
 - .github/workflows/update-agents-md.yml
 - .github/workflows/weekly_doc_maker.yml
@@ -56,7 +58,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 01:32:19
+**Run Date:** 2025-06-17 01:37:31
 
 ### Test Output
 ```
@@ -309,16 +311,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.5360  231.9830  45.1656  6.3978  43.4210  3.7270   301;297       22.1407    4438           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3170  355.4850  49.0248  13.1153  44.8490  4.8100   329;540       20.3978    4108           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 139 passed in 8.18s ==============================
+============================= 139 passed in 7.71s ==============================
 ```
 
 ### Coverage Summary
@@ -329,11 +331,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.5360  231.9830  45.1656  6.3978  43.4210  3.7270   301;297       22.1407    4438           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     41.3170  355.4850  49.0248  13.1153  44.8490  4.8100   329;540       20.3978    4108           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -392,4 +394,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:32:19 (GitHub Actions Run #15695865547)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 01:37:31 (GitHub Actions Run #15695937466)*
