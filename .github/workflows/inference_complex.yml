@@ -50,18 +50,18 @@ jobs:
           prompt: ${{ steps.commit_summary.outputs.summary }}
           max-tokens: 300
 
-      - name: Print AI output for commit summary
-        run: |
-          echo "AI-generated commit summary:"
-          cat <<EOF
-
-          ${{ steps.ai_summary.outputs.response }}
-          EOF
-
-
-      - name: AI Inference combining prompt and commits
-        id: ai_combined
-        uses: actions/ai-inference@v1
+        - name: Print AI output for commit summary
+          run: |
+            echo "AI-generated commit summary:"
+            cat <<'AI_EOF'
+            ${{ steps.ai_summary.outputs.response }}
+            AI_EOF
+        - name: Print AI combined output
+          run: |
+            echo "Combined AI output:"
+            cat <<'AI_EOF'
+            ${{ steps.ai_combined.outputs.response }}
+            AI_EOF
         with:
           system-prompt: ${{ steps.read_prompt.outputs.prompt_content }}
           prompt: |
