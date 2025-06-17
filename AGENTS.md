@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 00:54:59  
+**Generated:** 2025-06-17 00:56:15  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 9cb763b
+**Commit:** 26ef635
 **Branch:** main
 
 ---
@@ -13,54 +13,49 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **9cb763b** (24 seconds ago by Katharsis): Fixed workflow
-- **39ae967** (20 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **a680f21** (21 minutes ago by Katharsis): Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
-- **7a9ce65** (21 minutes ago by Katharsis): Add rank and finance mechanics
-- **5639ec5** (21 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **26ef635** (32 seconds ago by Katharsis): removed pylint workflow
+- **d867472** (66 seconds ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **9cb763b** (2 minutes ago by Katharsis): Fixed workflow
+- **39ae967** (22 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **a680f21** (22 minutes ago by Katharsis): Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 9cb763b - Fixed workflow
+#### Commit 26ef635 - removed pylint workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-17 00:54:35
+**Date:** 2025-06-17 00:55:17
 **Message:**
 
 ---
-#### Commit 39ae967 - 🤖 Auto-update AGENTS.md
+#### Commit d867472 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 00:34:37
+**Date:** 2025-06-17 00:55:09
 **Message:**
-- Updated from commit: a680f21eb4ac0614b2171ff53d50eb164c5b5480
+- Updated from commit: 9cb763b424b6c4690e2503c94ac5f97a516f8231
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit a680f21 - Merge pull request #144 from yakuzadave/codex/implement-rank-based-budget-control-and-tracking
+#### Commit 9cb763b - Fixed workflow
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 17:34:10
+**Date:** 2025-06-17 00:54:35
 **Message:**
-Add finance tracking and rank mechanics
+
 ---
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/pylint.yml
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
-- commands/cargo.py
-- data/commands.yaml
-- docs/cargo_system.md
-- systems/cargo.py
-- systems/jobs.py
-- tests/test_finance.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 00:55:09
+**Run Date:** 2025-06-17 00:56:23
 
 ### Test Output
 ```
@@ -313,16 +308,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.4770  268.8010  46.0917  6.8404  44.2330  3.9270   264;261       21.6959    3798           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.3750  503.3630  45.9301  11.3236  43.7620  3.9895   194;309       21.7722    4057           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 139 passed in 7.86s ==============================
+============================= 139 passed in 7.72s ==============================
 ```
 
 ### Coverage Summary
@@ -333,11 +328,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10221   3099    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.4770  268.8010  46.0917  6.8404  44.2330  3.9270   264;261       21.6959    3798           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.3750  503.3630  45.9301  11.3236  43.7620  3.9895   194;309       21.7722    4057           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -396,4 +391,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:55:09 (GitHub Actions Run #15695378813)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 00:56:24 (GitHub Actions Run #15695396020)*
