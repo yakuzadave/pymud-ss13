@@ -220,6 +220,19 @@ class MudServer:
         logger.info(f"Publishing client_connected event for: {client_id}")
         publish("client_connected", client_id=client_id)
 
+        # Let the player know they are on the shuttle heading to the station
+        await websocket.send(
+            json.dumps(
+                {
+                    "type": "system",
+                    "message": (
+                        "You strap into the arrival shuttle as it approaches "
+                        "Space Station Alpha."
+                    ),
+                }
+            )
+        )
+
         try:
             # Send initial 'look' command to get room description
             logger.info(f"Sending initial 'look' command for client: {client_id}")
@@ -255,7 +268,10 @@ class MudServer:
                 json.dumps(
                     {
                         "type": "system",
-                        "message": f"Select your job ({job_list}):",
+                        "message": (
+                            "The shuttle is about to dock. Choose your job "
+                            f"({job_list}) to receive your equipment:"
+                        ),
                     }
                 )
             )
@@ -275,11 +291,19 @@ class MudServer:
                 JOB_SYSTEM.setup_player_for_job(
                     f"player_{client_id}", f"player_{client_id}"
                 )
+                spawn_name = (
+                    self.mudpy_interface.get_room_name(job.spawn_location)
+                    if job.spawn_location
+                    else "the station"
+                )
                 await websocket.send(
                     json.dumps(
                         {
                             "type": "system",
-                            "message": f"You are assigned the role of {job.title}.",
+                            "message": (
+                                f"You are assigned the role of {job.title}. "
+                                f"{job.description} The shuttle docks and you step into {spawn_name}."
+                            ),
                         }
                     )
                 )
