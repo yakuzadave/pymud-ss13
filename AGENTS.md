@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 02:00:53  
+**Generated:** 2025-06-17 02:14:05  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** a6bd898
+**Commit:** 08203dd
 **Branch:** main
 
 ---
@@ -13,35 +13,30 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **a6bd898** (26 seconds ago by Katharsis): Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
-- **04d911b** (52 seconds ago by Katharsis): docs: build site with mkdocs
-- **7d96dea** (12 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **8b67466** (13 minutes ago by Katharsis): Merge pull request #147 from yakuzadave/codex/add-text-based-interfaces-for-consoles
-- **07a985f** (14 minutes ago by Katharsis): feat: add console interfaces for subsystems
+- **08203dd** (21 seconds ago by Katharsis): Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+- **8e8660a** (36 seconds ago by Katharsis): Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
+- **d44a84f** (76 seconds ago by Katharsis): docs: add github models API reference
+- **09c0bf4** (13 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **a6bd898** (14 minutes ago by Katharsis): Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit a6bd898 - Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+#### Commit 08203dd - Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:00:27
+**Date:** 2025-06-16 19:13:44
 **Message:**
 Fix docs workflow caching and output checks
 ---
-#### Commit 04d911b - docs: build site with mkdocs
+#### Commit 8e8660a - Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:00:01
+**Date:** 2025-06-16 19:13:29
 **Message:**
 
 ---
-#### Commit 7d96dea - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 01:48:43
+#### Commit d44a84f - docs: add github models API reference
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 19:12:49
 **Message:**
-- Updated from commit: 8b67466e214f63247d08cee7c3ae780557bec301
-- Triggered by: push
-- Branch: main
-
-[skip ci][autogen AGENTS.md]
 
 ---
 
@@ -51,19 +46,15 @@ Fix docs workflow caching and output checks
 - .github/scripts/process_generated_docs.py
 - .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
-- commands/consoles.py
-- data/commands.yaml
+- docs/github_models_api.md
 - docs/index.md
-- docs/text_interaction_design.md
-- engine.py
 - mkdocs.yml
-- tests/test_console_commands.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 02:01:02
+**Run Date:** 2025-06-17 02:14:15
 
 ### Test Output
 ```
@@ -224,7 +215,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           144     26    82%   40, 51, 101, 108-109, 159-164, 168-173, 188-192, 207-208, 211-212
+systems/cargo.py                           144     20    86%   40, 51, 101, 108-109, 159-164, 188-192, 207-208, 211-212
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -317,18 +308,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10318   3139    70%
+TOTAL                                    10318   3133    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9370  307.4730  45.8923  8.2878  43.9520  3.8770   275;305       21.7901    4156           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.4660  570.9730  45.3721  10.2899  43.4810  3.6070   221;295       22.0400    4294           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 142 passed in 7.82s ==============================
+============================= 142 passed in 8.15s ==============================
 ```
 
 ### Coverage Summary
@@ -337,13 +328,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10318   3139    70%
+TOTAL                                    10318   3133    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.9370  307.4730  45.8923  8.2878  43.9520  3.8770   275;305       21.7901    4156           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.4660  570.9730  45.3721  10.2899  43.4810  3.6070   221;295       22.0400    4294           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -402,4 +393,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:01:02 (GitHub Actions Run #15696252331)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:14:15 (GitHub Actions Run #15696429099)*
