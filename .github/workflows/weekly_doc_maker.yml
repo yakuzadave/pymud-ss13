@@ -14,7 +14,7 @@ on:
       - '*.py'
 
 jobs:
-  update-docs:
+  build-and-docs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,10 +23,12 @@ jobs:
       TODAY: ${{ github.run_id }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # ------ Caching for pip ------
       - name: Cache Python dependencies
         uses: actions/cache@v4
         with:
@@ -35,12 +37,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install Documentation Tools
+      # ------ Install Python + doc dependencies ------
+      - name: Install dependencies and doc tools
         run: |
           set -euo pipefail
+          pip install --upgrade pip
+          pip install -r requirements.txt
           pip install sphinx==7.2.6 sphinx-rtd-theme==2.0.0 pydoc-markdown==4.7.0
           pip install mkdocs==1.5.3 mkdocs-material==9.5.9 mkdocs-mermaid2-plugin==1.1.1
 
+      # ------ Run Tests ------
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          pytest --junitxml=pytest-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results-${{ env.TODAY }}
+          path: pytest-results.xml
+
+      # ------ Analyze MUD Code Coverage ------
       - name: Analyze MUD Code Coverage
         run: |
           set -euo pipefail
@@ -95,6 +114,7 @@ jobs:
           name: ai-prompt-context-${{ env.TODAY }}
           path: .github/ai-inputs/documentation
 
+      # ------ AI PROMPT & DOC GENERATION ------
       - name: Read Prompt Files
         id: prompts
         run: |
@@ -133,21 +153,24 @@ jobs:
           name: ai-docs-raw-${{ env.TODAY }}
           path: .github/ai-outputs/docs/generated-docs-raw.md
 
-      - name: Process Generated Documentation
-        run: |
-          set -euo pipefail
-          # Python-based section extraction (unchanged from your original)
+      # ------ Section Extraction, Command Reference, Site Build (your existing python/mkdocs steps go here) ------
+      # Example:
+      # - name: Process Generated Documentation
+      #   run: |
+      #     set -euo pipefail
+      #     # (python extraction script here)
+      #
+      # - name: Generate Command Reference
+      #   run: |
+      #     set -euo pipefail
+      #     # (python script here)
+      #
+      # - name: Generate Interactive Documentation Site
+      #   run: |
+      #     set -euo pipefail
+      #     # (mkdocs build here)
 
-      - name: Generate Command Reference
-        run: |
-          set -euo pipefail
-          # Python-based command reference generation (unchanged)
-
-      - name: Generate Interactive Documentation Site
-        run: |
-          set -euo pipefail
-          # mkdocs build steps (unchanged)
-
+      # ------ Link Check ------
       - name: Check Documentation Links
         uses: lycheeverse/lychee-action@v1
         with:
@@ -166,6 +189,7 @@ jobs:
           name: site-preview-${{ env.TODAY }}
           path: site
 
+      # ------ PR Automation ------
       - name: Create Documentation PR if Changes
         env:
           DOC_BRANCH: docs-update-${{ env.TODAY }}
