@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 02:14:05  
+**Generated:** 2025-06-17 02:20:21  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 08203dd
+**Commit:** d1f03c6
 **Branch:** main
 
 ---
@@ -13,31 +13,36 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **08203dd** (21 seconds ago by Katharsis): Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
-- **8e8660a** (36 seconds ago by Katharsis): Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
-- **d44a84f** (76 seconds ago by Katharsis): docs: add github models API reference
-- **09c0bf4** (13 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **a6bd898** (14 minutes ago by Katharsis): Merge pull request #148 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+- **d1f03c6** (19 seconds ago by Katharsis): Update weekly_doc_maker.yml
+- **4a6ab81** (6 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **08203dd** (7 minutes ago by Katharsis): Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
+- **8e8660a** (7 minutes ago by Katharsis): Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
+- **d44a84f** (8 minutes ago by Katharsis): docs: add github models API reference
 
 ### 🔍 Detailed Recent Changes
 
+#### Commit d1f03c6 - Update weekly_doc_maker.yml
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-06-16 19:20:02
+**Message:**
+fixed api reference for models
+---
+#### Commit 4a6ab81 - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-17 02:14:15
+**Message:**
+- Updated from commit: 08203dd763061fbd00da978ad746c34d6513b428
+- Triggered by: push
+- Branch: main
+
+[skip ci][autogen AGENTS.md]
+
+---
 #### Commit 08203dd - Merge pull request #149 from yakuzadave/codex/fix-workflow-caching-and-improve-error-handling
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
 **Date:** 2025-06-16 19:13:44
 **Message:**
 Fix docs workflow caching and output checks
----
-#### Commit 8e8660a - Merge branch 'main' into codex/fix-workflow-caching-and-improve-error-handling
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:13:29
-**Message:**
-
----
-#### Commit d44a84f - docs: add github models API reference
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 19:12:49
-**Message:**
-
 ---
 
 ### 📁 Files Modified Recently
@@ -54,7 +59,7 @@ Fix docs workflow caching and output checks
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 02:14:15
+**Run Date:** 2025-06-17 02:20:30
 
 ### Test Output
 ```
@@ -215,7 +220,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           144     20    86%   40, 51, 101, 108-109, 159-164, 188-192, 207-208, 211-212
+systems/cargo.py                           144     26    82%   40, 51, 101, 108-109, 159-164, 168-173, 188-192, 207-208, 211-212
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -308,18 +313,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10318   3133    70%
+TOTAL                                    10318   3139    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4660  570.9730  45.3721  10.2899  43.4810  3.6070   221;295       22.0400    4294           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     43.5720  240.8310  48.4542  7.0740  46.5770  3.7780   287;301       20.6381    3995           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 142 passed in 8.15s ==============================
+============================= 142 passed in 7.90s ==============================
 ```
 
 ### Coverage Summary
@@ -328,13 +333,13 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10318   3133    70%
+TOTAL                                    10318   3139    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.4660  570.9730  45.3721  10.2899  43.4810  3.6070   221;295       22.0400    4294           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     43.5720  240.8310  48.4542  7.0740  46.5770  3.7780   287;301       20.6381    3995           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -393,4 +398,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:14:15 (GitHub Actions Run #15696429099)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 02:20:30 (GitHub Actions Run #15696506802)*
