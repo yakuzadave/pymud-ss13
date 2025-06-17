@@ -16,6 +16,8 @@ on:
 jobs:
   build-and-docs:
     runs-on: ubuntu-latest
+    # Explicit job-level permissions per GitHub Models API docs:
+    # See: https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
     permissions:
       contents: write
       models: read
@@ -165,7 +167,8 @@ jobs:
         uses: actions/ai-inference@v1
         id: docs
         with:
-          model: "openai/gpt-4"
+          # See: https://docs.github.com/en/actions/using-github-models/actions-ai-inference#usage
+          model: "gpt-4o"
           system-prompt: ${{ steps.prompts.outputs.system_prompt }}
           prompt: ${{ steps.prompts.outputs.project_context }}
           max-tokens: 4000
