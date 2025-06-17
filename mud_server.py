@@ -11,6 +11,7 @@ import logging
 import os
 import yaml
 from typing import Dict, List, Callable, Any, Optional, Set, Coroutine
+import account_system as accounts
 import websockets
 from websockets.asyncio.server import serve
 from mudpy_interface import MudpyInterface
@@ -179,9 +180,41 @@ class MudServer:
             )
         )
 
+        # Prompt for account credentials
+        await websocket.send(json.dumps({"type": "system", "message": "Username:"}))
+        try:
+            name_msg = await websocket.recv()
+            try:
+                data = json.loads(name_msg)
+                username = data.get("command", name_msg).strip()
+            except json.JSONDecodeError:
+                username = name_msg.strip()
+        except Exception:
+            username = "guest"
+
+        await websocket.send(json.dumps({"type": "system", "message": "Password:"}))
+        try:
+            pass_msg = await websocket.recv()
+            try:
+                data = json.loads(pass_msg)
+                password = data.get("command", pass_msg).strip()
+            except json.JSONDecodeError:
+                password = pass_msg.strip()
+        except Exception:
+            password = ""
+
+        if not accounts.authenticate(username, password):
+            if username not in accounts._load():
+                accounts.create_account(username, password, admin=username == "admin")
+            else:
+                await websocket.send(json.dumps({"type": "error", "message": "Invalid password."}))
+                raise websockets.exceptions.ConnectionClosed(1000, "bad credentials")
+
+        is_admin = accounts.is_admin(username)
+
         # Connect client to MUDpy interface
         logger.info(f"Connecting client to MUDpy interface: {client_id}")
-        self.mudpy_interface.connect_client(client_id)
+        self.mudpy_interface.connect_client(client_id, username=username, is_admin=is_admin)
 
         # Publish client connected event to create player in the world
         logger.info(f"Publishing client_connected event for: {client_id}")

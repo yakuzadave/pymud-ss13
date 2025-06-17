@@ -1,7 +1,11 @@
 import asyncio
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 import world
 from mud_server import MudServer
 from mudpy_interface import MudpyInterface
+import account_system as accounts
 from systems.jobs import get_job_system
 from commands.admin import cmd_manifest
 from world import World
@@ -32,13 +36,15 @@ def teardown_world(old):
     world.WORLD = old
 
 
-def test_login_assigns_selected_job(tmp_path):
+def test_login_assigns_selected_job(tmp_path, monkeypatch):
     old = setup_world(tmp_path)
+    acc_file = tmp_path / "accounts.yaml"
+    monkeypatch.setattr(accounts, "ACCOUNTS_FILE", acc_file)
     try:
         js = get_job_system()
         js.reset_assignments()
         server = MudServer()
-        ws = DummyWebSocket(["engineer"])
+        ws = DummyWebSocket(["tester", "secret", "engineer"])
         asyncio.run(server._login(ws))
         player_id = f"player_{id(ws)}"
         job = js.get_player_job(player_id)
