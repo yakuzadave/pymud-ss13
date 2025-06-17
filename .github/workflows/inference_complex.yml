@@ -53,11 +53,12 @@ jobs:
       - name: Print AI output for commit summary
         run: |
           echo "AI-generated commit summary:"
-          cat <<EOF
-
+          cat <<'AI_EOF'
           ${{ steps.ai_summary.outputs.response }}
-          EOF
+          AI_EOF
 
+      - name: Save commit summary to file
+        run: echo "${{ steps.ai_summary.outputs.response }}" > ai_summary.txt
 
       - name: AI Inference combining prompt and commits
         id: ai_combined
@@ -72,6 +73,9 @@ jobs:
       - name: Print AI combined output
         run: |
           echo "Combined AI output:"
-          cat <<EOF
+          cat <<'AI_EOF'
           ${{ steps.ai_combined.outputs.response }}
-          EOF
+          AI_EOF
+
+      - name: Save combined output to file
+        run: echo "${{ steps.ai_combined.outputs.response }}" > ai_combined.txt
