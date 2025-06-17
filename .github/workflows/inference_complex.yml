@@ -1,0 +1,81 @@
+name: 'Complex AI Inference Test'
+
+on: workflow_dispatch
+
+jobs:
+  lint-test-inference:
+    runs-on: ubuntu-latest
+    permissions:
+      models: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: pytest -q
+
+      - name: Summarize recent commits
+        id: commit_summary
+        run: |
+          commits=$(git log -n 5 --pretty=format:'- %s (%h)')
+          commits="${commits//'%'/'%25'}"
+          commits="${commits//$'\n'/'%0A'}"
+          commits="${commits//$'\r'/'%0D'}"
+          echo "summary=$commits" >> "$GITHUB_OUTPUT"
+
+      - name: Read system prompt file
+        id: read_prompt
+        run: |
+          content="$(cat .github/prompts/documentation/mud-system.md)"
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "prompt_content=$content" >> "$GITHUB_OUTPUT"
+
+      - name: AI Inference on commit summary
+        id: ai_summary
+        uses: actions/ai-inference@v1
+        with:
+          system-prompt: "You are a release notes generator"
+          prompt: ${{ steps.commit_summary.outputs.summary }}
+          max-tokens: 300
+
+      - name: Print AI output for commit summary
+        run: |
+          echo "AI-generated commit summary:"
+          cat <<'AI_EOF'
+          ${{ steps.ai_summary.outputs.response }}
+          AI_EOF
+
+      - name: Save commit summary to file
+        run: echo "${{ steps.ai_summary.outputs.response }}" > ai_summary.txt
+
+      - name: AI Inference combining prompt and commits
+        id: ai_combined
+        uses: actions/ai-inference@v1
+        with:
+          system-prompt: ${{ steps.read_prompt.outputs.prompt_content }}
+          prompt: |
+            Generate release notes for PyMUD-SS13 using the following commit information:
+            ${{ steps.commit_summary.outputs.summary }}
+          max-tokens: 500
+
+      - name: Print AI combined output
+        run: |
+          echo "Combined AI output:"
+          cat <<'AI_EOF'
+          ${{ steps.ai_combined.outputs.response }}
+          AI_EOF
+
+      - name: Save combined output to file
+        run: echo "${{ steps.ai_combined.outputs.response }}" > ai_combined.txt
