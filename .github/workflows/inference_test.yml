@@ -25,7 +25,12 @@ jobs:
       - name: Read MUD system prompt file
         id: read_mud_prompt
         run: |
-          cat .github/prompts/documentation/mud-system.md > prompt.txt
+          content="$(cat .github/prompts/documentation/mud-system.md)"
+          # Escape special characters for GitHub Actions output
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "prompt_content=$content" >> $GITHUB_OUTPUT
 
       - name: Run AI Inference with Prompt Content
         id: inference_file
@@ -33,8 +38,6 @@ jobs:
         with:
           prompt: ${{ steps.read_mud_prompt.outputs.prompt_content }}
           max-tokens: 1000
-        env:
-          prompt_content: ${{ steps.read_mud_prompt.outputs.prompt_content }}
 
       - name: Print AI Output from prompt file
         run: |
