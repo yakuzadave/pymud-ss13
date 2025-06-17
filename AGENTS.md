@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 04:09:59  
+**Generated:** 2025-06-17 04:25:46  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 2e11431
+**Commit:** 9d6cad9
 **Branch:** main
 
 ---
@@ -13,29 +13,29 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **2e11431** (24 seconds ago by Katharsis): Merge pull request #156 from yakuzadave/w5j3qg-codex/fix-unexpected-eof-error-in-inference_test.yml
-- **84ed4d7** (32 seconds ago by Katharsis): Merge branch 'main' into w5j3qg-codex/fix-unexpected-eof-error-in-inference_test.yml
-- **06f09d1** (2 minutes ago by Katharsis): Fix YAML indentation in inference workflows
-- **559fde2** (7 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **ea13232** (7 minutes ago by Katharsis): Merge pull request #155 from yakuzadave/8dxtda-codex/fix-unexpected-eof-error-in-inference_test.yml
+- **9d6cad9** (22 seconds ago by Katharsis): Merge pull request #157 from yakuzadave/apwjn6-codex/fix-unexpected-eof-error-in-inference_test.yml
+- **0602f36** (29 seconds ago by Katharsis): Merge branch 'main' into apwjn6-codex/fix-unexpected-eof-error-in-inference_test.yml
+- **baf78ef** (84 seconds ago by Katharsis): Fix inference workflows
+- **2d9154e** (16 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **2e11431** (16 minutes ago by Katharsis): Merge pull request #156 from yakuzadave/w5j3qg-codex/fix-unexpected-eof-error-in-inference_test.yml
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 2e11431 - Merge pull request #156 from yakuzadave/w5j3qg-codex/fix-unexpected-eof-error-in-inference_test.yml
+#### Commit 9d6cad9 - Merge pull request #157 from yakuzadave/apwjn6-codex/fix-unexpected-eof-error-in-inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 21:09:35
+**Date:** 2025-06-16 21:25:24
 **Message:**
 Add complex inference workflow
 ---
-#### Commit 84ed4d7 - Merge branch 'main' into w5j3qg-codex/fix-unexpected-eof-error-in-inference_test.yml
+#### Commit 0602f36 - Merge branch 'main' into apwjn6-codex/fix-unexpected-eof-error-in-inference_test.yml
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 21:09:27
+**Date:** 2025-06-16 21:25:17
 **Message:**
 
 ---
-#### Commit 06f09d1 - Fix YAML indentation in inference workflows
+#### Commit baf78ef - Fix inference workflows
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-16 21:08:28
+**Date:** 2025-06-16 21:24:22
 **Message:**
 
 ---
@@ -50,7 +50,7 @@ Add complex inference workflow
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 04:10:08
+**Run Date:** 2025-06-17 04:25:56
 
 ### Test Output
 ```
@@ -211,7 +211,7 @@ systems/atmos.py                           194     84    57%   66-67, 81-82, 90,
 systems/atmosphere.py                        1      0   100%
 systems/bar.py                              61      4    93%   50, 53, 59, 86
 systems/botany.py                          155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                           144     15    90%   40, 51, 101, 108-109, 159-164, 207-208, 211-212
+systems/cargo.py                           144     21    85%   40, 51, 101, 108-109, 159-164, 168-173, 207-208, 211-212
 systems/chemical_reactions.py               66      4    94%   46, 52, 85, 97
 systems/chemistry.py                        54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                         56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -304,18 +304,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10492   3144    70%
+TOTAL                                    10492   3150    70%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.2270  224.5900  46.1208  6.7691  44.2330  3.7095   334;345       21.6822    4577           1
+test_command_performance     41.1680  354.1850  46.3083  8.3556  44.5330  3.6960   237;280       21.5944    3934           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 148 passed in 8.04s ==============================
+============================= 148 passed in 8.24s ==============================
 ```
 
 ### Coverage Summary
@@ -324,12 +324,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    10492   3144    70%
+TOTAL                                    10492   3150    70%
 
 ---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
 Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.2270  224.5900  46.1208  6.7691  44.2330  3.7095   334;345       21.6822    4577           1
+test_command_performance     41.1680  354.1850  46.3083  8.3556  44.5330  3.6960   237;280       21.5944    3934           1
 ----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -389,4 +389,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 04:10:08 (GitHub Actions Run #15697922520)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 04:25:56 (GitHub Actions Run #15698131109)*
