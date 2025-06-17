@@ -54,8 +54,10 @@ jobs:
         run: |
           echo "AI-generated commit summary:"
           cat <<EOF
+
           ${{ steps.ai_summary.outputs.response }}
           EOF
+
 
       - name: AI Inference combining prompt and commits
         id: ai_combined
