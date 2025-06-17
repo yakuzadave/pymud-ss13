@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-17 03:14:00  
+**Generated:** 2025-06-17 03:17:36  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 7586b8b
+**Commit:** e9e52c0
 **Branch:** main
 
 ---
@@ -13,14 +13,25 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **7586b8b** (23 seconds ago by Katharsis): Merge pull request #152 from yakuzadave/codex/expand-space_exploration.py-with-hazards-and-tracking
-- **3cf7401** (38 seconds ago by Katharsis): feat(space): expand exploration hazards and cargo returns
-- **d081e64** (5 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **5285c28** (6 minutes ago by Katharsis): Merge pull request #151 from yakuzadave/codex/add-logging-and-update-triggers-in-weekly_doc_maker.yml
-- **f43f948** (6 minutes ago by Katharsis): chore: refine weekly doc workflow logging
+- **e9e52c0** (3 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **7586b8b** (4 minutes ago by Katharsis): Merge pull request #152 from yakuzadave/codex/expand-space_exploration.py-with-hazards-and-tracking
+- **3cf7401** (4 minutes ago by Katharsis): feat(space): expand exploration hazards and cargo returns
+- **d081e64** (9 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **5285c28** (9 minutes ago by Katharsis): Merge pull request #151 from yakuzadave/codex/add-logging-and-update-triggers-in-weekly_doc_maker.yml
 
 ### 🔍 Detailed Recent Changes
 
+#### Commit e9e52c0 - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-06-17 03:14:09
+**Message:**
+- Updated from commit: 7586b8bac356d350117739942740190af1f006e8
+- Triggered by: push
+- Branch: main
+
+[skip ci][autogen AGENTS.md]
+
+---
 #### Commit 7586b8b - Merge pull request #152 from yakuzadave/codex/expand-space_exploration.py-with-hazards-and-tracking
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
 **Date:** 2025-06-16 20:13:37
@@ -33,21 +44,9 @@ Improve space missions with new hazards
 **Message:**
 
 ---
-#### Commit d081e64 - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-17 03:08:53
-**Message:**
-- Updated from commit: 5285c28b1ffcafe4ec63ff1fcb1797199e1dd54b
-- Triggered by: push
-- Branch: main
-
-[skip ci][autogen AGENTS.md]
-
----
 
 ### 📁 Files Modified Recently
 
-- .github/workflows/weekly_doc_maker.yml
 - AGENTS.md
 - docs/space_exploration.md
 - systems/space_exploration.py
@@ -57,7 +56,7 @@ Improve space missions with new hazards
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-17 03:14:09
+**Run Date:** 2025-06-17 03:17:45
 
 ### Test Output
 ```
@@ -313,16 +312,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10454   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8660  452.7880  45.9013  9.3331  43.8830  4.0680   259;311       21.7859    4141           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.7470  460.2220  45.9940  10.1926  44.0125  4.0270   224;274       21.7420    3958           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 146 passed in 7.86s ==============================
+============================= 146 passed in 7.94s ==============================
 ```
 
 ### Coverage Summary
@@ -333,11 +332,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    10454   3150    70%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.8660  452.7880  45.9013  9.3331  43.8830  4.0680   259;311       21.7859    4141           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.7470  460.2220  45.9940  10.1926  44.0125  4.0270   224;274       21.7420    3958           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -396,4 +395,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:14:09 (GitHub Actions Run #15697187751)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-17 03:17:45 (GitHub Actions Run #15697232059)*
