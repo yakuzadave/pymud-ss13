@@ -140,6 +140,7 @@ class PowerSystem:
         self.smes_units: Dict[str, Dict[str, Any]] = {}
         self.consumers: Dict[str, Dict[str, Any]] = {}
         self.room_power_status: Dict[str, bool] = {}
+        self.usage_history: Dict[str, List[float]] = {}
 
         # Register event handlers
         subscribe("generator_toggle", self.on_generator_toggle)
@@ -345,6 +346,10 @@ class PowerSystem:
 
             grid.capacity = total_power
             grid.update_load(load)
+            hist = self.usage_history.setdefault(grid_id, [])
+            hist.append(grid.current_load)
+            if len(hist) > 20:
+                del hist[0]
 
             if total_power <= 0:
                 # No power available, check for batteries
@@ -565,6 +570,14 @@ class PowerSystem:
             if powered
             else f"{room_id} is without power."
         )
+
+    def get_usage_graph(self, grid_id: str, width: int = 10) -> str:
+        """Return a simple ASCII graph of recent power usage for a grid."""
+        history = self.usage_history.get(grid_id, [])
+        if not history:
+            return "No data"
+        points = history[-width:]
+        return " ".join(f"{int(v):3d}" for v in points)
 
     def cause_electrical_hazard(self, grid_id: str) -> None:
         if grid_id in self.grids:

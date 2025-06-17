@@ -31,3 +31,29 @@ def test_secconsole_alerts():
     sec.alerts.append({"type": "motion", "location": "hall"})
     result = secconsole_handler("test", action="alerts")
     assert "hall" in result
+
+
+def test_engconsole_usage():
+    ps = get_power_system()
+    ps.usage_history.clear()
+    ps.usage_history["g1"] = [10, 20, 30]
+    ps.grids["g1"] = PowerGrid("g1", "Alpha")
+    result = engconsole_handler("test", action="usage", target="g1")
+    assert "10" in result and "30" in result
+
+
+def test_cargoconsole_route_management():
+    cargo = get_cargo_system()
+    cargo.shuttle_routes.clear()
+    cargo.set_route("r1", ["A", "B"])
+    out = cargoconsole_handler("test", action="route")
+    assert "r1" in out and "A" in out
+
+
+def test_secconsole_pardon():
+    sec = get_security_system()
+    sec.prisoners.clear()
+    sec.prisoners["p1"] = sec.arrest("p1", duration=10)
+    msg = secconsole_handler("test", action="pardon", target="p1")
+    assert "released" in msg
+    assert "p1" not in sec.prisoners
