@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-20 16:27:09  
+**Generated:** 2025-06-20 16:46:41  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 8dd839d
+**Commit:** cb21464
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **8dd839d** (21 seconds ago by Katharsis): Merge pull request #166 from yakuzadave/codex/implement-geneticist-and-virologist-roles
-- **b96f88c** (3 minutes ago by Katharsis): feat(roles): add geneticist and virologist
-- **372e0b8** (78 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **5b368e5** (79 minutes ago by Katharsis): Merge pull request #165 from yakuzadave/codex/investigate-item-organization-optimization
-- **cfbb273** (80 minutes ago by Katharsis): feat(items): show all item properties
+- **cb21464** (21 seconds ago by Katharsis): Merge pull request #167 from yakuzadave/codex/create-random-events-for-geneticist-and-virologist
+- **be97f33** (39 seconds ago by Katharsis): feat(events): add genetics and virology random events
+- **4bbe423** (19 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **8dd839d** (20 minutes ago by Katharsis): Merge pull request #166 from yakuzadave/codex/implement-geneticist-and-virologist-roles
+- **b96f88c** (23 minutes ago by Katharsis): feat(roles): add geneticist and virologist
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 8dd839d - Merge pull request #166 from yakuzadave/codex/implement-geneticist-and-virologist-roles
+#### Commit cb21464 - Merge pull request #167 from yakuzadave/codex/create-random-events-for-geneticist-and-virologist
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-20 09:26:48
+**Date:** 2025-06-20 09:46:20
 **Message:**
 
 ---
-#### Commit b96f88c - feat(roles): add geneticist and virologist
+#### Commit be97f33 - feat(events): add genetics and virology random events
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-20 09:23:41
+**Date:** 2025-06-20 09:46:02
 **Message:**
 
 ---
-#### Commit 372e0b8 - 🤖 Auto-update AGENTS.md
+#### Commit 4bbe423 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-20 15:08:42
+**Date:** 2025-06-20 16:27:18
 **Message:**
-- Updated from commit: 5b368e51e247183e16547687c144bff500b1e448
+- Updated from commit: 8dd839de711e12924b7fc8e125e4323640da795a
 - Triggered by: push
 - Branch: main
 
@@ -50,9 +50,8 @@ The following commits show recent development activity. Review these to understa
 - AGENTS.md
 - commands/geneticist.py
 - commands/virologist.py
-- components/item.py
 - components/player.py
-- data/items.yaml
+- data/random_events.yaml
 - docs/genetics_system.md
 - docs/virology_system.md
 - engine.py
@@ -60,7 +59,6 @@ The following commits show recent development activity. Review these to understa
 - start_server.py
 - systems/disease.py
 - systems/jobs.py
-- tests/test_item_properties.py
 - tests/test_jobs.py
 - tests/test_roles.py
 
@@ -68,7 +66,7 @@ The following commits show recent development activity. Review these to understa
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-20 16:27:18
+**Run Date:** 2025-06-20 16:46:50
 
 ### Test Output
 ```
@@ -331,16 +329,16 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    11029   3256    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.1060  494.8600  46.3337  10.3371  44.3330  4.0370   172;297       21.5826    3851           1
------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
+Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-------------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.1350  1,215.8860  48.9877  27.1857  43.4965  4.5035   233;484       20.4133    4496           1
+-------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 162 passed in 8.09s ==============================
+============================= 162 passed in 8.10s ==============================
 ```
 
 ### Coverage Summary
@@ -351,11 +349,11 @@ world.py                                   170     43    75%   48-49, 95, 104-11
 ----------------------------------------------------------------------
 TOTAL                                    11029   3256    70%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.1060  494.8600  46.3337  10.3371  44.3330  4.0370   172;297       21.5826    3851           1
------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
+Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-------------------------------------------------------------------------------------------------------------------------------
+test_command_performance     40.1350  1,215.8860  48.9877  27.1857  43.4965  4.5035   233;484       20.4133    4496           1
+-------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -414,4 +412,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-20 16:27:18 (GitHub Actions Run #15783374299)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-20 16:46:50 (GitHub Actions Run #15783699299)*
