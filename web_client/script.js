@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (data.type === 'inventory') {
                         inventoryData = data.inventory;
                         renderInventory();
+                    } else if (data.type === 'object_data') {
+                        displayObjectData(data.object);
                     } else if (data.type === 'door_status') {
                         doorStates[data.door_id] = data.locked;
                         renderMap();
@@ -294,6 +296,8 @@ document.addEventListener('DOMContentLoaded', function() {
             inventoryData.items.forEach(it => {
                 const li = document.createElement('li');
                 li.textContent = it.name;
+                li.dataset.objectId = it.id;
+                li.addEventListener('click', () => requestObject(it.id));
                 inventoryList.appendChild(li);
             });
         }
@@ -301,8 +305,29 @@ document.addEventListener('DOMContentLoaded', function() {
         inventoryData.equipment.forEach(eq => {
             const li = document.createElement('li');
             li.textContent = `[${eq.slot}] ${eq.name}`;
+            li.dataset.objectId = eq.id;
+            li.addEventListener('click', () => requestObject(eq.id));
             equipmentList.appendChild(li);
         });
+    }
+
+    function requestObject(objectId) {
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+            webSocket.send(JSON.stringify({ type: 'object_request', object_id: objectId }));
+        }
+    }
+
+    function displayObjectData(obj) {
+        if (!obj) {
+            appendToTerminal('Object not found.', 'error-message');
+            return;
+        }
+        appendToTerminal(`${obj.name}: ${obj.description}`, 'system-message');
+        if (obj.components) {
+            Object.entries(obj.components).forEach(([name, comp]) => {
+                appendToTerminal(`- ${name}: ${JSON.stringify(comp)}`, 'system-message');
+            });
+        }
     }
 
     // Event Listeners
