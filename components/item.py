@@ -202,8 +202,17 @@ class ItemComponent:
             description += f"It looks edible and provides {nutrition} nutrition."
 
         # Add additional property information
-        if "durability" in self.item_properties:
-            description += f"\nDurability: {self.item_properties['durability']}/100"
+        props = dict(self.item_properties)
+        if "durability" in props:
+            description += f"\nDurability: {props.pop('durability')}/100"
+
+        if self.item_type == "keycard" and "access_level" in props:
+            # access level already displayed above
+            props.pop("access_level")
+
+        for key, value in props.items():
+            label = key.replace("_", " ").capitalize()
+            description += f"\n{label}: {value}"
 
         return description
 
