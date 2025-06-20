@@ -120,3 +120,16 @@
   params:
     room_id: "airlock"
   description: A sudden rupture exposes a section of the station to space.
+- id: unstable_clone
+  name: Unstable Clone
+  weight: 1
+  params:
+    mutation: hulk
+  description: A cloning accident leaves a patient with aggressive mutations.
+
+- id: virus_outbreak
+  name: Virus Outbreak
+  weight: 1
+  params:
+    disease: virus_x
+  description: A containment failure releases a pathogen into medbay.
