@@ -224,6 +224,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: security_uniform
   name: Security Uniform
@@ -236,6 +239,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: engineering_uniform
   name: Engineering Uniform
@@ -248,6 +254,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: medical_uniform
   name: Medical Uniform
@@ -260,6 +269,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: science_uniform
   name: Science Uniform
@@ -272,6 +284,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: cargo_uniform
   name: Cargo Uniform
@@ -284,6 +299,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: janitor_uniform
   name: Janitor Uniform
@@ -296,6 +314,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: chef_uniform
   name: Chef Uniform
@@ -308,6 +329,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: assistant_uniform
   name: Assistant Uniform
@@ -320,6 +344,9 @@
       is_takeable: true
       is_usable: true
       item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 1
 
 - id: biometric_scanner
   name: Biometric Scanner
@@ -491,6 +518,7 @@
         durability: 90
         oxygen_remaining: 95
         duration_minutes: 30
+        safety_rating: 3
 
 - id: comms_device
   name: Communications Device
@@ -523,6 +551,8 @@
       item_properties:
         durability: 90
         radiation_protection: true
+        slot: body
+        armor_rating: 4
 
 - id: space_suit
   name: Space Suit
@@ -539,6 +569,8 @@
       item_properties:
         durability: 95
         vacuum_protection: true
+        slot: body
+        armor_rating: 5
 
 - id: tool_belt
   name: Engineer's Tool Belt
@@ -570,6 +602,8 @@
       is_takeable: true
       is_usable: false
       item_type: tool
+      item_properties:
+        max_volume: 100
 
 - id: chemical_a
   name: Chemical A
