@@ -60,6 +60,8 @@ from commands import (  # noqa: F401,E402
     bartender,
     botanist,
     research,
+    geneticist,
+    virologist,
     cargo,
     requisition,
     antag,

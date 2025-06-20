@@ -450,6 +450,8 @@ class PlayerComponent:
             "doctor": ["heal"],
             "security": ["restrain"],
             "chemist": ["mix"],
+            "geneticist": ["mutate", "stabilize"],
+            "virologist": ["infect", "cure"],
         }
         return mapping.get(role.lower(), [])
 

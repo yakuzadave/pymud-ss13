@@ -6,6 +6,8 @@ from components.player import PlayerComponent
 from commands.engineer import repair_handler, diagnostics_handler, reroute_handler, seal_handler
 from commands.doctor import heal_handler, diagnose_handler
 from commands.security import restrain_handler
+from commands.geneticist import mutate_handler, stabilize_handler
+from commands.virologist import infect_handler, cure_handler
 from systems.power import PowerGrid
 from systems.atmosphere import AtmosphericSystem
 import systems
@@ -136,4 +138,38 @@ def test_seal_command(monkeypatch):
         assert not atmos.leaks
     finally:
         atmos.leaks = []
+        teardown_player()
+
+
+def test_geneticist_commands(tmp_path):
+    world.WORLD = world.World(data_dir=str(tmp_path))
+    setup_player("geneticist")
+    target = GameObject(id="player_target", name="Target", description="")
+    target.add_component("player", PlayerComponent())
+    world.WORLD.register(target)
+    try:
+        mutate_handler("test", mutation="hulk", player="target")
+        profile = systems.get_genetics_system().get_profile("player_target")
+        assert "hulk" in profile.mutations
+        stabilize_handler("test", player="target", amount=1.0)
+        assert profile.instability == 0
+    finally:
+        world.WORLD.remove("player_target")
+        teardown_player()
+
+
+def test_virologist_commands(tmp_path):
+    world.WORLD = world.World(data_dir=str(tmp_path))
+    setup_player("virologist")
+    target = GameObject(id="player_tgt", name="Tgt", description="")
+    target.add_component("player", PlayerComponent())
+    world.WORLD.register(target)
+    try:
+        infect_handler("test", player="tgt", disease="flu")
+        comp = target.get_component("player")
+        assert "flu" in comp.diseases
+        cure_handler("test", player="tgt", disease="flu")
+        assert "flu" not in comp.diseases
+    finally:
+        world.WORLD.remove("player_tgt")
         teardown_player()

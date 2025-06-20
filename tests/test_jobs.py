@@ -77,3 +77,9 @@ def test_job_reassignment(tmp_path):
 def test_antagonist_ability_present():
     job = get_job_system().jobs.get("traitor")
     assert job and "sabotage" in job.abilities
+
+
+def test_new_jobs_registered():
+    js = get_job_system()
+    assert "geneticist" in js.jobs
+    assert "virologist" in js.jobs
