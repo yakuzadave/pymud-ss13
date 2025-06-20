@@ -411,6 +411,23 @@ def create_standard_jobs() -> Dict[str, Job]:
     doctor.set_spawn_location("medbay")
     jobs[doctor.job_id] = doctor
 
+    # Virologist
+    virologist = Job(
+        "virologist",
+        "Virologist",
+        "Research pathogens and develop cures.",
+        "medical",
+        rank=45,
+    )
+    virologist.add_access_level(50)
+    virologist.add_starting_item("medical_id_card", {"access_level": 50})
+    virologist.add_starting_item("medical_headset", {"channels": ["medical"]})
+    virologist.add_starting_item("biometric_scanner")
+    virologist.set_spawn_location("medbay")
+    virologist.add_ability("infect")
+    virologist.add_ability("cure")
+    jobs[virologist.job_id] = virologist
+
     # Scientist
     scientist = Job(
         "scientist",
@@ -426,6 +443,23 @@ def create_standard_jobs() -> Dict[str, Job]:
     scientist.add_starting_item("science_scanner")
     scientist.set_spawn_location("research")
     jobs[scientist.job_id] = scientist
+
+    # Geneticist
+    geneticist = Job(
+        "geneticist",
+        "Geneticist",
+        "Study DNA and manipulate genetic traits.",
+        "science",
+        rank=45,
+    )
+    geneticist.add_access_level(60)
+    geneticist.add_starting_item("science_id_card", {"access_level": 60})
+    geneticist.add_starting_item("science_headset", {"channels": ["science"]})
+    geneticist.add_starting_item("biometric_scanner")
+    geneticist.set_spawn_location("science_lab")
+    geneticist.add_ability("mutate")
+    geneticist.add_ability("stabilize")
+    jobs[geneticist.job_id] = geneticist
 
     # Chemist
     chemist = Job(

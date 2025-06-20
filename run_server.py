@@ -21,6 +21,7 @@ from systems import (
     get_random_event_system,
     get_security_system,
     get_genetics_system,
+    get_disease_system,
     get_round_manager,
 )
 from system_loops import run_update_loop, run_forever_loop
@@ -99,6 +100,7 @@ async def main():
     random_event_task = asyncio.create_task(run_forever_loop(get_random_event_system))
     security_task = asyncio.create_task(run_update_loop(get_security_system))
     genetics_task = asyncio.create_task(run_update_loop(get_genetics_system))
+    disease_task = asyncio.create_task(run_update_loop(get_disease_system))
 
     TASKS.extend(
         [
@@ -109,6 +111,7 @@ async def main():
             random_event_task,
             security_task,
             genetics_task,
+            disease_task,
         ]
     )
 
