@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-06-20 16:46:41  
+**Generated:** 2025-06-20 20:50:58  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** cb21464
+**Commit:** 316f1a9
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **cb21464** (21 seconds ago by Katharsis): Merge pull request #167 from yakuzadave/codex/create-random-events-for-geneticist-and-virologist
-- **be97f33** (39 seconds ago by Katharsis): feat(events): add genetics and virology random events
-- **4bbe423** (19 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **8dd839d** (20 minutes ago by Katharsis): Merge pull request #166 from yakuzadave/codex/implement-geneticist-and-virologist-roles
-- **b96f88c** (23 minutes ago by Katharsis): feat(roles): add geneticist and virologist
+- **316f1a9** (21 seconds ago by Katharsis): Merge pull request #168 from yakuzadave/codex/ensure-ui-displays-components
+- **33ce7ea** (75 seconds ago by Katharsis): feat(web): display item components in web client
+- **0651853** (4 hours ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **cb21464** (4 hours ago by Katharsis): Merge pull request #167 from yakuzadave/codex/create-random-events-for-geneticist-and-virologist
+- **be97f33** (4 hours ago by Katharsis): feat(events): add genetics and virology random events
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit cb21464 - Merge pull request #167 from yakuzadave/codex/create-random-events-for-geneticist-and-virologist
+#### Commit 316f1a9 - Merge pull request #168 from yakuzadave/codex/ensure-ui-displays-components
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-20 09:46:20
+**Date:** 2025-06-20 13:50:37
 **Message:**
 
 ---
-#### Commit be97f33 - feat(events): add genetics and virology random events
+#### Commit 33ce7ea - feat(web): display item components in web client
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-06-20 09:46:02
+**Date:** 2025-06-20 13:49:43
 **Message:**
 
 ---
-#### Commit 4bbe423 - 🤖 Auto-update AGENTS.md
+#### Commit 0651853 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-06-20 16:27:18
+**Date:** 2025-06-20 16:46:50
 **Message:**
-- Updated from commit: 8dd839de711e12924b7fc8e125e4323640da795a
+- Updated from commit: cb21464f5f66b4a2b16c9667258fd0598750ab02
 - Triggered by: push
 - Branch: main
 
@@ -48,25 +48,19 @@ The following commits show recent development activity. Review these to understa
 ### 📁 Files Modified Recently
 
 - AGENTS.md
-- commands/geneticist.py
-- commands/virologist.py
-- components/player.py
 - data/random_events.yaml
 - docs/genetics_system.md
 - docs/virology_system.md
-- engine.py
-- run_server.py
-- start_server.py
-- systems/disease.py
-- systems/jobs.py
-- tests/test_jobs.py
-- tests/test_roles.py
+- integration.py
+- mud_websocket_server.py
+- web_client/index.html
+- web_client/script.js
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-06-20 16:46:50
+**Run Date:** 2025-06-20 20:51:07
 
 ### Test Output
 ```
@@ -205,11 +199,11 @@ components/structure.py                     42      3    93%   43, 60, 72
 connection.py                               68     68     0%   6-193
 engine.py                                   52     10    81%   108, 133-134, 152-153, 157-162
 events.py                                   53     20    62%   89-90, 108-135, 145, 158
-integration.py                             127     24    81%   64, 67, 72, 76, 80, 84, 105-106, 210-211, 217, 230-231, 242-247, 258-264, 293
+integration.py                             135     31    77%   64, 67, 72, 76, 80, 84, 105-106, 210-211, 217, 230-231, 242-247, 258-264, 293, 312-318
 mod_manager.py                              80     10    88%   47-48, 73-74, 93, 100-101, 106, 117-118
 mods/example_mod/scripts/example.py          1      0   100%
 mud_server.py                              223    107    52%   53-54, 99-155, 189, 192-193, 200, 203-204, 210-211, 250, 282, 285-286, 288, 310-312, 366-369, 387-415, 428-451, 464-487, 501-524, 540-559, 567-576, 584-588, 605, 610-614
-mud_websocket_server.py                    183    183     0%   8-406
+mud_websocket_server.py                    187    187     0%   8-412
 mudpy_interface.py                         395    256    35%   249-252, 352-401, 420-424, 433, 436-437, 455, 473-570, 583-587, 599-607, 619-645, 649-668, 682, 688, 692, 707, 711, 721, 734-779, 792-862, 876-910, 923-972, 990-1024, 1067-1069, 1076, 1098-1102
 parser.py                                  114     31    73%   53-54, 85-86, 104-107, 139-175, 205, 226-227, 243, 252
 pathfinding.py                              29      4    86%   18, 30, 33, 46
@@ -327,18 +321,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    11029   3256    70%
+TOTAL                                    11041   3267    70%
 
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.1350  1,215.8860  48.9877  27.1857  43.4965  4.5035   233;484       20.4133    4496           1
+test_command_performance     40.8770  1,487.1630  45.7365  23.9730  43.5020  3.7470    16;302       21.8644    3936           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 162 passed in 8.10s ==============================
+============================= 162 passed in 7.99s ==============================
 ```
 
 ### Coverage Summary
@@ -347,12 +341,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    11029   3256    70%
+TOTAL                                    11041   3267    70%
 
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     40.1350  1,215.8860  48.9877  27.1857  43.4965  4.5035   233;484       20.4133    4496           1
+test_command_performance     40.8770  1,487.1630  45.7365  23.9730  43.5020  3.7470    16;302       21.8644    3936           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -412,4 +406,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-06-20 16:46:50 (GitHub Actions Run #15783699299)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-06-20 20:51:07 (GitHub Actions Run #15787596912)*
