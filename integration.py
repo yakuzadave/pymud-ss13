@@ -307,6 +307,16 @@ class MudpyIntegration:
         # Convert client_id to string to ensure compatibility
         return self.engine.process_command(str(client_id), command)
 
+    def get_object_data(self, object_id: str) -> Optional[Dict[str, Any]]:
+        """Return serialized data for a game object if it exists."""
+        obj = self.world.get_object(object_id)
+        if obj:
+            try:
+                return obj.to_dict()
+            except Exception as exc:
+                logger.error(f"Failed to serialize object {object_id}: {exc}")
+        return None
+
 
 # This function will be called to create the integration when needed
 def create_integration(interface) -> MudpyIntegration:

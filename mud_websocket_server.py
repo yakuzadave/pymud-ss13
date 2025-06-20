@@ -311,6 +311,12 @@ async def handle_client(websocket):
                                 json.dumps({"type": "inventory", "inventory": inv})
                             )
                             continue
+                        if data.get("type") == "object_request":
+                            obj = mud_integration.get_object_data(data.get("object_id", ""))
+                            await websocket.send_str(
+                                json.dumps({"type": "object_data", "object": obj})
+                            )
+                            continue
                         command = data.get("command", "")
                     except json.JSONDecodeError:
                         # If not valid JSON, treat the entire message as a command
