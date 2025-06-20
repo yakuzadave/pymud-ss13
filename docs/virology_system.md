@@ -5,3 +5,7 @@ The disease system models simple viral infections. Each virus inflicts toxin dam
 ## Virologist Role
 
 Virologists start in the medical bay with a biometric scanner. They can use the `infect`, `cure` and `diagnose_disease` commands to manage outbreaks. The system runs automatically when the server is active so untreated diseases will worsen and can spread to nearby players.
+
+## Random Events
+
+Virology may be thrust into action when the **virus_outbreak** event strikes, releasing a dangerous disease into the medical bay.
