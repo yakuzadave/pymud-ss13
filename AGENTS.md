@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-07-02 17:53:50  
+**Generated:** 2025-07-02 22:30:17  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** b17e36d
+**Commit:** a85f9d3
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **b17e36d** (25 seconds ago by Katharsis): Merge pull request #171 from yakuzadave/codex/update-shuttle-schedules
-- **37c5cd0** (12 minutes ago by Katharsis): fix(schedules): resolve flake8 issues
-- **bc2249d** (26 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **58535e7** (26 minutes ago by Katharsis): Merge pull request #170 from yakuzadave/codex/implement-character-creation-system
-- **f8b3832** (44 minutes ago by Katharsis): feat(login): add character creation and persistence
+- **a85f9d3** (23 seconds ago by Katharsis): Merge pull request #172 from yakuzadave/codex/add-verbs-and-commands-for-world-interaction
+- **3d70a0c** (52 seconds ago by Katharsis): feat(commands): add social and combat verbs
+- **38ad10a** (5 hours ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **b17e36d** (5 hours ago by Katharsis): Merge pull request #171 from yakuzadave/codex/update-shuttle-schedules
+- **37c5cd0** (5 hours ago by Katharsis): fix(schedules): resolve flake8 issues
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit b17e36d - Merge pull request #171 from yakuzadave/codex/update-shuttle-schedules
+#### Commit a85f9d3 - Merge pull request #172 from yakuzadave/codex/add-verbs-and-commands-for-world-interaction
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-02 13:53:25
+**Date:** 2025-07-02 18:29:54
 **Message:**
 
 ---
-#### Commit 37c5cd0 - fix(schedules): resolve flake8 issues
+#### Commit 3d70a0c - feat(commands): add social and combat verbs
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-02 13:41:33
+**Date:** 2025-07-02 18:29:25
 **Message:**
 
 ---
-#### Commit bc2249d - 🤖 Auto-update AGENTS.md
+#### Commit 38ad10a - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-07-02 17:28:06
+**Date:** 2025-07-02 17:54:00
 **Message:**
-- Updated from commit: 58535e77853f72a260c5e7669cb7333c17767eaa
+- Updated from commit: b17e36d608ad405063e9152f8a099ac2f1033319
 - Triggered by: push
 - Branch: main
 
@@ -48,19 +48,21 @@ The following commits show recent development activity. Review these to understa
 ### 📁 Files Modified Recently
 
 - AGENTS.md
-- account_system.py
+- commands/combat.py
+- commands/social.py
+- data/commands.yaml
+- docs/commands_reference.md
 - docs/space_exploration.md
-- mud_server.py
+- engine.py
 - systems/space_exploration.py
-- tests/test_accounts.py
-- tests/test_manifest_and_login.py
+- tests/test_social_and_combat.py
 - tests/test_space_exploration.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-07-02 17:54:00
+**Run Date:** 2025-07-02 22:30:28
 
 ### Test Output
 ```
@@ -70,70 +72,71 @@ benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
 plugins: metadata-3.1.1, benchmark-5.1.0, html-4.1.1, anyio-4.9.0, cov-6.2.1
-collected 165 items
+collected 169 items
 
 tests/test_accounts.py ...                                               [  1%]
 tests/test_action_queue.py .                                             [  2%]
-tests/test_advanced_antagonists.py ......                                [  6%]
+tests/test_advanced_antagonists.py ......                                [  5%]
 tests/test_advanced_chemistry.py ..                                      [  7%]
 tests/test_ai_gameplay.py .                                              [  7%]
-tests/test_ai_system.py ..                                               [  9%]
+tests/test_ai_system.py ..                                               [  8%]
 tests/test_alias_commands.py ..                                          [ 10%]
 tests/test_aliases.py ..                                                 [ 11%]
-tests/test_antag_command.py .                                            [ 12%]
+tests/test_antag_command.py .                                            [ 11%]
 tests/test_antagonists.py ..                                             [ 13%]
 tests/test_atmos_sim.py ..                                               [ 14%]
-tests/test_bartender.py .                                                [ 15%]
+tests/test_bartender.py .                                                [ 14%]
 tests/test_botany_kitchen.py ....                                        [ 17%]
-tests/test_botany_mechanics.py ....                                      [ 20%]
-tests/test_cargo.py ..........                                           [ 26%]
-tests/test_chemical_reactions.py ..                                      [ 27%]
-tests/test_chemistry.py ....                                             [ 29%]
-tests/test_circuit_system.py ...                                         [ 31%]
-tests/test_cli.py .                                                      [ 32%]
-tests/test_combat_system.py .                                            [ 32%]
+tests/test_botany_mechanics.py ....                                      [ 19%]
+tests/test_cargo.py ..........                                           [ 25%]
+tests/test_chemical_reactions.py ..                                      [ 26%]
+tests/test_chemistry.py ....                                             [ 28%]
+tests/test_circuit_system.py ...                                         [ 30%]
+tests/test_cli.py .                                                      [ 31%]
+tests/test_combat_system.py .                                            [ 31%]
 tests/test_communications.py ..                                          [ 33%]
-tests/test_console_commands.py ......                                    [ 37%]
-tests/test_construction_system.py ..                                     [ 38%]
-tests/test_containers.py ..                                              [ 40%]
-tests/test_cook_command.py .                                             [ 40%]
-tests/test_door_id_card_access.py ..                                     [ 41%]
-tests/test_doors.py .                                                    [ 42%]
-tests/test_environmental_protection.py .                                 [ 43%]
-tests/test_equipment.py .                                                [ 43%]
-tests/test_explosive_decompression.py ..                                 [ 44%]
-tests/test_finance.py ...                                                [ 46%]
-tests/test_fire_system.py ..                                             [ 47%]
-tests/test_flood_system.py .                                             [ 48%]
-tests/test_genetics.py ...                                               [ 50%]
-tests/test_inventory_sync.py .                                           [ 50%]
-tests/test_item_properties.py ..                                         [ 52%]
-tests/test_jobs.py .....                                                 [ 55%]
-tests/test_maintenance_system.py ..                                      [ 56%]
-tests/test_manifest_and_login.py ..                                      [ 57%]
-tests/test_medical.py ....                                               [ 60%]
-tests/test_nutrition.py .                                                [ 60%]
-tests/test_pathfinding.py ..                                             [ 61%]
-tests/test_performance.py .                                              [ 62%]
-tests/test_performance_monitor.py .                                      [ 63%]
-tests/test_persistence.py ...                                            [ 64%]
-tests/test_physics.py .                                                  [ 65%]
-tests/test_player_loading.py .                                           [ 66%]
-tests/test_plumbing_system.py ..                                         [ 67%]
-tests/test_power_system.py ..                                            [ 68%]
-tests/test_random_events.py ......                                       [ 72%]
-tests/test_replica_pod.py .                                              [ 72%]
-tests/test_research.py ...                                               [ 74%]
-tests/test_robotics.py ......                                            [ 78%]
-tests/test_roles.py ...........                                          [ 84%]
-tests/test_room_status.py .                                              [ 85%]
-tests/test_round_manager.py ..                                           [ 86%]
-tests/test_security_system.py .                                          [ 87%]
-tests/test_silicon.py .....                                              [ 90%]
-tests/test_space_exploration.py ......                                   [ 93%]
+tests/test_console_commands.py ......                                    [ 36%]
+tests/test_construction_system.py ..                                     [ 37%]
+tests/test_containers.py ..                                              [ 39%]
+tests/test_cook_command.py .                                             [ 39%]
+tests/test_door_id_card_access.py ..                                     [ 40%]
+tests/test_doors.py .                                                    [ 41%]
+tests/test_environmental_protection.py .                                 [ 42%]
+tests/test_equipment.py .                                                [ 42%]
+tests/test_explosive_decompression.py ..                                 [ 43%]
+tests/test_finance.py ...                                                [ 45%]
+tests/test_fire_system.py ..                                             [ 46%]
+tests/test_flood_system.py .                                             [ 47%]
+tests/test_genetics.py ...                                               [ 49%]
+tests/test_inventory_sync.py .                                           [ 49%]
+tests/test_item_properties.py ..                                         [ 50%]
+tests/test_jobs.py .....                                                 [ 53%]
+tests/test_maintenance_system.py ..                                      [ 55%]
+tests/test_manifest_and_login.py ..                                      [ 56%]
+tests/test_medical.py ....                                               [ 58%]
+tests/test_nutrition.py .                                                [ 59%]
+tests/test_pathfinding.py ..                                             [ 60%]
+tests/test_performance.py .                                              [ 60%]
+tests/test_performance_monitor.py .                                      [ 61%]
+tests/test_persistence.py ...                                            [ 63%]
+tests/test_physics.py .                                                  [ 63%]
+tests/test_player_loading.py .                                           [ 64%]
+tests/test_plumbing_system.py ..                                         [ 65%]
+tests/test_power_system.py ..                                            [ 66%]
+tests/test_random_events.py ......                                       [ 70%]
+tests/test_replica_pod.py .                                              [ 71%]
+tests/test_research.py ...                                               [ 72%]
+tests/test_robotics.py ......                                            [ 76%]
+tests/test_roles.py ...........                                          [ 82%]
+tests/test_room_status.py .                                              [ 83%]
+tests/test_round_manager.py ..                                           [ 84%]
+tests/test_security_system.py .                                          [ 85%]
+tests/test_silicon.py .....                                              [ 88%]
+tests/test_social_and_combat.py ....                                     [ 90%]
+tests/test_space_exploration.py ......                                   [ 94%]
 tests/test_spatial.py ...                                                [ 95%]
 tests/test_status_command.py .                                           [ 96%]
-tests/test_structure.py .                                                [ 96%]
+tests/test_structure.py .                                                [ 97%]
 tests/test_surgery.py ...                                                [ 98%]
 tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .                                               [100%]
@@ -160,6 +163,7 @@ commands/cargo.py                           63     14    78%   15-18, 25, 30-31,
 commands/chef.py                            15      3    80%   13, 16, 18
 commands/chemist.py                         86     21    76%   13, 16, 18, 27, 30, 32, 37, 41, 58, 61, 63, 68, 72, 74, 94, 97, 101, 104, 106, 113-114
 commands/circuit.py                         25     21    16%   15-35
+commands/combat.py                          42      7    83%   20, 25, 29, 45, 50, 53, 57
 commands/comms.py                           74     58    22%   7-14, 19-26, 31-38, 43-50, 55-62, 67-76, 81-88
 commands/consoles.py                        99     52    47%   19, 28, 31-49, 59, 63-73, 77, 80-90, 101, 105-108, 111, 114
 commands/debug.py                           88     73    17%   29-51, 68-87, 103-128, 144-173, 190-219
@@ -174,7 +178,7 @@ commands/observation.py                    184    162    12%   31, 34-98, 113-15
 commands/requisition.py                     25     19    24%   10-31
 commands/research.py                        25     17    32%   8-12, 18-23, 29-34
 commands/security.py                        75     49    35%   14, 17, 32-42, 48-56, 62-71, 77-86, 92-94, 100-108, 114-117
-commands/social.py                         109     95    13%   26-56, 71-109, 125-172, 188-237, 252-270
+commands/social.py                         133     99    26%   26-56, 71-109, 125-172, 188-237, 248-249, 268, 273, 288-306
 commands/system.py                          66     24    64%   30-39, 58-68, 85-98, 111, 116, 123, 125, 137-139, 151
 commands/virologist.py                      57     24    58%   9, 12, 20, 22, 26, 36, 38, 42, 50-65
 components/__init__.py                      22      0   100%
@@ -198,7 +202,7 @@ components/replica_pod.py                   30      4    87%   20, 23, 25, 32
 components/room.py                          42     25    40%   54, 64-65, 79-83, 92-103, 112-114, 126-130, 139
 components/structure.py                     42      3    93%   43, 60, 72
 connection.py                               68     68     0%   6-193
-engine.py                                   52     10    81%   108, 133-134, 152-153, 157-162
+engine.py                                   52     10    81%   109, 134-135, 153-154, 158-163
 events.py                                   53     20    62%   89-90, 108-135, 145, 158
 integration.py                             135     29    79%   64, 67, 72, 76, 80, 84, 105-106, 210-211, 217, 230-231, 243-247, 259-264, 293, 312-318
 mod_manager.py                              80     10    88%   47-48, 73-74, 93, 100-101, 106, 117-118
@@ -314,6 +318,7 @@ tests/test_room_status.py                   27      0   100%
 tests/test_round_manager.py                 23      0   100%
 tests/test_security_system.py               16      0   100%
 tests/test_silicon.py                       56      0   100%
+tests/test_social_and_combat.py             62      0   100%
 tests/test_space_exploration.py             91      0   100%
 tests/test_spatial.py                       43      0   100%
 tests/test_status_command.py                16      0   100%
@@ -323,18 +328,18 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    11186   3250    71%
+TOTAL                                    11314   3261    71%
 
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.7880  1,005.9270  46.5204  16.3670  44.4720  3.6770    63;294       21.4960    4136           1
+test_command_performance     41.0270  1,192.9610  46.3783  19.9353  44.2130  3.7775    27;317       21.5618    3896           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 165 passed in 8.30s ==============================
+============================= 169 passed in 8.91s ==============================
 ```
 
 ### Coverage Summary
@@ -343,12 +348,12 @@ tests/test_who.py                           19      0   100%
 tests/test_world_load.py                    22      0   100%
 world.py                                   170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ----------------------------------------------------------------------
-TOTAL                                    11186   3250    71%
+TOTAL                                    11314   3261    71%
 
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.7880  1,005.9270  46.5204  16.3670  44.4720  3.6770    63;294       21.4960    4136           1
+test_command_performance     41.0270  1,192.9610  46.3783  19.9353  44.2130  3.7775    27;317       21.5618    3896           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -408,4 +413,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-07-02 17:54:00 (GitHub Actions Run #16032257812)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-07-02 22:30:28 (GitHub Actions Run #16037123729)*
