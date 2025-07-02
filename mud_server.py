@@ -19,6 +19,7 @@ import integration
 import engine
 from events import publish, subscribe, unsubscribe
 from systems.jobs import JOB_SYSTEM
+import world
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -212,6 +213,9 @@ class MudServer:
 
         is_admin = accounts.is_admin(username)
 
+        # Check if this account already has a character
+        character = accounts.get_character(username)
+
         # Connect client to MUDpy interface
         logger.info(f"Connecting client to MUDpy interface: {client_id}")
         self.mudpy_interface.connect_client(client_id, username=username, is_admin=is_admin)
@@ -262,35 +266,53 @@ class MudServer:
                     }
                 )
             )
-            # Prompt for job selection
-            job_list = ", ".join(sorted(j.job_id for j in JOB_SYSTEM.get_all_jobs()))
-            await websocket.send(
-                json.dumps(
-                    {
-                        "type": "system",
-                        "message": (
-                            "The shuttle is about to dock. Choose your job "
-                            f"({job_list}) to receive your equipment:"
-                        ),
-                    }
+            if not character:
+                # Character creation flow
+                job_list = ", ".join(sorted(j.job_id for j in JOB_SYSTEM.get_all_jobs()))
+                await websocket.send(
+                    json.dumps(
+                        {
+                            "type": "system",
+                            "message": (
+                                "The shuttle is about to dock. Choose your job "
+                                f"({job_list}) to receive your equipment:"
+                            ),
+                        }
+                    )
                 )
-            )
-            try:
-                selection_msg = await websocket.recv()
                 try:
-                    sel_data = json.loads(selection_msg)
-                    selection = sel_data.get("command", selection_msg).strip()
-                except json.JSONDecodeError:
-                    selection = selection_msg.strip()
-            except Exception:
-                selection = "assistant"
-            if selection not in JOB_SYSTEM.jobs:
-                selection = "assistant"
-            job = JOB_SYSTEM.assign_job(f"player_{client_id}", selection)
+                    selection_msg = await websocket.recv()
+                    try:
+                        sel_data = json.loads(selection_msg)
+                        selection = sel_data.get("command", selection_msg).strip()
+                    except json.JSONDecodeError:
+                        selection = selection_msg.strip()
+                except Exception:
+                    selection = "assistant"
+                if selection not in JOB_SYSTEM.jobs:
+                    selection = "assistant"
+                await websocket.send(json.dumps({"type": "system", "message": "Choose a name for your character:"}))
+                try:
+                    name_msg = await websocket.recv()
+                    try:
+                        ndata = json.loads(name_msg)
+                        char_name = ndata.get("command", name_msg).strip()
+                    except json.JSONDecodeError:
+                        char_name = name_msg.strip()
+                except Exception:
+                    char_name = f"Crew Member {client_id % 1000}"
+                character = {"job": selection, "name": char_name}
+                accounts.set_character(username, character)
+            job_id = character.get("job", "assistant")
+            job = JOB_SYSTEM.assign_job(f"player_{client_id}", job_id)
             if job:
                 JOB_SYSTEM.setup_player_for_job(
                     f"player_{client_id}", f"player_{client_id}"
                 )
+                world_instance = world.get_world()
+                p_obj = world_instance.get_object(f"player_{client_id}")
+                if p_obj:
+                    p_obj.name = character.get("name", p_obj.name)
                 spawn_name = (
                     self.mudpy_interface.get_room_name(job.spawn_location)
                     if job.spawn_location

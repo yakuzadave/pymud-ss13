@@ -44,11 +44,14 @@ def test_login_assigns_selected_job(tmp_path, monkeypatch):
         js = get_job_system()
         js.reset_assignments()
         server = MudServer()
-        ws = DummyWebSocket(["tester", "secret", "engineer"])
+        ws = DummyWebSocket(["tester", "secret", "engineer", "Bob the Tester"])
         asyncio.run(server._login(ws))
         player_id = f"player_{id(ws)}"
         job = js.get_player_job(player_id)
         assert job and job.job_id == "engineer"
+        char = accounts.get_character("tester")
+        assert char["job"] == "engineer"
+        assert char["name"] == "Bob the Tester"
         asyncio.run(server._logout(ws, id(ws)))
     finally:
         teardown_world(old)
