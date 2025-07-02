@@ -112,6 +112,57 @@
     Send an out-of-character message to all players.
     Use this for meta-game discussions.
 
+# Social Commands
+- name: emote
+  category: Social
+  patterns:
+    - "emote {action}"
+    - "me {action}"
+  help: |
+    Perform a custom emote visible to nearby players.
+
+- name: wave
+  category: Social
+  patterns:
+    - "wave"
+    - "wave at {target}"
+  help: |
+    Wave cheerfully, optionally at a target.
+
+- name: smile
+  category: Social
+  patterns:
+    - "smile"
+    - "smile at {target}"
+  help: |
+    Smile warmly, optionally directing it at someone.
+
+- name: nod
+  category: Social
+  patterns:
+    - "nod"
+    - "nod at {target}"
+  help: |
+    Give a quick nod of acknowledgement.
+
+# Combat Commands
+- name: attack
+  category: Combat
+  patterns:
+    - "attack {target}"
+    - "attack {target} with {item}"
+    - "hit {target} with {item}"
+  help: |
+    Attack a target using a weapon or your bare hands.
+
+- name: throw
+  category: Combat
+  patterns:
+    - "throw {item} at {target}"
+    - "hurl {item} at {target}"
+  help: |
+    Throw an item at a target. The item leaves your inventory.
+
 # Object Interaction Commands
 - name: get
   category: Object Interaction
