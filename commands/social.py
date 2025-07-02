@@ -237,6 +237,42 @@ def tell_handler(client_id: str, player: str, message: str, **kwargs) -> str:
     return f"You tell {player}: {message}"
 
 
+@register("emote")
+def emote_handler(client_id: str, action: str, **kwargs) -> str:
+    """Perform a custom emote action."""
+    world_obj = None
+    try:
+        from world import get_world
+
+        world_obj = get_world().get_object(f"player_{client_id}")
+    except Exception:
+        world_obj = None
+    name = world_obj.name if world_obj else f"Player_{client_id}"
+    from events import publish
+    publish("player_emoted", client_id=client_id, action=action, name=name)
+    return f"You {action}"
+
+
+def _simple_emote(client_id: str, action: str, target: Optional[str]) -> str:
+    full = action if not target else f"{action} at {target}"
+    return emote_handler(client_id, full)
+
+
+@register("wave")
+def wave_handler(client_id: str, target: Optional[str] = None, **_kwargs) -> str:
+    return _simple_emote(client_id, "wave", target)
+
+
+@register("smile")
+def smile_handler(client_id: str, target: Optional[str] = None, **_kwargs) -> str:
+    return _simple_emote(client_id, "smile", target)
+
+
+@register("nod")
+def nod_handler(client_id: str, target: Optional[str] = None, **_kwargs) -> str:
+    return _simple_emote(client_id, "nod", target)
+
+
 @register("ooc")
 def ooc_handler(client_id: str, message: str, **kwargs) -> str:
     """

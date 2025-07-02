@@ -13,11 +13,17 @@
 | `tell` | Send a private message to any online player. |
 | `radio` | Send a message over a radio channel. |
 | `ooc` | Send an out-of-character message to all players. |
+| `emote` | Perform a custom emote action. |
+| `wave` | Wave to everyone or a specific target. |
+| `smile` | Smile warmly at those around you. |
+| `nod` | Give a short nod. |
 | `get` | Pick up an item from the current room or from a container. |
 | `drop` | Drop an item from your inventory into the current room. |
 | `put` | Place an item from your inventory into a container. |
 | `give` | Give an item from your inventory to another player. |
 | `use` | Activate or use an item, optionally on a target. |
+| `attack` | Attack another character with a weapon or bare hands. |
+| `throw` | Throw an item at a target. |
 | `open` | Open a door, container, or other openable object. |
 | `close` | Close a door, container, or other closable object. |
 | `inventory` | List all items you are carrying. |

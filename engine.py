@@ -68,6 +68,7 @@ from commands import (  # noqa: F401,E402
     job,
     admin,
     circuit,
+    combat,
     comms,
     ai,
     consoles,
