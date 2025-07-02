@@ -714,6 +714,24 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
         self.player_inventories[client_id].append(item_id)
         room["items"].remove(item_id)
 
+        # Synchronize with player component if present
+        try:
+            from world import get_world
+
+            world_inst = get_world()
+            player_obj = world_inst.get_object(f"player_{client_id}")
+            item_obj = world_inst.get_object(item_id)
+            if player_obj and item_obj:
+                pc = player_obj.get_component("player")
+                if pc:
+                    pc.add_to_inventory(item_id)
+                item_obj.location = None
+                itm_comp = item_obj.get_component("item")
+                if itm_comp:
+                    itm_comp.take(player_obj.id)
+        except Exception:
+            pass
+
         item = self.world["items"].get(item_id)
         if item:
             return f"You take the {item['name']}."
@@ -771,6 +789,24 @@ Exits: {', '.join(self.world['rooms']['start']['exits'].keys())}
             room["items"] = []
 
         room["items"].append(item_id)
+
+        # Synchronize with player component if present
+        try:
+            from world import get_world
+
+            world_inst = get_world()
+            player_obj = world_inst.get_object(f"player_{client_id}")
+            item_obj = world_inst.get_object(item_id)
+            if player_obj and item_obj:
+                pc = player_obj.get_component("player")
+                if pc:
+                    pc.remove_from_inventory(item_id)
+                item_obj.location = room_id
+                itm_comp = item_obj.get_component("item")
+                if itm_comp:
+                    itm_comp.drop(player_obj.id)
+        except Exception:
+            pass
 
         item = self.world["items"].get(item_id)
         if item:
