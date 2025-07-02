@@ -2,7 +2,8 @@ import yaml
 from pathlib import Path
 import os
 import hashlib
-from typing import Dict
+from typing import Dict, Any, Optional
+import yaml
 
 ACCOUNTS_FILE = Path('data/accounts.yaml')
 
@@ -51,4 +52,19 @@ def authenticate(username: str, password: str) -> bool:
 def is_admin(username: str) -> bool:
     accounts = _load()
     return bool(accounts.get(username, {}).get('administrator'))
+
+
+def get_character(username: str) -> Optional[Dict[str, Any]]:
+    """Return stored character data for ``username`` if present."""
+    accounts = _load()
+    return accounts.get(username, {}).get("character")
+
+
+def set_character(username: str, data: Dict[str, Any]) -> None:
+    """Save character customization data for ``username``."""
+    accounts = _load()
+    if username not in accounts:
+        raise ValueError("Account does not exist")
+    accounts[username]["character"] = data
+    _save(accounts)
 
