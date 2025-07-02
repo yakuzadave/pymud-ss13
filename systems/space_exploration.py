@@ -6,6 +6,7 @@ import logging
 import random
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
+import time
 
 from .cargo import get_cargo_system
 
@@ -32,7 +33,11 @@ class Shuttle:
         self.fuel -= 10
         self.location = destination
         self.docked = False
-        publish("shuttle_departed", shuttle_id=self.shuttle_id, destination=destination)
+        publish(
+            "shuttle_departed",
+            shuttle_id=self.shuttle_id,
+            destination=destination,
+        )
         return True
 
     def dock(self, dock_id: str) -> None:
@@ -82,7 +87,11 @@ class AwaySite:
         for hazard in self.environment:
             if random.random() < hazard.chance:
                 hazards.append(hazard)
-                publish("away_site_hazard", site_id=self.site_id, hazard=hazard.name)
+                publish(
+                    "away_site_hazard",
+                    site_id=self.site_id,
+                    hazard=hazard.name,
+                )
         return hazards
 
     def harvest(self, resource: str, amount: int) -> int:
@@ -145,6 +154,14 @@ class CrewStatus:
 
 
 @dataclass
+class ShuttleSchedule:
+    """Scheduled flight for a shuttle."""
+
+    destination: str
+    departure: float
+
+
+@dataclass
 class AwayMission:
     """Tracks the state of an off-station mission."""
 
@@ -166,7 +183,11 @@ class AwayMission:
         self.suits = {cid: EVASuit(cid) for cid in self.crew}
         self.crew_status = {cid: CrewStatus() for cid in self.crew}
         self.collected_resources.clear()
-        publish("mission_started", mission_id=self.mission_id, site=self.site.site_id)
+        publish(
+            "mission_started",
+            mission_id=self.mission_id,
+            site=self.site.site_id,
+        )
         return True
 
     def tick(self) -> None:
@@ -224,6 +245,7 @@ class SpaceExplorationSystem:
         self.sites: Dict[str, AwaySite] = {}
         self.missions: Dict[str, AwayMission] = {}
         self.station_resources: Dict[str, int] = {}
+        self.schedules: Dict[str, List[ShuttleSchedule]] = {}
 
     # ------------------------------------------------------------------
     def register_shuttle(self, shuttle: Shuttle) -> None:
@@ -239,7 +261,8 @@ class SpaceExplorationSystem:
     ) -> AwaySite:
         if hazards is None:
             hazards = random.sample(
-                DEFAULT_HAZARDS, k=random.randint(2, min(3, len(DEFAULT_HAZARDS)))
+                DEFAULT_HAZARDS,
+                k=random.randint(2, min(3, len(DEFAULT_HAZARDS))),
             )
         if resources is None:
             resources = {}
@@ -270,6 +293,15 @@ class SpaceExplorationSystem:
             mission.tick()
             mission.site.spawn_resources()
 
+        # Check scheduled flights
+        now = time.time()
+        for shuttle_id, schedules in list(self.schedules.items()):
+            while schedules and schedules[0].departure <= now:
+                sched = schedules.pop(0)
+                shuttle = self.shuttles.get(shuttle_id)
+                if shuttle:
+                    shuttle.navigate(sched.destination)
+
     # ------------------------------------------------------------------
     def complete_mission(self, mission_id: str, dock_id: str = "station") -> None:
         mission = self.missions.pop(mission_id, None)
@@ -287,3 +319,18 @@ class SpaceExplorationSystem:
             resources=mission.collected_resources,
             crew_status=mission.crew_status,
         )
+
+    # ------------------------------------------------------------------
+    def schedule_shuttle(
+        self, shuttle_id: str, destination: str, departure: float
+    ) -> bool:
+        shuttle = self.shuttles.get(shuttle_id)
+        if not shuttle:
+            return False
+        entries = self.schedules.setdefault(shuttle_id, [])
+        entries.append(ShuttleSchedule(destination, departure))
+        entries.sort(key=lambda s: s.departure)
+        return True
+
+    def get_schedule(self, shuttle_id: str) -> List[ShuttleSchedule]:
+        return list(self.schedules.get(shuttle_id, []))

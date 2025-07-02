@@ -20,11 +20,16 @@ station's cargo inventory when the mission completes.
   resource deposits.
 - **EVASuit** – tracks oxygen levels and suffers damage from severe hazards.
 - **AwayMission** – combines a shuttle, a site and a list of crew members.
+- **ShuttleSchedule** – keeps track of planned shuttle departures.
 
 `SpaceExplorationSystem` ties these pieces together so game logic can launch a
 mission and advance it with regular ticks. Resources gathered during missions
 are returned to the station when the shuttle docks and routed into the cargo
 inventory.
+
+Shuttles can be assigned future departures using `schedule_shuttle`, which
+records a destination and departure time. During each tick the system checks
+if a scheduled flight should begin and automatically navigates the shuttle.
 
 ## Common Hazards
 
