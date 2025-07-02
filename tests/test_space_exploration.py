@@ -1,10 +1,11 @@
 import os
 import sys
-from unittest import mock
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
-from systems.space_exploration import (
+from unittest import mock  # noqa: E402
+
+from systems.space_exploration import (  # noqa: E402
     SpaceExplorationSystem,
     EnvironmentalHazard,
     Shuttle,
@@ -115,3 +116,22 @@ def test_cargo_integration(monkeypatch):
     assert inv.get("ore") == 3
 
     cargo_mod.CARGO_SYSTEM = old_cargo
+
+
+def test_shuttle_schedule():
+    system = SpaceExplorationSystem()
+    shuttle = Shuttle("s6", "Traveler")
+    system.register_shuttle(shuttle)
+
+    with mock.patch("time.time") as mock_time:
+        mock_time.return_value = 1000.0
+        scheduled = system.schedule_shuttle("s6", "outpost", 1001.0)
+        assert scheduled
+        sched = system.get_schedule("s6")
+        assert len(sched) == 1
+        assert sched[0].destination == "outpost"
+
+        mock_time.return_value = 1001.1
+        system.tick()
+
+    assert shuttle.location == "outpost"
