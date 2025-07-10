@@ -377,6 +377,13 @@ footer {
     font-size: 12px;
     position: relative;
 }
+.map-cell:hover {
+    outline: 1px solid var(--accent-color);
+    cursor: pointer;
+}
+.map-cell.selected {
+    outline: 2px solid var(--accent-color);
+}
 
 .overlay {
     position: absolute;
@@ -402,6 +409,21 @@ footer {
 
 .inventory-panel li {
     margin: 2px 0;
+}
+.inventory-item {
+    cursor: pointer;
+}
+.inventory-item.selected {
+    background-color: rgba(76, 200, 255, 0.1);
+}
+.item-details {
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+.inventory-actions {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
 }
 
 /* Responsive design */

@@ -100,6 +100,13 @@ The default file `rooms.yaml` holds the Alpha layout while `rooms_beta.yaml`
 provides a smaller example map. The Alpha map now includes a small network
 of maintenance tunnels linking engineering, medbay, cargo and security.
 
+### Inventory Panel
+
+Press the **Inventory** button in the web client to open a sidebar listing your
+carried items and equipped gear. Selecting an item reveals its description along
+with **Use** and **Drop** buttons so you can manage your inventory directly from
+the browser.
+
 
 ## Running Tests
 

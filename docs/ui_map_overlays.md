@@ -10,3 +10,9 @@ name. Icons indicate important status information:
 
 The grid updates automatically whenever the server broadcasts door, atmospherics
 or power events. Refresh the page if the map becomes out of sync.
+
+Hovering over a cell now highlights it for easier navigation. Clicking a room
+outlines the cell and prints its details to the terminal. Use the **Inventory**
+button to open a panel showing your carried items and equipment. Selecting an
+item reveals its description with buttons to **Use** or **Drop** it directly
+from the UI.

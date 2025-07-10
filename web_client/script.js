@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const inventoryPanel = document.getElementById('inventory-panel');
     const inventoryList = document.getElementById('inventory-list');
     const equipmentList = document.getElementById('equipment-list');
+    const itemDetails = document.getElementById('item-details');
+    const inventoryActions = document.getElementById('inventory-actions');
+    const useItemButton = document.getElementById('use-item');
+    const dropItemButton = document.getElementById('drop-item');
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
     const serverUrlInput = document.getElementById('server-url');
     const saveSettingsButton = document.getElementById('save-settings');
@@ -31,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let hazardStates = {};
     let powerStates = {};
     let inventoryData = null;
+    let selectedItemId = null;
+    let selectedRoomId = null;
     // Set dark mode to true by default
     let darkModeEnabled = localStorage.getItem('darkMode') !== 'false';
 
@@ -235,6 +241,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cell = document.createElement('div');
                 cell.className = 'map-cell';
                 const key = Object.keys(roomPositions).find(k => roomPositions[k].x === x && roomPositions[k].y === y);
+                if (key === selectedRoomId) {
+                    cell.classList.add('selected');
+                }
                 if (key) {
                     cell.textContent = roomPositions[key].name[0];
                     cell.title = roomPositions[key].name;
@@ -256,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleMapClick(roomId) {
+        selectedRoomId = roomId;
         let msg = roomPositions[roomId].name;
         if (hazardStates[roomId] && hazardStates[roomId].length > 0) {
             msg += ' - Hazards: ' + hazardStates[roomId].join(', ');
@@ -267,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
             msg += ' [No Power]';
         }
         appendToTerminal(msg, 'system-message');
+        renderMap();
     }
 
     function requestMap() {
@@ -285,6 +296,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!inventoryPanel) return;
         inventoryList.innerHTML = '';
         equipmentList.innerHTML = '';
+        if (itemDetails) itemDetails.style.display = 'none';
+        if (inventoryActions) inventoryActions.style.display = 'none';
 
         if (!inventoryData) return;
 
@@ -297,7 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const li = document.createElement('li');
                 li.textContent = it.name;
                 li.dataset.objectId = it.id;
-                li.addEventListener('click', () => requestObject(it.id));
+                li.className = 'inventory-item';
+                if (selectedItemId === it.id) li.classList.add('selected');
+                li.addEventListener('click', () => selectInventoryItem(it.id));
                 inventoryList.appendChild(li);
             });
         }
@@ -306,7 +321,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const li = document.createElement('li');
             li.textContent = `[${eq.slot}] ${eq.name}`;
             li.dataset.objectId = eq.id;
-            li.addEventListener('click', () => requestObject(eq.id));
+            li.className = 'inventory-item';
+            if (selectedItemId === eq.id) li.classList.add('selected');
+            li.addEventListener('click', () => selectInventoryItem(eq.id));
             equipmentList.appendChild(li);
         });
     }
@@ -317,12 +334,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function findNameById(id) {
+        for (const it of inventoryData.items) {
+            if (it.id === id) return it.name;
+        }
+        for (const eq of inventoryData.equipment) {
+            if (eq.id === id) return eq.name;
+        }
+        return null;
+    }
+
+    function selectInventoryItem(id) {
+        selectedItemId = id;
+        renderInventory();
+        const item = inventoryData.items.find(it => it.id === id) || inventoryData.equipment.find(eq => eq.id === id);
+        if (itemDetails) {
+            itemDetails.textContent = item ? item.description : '';
+            itemDetails.style.display = item ? 'block' : 'none';
+        }
+        if (inventoryActions) {
+            inventoryActions.style.display = item ? 'flex' : 'none';
+        }
+    }
+
     function displayObjectData(obj) {
         if (!obj) {
             appendToTerminal('Object not found.', 'error-message');
             return;
         }
         appendToTerminal(`${obj.name}: ${obj.description}`, 'system-message');
+        if (itemDetails && obj.id === selectedItemId) {
+            itemDetails.textContent = obj.description;
+            itemDetails.style.display = 'block';
+            if (inventoryActions) inventoryActions.style.display = 'flex';
+        }
         if (obj.components) {
             Object.entries(obj.components).forEach(([name, comp]) => {
                 appendToTerminal(`- ${name}: ${JSON.stringify(comp)}`, 'system-message');
@@ -378,6 +423,26 @@ document.addEventListener('DOMContentLoaded', function() {
             inventoryPanel.style.display = 'none';
         }
     });
+
+    if (useItemButton) {
+        useItemButton.addEventListener('click', function() {
+            if (!selectedItemId) return;
+            const name = findNameById(selectedItemId);
+            if (name && webSocket && webSocket.readyState === WebSocket.OPEN) {
+                webSocket.send(JSON.stringify({ command: `use ${name}` }));
+            }
+        });
+    }
+
+    if (dropItemButton) {
+        dropItemButton.addEventListener('click', function() {
+            if (!selectedItemId) return;
+            const name = findNameById(selectedItemId);
+            if (name && webSocket && webSocket.readyState === WebSocket.OPEN) {
+                webSocket.send(JSON.stringify({ command: `drop ${name}` }));
+            }
+        });
+    }
 
     toggleDarkModeButton.addEventListener('click', function() {
         darkModeEnabled = !darkModeEnabled;
