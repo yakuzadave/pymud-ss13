@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-07-02 22:30:17  
+**Generated:** 2025-07-10 18:25:18  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** a85f9d3
+**Commit:** 39e1a2d
 **Branch:** main
 
 ---
@@ -13,31 +13,31 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **a85f9d3** (23 seconds ago by Katharsis): Merge pull request #172 from yakuzadave/codex/add-verbs-and-commands-for-world-interaction
-- **3d70a0c** (52 seconds ago by Katharsis): feat(commands): add social and combat verbs
-- **38ad10a** (5 hours ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **b17e36d** (5 hours ago by Katharsis): Merge pull request #171 from yakuzadave/codex/update-shuttle-schedules
-- **37c5cd0** (5 hours ago by Katharsis): fix(schedules): resolve flake8 issues
+- **39e1a2d** (24 seconds ago by Katharsis): Merge pull request #173 from yakuzadave/codex/enhance-frontend-with-tui-improvements
+- **8fffffe** (55 seconds ago by Katharsis): feat(web): improve inventory UI and map
+- **0981381** (8 days ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **a85f9d3** (8 days ago by Katharsis): Merge pull request #172 from yakuzadave/codex/add-verbs-and-commands-for-world-interaction
+- **3d70a0c** (8 days ago by Katharsis): feat(commands): add social and combat verbs
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit a85f9d3 - Merge pull request #172 from yakuzadave/codex/add-verbs-and-commands-for-world-interaction
+#### Commit 39e1a2d - Merge pull request #173 from yakuzadave/codex/enhance-frontend-with-tui-improvements
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-02 18:29:54
+**Date:** 2025-07-10 11:24:54
+**Message:**
+Enhanced web TUI with inventory controls
+---
+#### Commit 8fffffe - feat(web): improve inventory UI and map
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-07-10 11:24:23
 **Message:**
 
 ---
-#### Commit 3d70a0c - feat(commands): add social and combat verbs
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-02 18:29:25
-**Message:**
-
----
-#### Commit 38ad10a - 🤖 Auto-update AGENTS.md
+#### Commit 0981381 - 🤖 Auto-update AGENTS.md
 **Author:** GitHub Action <action@github.com>
-**Date:** 2025-07-02 17:54:00
+**Date:** 2025-07-02 22:30:28
 **Message:**
-- Updated from commit: b17e36d608ad405063e9152f8a099ac2f1033319
+- Updated from commit: a85f9d3b586ae607581afa85f07fa43ea762e1b1
 - Triggered by: push
 - Branch: main
 
@@ -48,21 +48,24 @@ The following commits show recent development activity. Review these to understa
 ### 📁 Files Modified Recently
 
 - AGENTS.md
+- README.md
 - commands/combat.py
 - commands/social.py
 - data/commands.yaml
 - docs/commands_reference.md
-- docs/space_exploration.md
+- docs/roadmap.md
+- docs/ui_map_overlays.md
 - engine.py
-- systems/space_exploration.py
 - tests/test_social_and_combat.py
-- tests/test_space_exploration.py
+- web_client/index.html
+- web_client/script.js
+- web_client/style.css
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-07-02 22:30:28
+**Run Date:** 2025-07-10 18:25:28
 
 ### Test Output
 ```
@@ -333,13 +336,13 @@ TOTAL                                    11314   3261    71%
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0270  1,192.9610  46.3783  19.9353  44.2130  3.7775    27;317       21.5618    3896           1
+test_command_performance     41.4180  1,066.3680  46.0608  18.1967  43.8120  3.8947    35;290       21.7104    4027           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 169 passed in 8.91s ==============================
+============================= 169 passed in 8.79s ==============================
 ```
 
 ### Coverage Summary
@@ -353,7 +356,7 @@ TOTAL                                    11314   3261    71%
 ------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------
 Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 -------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.0270  1,192.9610  46.3783  19.9353  44.2130  3.7775    27;317       21.5618    3896           1
+test_command_performance     41.4180  1,066.3680  46.0608  18.1967  43.8120  3.8947    35;290       21.7104    4027           1
 -------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
@@ -413,4 +416,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-07-02 22:30:28 (GitHub Actions Run #16037123729)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-07-10 18:25:28 (GitHub Actions Run #16202971986)*
