@@ -250,10 +250,18 @@ class PlayerComponent:
             publish("player_dead", player_id=self.owner.id)
 
     def heal_damage(self, body_part: str, damage_type: str, amount: float) -> None:
-        """Heal damage on a body part."""
+        """Heal damage on a body part with genetic modifiers."""
         part = self.body_parts.get(body_part)
         if not part or damage_type not in part:
             return
+
+        # Genetic integration: adjust healing efficiency
+        from systems.genetics import get_genetics_system
+
+        profile = get_genetics_system().get_profile(self.owner.id)
+        if "regeneration" in profile.mutations:
+            amount *= 1.5
+
         old = part[damage_type]
         part[damage_type] = max(0.0, part[damage_type] - amount)
         if damage_type == "oxygen":
@@ -273,9 +281,20 @@ class PlayerComponent:
             publish("player_revived", player_id=self.owner.id)
 
     def contract_disease(self, disease: str) -> None:
+        from systems.genetics import get_genetics_system
+
+        profile = get_genetics_system().get_profile(self.owner.id)
+        if "immunity" in profile.mutations:
+            publish(
+                "disease_resisted", player_id=self.owner.id, disease=disease
+            )
+            return
+
         if disease not in self.diseases:
             self.diseases.append(disease)
-            publish("disease_contracted", player_id=self.owner.id, disease=disease)
+            publish(
+                "disease_contracted", player_id=self.owner.id, disease=disease
+            )
 
     def cure_disease(self, disease: str) -> None:
         if disease in self.diseases:

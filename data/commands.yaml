@@ -487,3 +487,12 @@
     - "secconsole {action} {target}"
   help: |
     Review security alerts or crime records via terminal. Use `pardon <player>` to release a prisoner.
+
+- name: terminal
+  category: General
+  patterns:
+    - "terminal {id} {command}"
+    - "terminal {id} {command} {args}"
+  help: |
+    Access a station computer terminal. The terminal routes your command
+    to the appropriate subsystem based on its configured type.

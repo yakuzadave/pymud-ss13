@@ -31,6 +31,13 @@ class DiseaseSystem:
         comp = player.get_component("player")
         if not comp:
             return
+        from systems.genetics import get_genetics_system
+
+        profile = get_genetics_system().get_profile(player_id)
+        if "immunity" in profile.mutations:
+            publish("infection_resisted", player_id=player_id, disease=disease)
+            return
+
         comp.contract_disease(disease)
         self.infected.setdefault(player_id, []).append(disease)
         logger.debug(f"{player_id} infected with {disease}")
@@ -56,6 +63,12 @@ class DiseaseSystem:
                 continue
             for disease in list(diseases):
                 dmg = self.definitions[disease].get("damage_per_tick", 0)
+                from systems.genetics import get_genetics_system
+
+                profile = get_genetics_system().get_profile(player_id)
+                if "immunity" in profile.mutations:
+                    dmg *= 0.5
+
                 comp.apply_damage("torso", "toxin", dmg)
                 publish(
                     "disease_tick", player_id=player_id, disease=disease, damage=dmg

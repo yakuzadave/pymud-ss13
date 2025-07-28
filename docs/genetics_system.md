@@ -13,3 +13,7 @@ Geneticists have access to the `mutate`, `stabilize`, `scan_dna` and `apply_dna`
 ## Random Events
 
 The random event system can trigger incidents involving genetics or DNA labs, such as the **unstable_clone** event which causes harmful mutations.
+
+## Disease Resistance
+
+Mutating a player with `immunity` grants them partial protection from diseases. Infections will be blocked entirely and any existing illnesses inflict only half their usual damage during each disease tick.

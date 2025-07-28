@@ -26,6 +26,14 @@ Entire cyborg units may receive remote commands from the robotics console or AI.
 
 New `SpecializedRobotModule` objects allow creating equipment with unique power usage and a description of what they do. For example a medical probe might drain 3 power per tick while enabling healing actions. Install these modules the same way as standard modules to expand your cyborg's capabilities.
 
+## Medical Integration
+
+Cyborgs equipped with a module whose functionality is `heal` can assist medical staff. The `heal_player` method on `RoboticsSystem` leverages these modules to heal a target player. Healing uses the genetics system, so mutations such as `regeneration` increase the amount restored.
+
+## Maintenance Integration
+
+Cyborg units are now tracked by the maintenance system using a built-in `MaintainableComponent`. Each tick applies wear based on active modules, and severe wear will render the cyborg inoperable until repaired. The `repair_unit` command fully services the cyborg and restores its condition to 100%.
+
 ## AI Integration
 
 AI cores may register cyborg units and issue remote commands. A cyborg

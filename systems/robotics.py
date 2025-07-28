@@ -6,6 +6,8 @@ import logging
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
+from components.maintenance import MaintainableComponent
+
 from events import publish
 
 logger = logging.getLogger(__name__)
@@ -66,6 +68,12 @@ class CyborgUnit:
     power: int = 0
     location: Optional[str] = None
     docked_at: Optional[str] = None
+    maintenance: MaintainableComponent = field(default_factory=MaintainableComponent)
+
+    def __post_init__(self) -> None:
+        self.id = self.unit_id
+        self.maintenance.owner = self
+        self.maintenance.on_added()
 
     def install_module(self, module: RobotModule) -> bool:
         if len(self.modules) >= self.chassis.slots:
@@ -99,6 +107,7 @@ class CyborgUnit:
         for mod in self.modules:
             mod.active = True
         self.recharge()
+        self.maintenance.service(skill=1)
         publish("cyborg_repaired", unit_id=self.unit_id)
 
     def execute_command(self, command: str) -> bool:
@@ -139,9 +148,14 @@ class CyborgUnit:
         self.docked_at = station.station_id
 
     def tick(self) -> None:
+        active_modules = 0
         for mod in self.modules:
             if mod.active:
                 self.power = max(0, self.power - mod.power_usage)
+                active_modules += 1
+        self.maintenance.apply_usage(intensity=max(1, active_modules))
+        if not self.maintenance.is_operational:
+            publish("cyborg_failed", unit_id=self.unit_id)
         if self.power == 0:
             publish("cyborg_out_of_power", unit_id=self.unit_id)
 
@@ -215,7 +229,13 @@ class RoboticsSystem:
     def remote_control(
         self, unit_id: str, module_id: str, active: bool
     ) -> bool:
-        """Remotely toggle a module on a cyborg."""
+        """Remotely toggle a module on a cyborg respecting AI laws."""
+        from systems.ai import get_ai_law_system
+
+        action = f"{'activate' if active else 'deactivate'} {module_id}"
+        if not get_ai_law_system().check_action(action):
+            publish("cyborg_command_blocked", cyborg_id=unit_id, command=action)
+            return False
         unit = self.units.get(unit_id)
         if not unit:
             return False
@@ -223,7 +243,12 @@ class RoboticsSystem:
 
     # ------------------------------------------------------------------
     def remote_command(self, unit_id: str, command: str) -> bool:
-        """Send a high level command to a cyborg unit."""
+        """Send a high level command to a cyborg unit enforcing AI laws."""
+        from systems.ai import get_ai_law_system
+
+        if not get_ai_law_system().check_action(command):
+            publish("cyborg_command_blocked", cyborg_id=unit_id, command=command)
+            return False
         unit = self.units.get(unit_id)
         if not unit:
             return False
@@ -242,6 +267,45 @@ class RoboticsSystem:
         if not unit:
             return False
         unit.repair()
+        return True
+
+    # ------------------------------------------------------------------
+    def heal_player(
+        self,
+        unit_id: str,
+        target_id: str,
+        body_part: str = "torso",
+        damage_type: str = "brute",
+        amount: float = 10.0,
+    ) -> bool:
+        """Use a medical module to heal a player."""
+        unit = self.units.get(unit_id)
+        if not unit:
+            return False
+        has_probe = any(
+            isinstance(m, SpecializedRobotModule) and m.functionality == "heal"
+            for m in unit.modules
+        )
+        if not has_probe:
+            return False
+        from world import get_world
+
+        w = get_world()
+        player = w.get_object(target_id)
+        if not player:
+            return False
+        comp = player.get_component("player")
+        if not comp:
+            return False
+        comp.heal_damage(body_part, damage_type, amount)
+        publish(
+            "cyborg_heal",
+            cyborg_id=unit_id,
+            target_id=target_id,
+            part=body_part,
+            damage_type=damage_type,
+            amount=amount,
+        )
         return True
 
 
