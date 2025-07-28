@@ -54,3 +54,4 @@
 | `engconsole` | Operate an engineering console. Use `usage` to view power history. |
 | `cargoconsole` | Interact with cargo computers and manage shuttle routes. |
 | `secconsole` | Review security alerts or pardon prisoners. |
+| `terminal` | Access a station terminal which routes to the appropriate console based on type. |

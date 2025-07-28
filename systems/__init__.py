@@ -38,6 +38,7 @@ from .npc_ai import NPCSystem, get_npc_system
 from .plumbing import PlumbingSystem, get_plumbing_system
 from .round_manager import RoundManager, get_round_manager
 from .ai import CameraNetwork, AILawSystem, get_camera_network, get_ai_law_system
+from .terminal import TerminalSystem, get_terminal_system
 
 __all__ = [
     "AtmosphericSystem",
@@ -100,4 +101,6 @@ __all__ = [
     "get_camera_network",
     "AILawSystem",
     "get_ai_law_system",
+    "TerminalSystem",
+    "get_terminal_system",
 ]
