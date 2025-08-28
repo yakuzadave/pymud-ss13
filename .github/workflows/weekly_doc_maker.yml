@@ -223,7 +223,7 @@ jobs:
 
       # ------ Link Check ------
       - name: Check Documentation Links
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: --no-progress --exclude 'github.com/.*#.*' 'site/**/*.html'
 
