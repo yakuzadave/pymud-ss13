@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-07-28 01:15:27  
+**Generated:** 2025-10-21 19:31:13  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 9f64fd0
+**Commit:** 4704c90
 **Branch:** main
 
 ---
@@ -13,80 +13,108 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **9f64fd0** (27 seconds ago by Katharsis): Merge pull request #174 from yakuzadave/codex/integrate-existing-subsystems-deeper
-- **ec05c98** (46 seconds ago by Katharsis): feat(terminals): command and docs
-- **986d777** (2 weeks ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **39e1a2d** (2 weeks ago by Katharsis): Merge pull request #173 from yakuzadave/codex/enhance-frontend-with-tui-improvements
-- **8fffffe** (2 weeks ago by Katharsis): feat(web): improve inventory UI and map
+- **4704c90** (36 seconds ago by Katharsis): Merge pull request #176 from yakuzadave/claude/expand-project-entities-011CULs9CvRz8nrAk9npf4qj
+- **916108e** (69 seconds ago by Katharsis): Update docs/EXPANSION_SUMMARY.md
+- **ef68b04** (17 minutes ago by Claude): feat: massive entity expansion with 120+ items and 8 new rooms
+- **24532c8** (3 months ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **9f64fd0** (3 months ago by Katharsis): Merge pull request #174 from yakuzadave/codex/integrate-existing-subsystems-deeper
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 9f64fd0 - Merge pull request #174 from yakuzadave/codex/integrate-existing-subsystems-deeper
+#### Commit 4704c90 - Merge pull request #176 from yakuzadave/claude/expand-project-entities-011CULs9CvRz8nrAk9npf4qj
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-27 18:15:00
+**Date:** 2025-10-21 12:30:37
 **Message:**
-Integrate terminal consoles across station
+feat: massive entity expansion with 120+ items and 8 new rooms
 ---
-#### Commit ec05c98 - feat(terminals): command and docs
+#### Commit 916108e - Update docs/EXPANSION_SUMMARY.md
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-07-27 18:14:41
+**Date:** 2025-10-21 12:30:04
 **Message:**
-
+Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
 ---
-#### Commit 986d777 - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-07-10 18:25:28
+#### Commit ef68b04 - feat: massive entity expansion with 120+ items and 8 new rooms
+**Author:** Claude <noreply@anthropic.com>
+**Date:** 2025-10-21 19:14:02
 **Message:**
-- Updated from commit: 39e1a2d44b6ce7091dc585dbaaa0e2222198f901
-- Triggered by: push
-- Branch: main
+Added comprehensive equipment and locations for all departments:
 
-[skip ci][autogen AGENTS.md]
+Medical (17 items):
+- Complete surgery toolkit (scalpel, retractor, cautery, bone saw, etc.)
+- SS13-style medicines (bicaridine, kelotane, dexalin, dylovene, etc.)
+- Diagnostic tools (health analyzer, syringes, pill bottles)
+
+Security (11 items):
+- Non-lethal weapons (taser, pepper spray, flashbang)
+- Protective gear (armor vest, helmet, riot shield)
+- Investigation tools (evidence bags, security records)
+
+Engineering (11 items):
+- Complete toolset (screwdriver, wrench, wirecutters, crowbar, welder, multitool)
+- Construction materials (metal, glass, plasteel, cables)
+- Advanced equipment (RCD, engineering scanner)
+
+Traitor/Syndicate (7 items):
+- Stealth gear (chameleon jumpsuit, agent ID)
+- Hacking tools (emag)
+- Weapons (energy sword, sleepy pen)
+- Support (syndicate uplink with 20 TC)
+
+General Equipment (9 items):
+- Department headsets for all roles
+- PDAs with flashlight
+- Specialized gloves and masks
+
+Maintenance Loot (7 items):
+- Scavenging items (broken bottle, scrap metal, duct tape)
+- Broken equipment (rusty toolbox, old radio)
+- Utility items (flashlight, maintenance key)
+
+Food & Drinks (9 items):
+- Additional meals (burrito, taco, steak, ramen)
+- Beverages (coffee, tea, vodka, whiskey, rum)
+
+New Rooms (8 total):
+- Armory (secure weapons storage)
+- Security Office (workspace and evidence)
+- Chemistry Lab (chemical research)
+- 4 interconnected maintenance tunnels (Alpha, Beta, Gamma, Delta)
+  with varying atmosphere quality, hazards, and loot
+
+All items include proper SS13-style descriptions, appropriate weights,
+item types, and properties. Maintenance tunnels feature environmental
+challenges (low oxygen, debris, low light) for exploration gameplay.
+
+Documentation: Added comprehensive EXPANSION_SUMMARY.md with details
+on all new content, gameplay impact, and integration points.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
 ### 📁 Files Modified Recently
 
 - AGENTS.md
-- README.md
-- commands/terminal.py
-- components/player.py
-- components/terminal.py
-- data/commands.yaml
-- docs/commands_reference.md
-- docs/genetics_system.md
-- docs/roadmap.md
-- docs/robotics_system.md
-- docs/terminal_system.md
-- docs/ui_map_overlays.md
-- systems/__init__.py
-- systems/disease.py
-- systems/robotics.py
-- systems/terminal.py
-- tests/test_cyborg_med_integration.py
-- tests/test_genetic_disease_integration.py
-- tests/test_genetic_med_integration.py
-- tests/test_robotics_ai_integration.py
-- tests/test_robotics_maintenance_integration.py
-- tests/test_terminal_system.py
-- web_client/index.html
-- web_client/script.js
-- web_client/style.css
+- data/items.yaml
+- data/rooms.yaml
+- docs/EXPANSION_SUMMARY.md
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-07-28 01:15:37
+**Run Date:** 2025-10-21 19:31:23
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0
+platform linux -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0
 benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
-plugins: cov-6.2.1, anyio-4.9.0, html-4.1.1, benchmark-5.1.0, metadata-3.1.1
+plugins: anyio-4.11.0, html-4.1.1, benchmark-5.1.0, cov-7.0.0, metadata-3.1.1
 collected 176 items
 
 tests/test_accounts.py ...                                               [  1%]
@@ -163,13 +191,13 @@ tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .                                               [100%]
 
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+_______________ coverage: platform linux, python 3.13.7-final-0 ________________
 
 Name                                             Stmts   Miss  Cover   Missing
 ------------------------------------------------------------------------------
 account_system.py                                   46      2    96%   33, 67
 action_queue.py                                     10      0   100%
-cli.py                                              16      2    88%   16-17
+cli.py                                              16     16     0%   1-21
 combined_server.py                                  20     20     0%   5-40
 command_spec.py                                     63     19    70%   102-125, 138, 169-173
 commands/__init__.py                                 0      0   100%
@@ -358,18 +386,18 @@ tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
 world.py                                           170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            11589   3278    72%
+TOTAL                                            11589   3292    72%
 
------------------------------------------------------- benchmark: 1 tests -----------------------------------------------------
-Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
--------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.8090  1,421.1710  47.1332  24.3687  44.6250  3.9273    36;310       21.2165    3733           1
--------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     38.2220  925.4550  43.4125  15.5561  41.4575  3.6265    61;307       23.0348    4056           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 176 passed in 8.93s ==============================
+============================= 176 passed in 8.75s ==============================
 ```
 
 ### Coverage Summary
@@ -378,13 +406,13 @@ tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
 world.py                                           170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            11589   3278    72%
+TOTAL                                            11589   3292    72%
 
------------------------------------------------------- benchmark: 1 tests -----------------------------------------------------
-Name (time in us)                Min         Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
--------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     41.8090  1,421.1710  47.1332  24.3687  44.6250  3.9273    36;310       21.2165    3733           1
--------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     38.2220  925.4550  43.4125  15.5561  41.4575  3.6265    61;307       23.0348    4056           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -393,7 +421,7 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.13.5
+Python Version: Python 3.13.7
 Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
@@ -443,4 +471,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-07-28 01:15:37 (GitHub Actions Run #16557717495)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-10-21 19:31:23 (GitHub Actions Run #18695379279)*
