@@ -575,3 +575,136 @@
         pressure: 101.3
       hazards: []
       is_airlock: false
+
+- id: armory
+  name: Security Armory
+  description: >
+    A locked room containing weapons and tactical gear for security personnel.
+    Strict protocols govern access to this area.
+  components:
+    room:
+      exits:
+        west: security
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+    access:
+      required_level: 50
+
+- id: security_office
+  name: Security Office
+  description: >
+    The main security office with desks, computers, and evidence lockers.
+  components:
+    room:
+      exits:
+        east: security
+        south: armory
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+- id: chemistry_lab
+  name: Chemistry Lab
+  description: >
+    A laboratory equipped with chemical dispensers, beakers, and reaction chambers.
+    Safety posters warn of proper handling procedures.
+  components:
+    room:
+      exits:
+        north: science_lab
+      atmosphere:
+        oxygen: 21.0
+        nitrogen: 78.0
+        co2: 0.04
+        pressure: 101.3
+      hazards: []
+      is_airlock: false
+
+# Maintenance tunnel sections for loot and exploration
+- id: maint_tunnel_1
+  name: Maintenance Tunnel Alpha
+  description: >
+    A dingy maintenance passage with flickering lights and rusted pipes.
+    The air is stale, and debris litters the floor. You can hear the
+    distant hum of machinery through the walls.
+  components:
+    room:
+      exits:
+        east: maintenance_tunnel
+        south: maint_tunnel_2
+      atmosphere:
+        oxygen: 19.5
+        nitrogen: 79.0
+        co2: 0.08
+        pressure: 98.0
+      hazards: ["low_light", "debris"]
+      is_airlock: false
+
+- id: maint_tunnel_2
+  name: Maintenance Tunnel Beta
+  description: >
+    A cramped corridor filled with exposed wiring and leaking coolant pipes.
+    The floor is slippery with an unknown substance. Tools and parts are
+    scattered about, suggesting someone was working here recently.
+  components:
+    room:
+      exits:
+        north: maint_tunnel_1
+        east: maint_tunnel_3
+        south: maintenance_west
+      atmosphere:
+        oxygen: 19.0
+        nitrogen: 79.5
+        co2: 0.1
+        pressure: 97.0
+      hazards: ["low_light", "slippery", "debris"]
+      is_airlock: false
+
+- id: maint_tunnel_3
+  name: Maintenance Tunnel Gamma
+  description: >
+    A junction in the maintenance system where several tunnels meet.
+    Graffiti covers the walls, and makeshift storage has been created
+    using old crates. A faint smell of ozone hangs in the air.
+  components:
+    room:
+      exits:
+        west: maint_tunnel_2
+        north: maint_tunnel_4
+        south: maintenance_tunnel
+      atmosphere:
+        oxygen: 19.8
+        nitrogen: 79.0
+        co2: 0.06
+        pressure: 99.0
+      hazards: ["low_light"]
+      is_airlock: false
+
+- id: maint_tunnel_4
+  name: Maintenance Tunnel Delta
+  description: >
+    A remote section of the maintenance system near the outer hull.
+    The walls are cold to the touch, and frost has formed on some pipes.
+    Strange noises echo from deeper in the tunnel. This area feels
+    isolated and rarely visited.
+  components:
+    room:
+      exits:
+        south: maint_tunnel_3
+        west: maintenance_north
+      atmosphere:
+        oxygen: 18.5
+        nitrogen: 80.0
+        co2: 0.12
+        pressure: 95.0
+      hazards: ["low_light", "cold", "debris"]
+      is_airlock: false
