@@ -165,7 +165,7 @@ This document summarizes the major expansion of entities and features added to P
 6. **Maintenance Tunnel Gamma** (maint_tunnel_3)
    - Atmosphere: Slightly reduced oxygen (19.8%)
    - Hazards: Low light
-   - Contains: Emaags, syndicate toolboxes, rusty toolboxes
+   - Contains: Emags, syndicate toolboxes, rusty toolboxes
    - Description: Junction with graffiti and makeshift storage
 
 7. **Maintenance Tunnel Delta** (maint_tunnel_4)
