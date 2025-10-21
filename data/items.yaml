@@ -1924,3 +1924,1240 @@
       is_takeable: true
       is_usable: true
       item_type: tool
+
+# ===== MEDICAL SURGERY TOOLS =====
+- id: scalpel
+  name: Scalpel
+  description: >
+    A sharp surgical blade used for making incisions.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You carefully make a precise incision with the scalpel.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: scalpel
+        damage: 10
+
+- id: retractor
+  name: Retractor
+  description: >
+    A medical tool used to hold open incisions during surgery.
+  location: medbay
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You use the retractor to keep the incision open.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: retractor
+
+- id: cautery
+  name: Cautery
+  description: >
+    A surgical tool that seals wounds through heat.
+  location: medbay
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You cauterize the wound, sealing it with heat.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: cautery
+        power_level: 100
+
+- id: bone_saw
+  name: Bone Saw
+  description: >
+    A surgical saw designed for cutting through bone tissue.
+  location: medbay
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: You carefully saw through the bone structure.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: bone_saw
+
+- id: bone_setter
+  name: Bone Setter
+  description: >
+    A medical tool used to set broken bones.
+  location: medbay
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You carefully set the broken bone into place.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: bone_setter
+
+- id: hemostat
+  name: Hemostat
+  description: >
+    Surgical clamp used to stop bleeding during surgery.
+  location: medbay
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You clamp the blood vessel to stop the bleeding.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: hemostat
+
+- id: surgical_drill
+  name: Surgical Drill
+  description: >
+    A powered drill for delicate surgical procedures.
+  location: medbay
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: The drill whirs as you carefully apply it.
+      item_type: medical
+      item_properties:
+        surgery_tool: true
+        tool_type: drill
+        power_level: 85
+
+# ===== MEDICAL MEDICINES =====
+- id: epinephrine
+  name: Epinephrine
+  description: >
+    An emergency medication that stabilizes critical patients and treats cardiac arrest.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject the epinephrine. Your heart rate stabilizes.
+      item_type: medical
+      item_properties:
+        medicine_type: stabilizer
+        heal_amount: 10
+        doses: 5
+
+- id: bicaridine
+  name: Bicaridine
+  description: >
+    A medication that treats brute damage and physical trauma.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You apply bicaridine. Your wounds begin to close.
+      item_type: medical
+      item_properties:
+        medicine_type: brute
+        heal_type: brute
+        heal_amount: 25
+        doses: 5
+
+- id: kelotane
+  name: Kelotane
+  description: >
+    A medication that treats burn damage.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You apply kelotane. The burning sensation subsides.
+      item_type: medical
+      item_properties:
+        medicine_type: burn
+        heal_type: burn
+        heal_amount: 25
+        doses: 5
+
+- id: dexalin
+  name: Dexalin
+  description: >
+    A medication that treats oxygen deprivation.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject dexalin. Your breathing becomes easier.
+      item_type: medical
+      item_properties:
+        medicine_type: oxy
+        heal_type: oxygen
+        heal_amount: 20
+        doses: 5
+
+- id: dylovene
+  name: Dylovene
+  description: >
+    An anti-toxin that purges poisons from the body.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject dylovene. You feel the toxins being neutralized.
+      item_type: medical
+      item_properties:
+        medicine_type: toxin
+        heal_type: toxin
+        heal_amount: 20
+        doses: 5
+
+- id: tricordrazine
+  name: Tricordrazine
+  description: >
+    A general purpose medication that slowly heals all damage types.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject tricordrazine. You feel generally better.
+      item_type: medical
+      item_properties:
+        medicine_type: general
+        heal_amount: 15
+        doses: 5
+
+- id: syringe
+  name: Syringe
+  description: >
+    A medical syringe for injecting or extracting chemicals.
+  location: medbay
+  components:
+    item:
+      weight: 0.05
+      is_takeable: true
+      is_usable: true
+      use_effect: You draw liquid into the syringe.
+      item_type: medical
+      item_properties:
+        max_volume: 15
+        current_volume: 0
+
+- id: health_analyzer
+  name: Health Analyzer
+  description: >
+    A handheld device that displays detailed patient vitals and damage.
+  location: medbay
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You scan the patient. Vitals: Normal.
+        Brute: 0, Burn: 0, Toxin: 0, Oxygen: 0
+      item_type: diagnostic
+      item_properties:
+        power_level: 95
+
+- id: pill_bottle
+  name: Pill Bottle
+  description: >
+    A container for storing medical pills.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: false
+      item_type: container
+    container:
+      capacity: 10
+      items: []
+
+# ===== SECURITY EQUIPMENT =====
+- id: pepper_spray
+  name: Pepper Spray
+  description: >
+    A non-lethal defensive spray that temporarily blinds and incapacitates.
+  location: security_office
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You spray a cloud of irritating chemicals.
+      item_type: security
+      item_properties:
+        uses_remaining: 5
+        range: 2
+
+- id: taser
+  name: Taser
+  description: >
+    An energy weapon that fires stunning electrodes.
+  location: armory
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: You fire the taser. Electrodes discharge with a sharp crack.
+      item_type: security
+      item_properties:
+        power_level: 100
+        shots_remaining: 4
+        damage: 0
+        stun_duration: 10
+
+- id: flashbang
+  name: Flashbang
+  description: >
+    A non-lethal grenade that produces a blinding flash and deafening bang.
+  location: armory
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: The flashbang explodes with a brilliant flash and thunderous boom!
+      item_type: security
+      item_properties:
+        single_use: true
+
+- id: evidence_bag
+  name: Evidence Bag
+  description: >
+    A clear plastic bag for storing evidence.
+  location: security_office
+  components:
+    item:
+      weight: 0.05
+      is_takeable: true
+      is_usable: false
+      item_type: container
+    container:
+      capacity: 1
+      items: []
+
+- id: security_records
+  name: Security Records Terminal
+  description: >
+    A portable tablet with access to crew security records.
+  location: security_office
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You access the security database.
+      item_type: tool
+      item_properties:
+        power_level: 75
+
+- id: security_helmet
+  name: Security Helmet
+  description: >
+    A protective helmet worn by security officers.
+  location: security_office
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the security helmet.
+      item_type: apparel
+      item_properties:
+        slot: head
+        armor_rating: 3
+
+- id: security_vest
+  name: Security Armor Vest
+  description: >
+    A bulletproof vest that provides protection against physical attacks.
+  location: armory
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You strap on the armor vest.
+      item_type: apparel
+      item_properties:
+        slot: body
+        armor_rating: 5
+
+- id: riot_shield
+  name: Riot Shield
+  description: >
+    A transparent shield for crowd control operations.
+  location: armory
+  components:
+    item:
+      weight: 3.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You raise the riot shield defensively.
+      item_type: security
+      item_properties:
+        armor_rating: 4
+        durability: 100
+
+# ===== ENGINEERING TOOLS =====
+- id: screwdriver
+  name: Screwdriver
+  description: >
+    A basic tool for manipulating screws and panels.
+  location: engineering
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You turn screws with the screwdriver.
+      item_type: tool
+      item_properties:
+        tool_type: screwdriver
+        durability: 100
+
+- id: wrench
+  name: Wrench
+  description: >
+    A tool for tightening and loosening bolts.
+  location: engineering
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You adjust the bolts with the wrench.
+      item_type: tool
+      item_properties:
+        tool_type: wrench
+        durability: 100
+
+- id: wirecutters
+  name: Wirecutters
+  description: >
+    Cutting tool designed for manipulating wires.
+  location: engineering
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You snip the wire cleanly.
+      item_type: tool
+      item_properties:
+        tool_type: wirecutters
+        durability: 100
+
+- id: crowbar
+  name: Crowbar
+  description: >
+    A heavy tool for prying open doors and panels.
+  location: engineering
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You lever the crowbar with force.
+      item_type: tool
+      item_properties:
+        tool_type: crowbar
+        durability: 100
+        damage: 15
+
+- id: welding_tool
+  name: Welding Tool
+  description: >
+    A handheld torch for welding metal and cutting through walls.
+  location: engineering
+  components:
+    item:
+      weight: 1.2
+      is_takeable: true
+      is_usable: true
+      use_effect: The welding tool ignites with a bright blue flame.
+      item_type: tool
+      item_properties:
+        tool_type: welder
+        fuel_level: 100
+        power_level: 100
+
+- id: multitool
+  name: Multitool
+  description: >
+    An advanced device for interfacing with electronics and circuits.
+  location: engineering
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You scan the device with the multitool.
+      item_type: tool
+      item_properties:
+        tool_type: multitool
+        power_level: 90
+
+- id: cable_coil
+  name: Cable Coil
+  description: >
+    A roll of electrical cable for wiring.
+  location: engineering
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You lay down some cable.
+      item_type: material
+      item_properties:
+        amount: 30
+        material_type: cable
+
+- id: metal_sheets
+  name: Metal Sheets
+  description: >
+    A stack of metal sheets used for construction.
+  location: engineering
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You place the metal sheet.
+      item_type: material
+      item_properties:
+        amount: 50
+        material_type: metal
+
+- id: glass_sheets
+  name: Glass Sheets
+  description: >
+    A stack of glass sheets for windows and construction.
+  location: engineering
+  components:
+    item:
+      weight: 1.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You place the glass sheet carefully.
+      item_type: material
+      item_properties:
+        amount: 50
+        material_type: glass
+
+- id: plasteel
+  name: Plasteel
+  description: >
+    An advanced alloy of plasma and steel, extremely durable.
+  location: engineering
+  components:
+    item:
+      weight: 3.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You place the heavy plasteel sheet.
+      item_type: material
+      item_properties:
+        amount: 20
+        material_type: plasteel
+
+- id: rcd
+  name: Rapid Construction Device
+  description: >
+    An advanced tool that can instantly construct or deconstruct station infrastructure.
+  location: engineering
+  components:
+    item:
+      weight: 2.5
+      is_takeable: true
+      is_usable: true
+      use_effect: The RCD hums as it materializes structure from compressed matter.
+      item_type: tool
+      item_properties:
+        tool_type: rcd
+        matter_units: 100
+        power_level: 80
+
+- id: engineering_scanner
+  name: Engineering Scanner
+  description: >
+    A device that displays atmospheric and structural integrity data.
+  location: engineering
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: >
+        You scan the area. Pressure: 101.3 kPa, Temperature: 20°C,
+        O2: 21%, N2: 78%, Structure: Intact
+      item_type: tool
+      item_properties:
+        power_level: 90
+
+# ===== TRAITOR/SYNDICATE ITEMS =====
+- id: emag
+  name: Electromagnetic Card
+  description: >
+    A cryptographic sequencer that can hack electronic systems. Very illegal.
+  location: maint_tunnel_3
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: The card emits a brief electromagnetic pulse as it bypasses security.
+      item_type: syndicate
+      item_properties:
+        uses_remaining: 10
+        illegal: true
+
+- id: energy_sword
+  name: Energy Sword
+  description: >
+    A compact device that projects a deadly energy blade. Syndicate technology.
+  location: maint_tunnel_4
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: The energy sword ignites with a menacing hum.
+      item_type: syndicate
+      item_properties:
+        damage: 40
+        power_level: 100
+        illegal: true
+        active: false
+
+- id: agent_id_card
+  name: Agent ID Card
+  description: >
+    A chameleon ID card that can be programmed to display any name and access level.
+  location: maint_tunnel_2
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: The card's display flickers as you reprogram it.
+      item_type: syndicate
+      item_properties:
+        access_level: 100
+        illegal: true
+        can_forge: true
+
+- id: sleepy_pen
+  name: Sleepy Pen
+  description: >
+    A disguised syringe that injects a powerful sedative on contact.
+  location: maint_tunnel_1
+  components:
+    item:
+      weight: 0.05
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject the sedative. The target slumps unconscious.
+      item_type: syndicate
+      item_properties:
+        doses: 5
+        illegal: true
+
+- id: chameleon_jumpsuit
+  name: Chameleon Jumpsuit
+  description: >
+    A uniform that can mimic the appearance of any department's clothing.
+  location: maint_tunnel_2
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: The jumpsuit shimmers and changes appearance.
+      item_type: syndicate
+      item_properties:
+        slot: body
+        illegal: true
+        can_disguise: true
+
+- id: syndicate_uplink
+  name: Syndicate Uplink
+  description: >
+    A disguised PDA with access to the Syndicate black market.
+  location: maint_tunnel_4
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You access the encrypted Syndicate network.
+      item_type: syndicate
+      item_properties:
+        telecrystals: 20
+        illegal: true
+
+- id: syndicate_toolbox
+  name: Suspicious Toolbox
+  description: >
+    A reinforced red toolbox that doubles as a weapon. Contains basic tools.
+  location: maint_tunnel_3
+  components:
+    item:
+      weight: 2.0
+      is_takeable: true
+      is_usable: true
+      use_effect: You swing the heavy toolbox.
+      item_type: syndicate
+      item_properties:
+        damage: 25
+        illegal: true
+    container:
+      capacity: 7
+      items: []
+
+# ===== GENERAL ITEMS =====
+- id: headset
+  name: Radio Headset
+  description: >
+    A standard radio headset for station-wide communication.
+  location: start
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You adjust the radio frequency.
+      item_type: tool
+      item_properties:
+        slot: ears
+        power_level: 100
+        channels: [common]
+
+- id: engineering_headset
+  name: Engineering Headset
+  description: >
+    A radio headset with access to engineering channels.
+  location: engineering
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You tune to the engineering channel.
+      item_type: tool
+      item_properties:
+        slot: ears
+        power_level: 100
+        channels: [common, engineering]
+
+- id: medical_headset
+  name: Medical Headset
+  description: >
+    A radio headset with access to medical channels.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You tune to the medical channel.
+      item_type: tool
+      item_properties:
+        slot: ears
+        power_level: 100
+        channels: [common, medical]
+
+- id: security_headset
+  name: Security Headset
+  description: >
+    A radio headset with access to security channels.
+  location: security_office
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You tune to the security channel.
+      item_type: tool
+      item_properties:
+        slot: ears
+        power_level: 100
+        channels: [common, security]
+
+- id: pda
+  name: Personal Digital Assistant
+  description: >
+    A handheld computer with messaging, notes, and utility functions.
+  location: start
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You check your messages on the PDA.
+      item_type: tool
+      item_properties:
+        power_level: 80
+        has_flashlight: true
+
+- id: latex_gloves
+  name: Latex Gloves
+  description: >
+    Sterile gloves for medical procedures.
+  location: medbay
+  components:
+    item:
+      weight: 0.05
+      is_takeable: true
+      is_usable: true
+      use_effect: You snap on the latex gloves.
+      item_type: apparel
+      item_properties:
+        slot: hands
+        sterile: true
+
+- id: insulated_gloves
+  name: Insulated Gloves
+  description: >
+    Thick gloves that protect against electrical shocks.
+  location: engineering
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the insulated gloves.
+      item_type: apparel
+      item_properties:
+        slot: hands
+        electrical_protection: true
+
+- id: combat_gloves
+  name: Combat Gloves
+  description: >
+    Reinforced tactical gloves worn by security.
+  location: armory
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You pull on the combat gloves.
+      item_type: apparel
+      item_properties:
+        slot: hands
+        armor_rating: 1
+
+- id: engineering_hardhat
+  name: Engineering Hardhat
+  description: >
+    A protective hardhat for construction work.
+  location: engineering
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the hardhat.
+      item_type: apparel
+      item_properties:
+        slot: head
+        armor_rating: 2
+
+- id: medical_cap
+  name: Medical Cap
+  description: >
+    A surgical cap worn by medical staff.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the medical cap.
+      item_type: apparel
+      item_properties:
+        slot: head
+
+- id: gas_mask
+  name: Gas Mask
+  description: >
+    A mask that filters out harmful gases and particles.
+  location: engineering
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You secure the gas mask over your face.
+      item_type: apparel
+      item_properties:
+        slot: face
+        air_filtration: true
+
+- id: breath_mask
+  name: Breath Mask
+  description: >
+    A simple mask for emergency oxygen supply.
+  location: airlock_north
+  components:
+    item:
+      weight: 0.2
+      is_takeable: true
+      is_usable: true
+      use_effect: You put on the breath mask.
+      item_type: apparel
+      item_properties:
+        slot: face
+
+# ===== MAINTENANCE LOOT =====
+- id: broken_bottle
+  name: Broken Bottle
+  description: >
+    A shattered bottle with jagged edges. Could be used as a weapon.
+  location: maint_tunnel_1
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You jab with the broken bottle.
+      item_type: weapon
+      item_properties:
+        damage: 12
+        durability: 20
+
+- id: scrap_metal
+  name: Scrap Metal
+  description: >
+    A piece of twisted metal debris. Might be recyclable.
+  location: maint_tunnel_2
+  components:
+    item:
+      weight: 1.0
+      is_takeable: true
+      is_usable: false
+      item_type: material
+      item_properties:
+        amount: 5
+        material_type: metal
+
+- id: rusty_toolbox
+  name: Rusty Toolbox
+  description: >
+    An old toolbox found in maintenance. Contains random items.
+  location: maint_tunnel_3
+  components:
+    item:
+      weight: 1.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You rummage through the toolbox.
+      item_type: container
+      item_properties:
+        damage: 10
+    container:
+      capacity: 7
+      items: []
+
+- id: old_radio
+  name: Broken Radio
+  description: >
+    A damaged radio that occasionally crackles to life.
+  location: maint_tunnel_1
+  components:
+    item:
+      weight: 0.8
+      is_takeable: true
+      is_usable: true
+      use_effect: The radio emits static and garbled voices.
+      item_type: tool
+      item_properties:
+        power_level: 15
+        broken: true
+
+- id: maintenance_key
+  name: Maintenance Access Key
+  description: >
+    A worn keycard that opens maintenance tunnels.
+  location: maint_tunnel_2
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You swipe the maintenance key.
+      item_type: keycard
+      item_properties:
+        access_level: 20
+
+- id: duct_tape
+  name: Duct Tape
+  description: >
+    The universal solution to all problems.
+  location: maint_tunnel_4
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You tape things together with duct tape.
+      item_type: tool
+      item_properties:
+        uses_remaining: 10
+
+- id: flashlight
+  name: Flashlight
+  description: >
+    A portable light source for dark areas.
+  location: maint_tunnel_1
+  components:
+    item:
+      weight: 0.4
+      is_takeable: true
+      is_usable: true
+      use_effect: You click the flashlight on, illuminating the area.
+      item_type: tool
+      item_properties:
+        power_level: 60
+        light_range: 4
+
+# ===== ADDITIONAL CHEMICALS =====
+- id: cryoxadone
+  name: Cryoxadone
+  description: >
+    A chemical used in cryogenic treatment to heal patients.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: The cryoxadone induces rapid healing at low temperatures.
+      item_type: chemical
+      item_properties:
+        medicine_type: cryo
+
+- id: clonexadone
+  name: Clonexadone
+  description: >
+    An advanced version of cryoxadone, much more effective.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: The clonexadone accelerates healing significantly.
+      item_type: chemical
+      item_properties:
+        medicine_type: cryo
+
+- id: spaceacillin
+  name: Spaceacillin
+  description: >
+    A broad-spectrum antibiotic that prevents infections.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You take the spaceacillin. Infections are prevented.
+      item_type: chemical
+      item_properties:
+        medicine_type: antibiotic
+
+- id: synaptizine
+  name: Synaptizine
+  description: >
+    A toxin that treats paralysis and drowsiness but causes minor brain damage.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject synaptizine. You feel more alert but dizzy.
+      item_type: chemical
+      item_properties:
+        medicine_type: stimulant
+
+- id: inaprovaline
+  name: Inaprovaline
+  description: >
+    A cardiac stimulant that stabilizes patients in critical condition.
+  location: medbay
+  components:
+    item:
+      weight: 0.1
+      is_takeable: true
+      is_usable: true
+      use_effect: You inject inaprovaline. Your condition stabilizes.
+      item_type: chemical
+      item_properties:
+        medicine_type: stabilizer
+
+# ===== MORE FOOD =====
+- id: burrito
+  name: Burrito
+  description: >
+    A wrapped tortilla filled with beans, meat, and vegetables.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You bite into the delicious burrito.
+      item_type: food
+      item_properties:
+        nutrition: 20
+
+- id: taco
+  name: Taco
+  description: >
+    A crispy taco shell filled with meat and toppings.
+  location: kitchen
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You eat the taco in two bites.
+      item_type: food
+      item_properties:
+        nutrition: 15
+
+- id: steak
+  name: Grilled Steak
+  description: >
+    A perfectly cooked piece of meat.
+  location: kitchen
+  components:
+    item:
+      weight: 0.6
+      is_takeable: true
+      is_usable: true
+      use_effect: You savor the juicy steak.
+      item_type: food
+      item_properties:
+        nutrition: 30
+
+- id: ramen
+  name: Ramen Bowl
+  description: >
+    A steaming bowl of noodles in savory broth.
+  location: kitchen
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You slurp the delicious ramen.
+      item_type: food
+      item_properties:
+        nutrition: 25
+
+# ===== MORE DRINKS =====
+- id: coffee
+  name: Coffee
+  description: >
+    A hot cup of black coffee. Helps you stay awake.
+  location: bar
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You drink the coffee. You feel more alert.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+        caffeine: true
+
+- id: tea
+  name: Tea
+  description: >
+    A soothing cup of hot tea.
+  location: bar
+  components:
+    item:
+      weight: 0.3
+      is_takeable: true
+      is_usable: true
+      use_effect: You sip the calming tea.
+      item_type: drink
+      item_properties:
+        nutrition: 1
+
+- id: vodka
+  name: Vodka
+  description: >
+    A bottle of strong vodka.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You take a shot of vodka. It burns!
+      item_type: drink
+      item_properties:
+        alcohol_content: 40
+
+- id: whiskey
+  name: Whiskey
+  description: >
+    A bottle of quality whiskey.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You sip the smooth whiskey.
+      item_type: drink
+      item_properties:
+        alcohol_content: 40
+
+- id: rum
+  name: Rum
+  description: >
+    A bottle of spiced rum.
+  location: bar
+  components:
+    item:
+      weight: 0.5
+      is_takeable: true
+      is_usable: true
+      use_effect: You drink the rum. Tastes like the seven seas.
+      item_type: drink
+      item_properties:
+        alcohol_content: 35
