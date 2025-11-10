@@ -41,7 +41,7 @@ class MapCell(Static):
             char = "▢"
             color = "yellow"
         elif self.room_type == "room":
-            char = "·" if not self.is_visited else "·"
+            char = "·" if self.is_visited else "○"
             color = "cyan" if self.is_visited else "dim cyan"
         elif self.room_type == "corridor":
             char = "-"
