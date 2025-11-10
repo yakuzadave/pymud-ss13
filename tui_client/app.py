@@ -7,10 +7,8 @@ and view switching capabilities.
 
 import asyncio
 from typing import Optional
-from textual.app import App, ComposeResult
+from textual.app import App
 from textual.binding import Binding
-from textual.widgets import Footer, Header
-from textual.screen import Screen
 
 from tui_client.screens.login import LoginScreen
 from tui_client.screens.game import GameScreen
