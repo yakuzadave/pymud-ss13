@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-10-21 19:31:13  
+**Generated:** 2025-11-10 18:57:53  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 4704c90
+**Commit:** f12778f
 **Branch:** main
 
 ---
@@ -13,89 +13,41 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **4704c90** (36 seconds ago by Katharsis): Merge pull request #176 from yakuzadave/claude/expand-project-entities-011CULs9CvRz8nrAk9npf4qj
-- **916108e** (69 seconds ago by Katharsis): Update docs/EXPANSION_SUMMARY.md
-- **ef68b04** (17 minutes ago by Claude): feat: massive entity expansion with 120+ items and 8 new rooms
-- **24532c8** (3 months ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **9f64fd0** (3 months ago by Katharsis): Merge pull request #174 from yakuzadave/codex/integrate-existing-subsystems-deeper
+- **f12778f** (33 seconds ago by Katharsis): Add workflow to combine labelled pull requests into a single branch
+- **08a8800** (3 weeks ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **4704c90** (3 weeks ago by Katharsis): Merge pull request #176 from yakuzadave/claude/expand-project-entities-011CULs9CvRz8nrAk9npf4qj
+- **916108e** (3 weeks ago by Katharsis): Update docs/EXPANSION_SUMMARY.md
+- **ef68b04** (3 weeks ago by Claude): feat: massive entity expansion with 120+ items and 8 new rooms
 
 ### 🔍 Detailed Recent Changes
 
+#### Commit f12778f - Add workflow to combine labelled pull requests into a single branch
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-11-10 10:57:20
+**Message:**
+This workflow automates the process of combining pull requests based on a specified label and creates a new pull request with the combined changes.
+---
+#### Commit 08a8800 - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-10-21 19:31:23
+**Message:**
+- Updated from commit: 4704c908b5c0b5d8b1c7f7762815256bd68f314f
+- Triggered by: push
+- Branch: main
+
+[skip ci][autogen AGENTS.md]
+
+---
 #### Commit 4704c90 - Merge pull request #176 from yakuzadave/claude/expand-project-entities-011CULs9CvRz8nrAk9npf4qj
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
 **Date:** 2025-10-21 12:30:37
 **Message:**
 feat: massive entity expansion with 120+ items and 8 new rooms
 ---
-#### Commit 916108e - Update docs/EXPANSION_SUMMARY.md
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-10-21 12:30:04
-**Message:**
-Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
----
-#### Commit ef68b04 - feat: massive entity expansion with 120+ items and 8 new rooms
-**Author:** Claude <noreply@anthropic.com>
-**Date:** 2025-10-21 19:14:02
-**Message:**
-Added comprehensive equipment and locations for all departments:
-
-Medical (17 items):
-- Complete surgery toolkit (scalpel, retractor, cautery, bone saw, etc.)
-- SS13-style medicines (bicaridine, kelotane, dexalin, dylovene, etc.)
-- Diagnostic tools (health analyzer, syringes, pill bottles)
-
-Security (11 items):
-- Non-lethal weapons (taser, pepper spray, flashbang)
-- Protective gear (armor vest, helmet, riot shield)
-- Investigation tools (evidence bags, security records)
-
-Engineering (11 items):
-- Complete toolset (screwdriver, wrench, wirecutters, crowbar, welder, multitool)
-- Construction materials (metal, glass, plasteel, cables)
-- Advanced equipment (RCD, engineering scanner)
-
-Traitor/Syndicate (7 items):
-- Stealth gear (chameleon jumpsuit, agent ID)
-- Hacking tools (emag)
-- Weapons (energy sword, sleepy pen)
-- Support (syndicate uplink with 20 TC)
-
-General Equipment (9 items):
-- Department headsets for all roles
-- PDAs with flashlight
-- Specialized gloves and masks
-
-Maintenance Loot (7 items):
-- Scavenging items (broken bottle, scrap metal, duct tape)
-- Broken equipment (rusty toolbox, old radio)
-- Utility items (flashlight, maintenance key)
-
-Food & Drinks (9 items):
-- Additional meals (burrito, taco, steak, ramen)
-- Beverages (coffee, tea, vodka, whiskey, rum)
-
-New Rooms (8 total):
-- Armory (secure weapons storage)
-- Security Office (workspace and evidence)
-- Chemistry Lab (chemical research)
-- 4 interconnected maintenance tunnels (Alpha, Beta, Gamma, Delta)
-  with varying atmosphere quality, hazards, and loot
-
-All items include proper SS13-style descriptions, appropriate weights,
-item types, and properties. Maintenance tunnels feature environmental
-challenges (low oxygen, debris, low light) for exploration gameplay.
-
-Documentation: Added comprehensive EXPANSION_SUMMARY.md with details
-on all new content, gameplay impact, and integration points.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-
----
 
 ### 📁 Files Modified Recently
 
+- .github/workflows/combine-pull-requests.yml
 - AGENTS.md
 - data/items.yaml
 - data/rooms.yaml
@@ -105,16 +57,16 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-10-21 19:31:23
+**Run Date:** 2025-11-10 18:58:02
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0
-benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+platform linux -- Python 3.14.0, pytest-9.0.0, pluggy-1.6.0
+benchmark: 5.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pyproject.toml
-plugins: anyio-4.11.0, html-4.1.1, benchmark-5.1.0, cov-7.0.0, metadata-3.1.1
+plugins: anyio-4.11.0, html-4.1.1, benchmark-5.2.3, cov-7.0.0, metadata-3.1.1
 collected 176 items
 
 tests/test_accounts.py ...                                               [  1%]
@@ -188,10 +140,13 @@ tests/test_structure.py .                                                [ 96%]
 tests/test_surgery.py ...                                                [ 97%]
 tests/test_terminal_system.py ..                                         [ 98%]
 tests/test_who.py .                                                      [ 99%]
-tests/test_world_load.py .                                               [100%]
+tests/test_world_load.py .<unknown>:390: SyntaxWarning: 'return' in a 'finally' block
+/home/runner/work/pymud-ss13/pymud-ss13/mud_websocket_server.py:390: SyntaxWarning: 'return' in a 'finally' block
+  return websocket
+                                               [100%]
 
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.13.7-final-0 ________________
+_______________ coverage: platform linux, python 3.14.0-final-0 ________________
 
 Name                                             Stmts   Miss  Cover   Missing
 ------------------------------------------------------------------------------
@@ -251,7 +206,7 @@ components/power_consumer.py                        42      1    98%   68
 components/replica_pod.py                           30      4    87%   20, 23, 25, 32
 components/room.py                                  42     25    40%   54, 64-65, 79-83, 92-103, 112-114, 126-130, 139
 components/structure.py                             42      3    93%   43, 60, 72
-components/terminal.py                              16      3    81%   23-28
+components/terminal.py                              15      3    80%   23-28
 connection.py                                       68     68     0%   6-193
 engine.py                                           52     10    81%   109, 134-135, 153-154, 158-163
 events.py                                           53     20    62%   89-90, 108-135, 145, 158
@@ -275,22 +230,22 @@ start_server.py                                     96     96     0%   7-202
 system_loops.py                                     22     22     0%   1-29
 systems/__init__.py                                 33      0   100%
 systems/advanced_antagonists.py                    111     13    88%   37, 60-67, 84-85, 97-98, 114-115, 147, 195
-systems/advanced_chemistry.py                       77     11    86%   37-40, 45, 78, 83, 106, 114, 132, 137
+systems/advanced_chemistry.py                       73     11    85%   37-40, 45, 78, 83, 106, 114, 132, 137
 systems/ai.py                                       53      9    83%   18-22, 39-40, 44, 50
-systems/antagonists.py                              53     10    81%   59, 70-77, 93
+systems/antagonists.py                              52     10    81%   59, 70-77, 93
 systems/atmos.py                                   194     84    57%   66-67, 81-82, 90, 94, 106, 110, 116-117, 127, 129, 149-178, 188-199, 209, 215-218, 222, 226-229, 231, 235-238, 242, 246-249, 253, 256-259, 261, 264-266, 270, 328-329, 343-345, 350, 367-369, 374, 387-388, 398-401
 systems/atmosphere.py                                1      0   100%
 systems/bar.py                                      61      4    93%   50, 53, 59, 86
 systems/botany.py                                  155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
 systems/cargo.py                                   151     23    85%   40, 51, 96, 99, 112, 119-120, 170-175, 179-184, 218-219, 222-223
-systems/chemical_reactions.py                       66      4    94%   46, 52, 85, 97
+systems/chemical_reactions.py                       63      4    94%   46, 52, 85, 97
 systems/chemistry.py                                54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                                 56     11    80%   42, 45, 56, 61-65, 69, 73, 91
-systems/combat.py                                   46      2    96%   48, 51
+systems/combat.py                                   43      2    95%   48, 51
 systems/communications.py                          157     28    82%   75, 106, 110, 121, 134, 142, 148-158, 179, 191, 195, 198, 201, 214, 219, 225, 231, 268, 284-286, 295-298, 308
 systems/construction.py                             97      7    93%   57, 66, 84, 93, 96, 98, 177
 systems/disease.py                                  90     20    78%   27, 30, 33, 48, 51, 60, 63, 70, 77, 91, 99-100, 103, 106-112
-systems/fire.py                                     47      2    96%   37, 56
+systems/fire.py                                     46      2    96%   37, 56
 systems/flood.py                                    18      2    89%   20, 23
 systems/gas_sim.py                                 124     31    75%   98, 111-115, 120, 130, 133, 152-153, 158, 161-181
 systems/genetics.py                                 94      7    93%   44-45, 66, 80, 107, 111, 114
@@ -299,15 +254,15 @@ systems/jobs.py                                    244     21    91%   94, 151, 
 systems/kitchen.py                                  62      4    94%   54, 57, 63, 85
 systems/maintenance.py                              36      4    89%   31, 35, 38, 44
 systems/npc_ai.py                                   31     12    61%   27, 31, 35-44
-systems/physics.py                                  41     12    71%   37, 40, 45, 50-58
+systems/physics.py                                  38     12    68%   37, 40, 45, 50-58
 systems/plumbing.py                                 49      9    82%   29-30, 38, 45, 50, 53, 59, 63, 77
 systems/power.py                                   247     78    68%   66, 206-212, 230-235, 271-272, 275, 289-290, 298, 302, 319-321, 326-327, 338-345, 352, 359-361, 365-375, 378, 404-419, 453, 465-468, 479-511, 521-523, 533-542, 578
-systems/random_events.py                           105     20    81%   50-52, 77-81, 86, 88, 108-109, 114, 117, 125, 137-139, 149, 161
+systems/random_events.py                           103     20    81%   50-52, 77-81, 86, 88, 108-109, 114, 117, 125, 137-139, 149, 161
 systems/research.py                                124     18    85%   82, 85, 91, 93, 115, 117, 119, 121, 123, 132, 139-140, 153-154, 172-173, 176, 186
 systems/robotics.py                                199     16    92%   80, 95, 118, 124, 134, 160, 237-238, 241, 254, 261, 268, 284, 290, 296, 299
-systems/round_manager.py                            48      6    88%   33, 44, 71, 76-77, 93
+systems/round_manager.py                            45      6    87%   33, 44, 71, 76-77, 93
 systems/script_engine.py                            72     39    46%   25, 38-50, 54-57, 61, 65-71, 77-87, 96-99, 105-106, 112, 125-126, 144-151
-systems/security.py                                119     25    79%   108-113, 134, 157-158, 163-164, 169-170, 183, 185-189, 201-205, 215
+systems/security.py                                107     25    77%   108-113, 134, 157-158, 163-164, 169-170, 183, 185-189, 201-205, 215
 systems/space_exploration.py                       201     17    92%   31-32, 51-52, 134, 179, 181, 195, 263, 268-271, 283, 288, 309, 329
 systems/surgery.py                                  61      9    85%   35, 40, 44, 47, 50, 67, 70, 74, 102
 systems/terminal.py                                 37      5    86%   37, 48-51
@@ -384,35 +339,35 @@ tests/test_surgery.py                               56      0   100%
 tests/test_terminal_system.py                       39      0   100%
 tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
-world.py                                           170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
+world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            11589   3292    72%
+TOTAL                                            11553   3292    72%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     38.2220  925.4550  43.4125  15.5561  41.4575  3.6265    61;307       23.0348    4056           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     34.0630  403.7740  38.6349  8.7339  36.9190  3.3060   458;548       25.8833    9053           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-============================= 176 passed in 8.75s ==============================
+============================= 176 passed in 6.47s ==============================
 ```
 
 ### Coverage Summary
 ```
 tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
-world.py                                           170     43    75%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
+world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            11589   3292    72%
+TOTAL                                            11553   3292    72%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     38.2220  925.4550  43.4125  15.5561  41.4575  3.6265    61;307       23.0348    4056           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     34.0630  403.7740  38.6349  8.7339  36.9190  3.3060   458;548       25.8833    9053           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -421,7 +376,7 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.13.7
+Python Version: Python 3.14.0
 Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
@@ -471,4 +426,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-10-21 19:31:23 (GitHub Actions Run #18695379279)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-11-10 18:58:02 (GitHub Actions Run #19242777928)*
