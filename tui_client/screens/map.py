@@ -423,6 +423,12 @@ class MapScreen(Screen):
             self.grid_size -= 2
             self.zoom_level += 1
             self.app.notify(f"Zoom level: {self.zoom_level}")
+            # Re-render map with new grid size
+            if self.map_data:
+                grid = self.map_data.get("grid", [])
+                self._render_map(grid)
+            else:
+                self._render_map([])
 
     def action_zoom_out(self) -> None:
         """Zoom out on the map."""
@@ -430,3 +436,9 @@ class MapScreen(Screen):
             self.grid_size += 2
             self.zoom_level -= 1
             self.app.notify(f"Zoom level: {self.zoom_level}")
+            # Re-render map with new grid size
+            if self.map_data:
+                grid = self.map_data.get("grid", [])
+                self._render_map(grid)
+            else:
+                self._render_map([])
