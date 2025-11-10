@@ -7,7 +7,8 @@ including unit tests for the GameClient, screen tests, and integration tests.
 
 import pytest
 import asyncio
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
+from unittest.mock import Mock, AsyncMock
+from textual.widgets import Input, Static, Button
 
 # Import TUI components
 from tui_client.client import GameClient

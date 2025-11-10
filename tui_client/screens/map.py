@@ -8,7 +8,6 @@ from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, Grid
 from textual.screen import Screen
 from textual.widgets import Static, Header, Footer, Button
-from textual import log
 from rich.text import Text
 
 
@@ -41,7 +40,7 @@ class MapCell(Static):
             char = "▢"
             color = "yellow"
         elif self.room_type == "room":
-            char = "·" if not self.is_visited else "·"
+            char = "·" if self.is_visited else "○"
             color = "cyan" if self.is_visited else "dim cyan"
         elif self.room_type == "corridor":
             char = "-"
@@ -421,12 +420,12 @@ class MapScreen(Screen):
         """Zoom in on the map."""
         if self.grid_size > 7:
             self.grid_size -= 2
-            self.app.notify(f"Zoom level: {self.zoom_level + 1}")
             self.zoom_level += 1
+            self.app.notify(f"Zoom level: {self.zoom_level}")
 
     def action_zoom_out(self) -> None:
         """Zoom out on the map."""
         if self.grid_size < 25:
             self.grid_size += 2
-            self.app.notify(f"Zoom level: {self.zoom_level - 1}")
             self.zoom_level -= 1
+            self.app.notify(f"Zoom level: {self.zoom_level}")
