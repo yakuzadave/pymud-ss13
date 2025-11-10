@@ -66,6 +66,7 @@ class GameClient:
             try:
                 await self.receive_task
             except asyncio.CancelledError:
+                # Expected exception when cancelling the receive task
                 pass
 
         if self.websocket:
@@ -80,10 +81,7 @@ class GameClient:
             return
 
         try:
-            message = json.dumps({
-                "type": "command",
-                "command": command
-            })
+            message = json.dumps({"type": "command", "command": command})
             await self.websocket.send(message)
             log(f"Sent command: {command}")
         except Exception as e:
