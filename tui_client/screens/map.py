@@ -8,7 +8,6 @@ from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, Grid
 from textual.screen import Screen
 from textual.widgets import Static, Header, Footer, Button
-from textual import log
 from rich.text import Text
 
 
