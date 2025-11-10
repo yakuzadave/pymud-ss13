@@ -8,12 +8,20 @@ from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Static, Header, Footer, Button, ListView, ListItem, Label
+from textual.message import Message
 from textual import log
 from rich.text import Text
 
 
 class ItemWidget(Static):
     """Widget representing a single item."""
+
+    class ItemSelected(Message):
+        """Message when an item is selected."""
+
+        def __init__(self, item_widget):
+            super().__init__()
+            self.item_widget = item_widget
 
     def __init__(self, item_data: dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,13 +45,6 @@ class ItemWidget(Static):
     def on_click(self) -> None:
         """Handle item click."""
         self.post_message(self.ItemSelected(self))
-
-    class ItemSelected(Static.Clicked):
-        """Message when an item is selected."""
-
-        def __init__(self, item_widget):
-            super().__init__(item_widget)
-            self.item_widget = item_widget
 
 
 class InventoryScreen(Screen):
