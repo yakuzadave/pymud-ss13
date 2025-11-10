@@ -12,6 +12,7 @@ Switch seamlessly between different views using function keys:
 - **F2 - Inventory View**: Comprehensive item and equipment management
 - **F3 - Map View**: Visual grid-based station map with real-time updates
 - **F4 - Help View**: Complete command reference and keybindings
+- **F5 - Chat View**: Dedicated communication interface with multiple channels
 - **F10 - Quit**: Exit the application
 
 ### 🖥️ Game View (F1)
@@ -46,6 +47,17 @@ Switch seamlessly between different views using function keys:
 - Keyboard shortcut guide
 - Tips and tricks
 - About information
+
+### 💬 Chat View (F5)
+
+- Multiple chat channels (Say, Yell, Whisper, Radio, OOC, System)
+- Tabbed interface for organized conversations
+- Online player list with roles
+- Channel-specific color coding
+- Quick channel switching with Tab/Shift+Tab
+- Slash commands for advanced features
+- Real-time message history
+- Player count display
 
 ## Installation
 
@@ -95,6 +107,7 @@ Options:
 | F2 | Switch to Inventory view |
 | F3 | Switch to Map view |
 | F4 | Switch to Help view |
+| F5 | Switch to Chat view |
 | F10 | Quit application |
 | Ctrl+C | Quit application |
 
@@ -126,6 +139,29 @@ Options:
 | - | Zoom out |
 | R | Refresh map |
 
+### Chat View
+
+| Key | Action |
+|-----|--------|
+| Enter | Send message |
+| Escape | Clear input |
+| Tab | Next channel |
+| Shift+Tab | Previous channel |
+| Ctrl+L | Clear current channel |
+
+#### Chat Slash Commands
+
+| Command | Description |
+|---------|-------------|
+| /help | Show available commands |
+| /say <msg> | Say something |
+| /yell <msg> | Yell something |
+| /whisper <player> <msg> | Whisper to someone |
+| /radio <msg> | Send radio message |
+| /ooc <msg> | Out of character chat |
+| /who | List online players |
+| /clear | Clear current channel |
+
 ## Architecture
 
 ### Directory Structure
@@ -143,6 +179,7 @@ tui_client/
     ├── game.py          # Main game interface
     ├── inventory.py     # Inventory management
     ├── map.py           # Map visualization
+    ├── chat.py          # Chat and communication
     └── help.py          # Help and reference
 ```
 

@@ -17,6 +17,7 @@ from tui_client.screens.game import GameScreen
 from tui_client.screens.inventory import InventoryScreen
 from tui_client.screens.map import MapScreen
 from tui_client.screens.help import HelpScreen
+from tui_client.screens.chat import ChatScreen
 from tui_client.client import GameClient
 
 
@@ -33,6 +34,7 @@ class PyMUDApp(App):
         Binding("f2", "switch_screen('inventory')", "Inventory", show=True, priority=True),
         Binding("f3", "switch_screen('map')", "Map", show=True, priority=True),
         Binding("f4", "switch_screen('help')", "Help", show=True, priority=True),
+        Binding("f5", "switch_screen('chat')", "Chat", show=True, priority=True),
         Binding("f10", "quit", "Quit", show=True, priority=True),
         Binding("ctrl+c", "quit", "Quit", show=False),
     ]
@@ -75,6 +77,8 @@ class PyMUDApp(App):
             return
         elif screen_name == "help" and isinstance(current_screen, HelpScreen):
             return
+        elif screen_name == "chat" and isinstance(current_screen, ChatScreen):
+            return
 
         # Pop current screen and push new one
         self.pop_screen()
@@ -87,6 +91,8 @@ class PyMUDApp(App):
             self.push_screen(MapScreen(self.game_client))
         elif screen_name == "help":
             self.push_screen(HelpScreen(self.game_client))
+        elif screen_name == "chat":
+            self.push_screen(ChatScreen(self.game_client))
 
     def action_quit(self) -> None:
         """Quit the application."""

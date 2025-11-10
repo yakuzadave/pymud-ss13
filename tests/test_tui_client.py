@@ -18,6 +18,7 @@ from tui_client.screens.game import GameScreen
 from tui_client.screens.inventory import InventoryScreen
 from tui_client.screens.map import MapScreen
 from tui_client.screens.help import HelpScreen
+from tui_client.screens.chat import ChatScreen
 
 
 class TestGameClient:
@@ -187,6 +188,7 @@ class TestPyMUDApp:
         assert "f2" in binding_keys
         assert "f3" in binding_keys
         assert "f4" in binding_keys
+        assert "f5" in binding_keys
         assert "f10" in binding_keys
         assert "ctrl+c" in binding_keys
 
@@ -416,6 +418,128 @@ class TestHelpScreen:
     def test_help_screen_initialization(self, help_screen, mock_game_client):
         """Test HelpScreen initialization."""
         assert help_screen.game_client == mock_game_client
+
+
+class TestChatScreen:
+    """Test cases for the ChatScreen."""
+
+    @pytest.fixture
+    def mock_game_client(self):
+        """Create a mock GameClient."""
+        client = Mock(spec=GameClient)
+        client.register_handler = Mock()
+        client.unregister_handler = Mock()
+        client.send_command = AsyncMock()
+        client.connected = True
+        return client
+
+    @pytest.fixture
+    def chat_screen(self, mock_game_client):
+        """Create a ChatScreen instance."""
+        return ChatScreen(mock_game_client)
+
+    def test_chat_screen_initialization(self, chat_screen, mock_game_client):
+        """Test ChatScreen initialization."""
+        assert chat_screen.game_client == mock_game_client
+        assert chat_screen.current_channel == "say"
+        assert chat_screen.online_players == []
+        assert "say" in chat_screen.chat_logs
+        assert "yell" in chat_screen.chat_logs
+        assert "whisper" in chat_screen.chat_logs
+        assert "radio" in chat_screen.chat_logs
+        assert "ooc" in chat_screen.chat_logs
+
+    def test_chat_screen_bindings(self, chat_screen):
+        """Test that ChatScreen has expected bindings."""
+        # BINDINGS can be tuples or Binding objects
+        binding_keys = []
+        for b in chat_screen.BINDINGS:
+            if isinstance(b, tuple):
+                binding_keys.append(b[0])
+            else:
+                binding_keys.append(b.key)
+
+        assert "escape" in binding_keys
+        assert "ctrl+l" in binding_keys
+        assert "tab" in binding_keys
+        assert "shift+tab" in binding_keys
+
+    def test_switch_channel(self, chat_screen):
+        """Test switching between channels (data only)."""
+        # Test channel switching without mounted widgets
+        chat_screen.current_channel = "yell"
+        assert chat_screen.current_channel == "yell"
+
+        chat_screen.current_channel = "radio"
+        assert chat_screen.current_channel == "radio"
+
+        chat_screen.current_channel = "ooc"
+        assert chat_screen.current_channel == "ooc"
+
+    def test_chat_logs_structure(self, chat_screen):
+        """Test chat logs are properly initialized."""
+        assert isinstance(chat_screen.chat_logs, dict)
+        assert len(chat_screen.chat_logs) >= 5
+
+        for channel in ["say", "yell", "whisper", "radio", "ooc"]:
+            assert channel in chat_screen.chat_logs
+            assert isinstance(chat_screen.chat_logs[channel], list)
+
+    def test_handle_chat_data(self, chat_screen):
+        """Test handling chat message data (data processing only)."""
+        chat_data = {
+            "channel": "say",
+            "sender": "TestUser",
+            "message": "Hello world",
+            "timestamp": "12:00:00"
+        }
+
+        # Simulate receiving chat message
+        # We can't test the full handler without mounted widgets,
+        # but we can test the data structure
+        chat_screen.chat_logs["say"].append({
+            "timestamp": chat_data["timestamp"],
+            "sender": chat_data["sender"],
+            "message": chat_data["message"]
+        })
+
+        assert len(chat_screen.chat_logs["say"]) == 1
+        assert chat_screen.chat_logs["say"][0]["sender"] == "TestUser"
+        assert chat_screen.chat_logs["say"][0]["message"] == "Hello world"
+
+    def test_handle_players_data(self, chat_screen):
+        """Test handling player list data."""
+        players_data = {
+            "players": [
+                {"name": "Player1", "role": "Engineer", "status": "online"},
+                {"name": "Player2", "role": "Doctor", "status": "online"}
+            ]
+        }
+
+        # Test data processing
+        chat_screen.online_players = players_data.get("players", [])
+
+        assert len(chat_screen.online_players) == 2
+        assert chat_screen.online_players[0]["name"] == "Player1"
+        assert chat_screen.online_players[1]["role"] == "Doctor"
+
+    @pytest.mark.asyncio
+    async def test_send_message_say(self, chat_screen, mock_game_client):
+        """Test sending a say message."""
+        await chat_screen._send_message("Hello", "say")
+        mock_game_client.send_command.assert_called_once_with("say Hello")
+
+    @pytest.mark.asyncio
+    async def test_send_message_yell(self, chat_screen, mock_game_client):
+        """Test sending a yell message."""
+        await chat_screen._send_message("Help!", "yell")
+        mock_game_client.send_command.assert_called_once_with("yell Help!")
+
+    @pytest.mark.asyncio
+    async def test_send_message_radio(self, chat_screen, mock_game_client):
+        """Test sending a radio message."""
+        await chat_screen._send_message("Copy that", "radio")
+        mock_game_client.send_command.assert_called_once_with("radio Copy that")
 
 
 class TestIntegration:

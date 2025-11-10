@@ -77,6 +77,7 @@ The TUI provides multiple views accessible via function keys:
 - **F2**: Inventory view - Item management
 - **F3**: Map view - Visual station map
 - **F4**: Help view - Command reference
+- **F5**: Chat view - Multi-channel communication
 - **F10**: Quit
 
 See [tui_client/README.md](tui_client/README.md) for complete documentation.
