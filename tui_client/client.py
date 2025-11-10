@@ -6,10 +6,12 @@ Handles communication with the game server via WebSocket.
 
 import asyncio
 import json
-from typing import Optional, Dict, Any, Callable
+from typing import Optional, Dict, Any, Callable, TYPE_CHECKING
 import websockets
-from websockets.client import WebSocketClientProtocol
 from textual import log
+
+if TYPE_CHECKING:
+    from websockets.asyncio.client import ClientConnection
 
 
 class GameClient:
@@ -18,7 +20,7 @@ class GameClient:
     def __init__(self, server_url: str, app):
         self.server_url = server_url
         self.app = app
-        self.websocket: Optional[WebSocketClientProtocol] = None
+        self.websocket: Optional[Any] = None  # Type: ClientConnection when connected
         self.connected = False
         self.receive_task: Optional[asyncio.Task] = None
 
