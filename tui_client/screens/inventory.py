@@ -196,6 +196,8 @@ class InventoryScreen(Screen):
         self.selected_item = None
         self.carried_items = []
         self.equipped_items = []
+        self._cached_total_weight = 0.0
+        self._weight_cache_valid = False
 
     def compose(self) -> ComposeResult:
         """Compose the inventory screen."""
@@ -269,6 +271,9 @@ class InventoryScreen(Screen):
         self.carried_items = data.get("items", [])
         self.equipped_items = [item for item in self.carried_items if item.get("equipped", False)]
 
+        # Invalidate weight cache since inventory changed
+        self._weight_cache_valid = False
+
         # Update displays
         self._update_carried_items()
         self._update_equipped_items()
@@ -303,10 +308,17 @@ class InventoryScreen(Screen):
 
     def _update_stats(self):
         """Update player stats display."""
-        total_weight = sum(item.get("weight", 0) * item.get("quantity", 1) for item in self.carried_items)
+        # Use cached weight if valid, otherwise recalculate
+        if not self._weight_cache_valid:
+            self._cached_total_weight = sum(
+                item.get("weight", 0) * item.get("quantity", 1) 
+                for item in self.carried_items
+            )
+            self._weight_cache_valid = True
+        
         item_count = len(self.carried_items)
 
-        self.query_one("#total-weight", Static).update(f"{total_weight:.1f} kg")
+        self.query_one("#total-weight", Static).update(f"{self._cached_total_weight:.1f} kg")
         self.query_one("#item-count", Static).update(str(item_count))
 
     def _select_item(self, item_widget: ItemWidget):
