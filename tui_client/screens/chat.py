@@ -8,6 +8,7 @@ player list, and message history.
 from datetime import datetime
 from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
+from textual.css.query import NoMatches
 from textual.screen import Screen
 from textual.widgets import Static, Header, Footer, Input, Button, TabbedContent, TabPane, RichLog
 from textual import log
@@ -436,7 +437,7 @@ class ChatScreen(Screen):
         log_id = f"{channel}-log"
         try:
             chat_log = self.query_one(f"#{log_id}", RichLog)
-        except:
+        except NoMatches:
             log(f"Warning: Could not find log for channel {channel}")
             return
 
@@ -473,7 +474,7 @@ class ChatScreen(Screen):
         try:
             system_log = self.query_one("#system-log", RichLog)
             system_log.write(text)
-        except:
+        except NoMatches:
             pass
 
     def _update_player_list(self):
@@ -517,7 +518,7 @@ class ChatScreen(Screen):
             chat_log = self.query_one(f"#{log_id}", RichLog)
             chat_log.clear()
             self._add_system_message(f"Cleared {self.current_channel} channel")
-        except:
+        except NoMatches:
             pass
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
