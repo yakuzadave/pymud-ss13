@@ -4,6 +4,7 @@ This project extends the MUDpy game engine with a WebSocket interface. Players c
 
 ## Features
 
+- **Textual TUI Client**: Modern terminal user interface with multiple switchable views (F1-F4), keyboard shortcuts, and real-time updates. See [TUI Documentation](tui_client/README.md) for details.
 - **MUDpy Integration**: Interfaces with the MUDpy game engine.
 - **Persistent Storage**: Uses YAML for configuration and data files.
 - **Web-Based Frontend**: Connect through a browser using WebSockets.
@@ -62,6 +63,23 @@ python run_server.py
 ```
 
 The web client will be available on `http://localhost:5000`.
+
+### Terminal UI Client
+
+For a terminal-based interface, launch the Textual TUI client:
+
+```bash
+python tui_client.py
+```
+
+The TUI provides multiple views accessible via function keys:
+- **F1**: Game view - Main gameplay interface
+- **F2**: Inventory view - Item management
+- **F3**: Map view - Visual station map
+- **F4**: Help view - Command reference
+- **F10**: Quit
+
+See [tui_client/README.md](tui_client/README.md) for complete documentation.
 
 ## Accounts
 

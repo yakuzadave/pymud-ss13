@@ -1,0 +1,217 @@
+/* Main Application Styles for PyMUD-SS13 TUI */
+
+/* Global Styles */
+Screen {
+    background: $surface;
+}
+
+/* Header Styles */
+Header {
+    background: $primary;
+    color: $text;
+    text-style: bold;
+}
+
+/* Footer Styles */
+Footer {
+    background: $panel;
+}
+
+/* Common Container Styles */
+.container {
+    height: 100%;
+    width: 100%;
+    background: $surface;
+}
+
+.panel {
+    border: solid $primary;
+    background: $panel;
+    padding: 1;
+}
+
+.bordered {
+    border: solid $accent;
+    background: $surface;
+}
+
+/* Terminal/Log Display */
+.terminal {
+    height: 1fr;
+    border: solid $primary;
+    background: $surface;
+    padding: 1;
+    scrollbar-background: $panel;
+    scrollbar-color: $primary;
+}
+
+.log-entry {
+    margin-bottom: 1;
+}
+
+.log-system {
+    color: $warning;
+}
+
+.log-error {
+    color: $error;
+    text-style: bold;
+}
+
+.log-success {
+    color: $success;
+}
+
+/* Input Areas */
+.input-area {
+    height: auto;
+    padding: 1;
+    border: solid $accent;
+    background: $panel;
+}
+
+Input {
+    border: solid $primary;
+    width: 100%;
+}
+
+Input:focus {
+    border: solid $accent;
+}
+
+/* Inventory Styles */
+.inventory-list {
+    height: 1fr;
+    border: solid $primary;
+    background: $surface;
+}
+
+.item {
+    padding: 1;
+    border: solid $primary;
+    background: $panel;
+    margin: 1;
+}
+
+.item:hover {
+    background: $primary;
+    border: solid $accent;
+}
+
+.item-equipped {
+    background: $success-darken-2;
+    border: solid $success;
+}
+
+/* Map Styles */
+.map-container {
+    height: 1fr;
+    border: solid $primary;
+    background: $surface;
+    align: center middle;
+}
+
+.map-grid {
+    width: auto;
+    height: auto;
+}
+
+.map-cell {
+    width: 3;
+    height: 1;
+    border: none;
+    text-align: center;
+}
+
+.map-legend {
+    border: solid $primary;
+    background: $panel;
+    padding: 1;
+    width: 30;
+}
+
+/* Status Bar */
+.status-bar {
+    height: 3;
+    border: solid $primary;
+    background: $panel;
+    padding: 1;
+}
+
+.status-item {
+    margin-right: 2;
+}
+
+/* Help Screen Styles */
+.help-content {
+    height: 1fr;
+    border: solid $primary;
+    background: $surface;
+    padding: 2;
+}
+
+.help-section {
+    margin-bottom: 2;
+}
+
+.help-title {
+    text-style: bold;
+    color: $accent;
+}
+
+.help-command {
+    color: $success;
+    text-style: bold;
+}
+
+/* Login Screen Styles */
+.login-container {
+    align: center middle;
+}
+
+.login-form {
+    width: 60;
+    height: auto;
+    border: solid $primary;
+    background: $panel;
+    padding: 2;
+}
+
+.login-title {
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    margin-bottom: 1;
+}
+
+.form-row {
+    height: auto;
+    margin-bottom: 1;
+}
+
+Label {
+    width: 15;
+    margin-right: 1;
+}
+
+Button {
+    margin-top: 1;
+    width: 100%;
+}
+
+Button:hover {
+    background: $accent;
+}
+
+/* Scrollbars */
+*::-webkit-scrollbar {
+    background: $panel;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: $primary;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: $accent;
+}
