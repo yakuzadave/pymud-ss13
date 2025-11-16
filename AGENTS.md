@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-11-10 19:25:12  
+**Generated:** 2025-11-16 01:51:45  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 613648a
+**Commit:** 75c2d0d
 **Branch:** main
 
 ---
@@ -13,59 +13,61 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **613648a** (26 seconds ago by Katharsis): Merge pull request #177 from yakuzadave/claude/leverage-textual-tui-011CUzaQgzxTyybE8eGK41vm
-- **028cd86** (27 minutes ago by GitHub Action): 🤖 Auto-update AGENTS.md
-- **f12778f** (28 minutes ago by Katharsis): Add workflow to combine labelled pull requests into a single branch
-- **8edecff** (82 minutes ago by Katharsis): Update tui_client/screens/map.py
-- **b2e0b43** (85 minutes ago by Katharsis): Update tui_client/screens/map.py
+- **75c2d0d** (24 seconds ago by Katharsis): Merge pull request #187 from yakuzadave/codex/fix-ci-job-by-installing-pytest-asyncio
+- **f087abf** (43 seconds ago by Katharsis): Expand async GameClient coverage
+- **cce7bc9** (5 days ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **613648a** (5 days ago by Katharsis): Merge pull request #177 from yakuzadave/claude/leverage-textual-tui-011CUzaQgzxTyybE8eGK41vm
+- **028cd86** (5 days ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 613648a - Merge pull request #177 from yakuzadave/claude/leverage-textual-tui-011CUzaQgzxTyybE8eGK41vm
+#### Commit 75c2d0d - Merge pull request #187 from yakuzadave/codex/fix-ci-job-by-installing-pytest-asyncio
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-11-10 11:24:46
+**Date:** 2025-11-15 17:51:21
 **Message:**
-Optimize Textual TUI implementation for Python
+
 ---
-#### Commit 028cd86 - 🤖 Auto-update AGENTS.md
-**Author:** GitHub Action <action@github.com>
-**Date:** 2025-11-10 18:58:02
+#### Commit f087abf - Expand async GameClient coverage
+**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
+**Date:** 2025-11-15 17:51:02
 **Message:**
-- Updated from commit: f12778fa6eccd07689b0ae4d72b0b67196a5adde
+
+---
+#### Commit cce7bc9 - 🤖 Auto-update AGENTS.md
+**Author:** GitHub Action <action@github.com>
+**Date:** 2025-11-10 19:25:22
+**Message:**
+- Updated from commit: 613648abe047bdc3c786aba3c34762ac93ed0a7a
 - Triggered by: push
 - Branch: main
 
 [skip ci][autogen AGENTS.md]
 
 ---
-#### Commit f12778f - Add workflow to combine labelled pull requests into a single branch
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-11-10 10:57:20
-**Message:**
-This workflow automates the process of combining pull requests based on a specified label and creates a new pull request with the combined changes.
----
 
 ### 📁 Files Modified Recently
 
-- .github/workflows/combine-pull-requests.yml
 - AGENTS.md
-- tui_client/screens/map.py
+- pytest.ini
+- requirements.txt
+- tests/test_tui_client.py
 
 
 ## 🧪 Test Results
 
-**Status:** ❌ FAILED  
-**Run Date:** 2025-11-10 19:25:22
+**Status:** ✅ PASSED  
+**Run Date:** 2025-11-16 01:51:54
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.14.0, pytest-9.0.0, pluggy-1.6.0
+platform linux -- Python 3.14.0, pytest-9.0.1, pluggy-1.6.0
 benchmark: 5.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
-configfile: pyproject.toml
-plugins: anyio-4.11.0, html-4.1.1, benchmark-5.2.3, cov-7.0.0, metadata-3.1.1
-collected 220 items
+configfile: pytest.ini
+plugins: anyio-4.11.0, html-4.1.1, benchmark-5.2.3, cov-7.0.0, asyncio-1.3.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 223 items
 
 tests/test_accounts.py ...                                               [  1%]
 tests/test_action_queue.py .                                             [  1%]
@@ -75,244 +77,80 @@ tests/test_ai_gameplay.py .                                              [  5%]
 tests/test_ai_system.py ..                                               [  6%]
 tests/test_alias_commands.py ..                                          [  7%]
 tests/test_aliases.py ..                                                 [  8%]
-tests/test_antag_command.py .                                            [  9%]
-tests/test_antagonists.py ..                                             [ 10%]
+tests/test_antag_command.py .                                            [  8%]
+tests/test_antagonists.py ..                                             [  9%]
 tests/test_atmos_sim.py ..                                               [ 10%]
 tests/test_bartender.py .                                                [ 11%]
 tests/test_botany_kitchen.py ....                                        [ 13%]
-tests/test_botany_mechanics.py ....                                      [ 15%]
+tests/test_botany_mechanics.py ....                                      [ 14%]
 tests/test_cargo.py ..........                                           [ 19%]
 tests/test_chemical_reactions.py ..                                      [ 20%]
-tests/test_chemistry.py ....                                             [ 22%]
+tests/test_chemistry.py ....                                             [ 21%]
 tests/test_circuit_system.py ...                                         [ 23%]
-tests/test_cli.py .                                                      [ 24%]
+tests/test_cli.py .                                                      [ 23%]
 tests/test_combat_system.py .                                            [ 24%]
 tests/test_communications.py ..                                          [ 25%]
-tests/test_console_commands.py ......                                    [ 28%]
-tests/test_construction_system.py ..                                     [ 29%]
-tests/test_containers.py ..                                              [ 30%]
+tests/test_console_commands.py ......                                    [ 27%]
+tests/test_construction_system.py ..                                     [ 28%]
+tests/test_containers.py ..                                              [ 29%]
 tests/test_cook_command.py .                                             [ 30%]
 tests/test_cyborg_med_integration.py .                                   [ 30%]
 tests/test_door_id_card_access.py ..                                     [ 31%]
-tests/test_doors.py .                                                    [ 32%]
+tests/test_doors.py .                                                    [ 31%]
 tests/test_environmental_protection.py .                                 [ 32%]
-tests/test_equipment.py .                                                [ 33%]
-tests/test_explosive_decompression.py ..                                 [ 34%]
-tests/test_finance.py ...                                                [ 35%]
-tests/test_fire_system.py ..                                             [ 36%]
+tests/test_equipment.py .                                                [ 32%]
+tests/test_explosive_decompression.py ..                                 [ 33%]
+tests/test_finance.py ...                                                [ 34%]
+tests/test_fire_system.py ..                                             [ 35%]
 tests/test_flood_system.py .                                             [ 36%]
-tests/test_genetic_disease_integration.py .                              [ 37%]
+tests/test_genetic_disease_integration.py .                              [ 36%]
 tests/test_genetic_med_integration.py .                                  [ 37%]
-tests/test_genetics.py ...                                               [ 39%]
+tests/test_genetics.py ...                                               [ 38%]
 tests/test_inventory_sync.py .                                           [ 39%]
-tests/test_item_properties.py ..                                         [ 40%]
+tests/test_item_properties.py ..                                         [ 39%]
 tests/test_jobs.py .....                                                 [ 42%]
 tests/test_maintenance_system.py ..                                      [ 43%]
-tests/test_manifest_and_login.py ..                                      [ 44%]
-tests/test_medical.py ....                                               [ 46%]
+tests/test_manifest_and_login.py ..                                      [ 43%]
+tests/test_medical.py ....                                               [ 45%]
 tests/test_nutrition.py .                                                [ 46%]
 tests/test_pathfinding.py ..                                             [ 47%]
-tests/test_performance.py .                                              [ 48%]
-tests/test_performance_monitor.py .                                      [ 48%]
-tests/test_persistence.py ...                                            [ 50%]
-tests/test_physics.py .                                                  [ 50%]
+tests/test_performance.py .                                              [ 47%]
+tests/test_performance_monitor.py .                                      [ 47%]
+tests/test_persistence.py ...                                            [ 49%]
+tests/test_physics.py .                                                  [ 49%]
 tests/test_player_loading.py .                                           [ 50%]
 tests/test_plumbing_system.py ..                                         [ 51%]
 tests/test_power_system.py ..                                            [ 52%]
-tests/test_random_events.py ......                                       [ 55%]
+tests/test_random_events.py ......                                       [ 54%]
 tests/test_replica_pod.py .                                              [ 55%]
-tests/test_research.py ...                                               [ 57%]
-tests/test_robotics.py ......                                            [ 60%]
-tests/test_robotics_ai_integration.py .                                  [ 60%]
+tests/test_research.py ...                                               [ 56%]
+tests/test_robotics.py ......                                            [ 59%]
+tests/test_robotics_ai_integration.py .                                  [ 59%]
 tests/test_robotics_maintenance_integration.py .                         [ 60%]
 tests/test_roles.py ...........                                          [ 65%]
-tests/test_room_status.py .                                              [ 66%]
-tests/test_round_manager.py ..                                           [ 67%]
-tests/test_security_system.py .                                          [ 67%]
-tests/test_silicon.py .....                                              [ 70%]
-tests/test_social_and_combat.py ....                                     [ 71%]
-tests/test_space_exploration.py ......                                   [ 74%]
-tests/test_spatial.py ...                                                [ 75%]
-tests/test_status_command.py .                                           [ 76%]
-tests/test_structure.py .                                                [ 76%]
-tests/test_surgery.py ...                                                [ 78%]
-tests/test_terminal_system.py ..                                         [ 79%]
-tests/test_tui_client.py .......FFFFF.....................FFFFF.F.FFF    [ 99%]
+tests/test_room_status.py .                                              [ 65%]
+tests/test_round_manager.py ..                                           [ 66%]
+tests/test_security_system.py .                                          [ 66%]
+tests/test_silicon.py .....                                              [ 69%]
+tests/test_social_and_combat.py ....                                     [ 70%]
+tests/test_space_exploration.py ......                                   [ 73%]
+tests/test_spatial.py ...                                                [ 74%]
+tests/test_status_command.py .                                           [ 75%]
+tests/test_structure.py .                                                [ 75%]
+tests/test_surgery.py ...                                                [ 77%]
+tests/test_terminal_system.py ..                                         [ 78%]
+tests/test_tui_client.py ............................................... [ 99%]
+                                                                         [ 99%]
 tests/test_who.py .                                                      [ 99%]
 tests/test_world_load.py .<unknown>:390: SyntaxWarning: 'return' in a 'finally' block
 /home/runner/work/pymud-ss13/pymud-ss13/mud_websocket_server.py:390: SyntaxWarning: 'return' in a 'finally' block
   return websocket
                                                [100%]
 
-=================================== FAILURES ===================================
-_________________ TestGameClient.test_handle_message_location __________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_________________ TestGameClient.test_handle_message_inventory _________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-____________________ TestGameClient.test_handle_message_map ____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-__________________ TestGameClient.test_message_handler_called __________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_________________ TestGameClient.test_multiple_handlers_called _________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_____________________ TestChatScreen.test_send_message_say _____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-____________________ TestChatScreen.test_send_message_yell _____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-____________________ TestChatScreen.test_send_message_radio ____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_______________ TestIntegration.test_message_routing_to_screens ________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-__________________ TestIntegration.test_async_handler_support __________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_______________ TestPerformance.test_message_handler_performance _______________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-____________________ TestWithFixtures.test_location_update _____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-____________________ TestWithFixtures.test_inventory_update ____________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-_______________________ TestWithFixtures.test_map_update _______________________
-async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
 =============================== warnings summary ===============================
-tests/test_tui_client.py:98
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:98: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:111
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:111: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:123
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:123: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:137
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:148
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:148: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:526
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:526: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:532
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:532: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:538
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:538: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:548
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:548: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:572
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:572: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:619
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:619: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:750
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:750: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:761
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:761: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
-
-tests/test_tui_client.py:775
-  /home/runner/work/pymud-ss13/pymud-ss13/tests/test_tui_client.py:775: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
-    @pytest.mark.asyncio
+tests/test_tui_client.py: 1005 warnings
+  /home/runner/work/pymud-ss13/pymud-ss13/tui_client/client.py:132: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(handler):
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ================================ tests coverage ================================
@@ -407,7 +245,7 @@ systems/atmos.py                                   194     84    57%   66-67, 81
 systems/atmosphere.py                                1      0   100%
 systems/bar.py                                      61      4    93%   50, 53, 59, 86
 systems/botany.py                                  155     41    74%   65, 71, 77, 80-85, 91, 114, 117-133, 143, 150-167, 173, 187, 190
-systems/cargo.py                                   151     17    89%   40, 51, 96, 99, 112, 119-120, 170-175, 218-219, 222-223
+systems/cargo.py                                   151     23    85%   40, 51, 96, 99, 112, 119-120, 170-175, 179-184, 218-219, 222-223
 systems/chemical_reactions.py                       63      4    94%   46, 52, 85, 97
 systems/chemistry.py                                54      7    87%   22-23, 39, 46, 49, 56, 70
 systems/circuits.py                                 56     11    80%   42, 45, 56, 61-65, 69, 73, 91
@@ -508,15 +346,15 @@ tests/test_status_command.py                        16      0   100%
 tests/test_structure.py                             14      0   100%
 tests/test_surgery.py                               56      0   100%
 tests/test_terminal_system.py                       39      0   100%
-tests/test_tui_client.py                           427     91    79%   101-109, 114-121, 126-135, 140-146, 151-161, 255, 307, 368, 460, 529-530, 535-536, 541-542, 551-570, 575-592, 622-648, 753-759, 764-773, 778-788
+tests/test_tui_client.py                           469      4    99%   318, 370, 431, 523
 tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
 tui_client.py                                       23     23     0%   16-82
 tui_client/__init__.py                               1      0   100%
 tui_client/app.py                                   64     36    44%   50-51, 55-60, 64-95, 99-101, 106-107
-tui_client/client.py                               105     67    36%   47-60, 64-74, 78-91, 95-112, 116-137, 150-151
+tui_client/client.py                               105     32    70%   78-91, 95-112, 126, 136-137, 150-151
 tui_client/screens/__init__.py                       0      0   100%
-tui_client/screens/chat.py                         232    194    16%   21-24, 28-31, 218-310, 314-329, 333-335, 339-354, 358-390, 394-407, 411-416, 420-422, 426-428, 432-461, 469-477, 481-493, 497-511, 515-521, 525-541, 545, 549, 553-559, 563-569
+tui_client/screens/chat.py                         232    190    18%   21-24, 28-31, 218-310, 314-329, 333-335, 339-354, 358-390, 395, 411-416, 420-422, 426-428, 432-461, 469-477, 481-493, 497-511, 515-521, 525-541, 545, 549, 553-559, 563-569
 tui_client/screens/game.py                         150    117    22%   120-155, 159-179, 183-184, 189-194, 198-216, 220-237, 241, 245-246, 250-252, 256-258, 262-264, 268-270, 274-289, 293-303, 307-323
 tui_client/screens/help.py                          49     35    29%   108-128, 132-192, 196-388, 392-535, 539-601
 tui_client/screens/inventory.py                    159    121    24%   23-24, 27-33, 38-43, 47, 202-242, 247-256, 260, 264, 269-275, 279-289, 293-302, 306-310, 314-353, 357-376, 380, 384-385, 389-390, 394-395, 399-401, 405-406
@@ -524,117 +362,18 @@ tui_client/screens/login.py                         89     70    21%   87-126, 1
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13075   4206    68%
+TOTAL                                            13117   4086    69%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     34.0240  319.4570  38.5894  9.9643  36.6085  3.2560   214;303       25.9138    4416           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     33.3520  597.9380  37.7896  11.4174  35.9470  3.3035   208;331       26.4623    5143           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-=========================== short test summary info ============================
-FAILED tests/test_tui_client.py::TestGameClient::test_handle_message_location - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestGameClient::test_handle_message_inventory - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestGameClient::test_handle_message_map - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestGameClient::test_message_handler_called - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestGameClient::test_multiple_handlers_called - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestChatScreen::test_send_message_say - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestChatScreen::test_send_message_yell - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestChatScreen::test_send_message_radio - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestIntegration::test_message_routing_to_screens - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestIntegration::test_async_handler_support - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestPerformance::test_message_handler_performance - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestWithFixtures::test_location_update - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestWithFixtures::test_inventory_update - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-FAILED tests/test_tui_client.py::TestWithFixtures::test_map_update - Failed: async def functions are not natively supported.
-You need to install a suitable plugin for your async framework, for example:
-  - anyio
-  - pytest-asyncio
-  - pytest-tornasync
-  - pytest-trio
-  - pytest-twisted
-================= 14 failed, 206 passed, 14 warnings in 6.91s ==================
+====================== 223 passed, 1005 warnings in 6.86s ======================
 ```
 
 ### Coverage Summary
@@ -643,13 +382,13 @@ tui_client/screens/login.py                         89     70    21%   87-126, 1
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13075   4206    68%
+TOTAL                                            13117   4086    69%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     34.0240  319.4570  38.5894  9.9643  36.6085  3.2560   214;303       25.9138    4416           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     33.3520  597.9380  37.7896  11.4174  35.9470  3.3035   208;331       26.4623    5143           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -708,4 +447,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-11-10 19:25:22 (GitHub Actions Run #19243534359)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-11-16 01:51:54 (GitHub Actions Run #19398647180)*
