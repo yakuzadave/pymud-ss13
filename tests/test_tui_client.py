@@ -5,9 +5,12 @@ This module contains comprehensive tests for the PyMUD-SS13 TUI client,
 including unit tests for the GameClient, screen tests, and integration tests.
 """
 
-import pytest
 import asyncio
+import json
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
+
+import pytest
+import websockets
 from textual.widgets import Input, Static, Button
 
 # Import TUI components
@@ -96,6 +99,30 @@ class TestGameClient:
         assert game_client.get_status("nonexistent") is None
 
     @pytest.mark.asyncio
+    async def test_send_command_when_connected(self, game_client):
+        """Send command should serialize payloads for open sockets."""
+        websocket = AsyncMock()
+        game_client.websocket = websocket
+        game_client.connected = True
+
+        await game_client.send_command("look")
+
+        websocket.send.assert_awaited_once()
+        payload = websocket.send.await_args.args[0]
+        assert json.loads(payload) == {"type": "command", "command": "look"}
+
+    @pytest.mark.asyncio
+    async def test_send_command_skipped_when_disconnected(self, game_client):
+        """Send command should no-op if the websocket is unavailable."""
+        websocket = AsyncMock()
+        game_client.websocket = websocket
+        game_client.connected = False
+
+        await game_client.send_command("look")
+
+        websocket.send.assert_not_called()
+
+    @pytest.mark.asyncio
     async def test_handle_message_location(self, game_client):
         """Test handling location messages."""
         location_data = {
@@ -133,6 +160,120 @@ class TestGameClient:
         await game_client._handle_message(map_data)
 
         assert game_client.current_map == map_data
+
+    @pytest.mark.asyncio
+    async def test_handle_status_messages_cache_latest_data(self, game_client):
+        """Door/atmosphere/power messages should update cached status info."""
+        for status_type in ("door", "atmosphere", "power"):
+            payload = {"type": status_type, "state": "ok"}
+            await game_client._handle_message(payload)
+            assert game_client.player_status[status_type] == payload
+
+    @pytest.mark.asyncio
+    async def test_connect_success_creates_receive_task(self, game_client, monkeypatch):
+        """Connect should create the receive task when the websocket opens."""
+        loop = asyncio.get_running_loop()
+        created_tasks = []
+        websocket = object()
+
+        monkeypatch.setattr(
+            "tui_client.client.websockets.connect",
+            AsyncMock(return_value=websocket),
+        )
+
+        def fake_create_task(coro):
+            task = loop.create_task(coro)
+            created_tasks.append(task)
+            return task
+
+        receive_messages = AsyncMock(return_value=None)
+        monkeypatch.setattr("tui_client.client.asyncio.create_task", fake_create_task)
+        monkeypatch.setattr(game_client, "_receive_messages", receive_messages)
+
+        result = await game_client.connect()
+
+        assert result is True
+        assert game_client.connected is True
+        assert game_client.websocket is websocket
+        assert created_tasks
+        await created_tasks[0]
+        assert game_client.receive_task is created_tasks[0]
+        receive_messages.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_connect_failure_returns_false(self, game_client, monkeypatch):
+        """Connect should return False and not create a receive task on failure."""
+
+        async def failing_connect(_):
+            raise RuntimeError("boom")
+
+        monkeypatch.setattr("tui_client.client.websockets.connect", AsyncMock(side_effect=failing_connect))
+
+        result = await game_client.connect()
+
+        assert result is False
+        assert game_client.connected is False
+        assert game_client.receive_task is None
+
+    @pytest.mark.asyncio
+    async def test_disconnect_cancels_receive_task_and_closes_socket(self, game_client):
+        """Disconnect should cancel the receive task and close the websocket."""
+        loop = asyncio.get_running_loop()
+        receive_task = loop.create_future()
+        websocket = AsyncMock()
+
+        game_client.receive_task = receive_task
+        game_client.websocket = websocket
+        game_client.connected = True
+
+        await game_client.disconnect()
+
+        assert receive_task.cancelled()
+        websocket.close.assert_awaited_once()
+        assert game_client.connected is False
+
+    @pytest.mark.asyncio
+    async def test_receive_messages_dispatches_valid_json(self, game_client, monkeypatch):
+        """Valid JSON payloads should be forwarded to the handler coroutine."""
+
+        class FakeWebSocket:
+            def __init__(self, messages):
+                self._messages = list(messages)
+
+            def __aiter__(self):
+                return self
+
+            async def __anext__(self):
+                if not self._messages:
+                    raise StopAsyncIteration
+                return self._messages.pop(0)
+
+        payloads = [json.dumps({"type": "response", "value": 1}), "not json"]
+        game_client.websocket = FakeWebSocket(payloads)
+        handler = AsyncMock()
+        monkeypatch.setattr(game_client, "_handle_message", handler)
+
+        await game_client._receive_messages()
+
+        handler.assert_awaited_once_with({"type": "response", "value": 1})
+
+    @pytest.mark.asyncio
+    async def test_receive_messages_connection_closed_marks_disconnected(self, game_client):
+        """ConnectionClosed exceptions should mark the client as disconnected."""
+
+        class ClosingWebSocket:
+            def __aiter__(self):
+                return self
+
+            async def __anext__(self):
+                raise websockets.exceptions.ConnectionClosed(1000, "closed")
+
+        game_client.websocket = ClosingWebSocket()
+        game_client.connected = True
+
+        await game_client._receive_messages()
+
+        assert game_client.connected is False
 
     @pytest.mark.asyncio
     async def test_message_handler_called(self, game_client):
