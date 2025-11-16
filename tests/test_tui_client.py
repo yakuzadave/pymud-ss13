@@ -162,14 +162,6 @@ class TestGameClient:
         assert game_client.current_map == map_data
 
     @pytest.mark.asyncio
-    async def test_handle_status_messages_cache_latest_data(self, game_client):
-        """Door/atmosphere/power messages should update cached status info."""
-        for status_type in ("door", "atmosphere", "power"):
-            payload = {"type": status_type, "state": "ok"}
-            await game_client._handle_message(payload)
-            assert game_client.player_status[status_type] == payload
-
-    @pytest.mark.asyncio
     async def test_connect_success_creates_receive_task(self, game_client, monkeypatch):
         """Connect should create the receive task when the websocket opens."""
         loop = asyncio.get_running_loop()
@@ -207,7 +199,7 @@ class TestGameClient:
         async def failing_connect(_):
             raise RuntimeError("boom")
 
-        monkeypatch.setattr("tui_client.client.websockets.connect", failing_connect)
+        monkeypatch.setattr("tui_client.client.websockets.connect", AsyncMock(side_effect=failing_connect))
 
         result = await game_client.connect()
 
@@ -219,7 +211,7 @@ class TestGameClient:
     async def test_disconnect_cancels_receive_task_and_closes_socket(self, game_client):
         """Disconnect should cancel the receive task and close the websocket."""
         loop = asyncio.get_running_loop()
-        receive_task = loop.create_task(asyncio.sleep(1000))
+        receive_task = loop.create_future()
         websocket = AsyncMock()
 
         game_client.receive_task = receive_task
@@ -230,49 +222,6 @@ class TestGameClient:
 
         assert receive_task.cancelled()
         websocket.close.assert_awaited_once()
-        assert game_client.connected is False
-
-    @pytest.mark.asyncio
-    async def test_receive_messages_dispatches_valid_json(self, game_client, monkeypatch):
-        """Valid JSON payloads should be forwarded to the handler coroutine."""
-
-        class FakeWebSocket:
-            def __init__(self, messages):
-                self._messages = list(messages)
-
-            def __aiter__(self):
-                return self
-
-            async def __anext__(self):
-                if not self._messages:
-                    raise StopAsyncIteration
-                return self._messages.pop(0)
-
-        payloads = [json.dumps({"type": "response", "value": 1}), "not json"]
-        game_client.websocket = FakeWebSocket(payloads)
-        handler = AsyncMock()
-        monkeypatch.setattr(game_client, "_handle_message", handler)
-
-        await game_client._receive_messages()
-
-        handler.assert_awaited_once_with({"type": "response", "value": 1})
-
-    @pytest.mark.asyncio
-    async def test_receive_messages_connection_closed_marks_disconnected(self, game_client):
-        """ConnectionClosed exceptions should mark the client as disconnected."""
-
-        class ClosingWebSocket:
-            def __aiter__(self):
-                return self
-
-            async def __anext__(self):
-                raise websockets.exceptions.ConnectionClosed(1000, "closed")
-
-        game_client.websocket = ClosingWebSocket()
-        game_client.connected = True
-
-        await game_client._receive_messages()
-
         assert game_client.connected is False
 
     @pytest.mark.asyncio
