@@ -135,6 +135,69 @@ class TestGameClient:
         assert game_client.current_map == map_data
 
     @pytest.mark.asyncio
+    async def test_connect_success_creates_receive_task(self, game_client, monkeypatch):
+        """Connect should create the receive task when the websocket opens."""
+        loop = asyncio.get_running_loop()
+        created_tasks = []
+        websocket = object()
+
+        monkeypatch.setattr(
+            "tui_client.client.websockets.connect",
+            AsyncMock(return_value=websocket),
+        )
+
+        def fake_create_task(coro):
+            task = loop.create_task(coro)
+            created_tasks.append(task)
+            return task
+
+        receive_messages = AsyncMock(return_value=None)
+        monkeypatch.setattr("tui_client.client.asyncio.create_task", fake_create_task)
+        monkeypatch.setattr(game_client, "_receive_messages", receive_messages)
+
+        result = await game_client.connect()
+
+        assert result is True
+        assert game_client.connected is True
+        assert game_client.websocket is websocket
+        assert created_tasks
+        await created_tasks[0]
+        assert game_client.receive_task is created_tasks[0]
+        receive_messages.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_connect_failure_returns_false(self, game_client, monkeypatch):
+        """Connect should return False and not create a receive task on failure."""
+
+        async def failing_connect(_):
+            raise RuntimeError("boom")
+
+        monkeypatch.setattr("tui_client.client.websockets.connect", AsyncMock(side_effect=failing_connect))
+
+        result = await game_client.connect()
+
+        assert result is False
+        assert game_client.connected is False
+        assert game_client.receive_task is None
+
+    @pytest.mark.asyncio
+    async def test_disconnect_cancels_receive_task_and_closes_socket(self, game_client):
+        """Disconnect should cancel the receive task and close the websocket."""
+        loop = asyncio.get_running_loop()
+        receive_task = loop.create_future()
+        websocket = AsyncMock()
+
+        game_client.receive_task = receive_task
+        game_client.websocket = websocket
+        game_client.connected = True
+
+        await game_client.disconnect()
+
+        assert receive_task.cancelled()
+        websocket.close.assert_awaited_once()
+        assert game_client.connected is False
+
+    @pytest.mark.asyncio
     async def test_message_handler_called(self, game_client):
         """Test that registered handlers are called."""
         handler = AsyncMock()
