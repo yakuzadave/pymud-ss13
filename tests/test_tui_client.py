@@ -207,7 +207,7 @@ class TestGameClient:
         async def failing_connect(_):
             raise RuntimeError("boom")
 
-        monkeypatch.setattr("tui_client.client.websockets.connect", AsyncMock(side_effect=failing_connect))
+        monkeypatch.setattr("tui_client.client.websockets.connect", failing_connect)
 
         result = await game_client.connect()
 
@@ -219,7 +219,7 @@ class TestGameClient:
     async def test_disconnect_cancels_receive_task_and_closes_socket(self, game_client):
         """Disconnect should cancel the receive task and close the websocket."""
         loop = asyncio.get_running_loop()
-        receive_task = loop.create_future()
+        receive_task = loop.create_task(asyncio.sleep(1000))
         websocket = AsyncMock()
 
         game_client.receive_task = receive_task
