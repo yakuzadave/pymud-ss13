@@ -74,7 +74,7 @@ pip install textual websockets
 Run the TUI client with default settings (localhost:5000):
 
 ```bash
-python tui_client.py
+python -m tui_client
 ```
 
 ### Custom Server
@@ -82,13 +82,13 @@ python tui_client.py
 Connect to a specific server:
 
 ```bash
-python tui_client.py --host 192.168.1.100 --port 5000
+python -m tui_client --host 192.168.1.100 --port 5000
 ```
 
 ### Command Line Options
 
 ```
-usage: tui_client.py [-h] [--host HOST] [--port PORT] [--version]
+usage: python -m tui_client [-h] [--host HOST] [--port PORT] [--version]
 
 Options:
   -h, --help     Show help message and exit
@@ -267,18 +267,18 @@ For best performance:
 
 ```bash
 # With debug logging
-textual run --dev tui_client.py
+textual run --dev tui_client/app.py
 
 # With Textual console
 textual console
-textual run --dev tui_client.py
+textual run --dev tui_client/app.py
 ```
 
 ### Testing
 
 ```bash
 # Run the client against a test server
-python tui_client.py --host localhost --port 5000
+python -m tui_client --host localhost --port 5000
 ```
 
 ## Credits

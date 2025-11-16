@@ -5,9 +5,12 @@ This module contains comprehensive tests for the PyMUD-SS13 TUI client,
 including unit tests for the GameClient, screen tests, and integration tests.
 """
 
-import pytest
 import asyncio
+import json
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
+
+import pytest
+import websockets
 from textual.widgets import Input, Static, Button
 
 # Import TUI components
@@ -94,6 +97,30 @@ class TestGameClient:
         assert game_client.get_status("health") == 100
         assert game_client.get_status("condition") == "healthy"
         assert game_client.get_status("nonexistent") is None
+
+    @pytest.mark.asyncio
+    async def test_send_command_when_connected(self, game_client):
+        """Send command should serialize payloads for open sockets."""
+        websocket = AsyncMock()
+        game_client.websocket = websocket
+        game_client.connected = True
+
+        await game_client.send_command("look")
+
+        websocket.send.assert_awaited_once()
+        payload = websocket.send.await_args.args[0]
+        assert json.loads(payload) == {"type": "command", "command": "look"}
+
+    @pytest.mark.asyncio
+    async def test_send_command_skipped_when_disconnected(self, game_client):
+        """Send command should no-op if the websocket is unavailable."""
+        websocket = AsyncMock()
+        game_client.websocket = websocket
+        game_client.connected = False
+
+        await game_client.send_command("look")
+
+        websocket.send.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_handle_message_location(self, game_client):

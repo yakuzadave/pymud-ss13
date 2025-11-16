@@ -282,23 +282,23 @@ def action_switch_screen(self, screen_name: str):
 
 3. **Launch TUI**:
    ```bash
-   python tui_client.py
+   python -m tui_client
    ```
 
 ### Command Line Options
 
 ```bash
 # Connect to default server (localhost:5000)
-python tui_client.py
+python -m tui_client
 
 # Connect to custom server
-python tui_client.py --host 192.168.1.100 --port 5000
+python -m tui_client --host 192.168.1.100 --port 5000
 
 # Show help
-python tui_client.py --help
+python -m tui_client --help
 
 # Show version
-python tui_client.py --version
+python -m tui_client --version
 ```
 
 ### Keyboard Reference
@@ -438,7 +438,7 @@ TCSS provides powerful styling:
 To test with the server:
 
 1. Start server: `python run_server.py`
-2. Launch TUI: `python tui_client.py`
+2. Launch TUI: `python -m tui_client`
 3. Login/create account
 4. Test each view:
    - Send commands in Game view
