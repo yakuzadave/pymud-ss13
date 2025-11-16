@@ -1,13 +1,22 @@
-"""
-Pytest configuration and shared fixtures for TUI tests.
+"""Pytest configuration and shared fixtures for the TUI tests."""
 
-This module provides common fixtures and configuration for testing
-the PyMUD-SS13 TUI client.
-"""
+from __future__ import annotations
+
+import asyncio
+import sys
+from pathlib import Path
+from unittest.mock import AsyncMock, Mock
 
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock
+
+
+# Ensure the repository root is importable even when ``pytest`` is invoked via
+# the ``pytest`` console script, which otherwise sets ``sys.path[0]`` to the
+# virtualenv's bin directory. This keeps ``import tui_client`` working for
+# local smoke tests.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 
 @pytest.fixture

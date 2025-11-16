@@ -66,10 +66,10 @@ The web client will be available on `http://localhost:5000`.
 
 ### Terminal UI Client
 
-For a terminal-based interface, launch the Textual TUI client:
+For a terminal-based interface, launch the Textual TUI client module:
 
 ```bash
-python tui_client.py
+python -m tui_client
 ```
 
 The TUI provides multiple views accessible via function keys:
