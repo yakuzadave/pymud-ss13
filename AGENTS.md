@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-11-16 18:17:41  
+**Generated:** 2025-12-19 15:06:36  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 2ebec27
+**Commit:** 8c0fb1a
 **Branch:** main
 
 ---
@@ -13,149 +13,163 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **2ebec27** (31 seconds ago by Katharsis): Merge pull request #190 from yakuzadave/codex/fix-ci-job-by-installing-pytest-asyncio-6wopxm
-- **a23264c** (54 seconds ago by Katharsis): Merge branch 'main' into codex/fix-ci-job-by-installing-pytest-asyncio-6wopxm
-- **1515a41** (15 minutes ago by Katharsis): Fix TUI client imports and launcher
-- **6d9e92a** (15 minutes ago by Katharsis): Address review feedback on async client tests
-- **2b6a9c5** (25 minutes ago by Katharsis): Merge branch 'origin/main' into work
+- **8c0fb1a** (25 seconds ago by Katharsis): Merge pull request #191 from yakuzadave/copilot/improve-text-user-interface
+- **35629f7** (7 hours ago by copilot-swe-agent[bot]): Add test configurations, examples, and comprehensive improvement documentation
+- **8fe0987** (7 hours ago by copilot-swe-agent[bot]): Add enhanced TUI logging, BDD testing infrastructure, and comprehensive documentation
+- **beaf8ae** (7 hours ago by copilot-swe-agent[bot]): Initial plan
+- **c897d57** (5 weeks ago by GitHub Action): 🤖 Auto-update AGENTS.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 2ebec27 - Merge pull request #190 from yakuzadave/codex/fix-ci-job-by-installing-pytest-asyncio-6wopxm
+#### Commit 8c0fb1a - Merge pull request #191 from yakuzadave/copilot/improve-text-user-interface
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-11-16 10:17:10
-**Message:**
-Extend GameClient async coverage
----
-#### Commit a23264c - Merge branch 'main' into codex/fix-ci-job-by-installing-pytest-asyncio-6wopxm
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-11-16 10:16:47
+**Date:** 2025-12-19 07:06:11
 **Message:**
 
 ---
-#### Commit 1515a41 - Fix TUI client imports and launcher
-**Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-11-16 10:02:34
+#### Commit 35629f7 - Add test configurations, examples, and comprehensive improvement documentation
+**Author:** copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+**Date:** 2025-12-19 08:08:58
 **Message:**
+Co-authored-by: yakuzadave <34697131+yakuzadave@users.noreply.github.com>
+
+---
+#### Commit 8fe0987 - Add enhanced TUI logging, BDD testing infrastructure, and comprehensive documentation
+**Author:** copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+**Date:** 2025-12-19 08:05:01
+**Message:**
+Co-authored-by: yakuzadave <34697131+yakuzadave@users.noreply.github.com>
 
 ---
 
 ### 📁 Files Modified Recently
 
+- .gitignore
 - AGENTS.md
-- README.md
-- docs/TEXTUAL_TUI_IMPLEMENTATION.md
+- TUI_IMPROVEMENTS.md
+- behave.ini
+- docs/LOGGING_GUIDE.md
+- docs/TESTING_GUIDE.md
+- examples/README.md
+- examples/logging_demo.py
+- features/environment.py
+- features/steps/tui_steps.py
+- features/tui_game_commands.feature
+- features/tui_inventory.feature
+- features/tui_login.feature
+- features/tui_view_switching.feature
 - pyproject.toml
-- tests/conftest.py
-- tests/test_tui_client.py
-- tui_client.py
-- tui_client/README.md
-- tui_client/__main__.py
-- uv.lock
+- pytest.ini
+- tests/test_tui_logging.py
+- tests/test_tui_playwright.py
+- tui_client/client.py
+- tui_client/logging_config.py
+- tui_client/screens/game.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-11-16 18:17:54
+**Run Date:** 2025-12-19 15:06:45
 
 ### Test Output
 ```
 ============================= test session starts ==============================
-platform linux -- Python 3.14.0, pytest-9.0.1, pluggy-1.6.0
+platform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0
 benchmark: 5.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pytest.ini
-plugins: anyio-4.11.0, html-4.1.1, benchmark-5.2.3, cov-7.0.0, asyncio-1.3.0, metadata-3.1.1
+plugins: html-4.1.1, benchmark-5.2.3, anyio-4.12.0, cov-7.0.0, asyncio-1.3.0, metadata-3.1.1
 asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
-collected 225 items
+collected 246 items
 
 tests/test_accounts.py ...                                               [  1%]
 tests/test_action_queue.py .                                             [  1%]
 tests/test_advanced_antagonists.py ......                                [  4%]
-tests/test_advanced_chemistry.py ..                                      [  5%]
+tests/test_advanced_chemistry.py ..                                      [  4%]
 tests/test_ai_gameplay.py .                                              [  5%]
 tests/test_ai_system.py ..                                               [  6%]
-tests/test_alias_commands.py ..                                          [  7%]
-tests/test_aliases.py ..                                                 [  8%]
+tests/test_alias_commands.py ..                                          [  6%]
+tests/test_aliases.py ..                                                 [  7%]
 tests/test_antag_command.py .                                            [  8%]
-tests/test_antagonists.py ..                                             [  9%]
-tests/test_atmos_sim.py ..                                               [ 10%]
-tests/test_bartender.py .                                                [ 11%]
-tests/test_botany_kitchen.py ....                                        [ 12%]
-tests/test_botany_mechanics.py ....                                      [ 14%]
-tests/test_cargo.py ..........                                           [ 19%]
-tests/test_chemical_reactions.py ..                                      [ 20%]
-tests/test_chemistry.py ....                                             [ 21%]
-tests/test_circuit_system.py ...                                         [ 23%]
-tests/test_cli.py .                                                      [ 23%]
-tests/test_combat_system.py .                                            [ 24%]
-tests/test_communications.py ..                                          [ 24%]
-tests/test_console_commands.py ......                                    [ 27%]
-tests/test_construction_system.py ..                                     [ 28%]
-tests/test_containers.py ..                                              [ 29%]
-tests/test_cook_command.py .                                             [ 29%]
-tests/test_cyborg_med_integration.py .                                   [ 30%]
-tests/test_door_id_card_access.py ..                                     [ 31%]
-tests/test_doors.py .                                                    [ 31%]
-tests/test_environmental_protection.py .                                 [ 32%]
-tests/test_equipment.py .                                                [ 32%]
-tests/test_explosive_decompression.py ..                                 [ 33%]
-tests/test_finance.py ...                                                [ 34%]
-tests/test_fire_system.py ..                                             [ 35%]
-tests/test_flood_system.py .                                             [ 36%]
-tests/test_genetic_disease_integration.py .                              [ 36%]
-tests/test_genetic_med_integration.py .                                  [ 36%]
-tests/test_genetics.py ...                                               [ 38%]
-tests/test_inventory_sync.py .                                           [ 38%]
-tests/test_item_properties.py ..                                         [ 39%]
-tests/test_jobs.py .....                                                 [ 41%]
-tests/test_maintenance_system.py ..                                      [ 42%]
-tests/test_manifest_and_login.py ..                                      [ 43%]
-tests/test_medical.py ....                                               [ 45%]
-tests/test_nutrition.py .                                                [ 45%]
-tests/test_pathfinding.py ..                                             [ 46%]
-tests/test_performance.py .                                              [ 47%]
-tests/test_performance_monitor.py .                                      [ 47%]
-tests/test_persistence.py ...                                            [ 48%]
-tests/test_physics.py .                                                  [ 49%]
-tests/test_player_loading.py .                                           [ 49%]
-tests/test_plumbing_system.py ..                                         [ 50%]
-tests/test_power_system.py ..                                            [ 51%]
-tests/test_random_events.py ......                                       [ 54%]
-tests/test_replica_pod.py .                                              [ 54%]
-tests/test_research.py ...                                               [ 56%]
-tests/test_robotics.py ......                                            [ 58%]
-tests/test_robotics_ai_integration.py .                                  [ 59%]
-tests/test_robotics_maintenance_integration.py .                         [ 59%]
-tests/test_roles.py ...........                                          [ 64%]
-tests/test_room_status.py .                                              [ 64%]
-tests/test_round_manager.py ..                                           [ 65%]
-tests/test_security_system.py .                                          [ 66%]
-tests/test_silicon.py .....                                              [ 68%]
-tests/test_social_and_combat.py ....                                     [ 70%]
-tests/test_space_exploration.py ......                                   [ 72%]
-tests/test_spatial.py ...                                                [ 74%]
-tests/test_status_command.py .                                           [ 74%]
-tests/test_structure.py .                                                [ 75%]
-tests/test_surgery.py ...                                                [ 76%]
-tests/test_terminal_system.py ..                                         [ 77%]
-tests/test_tui_client.py ............................................... [ 98%]
-..                                                                       [ 99%]
+tests/test_antagonists.py ..                                             [  8%]
+tests/test_atmos_sim.py ..                                               [  9%]
+tests/test_bartender.py .                                                [ 10%]
+tests/test_botany_kitchen.py ....                                        [ 11%]
+tests/test_botany_mechanics.py ....                                      [ 13%]
+tests/test_cargo.py ..........                                           [ 17%]
+tests/test_chemical_reactions.py ..                                      [ 18%]
+tests/test_chemistry.py ....                                             [ 19%]
+tests/test_circuit_system.py ...                                         [ 21%]
+tests/test_cli.py .                                                      [ 21%]
+tests/test_combat_system.py .                                            [ 21%]
+tests/test_communications.py ..                                          [ 22%]
+tests/test_console_commands.py ......                                    [ 25%]
+tests/test_construction_system.py ..                                     [ 26%]
+tests/test_containers.py ..                                              [ 26%]
+tests/test_cook_command.py .                                             [ 27%]
+tests/test_cyborg_med_integration.py .                                   [ 27%]
+tests/test_door_id_card_access.py ..                                     [ 28%]
+tests/test_doors.py .                                                    [ 28%]
+tests/test_environmental_protection.py .                                 [ 29%]
+tests/test_equipment.py .                                                [ 29%]
+tests/test_explosive_decompression.py ..                                 [ 30%]
+tests/test_finance.py ...                                                [ 31%]
+tests/test_fire_system.py ..                                             [ 32%]
+tests/test_flood_system.py .                                             [ 32%]
+tests/test_genetic_disease_integration.py .                              [ 33%]
+tests/test_genetic_med_integration.py .                                  [ 33%]
+tests/test_genetics.py ...                                               [ 34%]
+tests/test_inventory_sync.py .                                           [ 35%]
+tests/test_item_properties.py ..                                         [ 36%]
+tests/test_jobs.py .....                                                 [ 38%]
+tests/test_maintenance_system.py ..                                      [ 39%]
+tests/test_manifest_and_login.py ..                                      [ 39%]
+tests/test_medical.py ....                                               [ 41%]
+tests/test_nutrition.py .                                                [ 41%]
+tests/test_pathfinding.py ..                                             [ 42%]
+tests/test_performance.py .                                              [ 43%]
+tests/test_performance_monitor.py .                                      [ 43%]
+tests/test_persistence.py ...                                            [ 44%]
+tests/test_physics.py .                                                  [ 45%]
+tests/test_player_loading.py .                                           [ 45%]
+tests/test_plumbing_system.py ..                                         [ 46%]
+tests/test_power_system.py ..                                            [ 47%]
+tests/test_random_events.py ......                                       [ 49%]
+tests/test_replica_pod.py .                                              [ 50%]
+tests/test_research.py ...                                               [ 51%]
+tests/test_robotics.py ......                                            [ 53%]
+tests/test_robotics_ai_integration.py .                                  [ 54%]
+tests/test_robotics_maintenance_integration.py .                         [ 54%]
+tests/test_roles.py ...........                                          [ 58%]
+tests/test_room_status.py .                                              [ 59%]
+tests/test_round_manager.py ..                                           [ 60%]
+tests/test_security_system.py .                                          [ 60%]
+tests/test_silicon.py .....                                              [ 62%]
+tests/test_social_and_combat.py ....                                     [ 64%]
+tests/test_space_exploration.py ......                                   [ 66%]
+tests/test_spatial.py ...                                                [ 67%]
+tests/test_status_command.py .                                           [ 68%]
+tests/test_structure.py .                                                [ 68%]
+tests/test_surgery.py ...                                                [ 69%]
+tests/test_terminal_system.py ..                                         [ 70%]
+tests/test_tui_client.py ............................................... [ 89%]
+..                                                                       [ 90%]
+tests/test_tui_logging.py ............                                   [ 95%]
+tests/test_tui_playwright.py sssssssss                                   [ 99%]
 tests/test_who.py .                                                      [ 99%]
-tests/test_world_load.py .<unknown>:390: SyntaxWarning: 'return' in a 'finally' block
-/home/runner/work/pymud-ss13/pymud-ss13/mud_websocket_server.py:390: SyntaxWarning: 'return' in a 'finally' block
+tests/test_world_load.py ./home/runner/work/pymud-ss13/pymud-ss13/mud_websocket_server.py:390: SyntaxWarning: 'return' in a 'finally' block
   return websocket
                                                [100%]
 
 =============================== warnings summary ===============================
 tests/test_tui_client.py: 1005 warnings
-  /home/runner/work/pymud-ss13/pymud-ss13/tui_client/client.py:132: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+  /home/runner/work/pymud-ss13/pymud-ss13/tui_client/client.py:153: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
     if asyncio.iscoroutinefunction(handler):
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ================================ tests coverage ================================
-_______________ coverage: platform linux, python 3.14.0-final-0 ________________
+_______________ coverage: platform linux, python 3.14.2-final-0 ________________
 
 Name                                             Stmts   Miss  Cover   Missing
 ------------------------------------------------------------------------------
@@ -348,33 +362,36 @@ tests/test_structure.py                             14      0   100%
 tests/test_surgery.py                               56      0   100%
 tests/test_terminal_system.py                       39      0   100%
 tests/test_tui_client.py                           487      4    99%   345, 397, 458, 550
+tests/test_tui_logging.py                          107      0   100%
+tests/test_tui_playwright.py                        62     29    53%   28-42, 55-58, 74, 79, 84, 89, 103, 108, 113, 123, 128, 144-153, 167
 tests/test_who.py                                   19      0   100%
 tests/test_world_load.py                            22      0   100%
 tui_client/__init__.py                               1      0   100%
 tui_client/__main__.py                              23     23     0%   3-57
 tui_client/app.py                                   64     36    44%   50-51, 55-60, 64-95, 99-101, 106-107
-tui_client/client.py                               105     25    76%   89-91, 95-112, 126, 136-137, 150-151
+tui_client/client.py                               124     33    73%   100-103, 107-129, 146-147, 157-159, 172-173
+tui_client/logging_config.py                        77      3    96%   152, 162-163
 tui_client/screens/__init__.py                       0      0   100%
 tui_client/screens/chat.py                         232    190    18%   21-24, 28-31, 218-310, 314-329, 333-335, 339-354, 358-390, 395, 411-416, 420-422, 426-428, 432-461, 469-477, 481-493, 497-511, 515-521, 525-541, 545, 549, 553-559, 563-569
-tui_client/screens/game.py                         150    117    22%   120-155, 159-179, 183-184, 189-194, 198-216, 220-237, 241, 245-246, 250-252, 256-258, 262-264, 268-270, 274-289, 293-303, 307-323
+tui_client/screens/game.py                         159    124    22%   125-160, 164-184, 188-189, 194-199, 203-221, 225-242, 246, 250-251, 255-259, 263-265, 269-272, 276-282, 286-301, 305-315, 326-360
 tui_client/screens/help.py                          49     35    29%   108-128, 132-192, 196-388, 392-535, 539-601
 tui_client/screens/inventory.py                    159    121    24%   23-24, 27-33, 38-43, 47, 202-242, 247-256, 260, 264, 269-275, 279-289, 293-302, 306-310, 314-353, 357-376, 380, 384-385, 389-390, 394-395, 399-401, 405-406
 tui_client/screens/login.py                         89     70    21%   87-126, 130-132, 136-143, 147-150, 154-182, 186-217, 221-230
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13141   4079    69%
+TOTAL                                            13415   4126    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     33.2330  558.1320  37.4790  12.3904  35.5760  3.3437   171;290       26.6816    4859           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     32.5610  300.3590  36.7955  6.1970  35.3060  3.2170   259;279       27.1772    4948           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-====================== 225 passed, 1005 warnings in 7.01s ======================
+================ 237 passed, 9 skipped, 1005 warnings in 6.97s =================
 ```
 
 ### Coverage Summary
@@ -383,13 +400,13 @@ tui_client/screens/login.py                         89     70    21%   87-126, 1
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13141   4079    69%
+TOTAL                                            13415   4126    69%
 
------------------------------------------------------ benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------
-test_command_performance     33.2330  558.1320  37.4790  12.3904  35.5760  3.3437   171;290       26.6816    4859           1
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     32.5610  300.3590  36.7955  6.1970  35.3060  3.2170   259;279       27.1772    4948           1
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -398,7 +415,7 @@ Legend:
 
 ### Environment Info
 ```
-Python Version: Python 3.14.0
+Python Version: Python 3.14.2
 Working Directory: /home/runner/work/pymud-ss13/pymud-ss13
 Git Branch: main
 Git Remote: https://github.com/yakuzadave/pymud-ss13
@@ -448,4 +465,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-11-16 18:17:54 (GitHub Actions Run #19409961980)*
+*This file was automatically generated by `generate_agents_md.sh` on 2025-12-19 15:06:45 (GitHub Actions Run #20373937214)*
