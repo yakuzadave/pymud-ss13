@@ -21,4 +21,8 @@ dependencies = [
     "d20>=1.1.2",
     "requests>=2.32.5",
     "pytest-benchmark>=5.2.3",
+    "behave>=1.2.6",
+    "playwright>=1.49.0",
+    "pytest-html>=4.1.1",
+    "pytest-cov>=7.0.0",
 ]

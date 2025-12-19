@@ -12,6 +12,11 @@ from textual.widgets import Static, Input, Header, Footer, RichLog
 from textual import log
 from rich.text import Text
 
+from tui_client.logging_config import get_logger
+
+# Initialize logger for this module
+logger = get_logger(__name__)
+
 
 class GameScreen(Screen):
     """Main game screen with terminal output and input."""
@@ -249,25 +254,32 @@ class GameScreen(Screen):
         """Handle response messages from server."""
         message = data.get("message", "")
         if message:
-            self._add_log_entry(message, "response")
+            # Check for severity level in response
+            severity = data.get("severity", "normal")
+            self._add_log_entry(message, severity)
 
     def _handle_system(self, data: dict) -> None:
         """Handle system messages from server."""
         message = data.get("message", "")
         if message:
-            self._add_log_entry(f"[SYSTEM] {message}", "system")
+            self._add_log_entry(message, "system")
 
     def _handle_error(self, data: dict) -> None:
         """Handle error messages from server."""
         message = data.get("message", "")
+        error_type = data.get("error_type", "ERROR")
         if message:
-            self._add_log_entry(f"[ERROR] {message}", "error")
+            self._add_log_entry(f"[{error_type}] {message}", "error")
 
     def _handle_broadcast(self, data: dict) -> None:
         """Handle broadcast messages from server."""
         message = data.get("message", "")
+        sender = data.get("sender", "")
         if message:
-            self._add_log_entry(f"[BROADCAST] {message}", "broadcast")
+            if sender:
+                self._add_log_entry(f"{sender}: {message}", "broadcast")
+            else:
+                self._add_log_entry(message, "broadcast")
 
     def _handle_location(self, data: dict) -> None:
         """Handle location update from server."""
@@ -303,21 +315,46 @@ class GameScreen(Screen):
         self.query_one("#status-connection", Static).update(connected)
 
     def _add_log_entry(self, message: str, message_type: str = "normal") -> None:
-        """Add an entry to the terminal log."""
+        """
+        Add an entry to the terminal log with categorization and styling.
+        
+        Args:
+            message: The message to display
+            message_type: Category of message (error, system, broadcast, location, 
+                         command, warning, success, info, debug, normal)
+        """
         timestamp = datetime.now().strftime("%H:%M:%S")
-
-        # Create styled text based on message type
+        
+        # Log to file with appropriate level
         if message_type == "error":
-            text = Text(f"[{timestamp}] {message}", style="bold red")
-        elif message_type == "system":
-            text = Text(f"[{timestamp}] {message}", style="yellow")
-        elif message_type == "broadcast":
-            text = Text(f"[{timestamp}] {message}", style="bold magenta")
-        elif message_type == "location":
-            text = Text(f"{message}", style="cyan")
-        elif message_type == "command":
-            text = Text(f"[{timestamp}] {message}", style="bold green")
+            logger.error(message)
+        elif message_type == "warning":
+            logger.warning(message)
+        elif message_type == "debug":
+            logger.debug(message)
         else:
-            text = Text(f"[{timestamp}] {message}")
+            logger.info(f"[{message_type}] {message}")
+
+        # Create styled text based on message type with icons/prefixes
+        message_styles = {
+            "error": ("❌ ", "bold red"),
+            "warning": ("⚠️  ", "bold yellow"),
+            "success": ("✅ ", "bold green"),
+            "system": ("ℹ️  ", "yellow"),
+            "broadcast": ("📢 ", "bold magenta"),
+            "location": ("", "cyan"),  # No icon for location as it's formatted differently
+            "command": ("➤ ", "bold green"),
+            "info": ("💡 ", "blue"),
+            "debug": ("🔍 ", "dim white"),
+        }
+        
+        prefix, style = message_styles.get(message_type, ("", ""))
+        
+        # Format message with timestamp (except for location which has special formatting)
+        if message_type == "location":
+            text = Text(f"{message}", style=style)
+        else:
+            formatted_message = f"[{timestamp}] {prefix}{message}"
+            text = Text(formatted_message, style=style)
 
         self.terminal_log.write(text)
