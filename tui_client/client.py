@@ -10,8 +10,13 @@ from typing import Optional, Dict, Any, Callable, TYPE_CHECKING
 import websockets
 from textual import log
 
+from tui_client.logging_config import get_logger
+
 if TYPE_CHECKING:
     from websockets.asyncio.client import ClientConnection
+
+# Initialize logger for this module
+logger = get_logger(__name__)
 
 
 class GameClient:
@@ -45,9 +50,11 @@ class GameClient:
     async def connect(self) -> bool:
         """Connect to the game server."""
         try:
+            logger.info(f"Connecting to {self.server_url}...")
             log(f"Connecting to {self.server_url}...")
             self.websocket = await websockets.connect(self.server_url)
             self.connected = True
+            logger.info("Connected successfully!")
             log("Connected successfully!")
 
             # Start receiving messages
@@ -55,6 +62,7 @@ class GameClient:
 
             return True
         except Exception as e:
+            logger.error(f"Connection failed: {e}", exc_info=True)
             log(f"Connection failed: {e}")
             self.connected = False
             return False
@@ -71,11 +79,13 @@ class GameClient:
         if self.websocket:
             await self.websocket.close()
             self.connected = False
+            logger.info("Disconnected from server")
             log("Disconnected from server")
 
     async def send_command(self, command: str):
         """Send a command to the game server."""
         if not self.websocket or not self.connected:
+            logger.warning("Not connected to server")
             log("Not connected to server")
             return
 
@@ -85,8 +95,10 @@ class GameClient:
                 "command": command
             })
             await self.websocket.send(message)
+            logger.debug(f"Sent command: {command}")
             log(f"Sent command: {command}")
         except Exception as e:
+            logger.error(f"Error sending command: {e}", exc_info=True)
             log(f"Error sending command: {e}")
             self.connected = False
 
@@ -99,15 +111,20 @@ class GameClient:
             async for message in self.websocket:
                 try:
                     data = json.loads(message)
+                    logger.debug(f"Received message: {data.get('type', 'unknown')}")
                     await self._handle_message(data)
                 except json.JSONDecodeError:
+                    logger.error(f"Invalid JSON received: {message}")
                     log(f"Invalid JSON received: {message}")
                 except Exception as e:
+                    logger.error(f"Error handling message: {e}", exc_info=True)
                     log(f"Error handling message: {e}")
         except websockets.exceptions.ConnectionClosed:
+            logger.info("Connection closed by server")
             log("Connection closed by server")
             self.connected = False
         except Exception as e:
+            logger.error(f"Error in receive loop: {e}", exc_info=True)
             log(f"Error in receive loop: {e}")
             self.connected = False
 
@@ -118,12 +135,16 @@ class GameClient:
         # Update state based on message type
         if message_type == "location":
             self.current_location = data
+            logger.debug(f"Location updated: {data.get('name', 'Unknown')}")
         elif message_type == "inventory":
             self.current_inventory = data
+            logger.debug("Inventory updated")
         elif message_type == "map":
             self.current_map = data
+            logger.debug("Map updated")
         elif message_type in ["door", "atmosphere", "power"]:
             self.player_status[message_type] = data
+            logger.debug(f"Status updated: {message_type}")
 
         # Call registered handlers
         handlers = self.message_handlers.get(message_type, [])
@@ -134,6 +155,7 @@ class GameClient:
                 else:
                     handler(data)
             except Exception as e:
+                logger.error(f"Error in message handler: {e}", exc_info=True)
                 log(f"Error in message handler: {e}")
 
     def register_handler(self, message_type: str, handler: Callable):
