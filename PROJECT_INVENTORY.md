@@ -5,9 +5,9 @@
 
 **Last Updated**: 2026-01-12  
 **Total Work Units**: 42  
-**Completed**: 8  
+**Completed**: 12  
 **In Progress**: 0  
-**Todo**: 34
+**Todo**: 30
 
 ---
 
@@ -66,14 +66,11 @@
 - [TODO] Document E2E testing in TESTING_GUIDE.md
 
 ### BDD Feature Expansion
-- [TODO] Create features/tui_map_navigation.feature
-- [TODO] Create features/tui_chat_system.feature
-- [TODO] Create features/tui_help_system.feature
-- [TODO] Write step definitions for map features
-- [TODO] Write step definitions for chat features
-- [TODO] Write step definitions for help features
-- [TODO] Update behave.ini with new tags
-- [TODO] Document BDD patterns in TESTING_GUIDE.md
+- [COMPLETED] Create features/tui_map_navigation.feature ✅
+- [COMPLETED] Create features/tui_chat_system.feature ✅
+- [COMPLETED] Create features/tui_help_system.feature ✅
+- [COMPLETED] Add 65+ step definitions for new scenarios ✅
+- [COMPLETED] Update TESTING_GUIDE.md with new scenarios ✅ [TESTING_GUIDE.md](docs/TESTING_GUIDE.md)
 
 ### Unit Test Coverage
 - [TODO] Run coverage analysis to identify <90% modules
@@ -180,20 +177,23 @@
 
 ## Status Summary
 
-### Completed (8)
+### Completed (12)
 - Core tracking files: TASKS.md, PROJECT_INVENTORY.md, STATUS.md, CHANGELOG.md ✓
 - PR analysis and resolution strategy for #188 and #189 ✓
 - Comprehensive analysis document created ✓
+- BDD feature files for Map, Chat, and Help systems ✓
+- 65+ step definitions added ✓
+- Testing documentation updated ✓
 
 ### In Progress (0)
 - None
 
 ### High Priority Next (Top 5)
-1. **BATCH-003**: Setup Playwright E2E testing framework
-2. Expand BDD test scenarios (Map, Chat, Help)
-3. Begin unit test coverage improvements
-4. TUI screen enhancements (Map/Chat/Help views)
-5. External logging integration (optional)
+1. **BATCH-004**: Unit test coverage improvements (identify <90% modules)
+2. Implement Playwright E2E testing framework
+3. TUI screen enhancements (Map/Chat/Help views)
+4. External logging integration (optional)
+5. Robotics remote control implementation
 
 ### Dependencies
 - ~~PR conflict resolution blocks GameClient async improvements~~ **RESOLVED**: Changes already in main
@@ -210,4 +210,4 @@
 - Documentation updates should happen after each feature batch
 - External integrations (logging, monitoring) are optional enhancements
 
-**Inventory Status**: BATCH-002 complete, PR conflicts resolved (close both PRs), ready for substantive testing improvements
+**Inventory Status**: BATCH-003 complete, BDD test coverage significantly expanded, ready for unit testing or E2E setup
