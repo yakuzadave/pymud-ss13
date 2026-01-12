@@ -17,29 +17,31 @@ Rule: Only pick next batch from unchecked tasks [ ]. Add new work here first (AN
 
 > Fill in the batch you are executing BEFORE doing work.
 
-### Batch ID: BATCH-002
+### Batch ID: BATCH-003
 
 **Batch Type**:
 - [ ] Setup & Documentation
-- [ ] Testing Enhancement — Add test coverage
+- [x] Testing Enhancement — Add BDD test coverage
 - [ ] Feature Implementation — Add new functionality
-- [x] Analysis & Planning — PR Conflict Resolution Strategy
+- [ ] Analysis & Planning
 - [ ] Refactoring — Improve code structure
 
 **Exit Criteria for this batch:**
 
-- [x] Review PR #188 changes in detail ✅
-- [x] Review PR #189 changes in detail ✅
-- [x] Compare both PRs to identify differences ✅
-- [x] Document which has better implementation (if applicable) ✅ (Both identical, both superseded)
-- [x] Create resolution strategy document ✅ [PR_ANALYSIS.md](PR_ANALYSIS.md)
-- [x] Update TASKS.md with findings and next steps ✅
-- [ ] Update STATUS.md with analysis results
-- [ ] Update CHANGELOG.md with BATCH-002 entry
-- [ ] Update PROJECT_INVENTORY.md with resolved status
+- [x] Add Map navigation feature file (tui_map_navigation.feature) ✅
+- [x] Add Chat functionality feature file (tui_chat_system.feature) ✅
+- [x] Add Help system feature file (tui_help_system.feature) ✅
+- [x] Add step definitions for new scenarios ✅ (65+ new steps)
+- [ ] Test all new BDD scenarios with behave (behave not available in env)
+- [x] Update TESTING_GUIDE.md with new scenarios ✅
+- [ ] Update TASKS.md with completion status
+- [ ] Update STATUS.md with batch results
+- [ ] Update CHANGELOG.md with BATCH-003 entry
+- [ ] Update PROJECT_INVENTORY.md with progress
 
-**Previous Batch (BATCH-001 - COMPLETED):**
-- [x] Setup & Documentation ✅ All tracking infrastructure created
+**Previous Batches:**
+- BATCH-001: Setup & Documentation ✅
+- BATCH-002: PR Conflict Analysis ✅
 
 ---
 
@@ -72,11 +74,11 @@ Rule: Only pick next batch from unchecked tasks [ ]. Add new work here first (AN
   - [ ] Create visual regression test infrastructure
   - [ ] Add screenshot comparison utilities
   - [ ] Document E2E testing guide
-- [ ] Expand BDD test coverage
-  - [ ] Add Map navigation feature file
-  - [ ] Add Chat functionality feature file
-  - [ ] Add Help system feature file
-  - [ ] Update TESTING_GUIDE.md with new scenarios
+- [x] Expand BDD test coverage ✅
+  - [x] Add Map navigation feature file ✅ [tui_map_navigation.feature](features/tui_map_navigation.feature)
+  - [x] Add Chat functionality feature file ✅ [tui_chat_system.feature](features/tui_chat_system.feature)
+  - [x] Add Help system feature file ✅ [tui_help_system.feature](features/tui_help_system.feature)
+  - [x] Update TESTING_GUIDE.md with new scenarios ✅ [TESTING_GUIDE.md](docs/TESTING_GUIDE.md)
 - [ ] Increase unit test coverage
   - [ ] Identify modules with <90% coverage
   - [ ] Write targeted unit tests
