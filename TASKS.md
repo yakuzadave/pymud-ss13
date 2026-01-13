@@ -17,31 +17,32 @@ Rule: Only pick next batch from unchecked tasks [ ]. Add new work here first (AN
 
 > Fill in the batch you are executing BEFORE doing work.
 
-### Batch ID: BATCH-003
+### Batch ID: BATCH-004
 
 **Batch Type**:
-- [ ] Setup & Documentation
-- [x] Testing Enhancement — Add BDD test coverage
+- [x] Documentation & Code Quality — Document testing patterns and improve test infrastructure
+- [ ] Testing Enhancement — Add test coverage
 - [ ] Feature Implementation — Add new functionality
 - [ ] Analysis & Planning
 - [ ] Refactoring — Improve code structure
 
 **Exit Criteria for this batch:**
 
-- [x] Add Map navigation feature file (tui_map_navigation.feature) ✅
-- [x] Add Chat functionality feature file (tui_chat_system.feature) ✅
-- [x] Add Help system feature file (tui_help_system.feature) ✅
-- [x] Add step definitions for new scenarios ✅ (65+ new steps)
-- [ ] Test all new BDD scenarios with behave (behave not available in env)
-- [x] Update TESTING_GUIDE.md with new scenarios ✅
+- [x] Document current test coverage status ✅
+- [x] Create test organization documentation ✅ [TEST_ORGANIZATION.md](docs/TEST_ORGANIZATION.md)
+- [x] Add testing best practices guide ✅ (included in TEST_ORGANIZATION.md)
+- [x] Document mocking patterns used in tests ✅ (included in TEST_ORGANIZATION.md)
+- [x] Update pytest.ini with additional markers ✅
+- [x] Add test utilities documentation ✅ (included in TEST_ORGANIZATION.md)
 - [ ] Update TASKS.md with completion status
 - [ ] Update STATUS.md with batch results
-- [ ] Update CHANGELOG.md with BATCH-003 entry
+- [ ] Update CHANGELOG.md with BATCH-004 entry
 - [ ] Update PROJECT_INVENTORY.md with progress
 
 **Previous Batches:**
 - BATCH-001: Setup & Documentation ✅
 - BATCH-002: PR Conflict Analysis ✅
+- BATCH-003: BDD Test Coverage Expansion ✅
 
 ---
 
