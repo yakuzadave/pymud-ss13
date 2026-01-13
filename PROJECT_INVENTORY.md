@@ -3,11 +3,11 @@
 > Complete enumeration of all improvement work units for pymud-ss13 project.
 > Each unit tagged with status: [TODO], [IN_PROGRESS], or [COMPLETED]
 
-**Last Updated**: 2026-01-12  
+**Last Updated**: 2026-01-13  
 **Total Work Units**: 42  
-**Completed**: 12  
+**Completed**: 16  
 **In Progress**: 0  
-**Todo**: 30
+**Todo**: 26
 
 ---
 
@@ -177,21 +177,23 @@
 
 ## Status Summary
 
-### Completed (12)
+### Completed (16)
 - Core tracking files: TASKS.md, PROJECT_INVENTORY.md, STATUS.md, CHANGELOG.md ✓
 - PR analysis and resolution strategy for #188 and #189 ✓
 - Comprehensive analysis document created ✓
 - BDD feature files for Map, Chat, and Help systems ✓
 - 65+ step definitions added ✓
 - Testing documentation updated ✓
+- Test organization guide created (16KB) ✓
+- pytest configuration enhanced (13 markers) ✓
 
 ### In Progress (0)
 - None
 
 ### High Priority Next (Top 5)
-1. **BATCH-004**: Unit test coverage improvements (identify <90% modules)
-2. Implement Playwright E2E testing framework
-3. TUI screen enhancements (Map/Chat/Help views)
+1. **BATCH-005**: Code quality improvements (type hints, docstrings)
+2. TUI screen enhancements (Map/Chat/Help views)
+3. Implement Playwright E2E testing framework
 4. External logging integration (optional)
 5. Robotics remote control implementation
 
@@ -210,4 +212,4 @@
 - Documentation updates should happen after each feature batch
 - External integrations (logging, monitoring) are optional enhancements
 
-**Inventory Status**: BATCH-003 complete, BDD test coverage significantly expanded, ready for unit testing or E2E setup
+**Inventory Status**: BATCH-004 complete, test infrastructure fully documented (78 files), pytest enhanced (13 markers), ready for code quality improvements
