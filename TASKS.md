@@ -17,32 +17,33 @@ Rule: Only pick next batch from unchecked tasks [ ]. Add new work here first (AN
 
 > Fill in the batch you are executing BEFORE doing work.
 
-### Batch ID: BATCH-004
+### Batch ID: BATCH-005
 
 **Batch Type**:
-- [x] Documentation & Code Quality — Document testing patterns and improve test infrastructure
-- [ ] Testing Enhancement — Add test coverage
-- [ ] Feature Implementation — Add new functionality
+- [ ] Documentation & Code Quality
+- [ ] Testing Enhancement
+- [x] Feature Implementation — TUI screen enhancements
 - [ ] Analysis & Planning
 - [ ] Refactoring — Improve code structure
 
 **Exit Criteria for this batch:**
 
-- [x] Document current test coverage status ✅
-- [x] Create test organization documentation ✅ [TEST_ORGANIZATION.md](docs/TEST_ORGANIZATION.md)
-- [x] Add testing best practices guide ✅ (included in TEST_ORGANIZATION.md)
-- [x] Document mocking patterns used in tests ✅ (included in TEST_ORGANIZATION.md)
-- [x] Update pytest.ini with additional markers ✅
-- [x] Add test utilities documentation ✅ (included in TEST_ORGANIZATION.md)
+- [ ] Add zoom functionality to Map screen
+- [ ] Add room details sidebar to Map screen
+- [ ] Add channel indicators to Chat screen
+- [ ] Add quick search to Help screen
+- [ ] Improve screen navigation and UX
+- [ ] Test enhanced screens manually
 - [ ] Update TASKS.md with completion status
 - [ ] Update STATUS.md with batch results
-- [ ] Update CHANGELOG.md with BATCH-004 entry
+- [ ] Update CHANGELOG.md with BATCH-005 entry
 - [ ] Update PROJECT_INVENTORY.md with progress
 
 **Previous Batches:**
 - BATCH-001: Setup & Documentation ✅
 - BATCH-002: PR Conflict Analysis ✅
 - BATCH-003: BDD Test Coverage Expansion ✅
+- BATCH-004: Test Infrastructure Documentation ✅
 
 ---
 
