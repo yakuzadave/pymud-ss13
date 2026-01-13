@@ -5,9 +5,9 @@
 
 **Last Updated**: 2026-01-13  
 **Total Work Units**: 42  
-**Completed**: 16  
+**Completed**: 19  
 **In Progress**: 0  
-**Todo**: 26
+**Todo**: 23
 
 ---
 
@@ -177,7 +177,7 @@
 
 ## Status Summary
 
-### Completed (16)
+### Completed (19)
 - Core tracking files: TASKS.md, PROJECT_INVENTORY.md, STATUS.md, CHANGELOG.md ✓
 - PR analysis and resolution strategy for #188 and #189 ✓
 - Comprehensive analysis document created ✓
@@ -186,15 +186,17 @@
 - Testing documentation updated ✓
 - Test organization guide created (16KB) ✓
 - pytest configuration enhanced (13 markers) ✓
+- Help screen search functionality added ✓
+- Map and Chat screen features verified ✓
 
 ### In Progress (0)
 - None
 
 ### High Priority Next (Top 5)
-1. **BATCH-005**: Code quality improvements (type hints, docstrings)
-2. TUI screen enhancements (Map/Chat/Help views)
+1. **BATCH-006**: Additional TUI enhancements (logging, shortcuts, animations)
+2. Code quality improvements (type hints, docstrings)
 3. Implement Playwright E2E testing framework
-4. External logging integration (optional)
+4. External logging integration
 5. Robotics remote control implementation
 
 ### Dependencies
@@ -212,4 +214,4 @@
 - Documentation updates should happen after each feature batch
 - External integrations (logging, monitoring) are optional enhancements
 
-**Inventory Status**: BATCH-004 complete, test infrastructure fully documented (78 files), pytest enhanced (13 markers), ready for code quality improvements
+**Inventory Status**: BATCH-005 complete, TUI help screen enhanced with search (27+ commands indexed), Map and Chat features verified, ready for additional TUI work or code quality improvements
