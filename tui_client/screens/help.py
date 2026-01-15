@@ -7,7 +7,7 @@ Displays command reference, keybindings, and game information with search functi
 from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Static, Header, Footer, TabbedContent, TabPane, Markdown, Input
+from textual.widgets import Static, Header, Footer, TabbedContent, TabPane, Input
 from textual.reactive import reactive
 
 
@@ -51,29 +51,14 @@ class HelpScreen(Screen):
         text-style: bold;
     }
 
-    .search-results {
+    #search-results-panel {
         height: auto;
+        max-height: 15;
+        overflow-y: auto;
         background: $surface;
         border: solid $primary;
         padding: 1;
         margin-bottom: 1;
-    }
-
-    .search-result-item {
-        padding: 1;
-        margin-bottom: 1;
-        background: $boost;
-        border-left: solid $accent;
-    }
-
-    .result-title {
-        color: $accent;
-        text-style: bold;
-    }
-
-    .result-content {
-        color: $text;
-        margin-top: 1;
     }
 
     TabbedContent {
@@ -169,6 +154,9 @@ class HelpScreen(Screen):
                     placeholder="Search commands, keybindings, or topics...",
                     id="search-input"
                 )
+            
+            # Search results panel (initially empty)
+            yield Static("", id="search-results-panel")
 
             with TabbedContent():
                 # Overview Tab
@@ -236,8 +224,15 @@ class HelpScreen(Screen):
 
     async def _perform_search(self) -> None:
         """Perform search and display results."""
+        # Get the results panel
+        try:
+            results_panel = self.query_one("#search-results-panel", Static)
+        except Exception:
+            return
+        
         if not self.search_query or len(self.search_query) < 2:
-            # Clear search results
+            # Clear search results when query is too short or empty
+            results_panel.update("")
             return
 
         results = []
@@ -247,11 +242,21 @@ class HelpScreen(Screen):
                 self.search_query in info["category"].lower()):
                 results.append((cmd, info))
 
-        # Display results notification
+        # Update the results panel content
         if results:
-            self.app.notify(f"Found {len(results)} result(s) for '{self.search_query}'")
+            lines = [
+                f"[bold]Search results for '{self.search_query}' ({len(results)} found):[/bold]",
+                "",
+            ]
+            for cmd, info in results:
+                lines.append(
+                    f"[green]{cmd}[/green]: {info['desc']} [dim](Category: {info['category']})[/dim]"
+                )
+            results_panel.update("\n".join(lines))
+            self.app.notify(f"Found {len(results)} result(s)")
         else:
-            self.app.notify(f"No results found for '{self.search_query}'")
+            results_panel.update(f"[dim]No results found for '{self.search_query}'.[/dim]")
+            self.app.notify(f"No results found")
 
     def on_input_submitted(self, event: Input.Submitted) -> None:
         """Handle search submission."""
