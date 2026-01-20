@@ -1,10 +1,10 @@
 # 🤖 Agent Development Guide
 
 **Project:** pymud-ss13  
-**Generated:** 2025-12-19 15:06:36  
+**Generated:** 2026-01-20 01:33:35  
 **For:** New team member onboarding
 **Repository:** https://github.com/yakuzadave/pymud-ss13
-**Commit:** 8c0fb1a
+**Commit:** d90087a
 **Branch:** main
 
 ---
@@ -13,30 +13,30 @@
 
 The following commits show recent development activity. Review these to understand current work:
 
-- **8c0fb1a** (25 seconds ago by Katharsis): Merge pull request #191 from yakuzadave/copilot/improve-text-user-interface
-- **35629f7** (7 hours ago by copilot-swe-agent[bot]): Add test configurations, examples, and comprehensive improvement documentation
-- **8fe0987** (7 hours ago by copilot-swe-agent[bot]): Add enhanced TUI logging, BDD testing infrastructure, and comprehensive documentation
-- **beaf8ae** (7 hours ago by copilot-swe-agent[bot]): Initial plan
-- **c897d57** (5 weeks ago by GitHub Action): 🤖 Auto-update AGENTS.md
+- **d90087a** (23 seconds ago by Katharsis): Merge pull request #192 from yakuzadave/copilot/improvement-items-review
+- **da97c64** (5 days ago by copilot-swe-agent[bot]): Fix Help screen: Remove unused imports/CSS, implement visual search results display
+- **6a49ebf** (7 days ago by copilot-swe-agent[bot]): Update tracking files for BATCH-005: STATUS.md, CHANGELOG.md, PROJECT_INVENTORY.md
+- **4f44c4c** (7 days ago by copilot-swe-agent[bot]): Complete BATCH-005: Add search functionality to Help screen and enhance TUI screens
+- **6253b28** (7 days ago by copilot-swe-agent[bot]): Update tracking files for BATCH-004: STATUS.md, CHANGELOG.md, PROJECT_INVENTORY.md
 
 ### 🔍 Detailed Recent Changes
 
-#### Commit 8c0fb1a - Merge pull request #191 from yakuzadave/copilot/improve-text-user-interface
+#### Commit d90087a - Merge pull request #192 from yakuzadave/copilot/improvement-items-review
 **Author:** Katharsis <34697131+yakuzadave@users.noreply.github.com>
-**Date:** 2025-12-19 07:06:11
+**Date:** 2026-01-19 17:33:12
 **Message:**
 
 ---
-#### Commit 35629f7 - Add test configurations, examples, and comprehensive improvement documentation
+#### Commit da97c64 - Fix Help screen: Remove unused imports/CSS, implement visual search results display
 **Author:** copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
-**Date:** 2025-12-19 08:08:58
+**Date:** 2026-01-15 02:39:43
 **Message:**
 Co-authored-by: yakuzadave <34697131+yakuzadave@users.noreply.github.com>
 
 ---
-#### Commit 8fe0987 - Add enhanced TUI logging, BDD testing infrastructure, and comprehensive documentation
+#### Commit 6a49ebf - Update tracking files for BATCH-005: STATUS.md, CHANGELOG.md, PROJECT_INVENTORY.md
 **Author:** copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
-**Date:** 2025-12-19 08:05:01
+**Date:** 2026-01-13 03:01:44
 **Message:**
 Co-authored-by: yakuzadave <34697131+yakuzadave@users.noreply.github.com>
 
@@ -44,33 +44,17 @@ Co-authored-by: yakuzadave <34697131+yakuzadave@users.noreply.github.com>
 
 ### 📁 Files Modified Recently
 
-- .gitignore
-- AGENTS.md
-- TUI_IMPROVEMENTS.md
-- behave.ini
-- docs/LOGGING_GUIDE.md
-- docs/TESTING_GUIDE.md
-- examples/README.md
-- examples/logging_demo.py
-- features/environment.py
-- features/steps/tui_steps.py
-- features/tui_game_commands.feature
-- features/tui_inventory.feature
-- features/tui_login.feature
-- features/tui_view_switching.feature
-- pyproject.toml
-- pytest.ini
-- tests/test_tui_logging.py
-- tests/test_tui_playwright.py
-- tui_client/client.py
-- tui_client/logging_config.py
-- tui_client/screens/game.py
+- CHANGELOG.md
+- PROJECT_INVENTORY.md
+- STATUS.md
+- TASKS.md
+- tui_client/screens/help.py
 
 
 ## 🧪 Test Results
 
 **Status:** ✅ PASSED  
-**Run Date:** 2025-12-19 15:06:45
+**Run Date:** 2026-01-20 01:33:45
 
 ### Test Output
 ```
@@ -79,7 +63,8 @@ platform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0
 benchmark: 5.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /home/runner/work/pymud-ss13/pymud-ss13
 configfile: pytest.ini
-plugins: html-4.1.1, benchmark-5.2.3, anyio-4.12.0, cov-7.0.0, asyncio-1.3.0, metadata-3.1.1
+testpaths: tests
+plugins: benchmark-5.2.3, cov-7.0.0, asyncio-1.3.0, html-4.2.0, anyio-4.12.1, metadata-3.1.1
 asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
 collected 246 items
 
@@ -374,24 +359,34 @@ tui_client/logging_config.py                        77      3    96%   152, 162-
 tui_client/screens/__init__.py                       0      0   100%
 tui_client/screens/chat.py                         232    190    18%   21-24, 28-31, 218-310, 314-329, 333-335, 339-354, 358-390, 395, 411-416, 420-422, 426-428, 432-461, 469-477, 481-493, 497-511, 515-521, 525-541, 545, 549, 553-559, 563-569
 tui_client/screens/game.py                         159    124    22%   125-160, 164-184, 188-189, 194-199, 203-221, 225-242, 246, 250-251, 255-259, 263-265, 269-272, 276-282, 286-301, 305-315, 326-360
-tui_client/screens/help.py                          49     35    29%   108-128, 132-192, 196-388, 392-535, 539-601
+tui_client/screens/help.py                          86     64    26%   147-178, 221-223, 228-259, 263-265, 269-329, 333-525, 529-672, 676-738
 tui_client/screens/inventory.py                    159    121    24%   23-24, 27-33, 38-43, 47, 202-242, 247-256, 260, 264, 269-275, 279-289, 293-302, 306-310, 314-353, 357-376, 380, 384-385, 389-390, 394-395, 399-401, 405-406
 tui_client/screens/login.py                         89     70    21%   87-126, 130-132, 136-143, 147-150, 154-182, 186-217, 221-230
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13415   4126    69%
+TOTAL                                            13452   4155    69%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     32.5610  300.3590  36.7955  6.1970  35.3060  3.2170   259;279       27.1772    4948           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     32.2400  548.1640  36.6643  10.5813  34.8250  3.4460   225;326       27.2745    4846           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-================ 237 passed, 9 skipped, 1005 warnings in 6.97s =================
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_tui_playwright.py:69: Requires Playwright and terminal emulator setup
+SKIPPED [1] tests/test_tui_playwright.py:76: Requires Playwright and terminal emulator setup
+SKIPPED [1] tests/test_tui_playwright.py:81: Requires Playwright and terminal emulator setup
+SKIPPED [1] tests/test_tui_playwright.py:86: Requires Playwright and terminal emulator setup
+SKIPPED [1] tests/test_tui_playwright.py:99: Requires screenshot baseline setup
+SKIPPED [1] tests/test_tui_playwright.py:105: Requires screenshot baseline setup
+SKIPPED [1] tests/test_tui_playwright.py:110: Requires screenshot baseline setup
+SKIPPED [1] tests/test_tui_playwright.py:119: Requires performance baseline
+SKIPPED [1] tests/test_tui_playwright.py:125: Requires performance baseline
+================ 237 passed, 9 skipped, 1005 warnings in 6.95s =================
 ```
 
 ### Coverage Summary
@@ -400,13 +395,13 @@ tui_client/screens/login.py                         89     70    21%   87-126, 1
 tui_client/screens/map.py                          192    148    23%   19-26, 31-60, 230-298, 303-313, 317-318, 322, 326-332, 336-342, 346-365, 386-397, 401, 405, 409, 413, 417-418, 422-425, 429-432
 world.py                                           167     43    74%   48-49, 95, 104-110, 146-149, 153-156, 160-163, 187-188, 221, 223, 225, 227, 234, 241, 251, 304-308, 311, 322-324, 336-349
 ------------------------------------------------------------------------------
-TOTAL                                            13415   4126    69%
+TOTAL                                            13452   4155    69%
 
----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
-Name (time in us)                Min       Max     Mean  StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------------------
-test_command_performance     32.5610  300.3590  36.7955  6.1970  35.3060  3.2170   259;279       27.1772    4948           1
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in us)                Min       Max     Mean   StdDev   Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------
+test_command_performance     32.2400  548.1640  36.6643  10.5813  34.8250  3.4460   225;326       27.2745    4846           1
+-----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
@@ -465,4 +460,4 @@ Before making changes:
 
 **Happy coding! 🎉**
 
-*This file was automatically generated by `generate_agents_md.sh` on 2025-12-19 15:06:45 (GitHub Actions Run #20373937214)*
+*This file was automatically generated by `generate_agents_md.sh` on 2026-01-20 01:33:45 (GitHub Actions Run #21156454130)*
