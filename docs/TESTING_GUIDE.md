@@ -226,8 +226,121 @@ def step_see_game_screen(context):
 
 - `tui_login.feature`: Login and authentication flows
 - `tui_game_commands.feature`: Command execution and history
-- `tui_view_switching.feature`: Switching between views
+- `tui_view_switching.feature`: Switching between views (F1-F5)
 - `tui_inventory.feature`: Inventory management
+- `tui_map_navigation.feature`: **NEW** - Map viewing, navigation, and overlays
+- `tui_chat_system.feature`: **NEW** - Chat channels, messaging, and notifications
+- `tui_help_system.feature`: **NEW** - Help documentation and tutorials
+
+### New BDD Scenarios (BATCH-003)
+
+#### Map Navigation (`tui_map_navigation.feature`)
+
+Tests comprehensive map interaction features:
+- **View station map** - Display grid layout with player position
+- **Navigate with arrow keys** - Scroll viewport in all directions
+- **View room details** - Click rooms to see details sidebar
+- **Toggle overlays** - Door locks (D), atmosphere (A), power (P)
+- **Zoom controls** - Zoom in (+) and out (-) functionality
+- **Center on player** - Quick center (C) to player position
+- **Minimap indicator** - Corner minimap with nearby rooms
+- **Real-time updates** - Map updates as game state changes
+- **Preserve state** - Map state maintained when switching views
+
+**Example Scenario:**
+```gherkin
+Scenario: Navigate map with arrow keys
+  Given I am viewing the map screen
+  When I press the right arrow key
+  Then the map viewport should scroll right
+  When I press the down arrow key
+  Then the map viewport should scroll down
+```
+
+#### Chat System (`tui_chat_system.feature`)
+
+Tests all chat and communication features:
+- **Send messages** - Global, local, and department channels
+- **Chat history** - Scroll through message history
+- **Channel switching** - Press 1-3 to switch channels (Global/Local/Dept)
+- **Private messages** - Send PMs with `pm username message`
+- **Notifications** - Badge indicators for new messages
+- **Message filtering** - Filter by message type
+- **Player muting** - Right-click to mute players
+- **Online players list** - View players with status and roles
+- **Emotes** - Use emote command for actions
+- **Autocomplete** - Tab completion for commands
+- **Timestamps** - Messages show time in HH:MM format
+
+**Example Scenario:**
+```gherkin
+Scenario: Switch between chat channels
+  Given I am viewing the chat screen
+  When I press "1" to switch to global channel
+  Then the channel indicator should show "Global"
+  And I should see global chat messages
+  When I press "2" to switch to local channel
+  Then the channel indicator should show "Local"
+  And I should see only local chat messages
+```
+
+#### Help System (`tui_help_system.feature`)
+
+Tests help documentation and learning features:
+- **Open help screen** - F4 to access help
+- **Browse categories** - Navigate help by category
+- **View command details** - Detailed syntax and examples
+- **Search topics** - Search box with ranked results
+- **Keyboard shortcuts** - Reference for all shortcuts
+- **Job-specific guides** - Instructions for each role
+- **Game mechanics** - Atmosphere, power, combat explanations
+- **Copy examples** - Copy command examples to clipboard
+- **Navigation history** - Back/forward through help pages
+- **Getting started** - Step-by-step tutorial for new players
+- **Context-sensitive** - Opens to relevant topic based on context
+- **Recent updates** - Patch notes and what's new
+- **Export content** - Save help as text file
+- **Quick navigation** - Press letter to jump to topics
+
+**Example Scenario:**
+```gherkin
+Scenario: Search for help topics
+  Given I am viewing the help screen
+  When I type "inventory" in the search box
+  Then I should see search results for "inventory"
+  And results should be ranked by relevance
+  And I should see matching commands and articles
+  When I click on a search result
+  Then I should navigate to that help topic
+```
+
+### Running New BDD Tests
+
+Run all new scenarios:
+```bash
+behave features/tui_map_navigation.feature
+behave features/tui_chat_system.feature
+behave features/tui_help_system.feature
+```
+
+Run specific scenarios by line number:
+```bash
+behave features/tui_map_navigation.feature:12
+behave features/tui_chat_system.feature:25
+```
+
+Run all TUI features:
+```bash
+behave features/tui_*.feature
+```
+
+### Step Definitions Coverage
+
+All new scenarios have complete step definitions in `features/steps/tui_steps.py`:
+- **65+ new step definitions** added for map, chat, and help features
+- Steps use mocking for isolation (no real server needed)
+- Steps follow existing patterns and conventions
+- Each step has a docstring explaining its purpose
 
 ---
 

@@ -1,17 +1,20 @@
 """
 Help Screen for PyMUD-SS13 TUI Client
 
-Displays command reference, keybindings, and game information.
+Displays command reference, keybindings, and game information with search functionality.
 """
 
 from textual.app import ComposeResult
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Static, Header, Footer, TabbedContent, TabPane, Markdown
+from textual.widgets import Static, Header, Footer, TabbedContent, TabPane, Input
+from textual.reactive import reactive
 
 
 class HelpScreen(Screen):
-    """Help and reference screen."""
+    """Help and reference screen with search functionality."""
+
+    search_query = reactive("")
 
     CSS = """
     HelpScreen {
@@ -21,6 +24,41 @@ class HelpScreen(Screen):
     #help-container {
         height: 100%;
         padding: 1;
+    }
+
+    #search-container {
+        height: auto;
+        background: $boost;
+        border: solid $primary;
+        padding: 1;
+        margin-bottom: 1;
+    }
+
+    #search-input {
+        width: 100%;
+        border: none;
+        background: $surface;
+    }
+
+    #search-input:focus {
+        border: solid $accent;
+    }
+
+    .search-label {
+        width: auto;
+        margin-right: 1;
+        color: $accent;
+        text-style: bold;
+    }
+
+    #search-results-panel {
+        height: auto;
+        max-height: 15;
+        overflow-y: auto;
+        background: $surface;
+        border: solid $primary;
+        padding: 1;
+        margin-bottom: 1;
     }
 
     TabbedContent {
@@ -102,12 +140,24 @@ class HelpScreen(Screen):
     def __init__(self, game_client):
         super().__init__()
         self.game_client = game_client
+        self.all_commands = self._build_command_index()
 
     def compose(self) -> ComposeResult:
         """Compose the help screen."""
         yield Header(show_clock=True)
 
         with Container(id="help-container"):
+            # Search bar
+            with Horizontal(id="search-container"):
+                yield Static("🔍 Search:", classes="search-label")
+                yield Input(
+                    placeholder="Search commands, keybindings, or topics...",
+                    id="search-input"
+                )
+            
+            # Search results panel (initially empty)
+            yield Static("", id="search-results-panel")
+
             with TabbedContent():
                 # Overview Tab
                 with TabPane("Overview", id="overview-tab"):
@@ -126,6 +176,93 @@ class HelpScreen(Screen):
                     yield self._create_about()
 
         yield Footer()
+
+    def _build_command_index(self) -> dict:
+        """Build a searchable index of all commands and help content."""
+        return {
+            # Movement commands
+            "look": {"category": "observation", "desc": "Examine your surroundings"},
+            "north": {"category": "movement", "desc": "Move north"},
+            "south": {"category": "movement", "desc": "Move south"},
+            "east": {"category": "movement", "desc": "Move east"},
+            "west": {"category": "movement", "desc": "Move west"},
+            "up": {"category": "movement", "desc": "Move up"},
+            "down": {"category": "movement", "desc": "Move down"},
+            
+            # Interaction commands
+            "take": {"category": "interaction", "desc": "Pick up an item"},
+            "drop": {"category": "interaction", "desc": "Drop an item from inventory"},
+            "use": {"category": "interaction", "desc": "Use an item or device"},
+            "examine": {"category": "observation", "desc": "Examine an item or person closely"},
+            "open": {"category": "interaction", "desc": "Open a door or container"},
+            "close": {"category": "interaction", "desc": "Close a door or container"},
+            
+            # Communication commands
+            "say": {"category": "communication", "desc": "Speak normally (local area)"},
+            "yell": {"category": "communication", "desc": "Shout loudly (wider area)"},
+            "whisper": {"category": "communication", "desc": "Whisper quietly to nearby players"},
+            "radio": {"category": "communication", "desc": "Use radio communication"},
+            "ooc": {"category": "communication", "desc": "Out-of-character chat"},
+            
+            # Inventory commands
+            "inventory": {"category": "inventory", "desc": "View your inventory"},
+            "equip": {"category": "inventory", "desc": "Equip an item"},
+            "unequip": {"category": "inventory", "desc": "Unequip an item"},
+            
+            # System commands
+            "help": {"category": "system", "desc": "Display this help screen"},
+            "who": {"category": "system", "desc": "List online players"},
+            "quit": {"category": "system", "desc": "Exit the game"},
+            "status": {"category": "system", "desc": "Show your character status"},
+        }
+
+    async def on_input_changed(self, event: Input.Changed) -> None:
+        """Handle search input changes."""
+        if event.input.id == "search-input":
+            self.search_query = event.value.lower()
+            await self._perform_search()
+
+    async def _perform_search(self) -> None:
+        """Perform search and display results."""
+        # Get the results panel
+        try:
+            results_panel = self.query_one("#search-results-panel", Static)
+        except Exception:
+            return
+        
+        if not self.search_query or len(self.search_query) < 2:
+            # Clear search results when query is too short or empty
+            results_panel.update("")
+            return
+
+        results = []
+        for cmd, info in self.all_commands.items():
+            if (self.search_query in cmd.lower() or 
+                self.search_query in info["desc"].lower() or
+                self.search_query in info["category"].lower()):
+                results.append((cmd, info))
+
+        # Update the results panel content
+        if results:
+            lines = [
+                f"[bold]Search results for '{self.search_query}' ({len(results)} found):[/bold]",
+                "",
+            ]
+            for cmd, info in results:
+                lines.append(
+                    f"[green]{cmd}[/green]: {info['desc']} [dim](Category: {info['category']})[/dim]"
+                )
+            results_panel.update("\n".join(lines))
+            self.app.notify(f"Found {len(results)} result(s)")
+        else:
+            results_panel.update(f"[dim]No results found for '{self.search_query}'.[/dim]")
+            self.app.notify(f"No results found")
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        """Handle search submission."""
+        if event.input.id == "search-input":
+            self.search_query = event.value.lower()
+            self.app.notify(f"Searching for: {self.search_query}")
 
     def _create_overview(self) -> VerticalScroll:
         """Create the overview content."""
